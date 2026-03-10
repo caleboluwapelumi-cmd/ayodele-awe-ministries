@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Color system — Blue / Wine / Neutral */
+  --color-white: #FFFFFF;
+  --color-cream: #F8F9FC;
+  --color-blue-sky: #4A90D9;
+  --color-blue: #1B4F8A;
+  --color-blue-deep: #0F2D5A;
+  --color-blue-navy: #0A1628;
+  --color-wine-light: #8B2346;
+  --color-wine: #6B1530;
+  --color-wine-deep: #4A0D20;
+  --color-muted: #6B7A99;
+
+  /* Typography */
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-blue-navy);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--color-wine);
+  color: #ffffff;
+}
+
+/* Editorial heading defaults */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+}
