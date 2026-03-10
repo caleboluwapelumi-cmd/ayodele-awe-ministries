@@ -25,11 +25,11 @@ export default function EventsPage() {
   return (
     <>
       {/* ── 1. Page Hero ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-40 pb-24 px-6 lg:px-8 text-center">
+      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 text-center">
         <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
           Events
         </p>
-        <h1 className="font-serif text-4xl md:text-5xl text-white mb-4">
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white mb-4">
           Gather. Encounter. Be Transformed.
         </h1>
         <p className="font-sans text-lg text-white/70 max-w-xl mx-auto">
@@ -38,7 +38,7 @@ export default function EventsPage() {
       </section>
 
       {/* ── 2. Featured Event ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
         <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
           <div className="relative aspect-video rounded-lg overflow-hidden">
             <Image
@@ -90,7 +90,7 @@ export default function EventsPage() {
       </section>
 
       {/* ── 3. All Events Grid ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
             All Events
@@ -101,7 +101,7 @@ export default function EventsPage() {
           <p className="font-sans text-white/70 mb-12 max-w-xl">
             UK and Nigeria — both nations, one fire
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <EventCard
               title="Norwich Prayer Surge"
               date="TBA"
@@ -132,7 +132,7 @@ export default function EventsPage() {
       </section>
 
       {/* ── 4. Past Events ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
             Past Events
@@ -182,7 +182,7 @@ export default function EventsPage() {
       </section>
 
       {/* ── 5. Newsletter CTA ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep text-center">
         <div className="mx-auto max-w-lg">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
             Never Miss an Event
@@ -199,7 +199,7 @@ export default function EventsPage() {
       </section>
 
       {/* ── 6. CTA Banner ── */}
-      <section className="py-20 px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-3xl text-white mb-4">
             Want to Host an Event?

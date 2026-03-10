@@ -21,18 +21,18 @@ export default function BHCCPage() {
         }}
       >
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-6">United Kingdom</p>
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2">Building House Christian Center</h1>
-          <p className="font-serif text-3xl text-blue-sky mb-6">BHCC</p>
-          <p className="font-sans text-lg text-white/70 max-w-2xl mx-auto mb-10">Building the House of God in the United Kingdom</p>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2">Building House Christian Center</h1>
+          <p className="font-serif text-2xl sm:text-3xl text-blue-sky mb-6">BHCC</p>
+          <p className="font-sans text-base sm:text-lg text-white/70 max-w-2xl mx-auto mb-8 sm:mb-10">Building the House of God in the United Kingdom</p>
           <Link href="/contact" className="font-sans text-sm font-semibold bg-wine text-white px-10 py-4 rounded-lg hover:bg-wine-light transition-colors">Join Us</Link>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
       </section>
 
       {/* ── 2. About ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
         <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
           <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
             <Image
@@ -53,7 +53,7 @@ export default function BHCCPage() {
       </section>
 
       {/* ── 3. Beliefs ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Our Beliefs</p>
           <h2 className="font-serif text-3xl text-white mb-16">What We Stand For</h2>
@@ -73,7 +73,7 @@ export default function BHCCPage() {
       </section>
 
       {/* ── 4. Services ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Join Us</p>
           <h2 className="font-serif text-3xl text-blue-navy mb-16">Service Times</h2>
@@ -96,7 +96,7 @@ export default function BHCCPage() {
       </section>
 
       {/* ── 5. CTA ── */}
-      <section className="py-20 px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-3xl text-white mb-4">You Are Welcome Here</h2>
           <p className="font-sans text-white/70 mb-10 max-w-xl mx-auto">BHCC is a family. Come as you are and encounter the living God.</p>

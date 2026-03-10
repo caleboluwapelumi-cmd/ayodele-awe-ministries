@@ -21,18 +21,18 @@ export default function BLCNPage() {
         }}
       >
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-6">Nigeria</p>
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2">Bethel Livingstone Christian Network</h1>
-          <p className="font-serif text-3xl text-blue-sky mb-6">BLCN</p>
-          <p className="font-sans text-lg text-white/70 max-w-2xl mx-auto mb-10">Raising Believers, Transforming Nigeria</p>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2">Bethel Livingstone Christian Network</h1>
+          <p className="font-serif text-2xl sm:text-3xl text-blue-sky mb-6">BLCN</p>
+          <p className="font-sans text-base sm:text-lg text-white/70 max-w-2xl mx-auto mb-8 sm:mb-10">Raising Believers, Transforming Nigeria</p>
           <Link href="/contact" className="font-sans text-sm font-semibold bg-wine text-white px-10 py-4 rounded-lg hover:bg-wine-light transition-colors">Join Us</Link>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
       </section>
 
       {/* ── 2. About ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
         <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
           <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
             <Image
@@ -53,7 +53,7 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 3. Beliefs ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Our Beliefs</p>
           <h2 className="font-serif text-3xl text-white mb-16">What We Stand For</h2>
@@ -73,7 +73,7 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 4. Services ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Join Us</p>
           <h2 className="font-serif text-3xl text-blue-navy mb-16">Service Times</h2>
@@ -96,7 +96,7 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 5. Network Vision ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep text-center">
         <div className="mx-auto max-w-5xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">The Network</p>
           <h2 className="font-serif text-3xl text-white mb-6">Beyond a Church, A Movement</h2>
@@ -117,7 +117,7 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 6. CTA ── */}
-      <section className="py-20 px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-3xl text-white mb-4">Be Part of the Network</h2>
           <p className="font-sans text-white/70 mb-10 max-w-xl mx-auto">BLCN is a family spread across Nigeria. Find your place in the network.</p>

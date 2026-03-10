@@ -66,16 +66,16 @@ export default function ContactPage() {
   return (
     <>
       {/* ── 1. Page Hero ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-40 pb-24 px-6 lg:px-8 text-center">
+      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 text-center">
         <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Contact</p>
-        <h1 className="font-serif text-4xl md:text-5xl text-white mb-4">Get In Touch</h1>
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white mb-4">Get In Touch</h1>
         <p className="font-sans text-lg text-white/70 max-w-2xl mx-auto">
           We would love to hear from you — whether you have a question, want to book Minister Awe, or simply want to connect with the ministry
         </p>
       </section>
 
       {/* ── 2. Contact Grid ── */}
-      <section id="contact-form" className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
+      <section id="contact-form" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
         <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-5 gap-16">
           {/* Form (3/5) */}
           <div className="lg:col-span-3">
@@ -165,7 +165,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── 3. Churches Contact ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Find a Church</p>
           <h2 className="font-serif text-3xl text-white mb-12">Connect With Our Churches</h2>
@@ -203,7 +203,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── 4. Booking ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-3xl">
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Speaking Engagements</p>
           <h2 className="font-serif text-3xl text-blue-navy mb-6">Book Minister Ayodele Oladapo Awe</h2>
@@ -225,7 +225,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── 5. Newsletter ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep text-center">
         <div className="mx-auto max-w-lg">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Stay Connected</p>
           <h2 className="font-serif text-3xl text-white mb-4">Join Our Mailing List</h2>
@@ -235,7 +235,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── 6. Scripture ── */}
-      <section className="py-20 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-3xl">
           <span className="font-serif text-6xl text-wine leading-none block mb-4">&ldquo;</span>
           <p className="font-serif text-lg md:text-xl text-blue-navy/80 leading-relaxed italic mb-6">How beautiful are the feet of those who bring good news!</p>

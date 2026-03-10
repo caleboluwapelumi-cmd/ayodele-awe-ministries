@@ -76,10 +76,10 @@ export default function PartnersPage() {
         }}
       >
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto">
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-blue-sky mb-6">Partnership</p>
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">Partner With Us</h1>
-          <p className="font-sans text-lg text-white/70 max-w-2xl mx-auto mb-12">Join a community of believers fuelling the gospel across the UK and Nigeria</p>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">Partner With Us</h1>
+          <p className="font-sans text-base sm:text-lg text-white/70 max-w-2xl mx-auto mb-8 sm:mb-12">Join a community of believers fuelling the gospel across the UK and Nigeria</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="#partner-form" className="font-sans text-sm font-semibold bg-wine text-white px-10 py-4 rounded-lg hover:bg-wine-light transition-colors">Become a Partner</a>
             <a href="#why-partner" className="font-sans text-sm font-semibold border border-white/40 text-white px-10 py-4 rounded-lg hover:border-white transition-colors">Learn More</a>
@@ -89,7 +89,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 2. Why Partner ── */}
-      <section id="why-partner" className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section id="why-partner" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-4xl">
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Why Partner</p>
           <h2 className="font-serif text-3xl text-blue-navy mb-6">Your Giving Fuels the Gospel</h2>
@@ -110,7 +110,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 3. Tiers ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Partnership Levels</p>
           <h2 className="font-serif text-3xl text-white mb-4">Find Your Place</h2>
@@ -138,7 +138,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 4. Impact ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Impact</p>
           <h2 className="font-serif text-3xl text-blue-navy mb-16">Where Your Seeds Go</h2>
@@ -159,7 +159,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 5. Form ── */}
-      <section id="partner-form" className="py-24 px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep">
+      <section id="partner-form" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep">
         <div className="mx-auto max-w-2xl text-center">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Join Us</p>
           <h2 className="font-serif text-3xl text-white mb-4">Register as a Partner</h2>
@@ -214,7 +214,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 6. Scripture ── */}
-      <section className="py-20 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-3xl">
           <span className="font-serif text-6xl text-wine leading-none block mb-4">&ldquo;</span>
           <p className="font-serif text-lg md:text-xl text-blue-navy/80 leading-relaxed italic mb-6">Now he who supplies seed to the sower and bread for food will also supply and increase your store of seed and will enlarge the harvest of your righteousness.</p>
@@ -223,7 +223,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 7. CTA ── */}
-      <section className="py-20 px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-3xl text-white mb-4">Questions About Partnership?</h2>
           <p className="font-sans text-white/70 mb-10 max-w-xl mx-auto">We would love to hear from you and walk you through the process.</p>

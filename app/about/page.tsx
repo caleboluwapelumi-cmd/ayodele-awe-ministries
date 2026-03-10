@@ -14,8 +14,8 @@ export default function AboutPage() {
   return (
     <>
       {/* ── 1. Page Hero ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-40 pb-24 px-6 lg:px-8 text-center">
-        <h1 className="font-serif text-4xl md:text-5xl text-white mb-4">
+      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 text-center">
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white mb-4">
           About the Minister
         </h1>
         <div className="mx-auto w-12 h-0.5 bg-wine mb-6" />
@@ -25,7 +25,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 2. Bio Section ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
         <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
           <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
             <Image
@@ -71,7 +71,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 3. Mandate Section ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
             The Mandate
@@ -108,7 +108,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 4. Calling Section ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
         <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div>
             <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
@@ -148,7 +148,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 5. Churches Teaser ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep text-center">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
             Our Churches
@@ -184,7 +184,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 6. CTA Banner ── */}
-      <section className="py-20 px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-3xl text-white mb-4">
             Join the Movement

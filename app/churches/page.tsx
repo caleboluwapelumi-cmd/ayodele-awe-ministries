@@ -12,11 +12,11 @@ export default function ChurchesPage() {
   return (
     <>
       {/* ── 1. Page Hero ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-40 pb-24 px-6 lg:px-8 text-center">
+      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 text-center">
         <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
           Our Churches
         </p>
-        <h1 className="font-serif text-4xl md:text-5xl text-white mb-4">
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white mb-4">
           Two Churches, One Mandate
         </h1>
         <p className="font-sans text-lg text-white/70 max-w-xl mx-auto">
@@ -25,7 +25,7 @@ export default function ChurchesPage() {
       </section>
 
       {/* ── 2. Intro ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-3xl">
           <h2 className="font-serif text-3xl text-blue-navy mb-6">
             Ministry Expressions
@@ -40,7 +40,7 @@ export default function ChurchesPage() {
       </section>
 
       {/* ── 3. Church Cards ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue">
         <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* BHCC */}
           <div className="group bg-blue-deep/50 rounded-lg overflow-hidden border border-white/5 hover:border-white/10 transition-all">
@@ -112,7 +112,7 @@ export default function ChurchesPage() {
       </section>
 
       {/* ── 4. Shared Vision ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
             One Vision
@@ -135,7 +135,7 @@ export default function ChurchesPage() {
       </section>
 
       {/* ── 5. CTA Banner ── */}
-      <section className="py-20 px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-serif text-3xl text-white mb-4">
             Find Your Community

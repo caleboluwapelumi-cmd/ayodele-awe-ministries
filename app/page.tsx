@@ -19,7 +19,7 @@ export default function HomePage() {
       <HeroSection />
 
       {/* ── 2. About Snippet ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
         <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div className="relative aspect-square rounded-lg overflow-hidden">
             <Image
@@ -61,7 +61,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 3. Ministry Expressions ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
             Our Ministry Expressions
@@ -97,7 +97,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 4. Upcoming Events ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
             Upcoming Events
@@ -129,7 +129,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 5. Teachings & Music ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
             Teachings &amp; Music
@@ -145,7 +145,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 6. Partners ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light relative overflow-hidden">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light relative overflow-hidden">
         <div className="relative mx-auto max-w-3xl text-center z-10">
           <p className="font-sans text-xs uppercase tracking-widest text-white/60 mb-4">
             Partnership
@@ -165,7 +165,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 7. Newsletter ── */}
-      <section className="py-24 px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep">
         <div className="mx-auto max-w-lg text-center">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
             Stay Connected

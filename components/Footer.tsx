@@ -28,7 +28,7 @@ const SOCIAL_ICONS = [
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-b from-blue-navy to-blue-deep">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-20 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
           {/* Brand */}
           <div>
@@ -65,7 +65,7 @@ export default function Footer() {
             <h4 className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-6">
               Connect
             </h4>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-4">
               {SOCIAL_ICONS.map(({ name, href, Icon }) => (
                 <a
                   key={name}
@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-16 pt-8 border-t border-white/10">
+        <div className="mt-12 sm:mt-16 pt-8 border-t border-white/10 text-center sm:text-left">
           <p className="font-sans text-xs text-white/40">
             &copy; 2025 {SITE_NAME}. All rights reserved.
           </p>
