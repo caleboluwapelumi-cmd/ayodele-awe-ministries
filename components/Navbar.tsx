@@ -4,22 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
-
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Churches", href: "/churches", dropdown: true },
-  { label: "Events", href: "/events" },
-  { label: "Media", href: "/media" },
-  { label: "Partners", href: "/partners" },
-  { label: "Contact", href: "/contact" },
-] as const;
-
-const CHURCH_LINKS = [
-  { label: "BHCC", href: "/churches/bhcc", desc: "Building House Christian Center" },
-  { label: "BLCN", href: "/churches/blcn", desc: "Bethel Livingstone Christian Network" },
-  { label: "All Churches", href: "/churches", desc: null },
-];
+import { NAV_LINKS } from "@/lib/constants";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -121,7 +106,7 @@ export default function Navbar() {
                   }`}
                 >
                   <div className="w-64 bg-blue-navy/95 backdrop-blur-md rounded-lg p-2 shadow-xl border border-white/10">
-                    {CHURCH_LINKS.map((church) => (
+                    {link.children?.map((church) => (
                       <Link
                         key={church.href + church.label}
                         href={church.href}
@@ -204,7 +189,7 @@ export default function Navbar() {
                   }`}
                 >
                   <div className="ml-4 space-y-1 border-l border-white/10 pl-4 pb-2">
-                    {CHURCH_LINKS.map((church) => (
+                    {link.children?.map((church) => (
                       <Link
                         key={church.href + church.label}
                         href={church.href}
