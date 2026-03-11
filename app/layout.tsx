@@ -33,7 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning className={`${playfair.variable} ${inter.variable} antialiased overflow-x-hidden`}>
         <Navbar />
-        <main>{children}</main>
+        <main className="pt-[72px] lg:pt-0">{children}</main>
         <Footer />
       </body>
     </html>

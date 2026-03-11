@@ -63,10 +63,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-blue-navy/95 backdrop-blur-md shadow-lg lg:shadow-none ${
         scrolled || mobileOpen
-          ? "bg-blue-navy/95 backdrop-blur-md shadow-lg"
-          : "bg-transparent"
+          ? "lg:bg-blue-navy/95 lg:backdrop-blur-md lg:shadow-lg"
+          : "lg:bg-transparent lg:backdrop-blur-none"
       }`}
     >
       <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-5 lg:px-8">
