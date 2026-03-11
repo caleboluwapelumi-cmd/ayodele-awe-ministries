@@ -9,8 +9,8 @@ import { NAV_LINKS } from "@/lib/constants";
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [churchesOpen, setChurchesOpen] = useState(false);
-  const [mobileChurchesOpen, setMobileChurchesOpen] = useState(false);
+  const [expressionsOpen, setExpressionsOpen] = useState(false);
+  const [mobileExpressionsOpen, setMobileExpressionsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -28,7 +28,7 @@ export default function Navbar() {
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setChurchesOpen(false);
+        setExpressionsOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClick);
@@ -58,7 +58,7 @@ export default function Navbar() {
 
   function closeMobile() {
     setMobileOpen(false);
-    setMobileChurchesOpen(false);
+    setMobileExpressionsOpen(false);
   }
 
   return (
@@ -83,42 +83,51 @@ export default function Navbar() {
                 key={link.label}
                 className="relative"
                 ref={dropdownRef}
-                onMouseEnter={() => setChurchesOpen(true)}
-                onMouseLeave={() => setChurchesOpen(false)}
+                onMouseEnter={() => setExpressionsOpen(true)}
+                onMouseLeave={() => setExpressionsOpen(false)}
               >
                 <button
-                  onClick={() => setChurchesOpen((prev) => !prev)}
+                  onClick={() => setExpressionsOpen((prev) => !prev)}
                   className={`flex items-center gap-1 ${linkClasses(link.href)}`}
                 >
                   {link.label}
                   <ChevronDown
                     size={12}
-                    className={`transition-transform duration-200 ${churchesOpen ? "rotate-180" : ""}`}
+                    className={`transition-transform duration-200 ${expressionsOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {/* Dropdown */}
                 <div
                   className={`absolute top-full left-0 pt-2 transition-all duration-200 ${
-                    churchesOpen
+                    expressionsOpen
                       ? "opacity-100 translate-y-0 pointer-events-auto"
                       : "opacity-0 -translate-y-1 pointer-events-none"
                   }`}
                 >
-                  <div className="w-64 bg-blue-navy/95 backdrop-blur-md rounded-lg p-2 shadow-xl border border-white/10">
-                    {link.children?.map((church) => (
-                      <Link
-                        key={church.href + church.label}
-                        href={church.href}
-                        onClick={() => setChurchesOpen(false)}
-                        className="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors"
-                      >
-                        <span className="block font-sans font-medium">{church.label}</span>
-                        {church.desc && (
-                          <span className="block font-sans text-xs text-white/50 mt-0.5">{church.desc}</span>
-                        )}
-                      </Link>
-                    ))}
+                  <div className="w-72 bg-blue-navy/95 backdrop-blur-md rounded-lg p-2 shadow-xl border border-white/10 max-h-[70vh] overflow-y-auto">
+                    {link.children?.map((item) =>
+                      item.label.startsWith("\u2014") ? (
+                        <p
+                          key={item.label}
+                          className="px-4 pt-3 pb-1 font-sans text-[0.6rem] uppercase tracking-widest text-white/30 select-none"
+                        >
+                          {item.label}
+                        </p>
+                      ) : (
+                        <Link
+                          key={item.href + item.label}
+                          href={item.href}
+                          onClick={() => setExpressionsOpen(false)}
+                          className="block px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors"
+                        >
+                          <span className="block font-sans font-medium">{item.label}</span>
+                          {item.desc && (
+                            <span className="block font-sans text-xs text-white/50 mt-0.5">{item.desc}</span>
+                          )}
+                        </Link>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -168,7 +177,7 @@ export default function Navbar() {
             link.dropdown ? (
               <div key={link.label}>
                 <button
-                  onClick={() => setMobileChurchesOpen((prev) => !prev)}
+                  onClick={() => setMobileExpressionsOpen((prev) => !prev)}
                   className={`flex items-center justify-between w-full py-4 font-sans text-lg transition-colors ${
                     isActive("/churches")
                       ? "text-white font-semibold"
@@ -178,31 +187,40 @@ export default function Navbar() {
                   {link.label}
                   <ChevronDown
                     size={18}
-                    className={`transition-transform duration-200 ${mobileChurchesOpen ? "rotate-180" : ""}`}
+                    className={`transition-transform duration-200 ${mobileExpressionsOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
-                {/* Inline expanded churches */}
+                {/* Inline expanded expressions */}
                 <div
                   className={`overflow-hidden transition-all duration-300 ${
-                    mobileChurchesOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
+                    mobileExpressionsOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
                   }`}
                 >
                   <div className="ml-4 space-y-1 border-l border-white/10 pl-4 pb-2">
-                    {link.children?.map((church) => (
-                      <Link
-                        key={church.href + church.label}
-                        href={church.href}
-                        onClick={closeMobile}
-                        className={`block py-2 font-sans text-base transition-colors ${
-                          pathname === church.href
-                            ? "text-white font-semibold"
-                            : "text-white/60 hover:text-white"
-                        }`}
-                      >
-                        {church.label}
-                      </Link>
-                    ))}
+                    {link.children?.map((item) =>
+                      item.label.startsWith("\u2014") ? (
+                        <p
+                          key={item.label}
+                          className="pt-3 pb-1 font-sans text-[0.6rem] uppercase tracking-widest text-white/30 select-none"
+                        >
+                          {item.label}
+                        </p>
+                      ) : (
+                        <Link
+                          key={item.href + item.label}
+                          href={item.href}
+                          onClick={closeMobile}
+                          className={`block py-2 font-sans text-base transition-colors ${
+                            pathname === item.href
+                              ? "text-white font-semibold"
+                              : "text-white/60 hover:text-white"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      )
+                    )}
                   </div>
                 </div>
               </div>

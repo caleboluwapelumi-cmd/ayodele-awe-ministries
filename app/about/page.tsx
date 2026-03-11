@@ -26,7 +26,7 @@ export default function AboutPage() {
 
       {/* ── 2. Bio Section ── */}
       <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
             <Image
               src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80"
@@ -79,7 +79,7 @@ export default function AboutPage() {
           <h2 className="font-serif text-3xl md:text-4xl text-white mb-16 max-w-3xl mx-auto">
             Raising Voices, Building Houses, Transforming Nations
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
             {[
               {
                 title: "Raising Voices",
@@ -109,7 +109,7 @@ export default function AboutPage() {
 
       {/* ── 4. Calling Section ── */}
       <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
               The Calling
@@ -159,7 +159,7 @@ export default function AboutPage() {
           <p className="font-sans text-white/70 mb-12">
             Two expressions of one vision
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-left">
             {CHURCHES.map((church) => (
               <ChurchCard
                 key={church.acronym}

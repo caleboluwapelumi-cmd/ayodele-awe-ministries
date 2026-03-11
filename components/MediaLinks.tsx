@@ -29,7 +29,7 @@ const MEDIA_CARDS = [
 
 export default function MediaLinks() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {MEDIA_CARDS.map((card) => (
         <a
           key={card.title}
@@ -39,7 +39,8 @@ export default function MediaLinks() {
           className="group block bg-blue-deep/50 rounded-lg p-8 border border-white/5 hover:border-white/10 transition-all"
         >
           <div className="mb-6">
-            <card.Icon size={64} />
+            <card.Icon size={48} className="lg:hidden" />
+            <card.Icon size={64} className="hidden lg:block" />
           </div>
           <h3 className="font-serif text-xl text-white group-hover:text-blue-sky transition-colors mb-3">
             {card.title}

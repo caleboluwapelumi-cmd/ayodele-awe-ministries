@@ -153,7 +153,7 @@ export default function ContactPage() {
 
             <div className="my-8 border-t border-blue-navy/10" />
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
               {SOCIAL_ICONS.map(({ name, href, Icon }) => (
                 <a key={name} href={href} target="_blank" rel="noopener noreferrer" aria-label={name}>
                   <Icon size={32} className="opacity-70 hover:opacity-100 transition-opacity" />
@@ -169,11 +169,11 @@ export default function ContactPage() {
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Find a Church</p>
           <h2 className="font-serif text-3xl text-white mb-12">Connect With Our Churches</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-left">
             {/* BHCC */}
             <div className="group bg-blue-deep/50 rounded-lg p-8 border border-white/5">
               <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">United Kingdom</p>
-              <h3 className="font-serif text-xl text-white group-hover:text-blue-sky transition-colors mb-2">Building House Christian Center</h3>
+              <h3 className="font-serif text-xl text-white group-hover:text-blue-sky transition-colors mb-2">Building House Christian Centre</h3>
               <p className="font-sans text-sm text-white/50 mb-6">For service times, location, and church-specific enquiries</p>
               <div className="space-y-2 mb-8">
                 <p className="font-sans text-sm text-white/60"><span className="text-white font-medium">Location:</span> United Kingdom (full address TBA)</p>
@@ -208,7 +208,7 @@ export default function ContactPage() {
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Speaking Engagements</p>
           <h2 className="font-serif text-3xl text-blue-navy mb-6">Book Minister Ayodele Oladapo Awe</h2>
           <p className="font-sans text-muted leading-relaxed mb-16">Minister Awe is available to minister at churches, conferences, retreats, prayer gatherings, and special events across the UK, Nigeria, and beyond. To submit a booking request, use the contact form above and select &ldquo;Book Minister Awe&rdquo; as the subject.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
             {[
               { title: "Church Services", desc: "Sunday services, special services, anniversary events" },
               { title: "Conferences & Retreats", desc: "Speakers for kingdom-focused gatherings" },

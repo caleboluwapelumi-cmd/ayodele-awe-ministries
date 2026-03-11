@@ -31,7 +31,7 @@ export default function MediaPage() {
 
       {/* ── 2. Teachings Section ── */}
       <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
               Teachings
@@ -98,7 +98,7 @@ export default function MediaPage() {
 
       {/* ── 3. Music Section ── */}
       <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative bg-blue-deep/50 rounded-lg p-12 text-center border border-white/5 overflow-hidden">
             <Image
               src="https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80"

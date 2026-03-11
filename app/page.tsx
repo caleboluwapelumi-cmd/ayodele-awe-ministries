@@ -20,7 +20,7 @@ export default function HomePage() {
 
       {/* ── 2. About Snippet ── */}
       <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative aspect-square rounded-lg overflow-hidden">
             <Image
               src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80"
@@ -33,7 +33,7 @@ export default function HomePage() {
             <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
               About the Minister
             </p>
-            <h2 className="font-serif text-3xl md:text-4xl text-blue-navy mb-6">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-blue-navy mb-6">
               A Voice Sent with Purpose
             </h2>
             <p className="font-sans text-muted leading-relaxed mb-4">
@@ -66,13 +66,13 @@ export default function HomePage() {
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
             Our Ministry Expressions
           </p>
-          <h2 className="font-serif text-3xl text-white mb-4">
+          <h2 className="font-serif text-2xl sm:text-3xl text-white mb-4">
             Two churches, one mandate
           </h2>
           <p className="font-sans text-white/70 mb-12 max-w-xl">
             Building the house of God in the UK and Nigeria.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {CHURCHES.map((church) => (
               <ChurchCard
                 key={church.acronym}

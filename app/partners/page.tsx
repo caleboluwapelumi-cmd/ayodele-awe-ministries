@@ -94,7 +94,7 @@ export default function PartnersPage() {
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Why Partner</p>
           <h2 className="font-serif text-3xl text-blue-navy mb-6">Your Giving Fuels the Gospel</h2>
           <p className="font-sans text-muted leading-relaxed mb-16 max-w-3xl mx-auto">Partnership is not just financial — it is a spiritual alignment with the vision God has given to this ministry. When you partner with Ayodele Oladapo Awe Ministries, you become a co-labourer in the harvest, sharing in every soul saved, every believer built up, and every nation touched.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
             {[
               { title: "Churches Built", desc: "Your partnership sustains and grows BHCC in the UK and BLCN in Nigeria." },
               { title: "Lives Transformed", desc: "Every seed sown reaches souls across two nations." },

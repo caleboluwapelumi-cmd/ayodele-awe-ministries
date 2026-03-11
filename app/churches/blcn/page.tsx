@@ -33,7 +33,7 @@ export default function BLCNPage() {
 
       {/* ── 2. About ── */}
       <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
             <Image
               src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80"
@@ -57,7 +57,7 @@ export default function BLCNPage() {
         <div className="mx-auto max-w-7xl">
           <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Our Beliefs</p>
           <h2 className="font-serif text-3xl text-white mb-16">What We Stand For</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
             {[
               { title: "The Bible", desc: "We believe the Bible is the infallible Word of God, the final authority in all matters of faith and conduct." },
               { title: "Salvation", desc: "We believe in the death and resurrection of Jesus Christ as the only means of salvation for all mankind." },
@@ -77,7 +77,7 @@ export default function BLCNPage() {
         <div className="mx-auto max-w-5xl">
           <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Join Us</p>
           <h2 className="font-serif text-3xl text-blue-navy mb-16">Service Times</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {[
               { title: "Sunday Service", time: "Time TBC", desc: "Main weekly gathering for worship, Word, and fellowship." },
               { title: "Midweek Bible Study", time: "Time TBC", desc: "Deep dive into the Word of God." },

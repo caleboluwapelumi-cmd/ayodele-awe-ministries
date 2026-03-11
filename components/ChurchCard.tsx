@@ -22,7 +22,7 @@ export default function ChurchCard({
     <Link href={href} className="group block bg-blue-deep/50 rounded-lg overflow-hidden border border-white/5 hover:border-white/10 transition-all">
       {/* Image */}
       {imageUrl && (
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
           <Image
             src={imageUrl}
             alt={name}
@@ -32,7 +32,7 @@ export default function ChurchCard({
         </div>
       )}
 
-      <div className="p-8">
+      <div className="p-5 sm:p-8">
         {/* Acronym */}
         <span className="font-serif text-4xl font-bold text-white/30 group-hover:text-white/50 transition-colors">
           {acronym}

@@ -10,7 +10,7 @@ import FacebookIcon from "@/components/icons/FacebookIcon";
 const FOOTER_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Churches", href: "/churches" },
+  { label: "Expressions", href: "/churches" },
   { label: "Events", href: "/events" },
   { label: "Media", href: "/media" },
   { label: "Partners", href: "/partners" },
@@ -28,8 +28,8 @@ const SOCIAL_ICONS = [
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-b from-blue-navy to-blue-deep">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-20 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
+      <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-12 xl:px-24 py-16 sm:py-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16">
           {/* Brand */}
           <div>
             <Link href="/" className="font-serif text-xl text-white">
@@ -65,7 +65,7 @@ export default function Footer() {
             <h4 className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-6">
               Connect
             </h4>
-            <div className="flex flex-wrap items-center gap-4 sm:gap-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
               {SOCIAL_ICONS.map(({ name, href, Icon }) => (
                 <a
                   key={name}
@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-12 sm:mt-16 pt-8 border-t border-white/10 text-center sm:text-left">
+        <div className="mt-12 sm:mt-16 pt-8 border-t border-white/10 text-center">
           <p className="font-sans text-xs text-white/40">
             &copy; 2025 {SITE_NAME}. All rights reserved.
           </p>

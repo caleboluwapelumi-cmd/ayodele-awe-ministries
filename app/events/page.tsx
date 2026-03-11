@@ -39,7 +39,7 @@ export default function EventsPage() {
 
       {/* ── 2. Featured Event ── */}
       <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <div className="relative aspect-video rounded-lg overflow-hidden">
             <Image
               src="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=1200&q=80"
@@ -143,7 +143,7 @@ export default function EventsPage() {
           <p className="font-sans text-muted mb-12">
             A testimony of His faithfulness
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-80">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 opacity-80">
             {[
               { title: "Kingdom Advancement Conference", date: "2024" },
               { title: "Night of Encounter", date: "2024" },

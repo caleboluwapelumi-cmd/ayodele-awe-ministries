@@ -52,7 +52,7 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
       <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
         {["Days", "Hours", "Min", "Sec"].map((label) => (
           <div key={label} className="text-center">
-            <span className="block font-serif text-3xl sm:text-5xl text-blue-sky">--</span>
+            <span className="block font-serif text-3xl sm:text-4xl md:text-6xl text-blue-sky">--</span>
             <span className="block font-sans text-xs uppercase tracking-widest text-white/50 mt-2">
               {label}
             </span>
@@ -80,11 +80,11 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
   ];
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
+    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-6">
       {segments.map((seg, i) => (
-        <div key={seg.label} className="flex items-center gap-4 sm:gap-8">
+        <div key={seg.label} className="flex items-center gap-2 sm:gap-6">
           <div className="text-center">
-            <span className="block font-serif text-3xl sm:text-5xl text-blue-sky tabular-nums">
+            <span className="block font-serif text-3xl sm:text-4xl md:text-6xl text-blue-sky tabular-nums">
               {String(seg.value).padStart(2, "0")}
             </span>
             <span className="block font-sans text-xs uppercase tracking-widest text-white/50 mt-2">
