@@ -102,7 +102,7 @@ export default function PartnersPage() {
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
           <AnimateIn direction="up" className="max-w-3xl">
             <SectionLabel tone="dark">Partnership</SectionLabel>
-            <h1 className="mb-6 font-serif text-5xl font-black leading-none tracking-tight text-white sm:text-6xl md:text-7xl">
+            <h1 className="mb-6 font-serif text-5xl font-bold leading-none tracking-tight text-white sm:text-6xl md:text-7xl">
               Partner With Us
             </h1>
             <div className="mb-8 h-0.5 w-16 bg-blue-sky" />

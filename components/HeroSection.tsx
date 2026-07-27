@@ -66,7 +66,7 @@ export default function HeroSection() {
             Minister of the Gospel &mdash; UK &amp; Nigeria
           </SectionLabel>
 
-          <h1 className="mb-6 font-serif text-5xl font-black leading-none tracking-tight text-white sm:text-7xl md:text-8xl">
+          <h1 className="mb-6 font-serif text-5xl font-bold leading-none tracking-tight text-white sm:text-7xl md:text-8xl">
             {MINISTER_NAME}
           </h1>
 

@@ -8,7 +8,7 @@ A full ministry website for **Ayodele Oladapo Awe Ministries** — a minister of
 ## Tech Stack
 - **Framework:** Next.js 16 (App Router, TypeScript, Turbopack)
 - **Styling:** Tailwind CSS **v4** — there is **no `tailwind.config.ts`**. The theme lives in `app/globals.css` under `@theme inline { … }`.
-- **Fonts:** Playfair Display (serif, headings — 400/700/900) + Inter (sans, body — 400/500/600/700)
+- **Fonts:** Clash Display only (400/500/600/700) — one face for headings and body alike. Self-hosted from `app/fonts/*.woff2` via `next/font/local`; not a Google font. Playfair Display and Inter were removed.
 - **Animation:** Framer Motion, via the `AnimateIn` wrapper (see Components)
 - **Images:** Next.js `<Image>` — Unsplash placeholders until real assets arrive
 - **Icons:** Custom SVG components in `components/icons/` (Spotify, Telegram, YouTube, Instagram, Facebook) + `lucide-react`
@@ -52,15 +52,27 @@ There is **no `-DEFAULT` suffix** in Tailwind v4. Use `bg-blue` / `text-wine`, *
 | Wine / accent | `wine` | `bg-white text-wine hover:bg-cream` |
 | Any (secondary action) | `outline` | `border border-current hover:bg-white/10` — pass `className="text-white"` on dark |
 
-- Sizes: `size="default"` (`px-7 py-3.5 text-xs`) or `size="lg"` (`px-8 py-4 text-sm`).
-- All buttons are **sharp-cornered** (`rounded-none`), uppercase, `tracking-widest`.
+- Sizes: `size="default"` (`px-8 py-3.5 text-sm`) or `size="lg"` (`px-10 py-4 text-base`).
+- All buttons are **pills** (`rounded-full`), **sentence case**, no letter-spacing.
+  There is no `uppercase` in `Button.tsx` any more, so labels render exactly as
+  authored — write them properly at the call site.
 - Wine is NEVER used as button bg on dark blue backgrounds.
 
 ---
 
 ## Typography Rules
-- All headings: `font-serif` (Playfair Display), `leading-tight`
-- `h1`: `font-serif font-black tracking-tight` — never `font-bold` or lighter
+> ⚠️ `font-serif` no longer means a serif. Both `--font-serif` and `--font-sans`
+> in `globals.css` now point at Clash Display — the alias was kept so the ~15
+> pages using `font-serif` on headings needed no edits. To change the site's
+> face, edit the `next/font/local` block in `layout.tsx` and those two lines.
+> Nothing else names a font.
+>
+> ⚠️ **Clash Display stops at 700.** Never use `font-black` or `font-extrabold`
+> — there is no 800/900 file, so the browser fakes one and it looks smeared.
+> `font-bold` is the heaviest legitimate weight.
+
+- All headings: `font-serif` (→ Clash Display), `leading-tight`
+- `h1`: `font-serif font-bold tracking-tight` — 700 is the heaviest weight the font ships
 - `h2`/`h3`: `font-serif font-bold` — **never** `font-medium` or lighter on a heading
 - Section labels above headings: use `components/SectionLabel.tsx` (`font-sans text-xs font-semibold uppercase tracking-[0.2em]`), `tone="light"` on light sections, `tone="dark"` on dark, `tone="onAccent"` on wine
 - Body copy: `font-sans text-base sm:text-lg leading-relaxed`
@@ -122,6 +134,15 @@ components/
   EventCard.tsx
   ChurchCard.tsx
   MediaLinks.tsx
+  SpotifyEmbed.tsx        ← Spotify iframe player. Props: kind ('artist'|'show'|
+                            'album'|'track'|'episode'), id (bare ID or a pasted
+                            share URL), title, size ('compact' 152px | 'full' 352px)
+  TelegramPost.tsx        ← 'use client' — renders one public Telegram post via
+                            telegram-widget.js. Audio posts come with a play
+                            button. The widget is a self-replacing <script>, so
+                            it is injected into a ref'd div in useEffect and the
+                            container is cleared on cleanup (StrictMode safety)
+  YouTubeEmbed.tsx        ← youtube-nocookie player. Takes videoId OR playlistId
   icons/
     SpotifyIcon.tsx
     TelegramIcon.tsx
@@ -225,6 +246,21 @@ Still `#` placeholders — real URLs pending:
 - Apple Music, Audiomack (music page platform grid)
 - Event registration links (`registerLink` on `/` and `/events`)
 
+## On-site players
+- **Spotify** — `SPOTIFY_ARTIST_ID` / `SPOTIFY_PODCAST_ID` feed `SpotifyEmbed` on
+  `/media` and `/media/music`. ⚠️ Visitors not logged into Spotify get **30-second
+  previews**; full playback needs a Spotify login. Platform rule, not fixable here.
+- **Telegram** — `SERMONS` in `lib/constants.ts` is a hand-curated list of audio
+  post IDs, newest first, rendered as players on `/media/teachings`. Telegram has
+  no API to list channel posts without a bot token, so **new sermons must be added
+  by hand**: copy the audio post's link (`t.me/bethelencounterlib/1344`), add the
+  trailing number and title to the top of the array. Each sermon posts as three
+  messages (description → audio → cover image); the ID needed is the audio one.
+- **YouTube** — `YOUTUBE_UPLOADS_PLAYLIST_ID` is `null`, so `/media/teachings`
+  renders a link-out card instead of a player. YouTube cannot embed a channel by
+  @handle. To switch the player on: take the channel ID (`UC…`), swap the leading
+  `UC` for `UU` (that is the auto-generated all-uploads playlist), paste it in.
+
 Anything still on `#` is rendered dimmed + `pointer-events-none`, with a
 "Coming Soon" badge where the card has room. Never give a `#` href
 `target="_blank"` — it opens an empty tab.
@@ -262,7 +298,7 @@ is ever replaced with tighter margins, switch the container to
 - No flat solid backgrounds — always use gradient pairs
 - No gold — that was the old design system. Current system is blue/wine/white
 - Responsive grid rule: always `grid-cols-1` base, scale up with `sm:` and `lg:`
-- **Sharp corners everywhere** — buttons, cards and panels are `rounded-none`. The only rounded elements are the social icon circles in the Footer/Contact page and the hero slideshow dot indicators.
+- **Corners are mixed by design.** Buttons are pills (`rounded-full`); single-line form fields are pills, the contact textarea is `rounded-3xl`; embedded players are `rounded-2xl`. Cards, panels and image containers stay **sharp** (`rounded-none`) — that structural contrast is deliberate, don't round them. Social icon circles and hero dots remain round as before.
 - Wrap every card, heading block and column in `AnimateIn`. Grid children get a staggered `delay={index * 0.1}` and `className="h-full"` so the wrapper inherits the grid cell height.
 - Images live in an `overflow-hidden` container with `object-cover transition-transform duration-700 group-hover:scale-105`.
 - Any photo carrying text over it needs a scrim (`bg-gradient-to-b from-black/70 via-transparent to-black/80` or similar).

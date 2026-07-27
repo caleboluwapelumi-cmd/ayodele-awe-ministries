@@ -8,8 +8,10 @@ import SectionLabel from "@/components/SectionLabel";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
+import SpotifyEmbed from "@/components/SpotifyEmbed";
 import {
   SOCIALS,
+  SPOTIFY_ARTIST_ID,
   SPOTIFY_PODCAST_NAME,
   SPOTIFY_PODCAST_TAGLINE,
   SPOTIFY_PODCAST_URL,
@@ -115,42 +117,12 @@ export default function MediaPage() {
       <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
-            <div className="relative overflow-hidden border-t-2 border-blue-sky p-12 text-center">
-              <Image
-                src="https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80"
-                alt=""
-                aria-hidden
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-blue-navy/80" />
-              <div className="relative z-10">
-                <div className="mx-auto mb-6 flex justify-center">
-                  <SpotifyIcon size={64} />
-                </div>
-                <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-white">
-                  Music on Spotify
-                </h3>
-                <p className="mb-6 font-sans text-sm text-white/50">
-                  Worship · Gospel · Prophetic Songs
-                </p>
-                <a
-                  href={SOCIALS.spotify}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-white"
-                >
-                  Listen Now
-                  <span
-                    aria-hidden
-                    className="transition-transform duration-300 group-hover:translate-x-1"
-                  >
-                    &rarr;
-                  </span>
-                </a>
-              </div>
-            </div>
+            <SpotifyEmbed
+              kind="artist"
+              id={SPOTIFY_ARTIST_ID}
+              title="Ayodele Oladapo Awe on Spotify"
+              className="shadow-xl"
+            />
           </AnimateIn>
 
           <AnimateIn direction="right">

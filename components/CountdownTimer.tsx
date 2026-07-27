@@ -16,7 +16,7 @@ interface TimeLeft {
 const LABELS = ["Days", "Hours", "Min", "Sec"];
 
 const NUMBER_CLASS =
-  "font-serif font-black leading-none tabular-nums text-white text-4xl sm:text-6xl md:text-7xl";
+  "font-serif font-bold leading-none tabular-nums text-white text-4xl sm:text-6xl md:text-7xl";
 const LABEL_CLASS =
   "mt-1 font-sans text-xs uppercase tracking-[0.2em] text-white/40";
 const SEPARATOR_CLASS =

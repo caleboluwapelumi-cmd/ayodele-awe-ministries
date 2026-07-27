@@ -51,8 +51,12 @@ const BOOKING_TYPES = [
 
 const FIELD_LABEL =
   "mb-2 block font-sans text-xs font-semibold uppercase tracking-[0.2em] text-muted";
-const FIELD_INPUT =
-  "w-full rounded-none border-b-2 border-blue-navy/20 bg-transparent px-0 py-3 font-sans text-sm text-blue-navy outline-none transition-colors placeholder:text-blue-navy/30 focus:border-blue-sky";
+// Shared field styling. Single-line fields are pills; the textarea gets a
+// softened rectangle instead, since a full pill reads badly over several lines.
+const FIELD_BASE =
+  "w-full border border-blue-navy/20 bg-white px-6 py-3.5 font-sans text-sm text-blue-navy outline-none transition-colors placeholder:text-blue-navy/40 focus:border-blue-sky";
+const FIELD_INPUT = `${FIELD_BASE} rounded-full`;
+const FIELD_TEXTAREA = `${FIELD_BASE} resize-none rounded-3xl`;
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -146,10 +150,10 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <label htmlFor="c-message" className={FIELD_LABEL}>Message *</label>
-                  <textarea id="c-message" rows={5} required value={form.message} onChange={(e) => update("message", e.target.value)} className={`${FIELD_INPUT} resize-none`} placeholder="Your message..." />
+                  <textarea id="c-message" rows={5} required value={form.message} onChange={(e) => update("message", e.target.value)} className={FIELD_TEXTAREA} placeholder="Your message..." />
                 </div>
                 <label className="flex cursor-pointer items-center gap-3">
-                  <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-4 w-4 rounded-none border-blue-navy/30 bg-transparent text-wine focus:ring-wine" />
+                  <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-4 w-4 rounded border-blue-navy/30 bg-transparent text-wine focus:ring-wine" />
                   <span className="font-sans text-sm text-muted">Subscribe me to the ministry newsletter</span>
                 </label>
 

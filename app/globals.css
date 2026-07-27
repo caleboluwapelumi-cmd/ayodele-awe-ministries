@@ -13,9 +13,11 @@
   --color-wine-deep: #4A0D20;
   --color-muted: #6B7A99;
 
-  /* Typography */
-  --font-serif: var(--font-playfair), Georgia, serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  /* Typography — Clash Display everywhere.
+     `--font-serif` is kept as an alias so the ~15 pages using the `font-serif`
+     utility on headings need no edits; it no longer means an actual serif. */
+  --font-serif: var(--font-clash), system-ui, sans-serif;
+  --font-sans: var(--font-clash), system-ui, sans-serif;
 }
 
 body {

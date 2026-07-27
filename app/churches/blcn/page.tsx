@@ -116,7 +116,7 @@ export default function BLCNPage() {
               </div>
             </div>
             <SectionLabel tone="dark">Nigeria</SectionLabel>
-            <h1 className="font-serif text-4xl font-black leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
+            <h1 className="font-serif text-4xl font-bold leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
               Bethel Livingstone Christian Network
             </h1>
             <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-blue-sky sm:text-3xl">

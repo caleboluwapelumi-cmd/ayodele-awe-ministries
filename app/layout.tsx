@@ -1,21 +1,29 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
+/**
+ * Clash Display (Indian Type Foundry, free via Fontshare) — one face across the
+ * whole site, headings and body alike.
+ *
+ * Self-hosted from ./fonts rather than loaded off Fontshare's CDN: no
+ * third-party request on every page view, no extra DNS/TLS round trip, and the
+ * files are version-pinned so an upstream change can't alter the site.
+ *
+ * ⚠️ It ships 200–700 only. There is NO 800 or 900, so never use `font-black`
+ * — the browser would synthesise a fake bold. `font-bold` (700) is the ceiling.
+ */
+const clashDisplay = localFont({
+  variable: "--font-clash",
   display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
+  src: [
+    { path: "./fonts/ClashDisplay-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/ClashDisplay-Medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/ClashDisplay-Semibold.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/ClashDisplay-Bold.woff2", weight: "700", style: "normal" },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -31,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning className={`${playfair.variable} ${inter.variable} antialiased overflow-x-hidden`}>
+      <body suppressHydrationWarning className={`${clashDisplay.variable} antialiased overflow-x-hidden`}>
         <Navbar />
         <main className="pt-[72px] lg:pt-0">{children}</main>
         <Footer />

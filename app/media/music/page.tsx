@@ -5,9 +5,12 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import SpotifyEmbed from "@/components/SpotifyEmbed";
 import {
   ANCHOR_FM_URL,
   SOCIALS,
+  SPOTIFY_ARTIST_ID,
+  SPOTIFY_PODCAST_ID,
   SPOTIFY_PODCAST_NAME,
   SPOTIFY_PODCAST_TAGLINE,
   SPOTIFY_PODCAST_URL,
@@ -75,9 +78,12 @@ export default function MusicPage() {
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
-            <div className="flex items-center justify-center bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep p-16 shadow-xl">
-              <SpotifyIcon size={120} />
-            </div>
+            <SpotifyEmbed
+              kind="artist"
+              id={SPOTIFY_ARTIST_ID}
+              title="Ayodele Oladapo Awe on Spotify"
+              className="shadow-xl"
+            />
           </AnimateIn>
 
           <AnimateIn direction="right">
@@ -199,9 +205,12 @@ export default function MusicPage() {
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
-            <div className="flex items-center justify-center bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep p-16 shadow-xl">
-              <Mic size={120} className="text-blue-sky" />
-            </div>
+            <SpotifyEmbed
+              kind="show"
+              id={SPOTIFY_PODCAST_ID}
+              title={`${SPOTIFY_PODCAST_NAME} podcast on Spotify`}
+              className="shadow-xl"
+            />
           </AnimateIn>
 
           <AnimateIn direction="right">

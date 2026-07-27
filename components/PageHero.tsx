@@ -34,7 +34,7 @@ export default function PageHero({
           <SectionLabel tone={dark ? "dark" : "light"}>{label}</SectionLabel>
         )}
         <h1
-          className={`font-serif text-4xl font-black leading-tight tracking-tight sm:text-6xl ${
+          className={`font-serif text-4xl font-bold leading-tight tracking-tight sm:text-6xl ${
             dark ? "text-white" : "text-blue-navy"
           }`}
         >

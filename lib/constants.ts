@@ -21,6 +21,50 @@ export const SPOTIFY_PODCAST_TAGLINE = "Everything Faith and Family";
 
 export const ANCHOR_FM_URL = "https://anchor.fm/ayodele-awe";
 
+/** Bare Spotify IDs for the embedded players (SOCIALS.spotify is the share link). */
+export const SPOTIFY_ARTIST_ID = "5WpAgkKg8zUcHp806EQ8LW";
+export const SPOTIFY_PODCAST_ID = "7g3Ft514KFHvK57KFlWgNh";
+
+export const TELEGRAM_CHANNEL = "bethelencounterlib";
+
+/**
+ * YouTube cannot embed a channel by @handle, only by playlist. To switch this
+ * on: open the channel, take its channel ID (starts `UC…`), replace the leading
+ * `UC` with `UU` — that is the auto-generated "all uploads" playlist — and paste
+ * it here. While this is null the YouTube section renders as a link-out card.
+ */
+export const YOUTUBE_UPLOADS_PLAYLIST_ID: string | null = null;
+
+export interface Sermon {
+  /** Telegram message ID of the audio post. */
+  messageId: number;
+  title: string;
+}
+
+/**
+ * Curated sermon audio from the Telegram channel, newest first.
+ *
+ * Telegram offers no way to list a channel's posts without a bot token, so this
+ * is maintained by hand. To add a new sermon: open the audio post in Telegram,
+ * copy its link (t.me/bethelencounterlib/1344), and add the trailing number
+ * plus its title to the TOP of this array. Nothing else needs changing.
+ *
+ * Each sermon posts as three messages — description, audio, cover image. The ID
+ * needed here is the middle one (the audio itself).
+ */
+export const SERMONS: Sermon[] = [
+  { messageId: 1344, title: "The Shout Of Joy 1" },
+  { messageId: 1341, title: "Scent Of Water (Pt 2)" },
+  { messageId: 1338, title: "Scent Of Water (Pt 1)" },
+  { messageId: 1333, title: "The Kingdom Agenda" },
+  { messageId: 1317, title: "Understanding Faith: The Law Of Conversion (Pt 3)" },
+  { messageId: 1314, title: "Understanding Faith: The Law Of Conversion (Pt 2)" },
+  { messageId: 1312, title: "Understanding Faith: The Law Of Conversion (Pt 1)" },
+  { messageId: 1308, title: "Strengthen Yourself For Destiny" },
+  { messageId: 1294, title: "Functioning From Rest" },
+  { messageId: 1280, title: "Faith That Overcomes" },
+];
+
 export const SELAR_BOOK_URL = "https://tr.ee/VJOapqf39_";
 export const AMAZON_BOOK_URL = "https://tr.ee/uiJj6WRE9Q";
 

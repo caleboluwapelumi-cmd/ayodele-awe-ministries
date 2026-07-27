@@ -4,7 +4,17 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
-import { SOCIALS } from "@/lib/constants";
+import TelegramPost from "@/components/TelegramPost";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
+import {
+  SERMONS,
+  SOCIALS,
+  TELEGRAM_CHANNEL,
+  YOUTUBE_UPLOADS_PLAYLIST_ID,
+} from "@/lib/constants";
+
+/** How many of the curated sermons to render players for on this page. */
+const FEATURED_COUNT = 6;
 
 export const metadata: Metadata = {
   title: "Telegram Teachings — Ayodele Oladapo Awe Ministries",
@@ -77,7 +87,85 @@ export default function TeachingsPage() {
         </div>
       </section>
 
-      {/* ── 3. What to Expect ── */}
+      {/* ── 3. Listen — Telegram sermon players ── */}
+      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+            <SectionLabel tone="dark">Listen Now</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              Recent Teachings
+            </h2>
+            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+              Press play below — no app needed. Every message is also available
+              in full on the Telegram channel.
+            </p>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2">
+            {SERMONS.slice(0, FEATURED_COUNT).map((sermon, i) => (
+              <AnimateIn
+                key={sermon.messageId}
+                delay={(i % 2) * 0.1}
+                className="h-full"
+              >
+                <div className="flex h-full flex-col border-t-2 border-blue-sky bg-blue-deep/40 p-6">
+                  <h3 className="mb-4 font-serif text-lg font-bold leading-tight text-white">
+                    {sermon.title}
+                  </h3>
+                  <TelegramPost
+                    post={`${TELEGRAM_CHANNEL}/${sermon.messageId}`}
+                  />
+                </div>
+              </AnimateIn>
+            ))}
+          </div>
+
+          <AnimateIn direction="up" className="mt-16 text-center">
+            <Button href={SOCIALS.telegram} variant="secondary" size="lg" external>
+              Browse the full library
+            </Button>
+          </AnimateIn>
+        </div>
+      </section>
+
+      {/* ── 4. Watch — YouTube ── */}
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-5xl">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+            <SectionLabel tone="light">Watch</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              Services on YouTube
+            </h2>
+            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg">
+              Full services, live sessions, and video messages from Minister
+              Awe.
+            </p>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <AnimateIn direction="up" className="mt-16">
+            {YOUTUBE_UPLOADS_PLAYLIST_ID ? (
+              <YouTubeEmbed
+                playlistId={YOUTUBE_UPLOADS_PLAYLIST_ID}
+                title="Ayodele Awe Ministries on YouTube"
+              />
+            ) : (
+              <div className="border-t-2 border-blue-sky bg-cream p-12 text-center">
+                <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
+                  Watch every service and message on the ministry&apos;s YouTube
+                  channel.
+                </p>
+                <Button href={SOCIALS.youtube} variant="primary" size="lg" external>
+                  Open YouTube channel
+                </Button>
+              </div>
+            )}
+          </AnimateIn>
+        </div>
+      </section>
+
+      {/* ── 5. What to Expect ── */}
       <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
@@ -103,7 +191,7 @@ export default function TeachingsPage() {
         </div>
       </section>
 
-      {/* ── 4. CTA Banner ── */}
+      {/* ── 6. CTA Banner ── */}
       <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

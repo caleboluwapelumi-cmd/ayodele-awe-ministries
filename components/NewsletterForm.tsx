@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 import Button from "./Button";
 
 const INPUT_CLASS =
-  "w-full rounded-none border-b-2 border-white/20 bg-transparent px-0 py-3 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-blue-sky";
+  "w-full rounded-full border border-white/20 bg-white/5 px-6 py-3.5 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/40 focus:border-blue-sky";
 
 export default function NewsletterForm() {
   const [firstName, setFirstName] = useState("");

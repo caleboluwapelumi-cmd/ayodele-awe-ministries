@@ -41,7 +41,7 @@ export default function ChurchCard({
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80" />
         <div className="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/20" />
 
-        <span className="absolute left-4 top-4 font-serif text-4xl font-black leading-none text-white">
+        <span className="absolute left-4 top-4 font-serif text-4xl font-bold leading-none text-white">
           {acronym}
         </span>
       </div>

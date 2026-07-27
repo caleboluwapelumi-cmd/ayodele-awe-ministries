@@ -2,9 +2,12 @@ import Link from "next/link";
 import { ReactNode } from "react";
 
 /**
- * Global button standard. Sharp corners, small uppercase label, wide tracking.
+ * Global button standard. Pill shape, sentence-case label, no letter-spacing.
  * Variant picks the treatment that suits the section background — see CLAUDE.md
  * button rules (wine is never a button background on dark blue sections).
+ *
+ * Labels render exactly as authored — there is no `uppercase` here any more, so
+ * write them in sentence or title case at the call site.
  */
 export type ButtonVariant = "primary" | "secondary" | "outline" | "wine";
 export type ButtonSize = "default" | "lg";
@@ -23,11 +26,13 @@ type ButtonProps = {
 };
 
 const BASE =
-  "inline-flex items-center justify-center gap-2 font-sans font-semibold uppercase tracking-widest rounded-none transition-all duration-200 focus-visible:outline-none";
+  "inline-flex items-center justify-center gap-2 font-sans font-semibold rounded-full transition-all duration-200 focus-visible:outline-none";
 
+// Pills need more horizontal room than the old square buttons, and the label
+// steps up a size now that it is no longer uppercased.
 const SIZES: Record<ButtonSize, string> = {
-  default: "px-7 py-3.5 text-xs",
-  lg: "px-8 py-4 text-sm",
+  default: "px-8 py-3.5 text-sm",
+  lg: "px-10 py-4 text-base",
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
