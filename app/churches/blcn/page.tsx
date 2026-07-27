@@ -83,16 +83,22 @@ export default function BLCNPage() {
     <>
       {/* ── 1. Hero ── */}
       <section className="relative flex min-h-screen items-center overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1920&q=80"
-          alt=""
-          aria-hidden
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-black/60" />
+        {/* The emblem is the hero image — no stock photography here. At 828×647
+            it is far too small to hold a full-bleed crop sharply, so it is blown
+            up and blurred to read as texture; the crisp badge below carries the
+            actual mark. The overflow-hidden wrapper keeps the blur's soft edge
+            from bleeding past the section. */}
+        <div aria-hidden className="absolute inset-0 overflow-hidden">
+          <Image
+            src="/images/blcn-logo.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="scale-125 object-cover blur-2xl"
+          />
+        </div>
+        <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-blue-navy/90 via-transparent to-blue-navy/40" />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">

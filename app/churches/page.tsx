@@ -35,9 +35,9 @@ const EXPRESSIONS: Expression[] = [
     icon: "building2",
     title: "Building House Christian Centre",
     acronym: "BHCC",
-    location: "🇬🇧 United Kingdom",
+    location: "🇬🇧 Norwich, United Kingdom",
     description:
-      "A Spirit-filled church community in the UK committed to building lives, raising leaders, and establishing the house of God through the Word and worship.",
+      "A Spirit-filled church in Norwich committed to building lives, raising leaders, and establishing the house of God through the Word and worship.",
     cta: "Visit BHCC",
     href: "/churches/bhcc",
     accent: "blue",

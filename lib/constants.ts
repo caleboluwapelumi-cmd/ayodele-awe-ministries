@@ -56,6 +56,16 @@ export interface ChurchSocials {
   facebook?: string;
 }
 
+export interface ChurchLeader {
+  name: string;
+  role: string;
+  /**
+   * Portrait in `public/images/`. Omitted while the photo is still pending —
+   * pages fall back to an initials block, so never point this at a placeholder.
+   */
+  image?: string;
+}
+
 export interface Church {
   name: string;
   acronym: string;
@@ -64,6 +74,11 @@ export interface Church {
   address?: string;
   serviceTimes?: ServiceTime[];
   email?: string;
+  vision?: string;
+  mission?: string;
+  /** Human-readable founding date, e.g. "9 February 2025". */
+  founded?: string;
+  leadership?: ChurchLeader[];
   /** Church-run accounts — distinct from the minister's own SOCIALS. */
   socials?: ChurchSocials;
 }
@@ -84,8 +99,29 @@ export const CHURCHES: Church[] = [
   {
     name: "Building House Christian Centre",
     acronym: "BHCC",
-    location: "United Kingdom",
+    location: "Norwich, United Kingdom",
     href: "/churches/bhcc",
+    address:
+      "Frere Community Centre, Frere Road, Norwich NR7 9UT, United Kingdom",
+    serviceTimes: [
+      { day: "Sunday", time: "12:00 PM" },
+      { day: "Thursday", time: "8:00 PM" },
+    ],
+    email: "Info.buildinghousecc@gmail.com",
+    vision:
+      "Raising Saints that would host the presence and the power of God in every Nation.",
+    mission:
+      "We exist to Equip saints that would worship God accurately, sound in doctrine and bear witness with power to the resurrected Christ.",
+    founded: "9 February 2025",
+    leadership: [
+      {
+        name: "Ayodele Oladapo Awe",
+        role: "Lead Pastor",
+        image: "/images/apostle-portrait.jpg",
+      },
+      // Photo pending from the client — renders as an initials block until then.
+      { name: "Iyanuoluwa Ayodele-Awe", role: "Co-Pastor" },
+    ],
   },
   {
     name: "Bethel Livingstone Christian Network",

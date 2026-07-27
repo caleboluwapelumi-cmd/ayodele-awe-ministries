@@ -21,9 +21,11 @@ const BLCN_SOCIAL_LINKS = [
   { name: "BLCN Global on Facebook", href: BLCN_SOCIALS.facebook, Icon: FacebookIcon },
 ];
 
-// TODO (email routing): once Resend is wired up in /api/contact, submissions with
-// subject "Church Information (BLCN)" should be routed to blcnglobal@gmail.com
-// rather than the general ministry inbox.
+// TODO (email routing): once Resend is wired up in /api/contact, church-specific
+// submissions should be routed to the church's own inbox rather than the general
+// ministry inbox —
+//   "Church Information (BHCC)" → Info.buildinghousecc@gmail.com
+//   "Church Information (BLCN)" → blcnglobal@gmail.com
 const SUBJECTS = [
   "General Enquiry",
   "Book Minister Awe",
@@ -265,9 +267,10 @@ export default function ContactPage() {
                 subject: "Church Information (BHCC)",
                 enquire: "Enquire About BHCC",
                 href: "/churches/bhcc",
-                location: "United Kingdom (full address TBA)",
-                services: "Contact us for service schedule",
-                email: null,
+                location:
+                  "Frere Community Centre, Frere Road, Norwich NR7 9UT, United Kingdom",
+                services: "Sunday 12:00 PM · Thursday 8:00 PM",
+                email: "Info.buildinghousecc@gmail.com",
                 socials: null,
               },
               {

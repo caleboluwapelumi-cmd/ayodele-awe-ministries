@@ -138,8 +138,13 @@ components/
   Button.tsx              ← THE button. Variants: primary | secondary | outline | wine. Sizes: default | lg
   SectionLabel.tsx        ← The small-caps eyebrow above every heading. tone: dark | light | onAccent
   PageHero.tsx            ← Shared hero for all inner pages. variant: dark | light
-  Navbar.tsx              ← Transparent on desktop hero, solid on scroll; always solid on mobile
-  Footer.tsx
+  Navbar.tsx              ← Transparent on desktop hero, solid on scroll; always solid
+                            on mobile. Its local `Brand` component is used by both the
+                            desktop bar and the mobile menu header: `awe-min-mark.png`
+                            at `h-9` plus "AOA Ministries" in text. ⚠️ The full lockup
+                            is NOT used here — its two-line wordmark falls under 6px at
+                            header scale. Mark in the header, lockup in the footer.
+  Footer.tsx              ← Brand column carries the full `awe-min-logo.png` at `w-48`
   HeroSection.tsx         ← 'use client' — homepage full-screen hero (left-aligned,
                             editorial). Crossfading background slideshow: slides
                             stacked absolutely, 6s interval, opacity-only
@@ -167,7 +172,14 @@ components/
 
 lib/
   constants.ts            ← SITE_NAME, MINISTER_NAME, TAGLINE, NAV_LINKS, CHURCHES,
-                            SOCIALS (minister), BLCN_SOCIALS (church), media/book URLs
+                            SOCIALS (minister), BLCN_SOCIALS (church), media/book URLs.
+                            `Church` carries address / serviceTimes / email /
+                            vision / mission / founded / leadership / socials —
+                            all optional, so pages read them with `?.` and render
+                            nothing when a field is absent. Both BHCC and BLCN are
+                            fully populated; page copy sources address, email,
+                            vision, mission and founding date from here rather
+                            than hard-coding them.
   telegram.ts             ← Server-side scrape of the public channel preview.
                             getLatestSermons(n) → the n newest audio posts,
                             revalidated hourly. Returns [] on any failure —
@@ -193,7 +205,7 @@ lib/
 
 ## Ministry Context
 - **Minister:** Ayodele Oladapo Awe — Nigerian-born, UK-based
-- **BHCC** = Building House Christian **Centre** (UK) — use **British English** for all BHCC content
+- **BHCC** = Building House Christian **Centre** — Norwich, UK. Use **British English** for all BHCC content. Founded 9 February 2025; led by Ayodele Oladapo Awe (Lead Pastor) and Iyanuoluwa Ayodele-Awe (Co-Pastor). The founding-story section on `/churches/bhcc` retells a testimony the client supplied — it is a real account of a trance at a 2023 end-of-year retreat, so keep it reverent and don't embellish it.
 - **BLCN** = Bethel Livingstone Christian Network (Nigeria) — standard English
 - **Key event:** Norwich Prayer Surge (UK) — date TBA, placeholder countdown active
 - **Media:** Spotify music + the "Babylonian Legends" podcast ("Everything Faith and Family") + Telegram teachings — all live, see Assets Status
@@ -217,6 +229,14 @@ Real assets received (all in `public/images/`, all JPEG):
    (double extension, one uppercase) and were renamed. Keep image filenames
    lowercase single-extension — Vercel's filesystem is case-sensitive, Windows
    is not, so a casing mismatch builds locally and 404s in production.
+
+   ⚠️ That same case-insensitivity destroys files. `awe-min-logo.PNG` arrived
+   uppercase; a `sharp` script read it and wrote its processed output to
+   `awe-min-logo.png`, which on Windows **is the same file** — the 5610×4807
+   master was overwritten in place by the 1200px derivative, and being untracked
+   it was unrecoverable. When processing an asset, always write to a filename
+   that differs by more than case (`-mark`, `-2560`, a temp directory), and
+   `git add` the original before running anything over it.
 2. **Downscale before committing.** They were 4928×3264 (5.2 MB) and 3072×4080
    (2.1 MB) camera originals. Pushing them blew past GitHub's request window
    and the push failed with HTTP 408. Cap the long edge at 2560px and re-encode
@@ -225,13 +245,48 @@ Real assets received (all in `public/images/`, all JPEG):
    oversized sources buy nothing and bloat the repo permanently.
 - `walking-with-the-holy-spirit.**jpeg**` — 800×1135 book cover. Note the
   `.jpeg` extension; every other image in the folder is `.jpg`. Used on `/books`.
-- `blcn-logo.jpg` — 828×647, shofar emblem on a dark charcoal background (**not** transparent). Used on `/churches/blcn` hero + the BLCN card on `/churches`.
+- `blcn-logo.jpg` — 828×647, shofar emblem on a dark charcoal background (**not**
+  transparent). Used three ways on `/churches/blcn`: the crisp badge in the hero,
+  the **hero background image itself** (`scale-125 object-cover blur-2xl` inside an
+  `overflow-hidden` wrapper, under a `bg-black/40` scrim — 828px cannot hold a
+  full-bleed crop sharply, so it reads as texture, not as a photo), and the BLCN
+  card on `/churches`. There is no stock photo in that hero any more.
+- `awe-min-logo.png` — 1200×662 **transparent** ministry lockup: cross + arc +
+  mountains beside a two-line "Ayodele Awe Ministries" wordmark, all white. Trimmed
+  flush to the artwork, so all padding is the caller's job. Used in the Footer at
+  `w-48`. ⚠️ White-on-transparent — it is invisible on a light background; every
+  placement must be dark.
+- `awe-min-mark.png` — 702×662, the same lockup's **mark only** (cross, arc,
+  mountains; wordmark removed), white on transparent. Used in the Navbar at `h-9`.
+  Derived by connected-component analysis: the three mark shapes each span >25% of
+  the lockup height while no wordmark letter exceeds 12%, which separates them
+  cleanly — the mark and wordmark overlap horizontally, so no column crop works.
+- `app/icon.png` (512×512) + `app/apple-icon.png` (180×180) — the mark, padded 13%,
+  on a solid `#0A1628` navy plate. App Router file conventions, so Next emits the
+  `<link rel="icon">` / `apple-touch-icon` tags itself; there is **no** `<head>`
+  markup and no `icons` key in `metadata`. The create-next-app `app/favicon.ico`
+  was deleted, so `/favicon.ico` now 404s by design.
+  ⚠️ The navy plate is deliberate: the mark is white, so a transparent icon would
+  vanish in a light browser tab. ⚠️ `sharp` applies `flatten` **before** `extend`,
+  so extending with a transparent background and then flattening leaves the padding
+  clear — the plate is made by compositing the mark onto an opaque navy canvas.
 - `blcn-church-order.jpg` — 432×1080 portrait graphic with BLCN vision/mission/values text baked in. Full text lives in its `alt`; do not duplicate it as body copy.
 
 Still Unsplash placeholders — pending from client:
 - BHCC logo + BHCC/BLCN church photos (BHCC stays acronym-only until its assets arrive)
 - Event banners
-- Ministry logo + favicon
+
+⚠️ **The ministry logo master is lost.** Only the 1200×662 derivative survives (see
+the filename warning above). Ask the client to re-supply the original if a larger
+rendition is ever needed — print, an og:image, or a light-background variant, none
+of which the current white-on-transparent file can serve.
+
+Pending, **not** on a placeholder image: a portrait of **Iyanuoluwa Ayodele-Awe**
+for the BHCC leadership grid. `ChurchLeader.image` is left undefined for her, and
+`/churches/bhcc` renders an initials block ("IA" on the dark gradient) plus a
+"Photo coming soon" caption instead. Drop the file in `public/images/` and set
+`image` in `CHURCHES` — no page edit needed. Never point `image` at a stock photo
+of a stranger to fill the gap.
 
 Live links (in `lib/constants.ts`):
 - `SOCIALS.spotify` — Spotify artist page
@@ -325,10 +380,14 @@ is ever replaced with tighter margins, switch the container to
 
 ## What Still Needs Building
 - [ ] Newsletter API wired to Brevo or Mailchimp
-- [ ] Contact form wired to Resend (emails to minister)
+- [ ] Contact form wired to Resend (emails to minister). The subject → church-inbox
+      routing is already resolved in `app/api/contact/route.ts` (`CHURCH_INBOXES`
+      maps "Church Information (BHCC)" → `Info.buildinghousecc@gmail.com` and
+      "(BLCN)" → `blcnglobal@gmail.com`) and passed through as `cc`; nothing is
+      sent yet, so wiring Resend is a one-line change at that call site.
 - [ ] SEO metadata per page (title, description, og:image)
 - [ ] Custom 404 page
-- [ ] Favicon (AOA initials)
+- [x] Favicon — `app/icon.png` + `app/apple-icon.png`, the ministry mark on navy
 - [ ] Page transition animations (Framer Motion)
 - [ ] Real assets swapped in when client provides them
 - [ ] Custom domain pointed to Vercel

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Link2 as LinkIcon } from "lucide-react";
 import { SITE_NAME, SOCIALS, TAGLINE } from "@/lib/constants";
 import NewsletterForm from "./NewsletterForm";
@@ -37,13 +38,19 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-3">
           {/* Brand */}
           <div>
-            <Link
-              href="/"
-              className="font-serif text-lg font-bold tracking-wide text-white"
-            >
-              AOA Ministries
+            {/* Full lockup — the footer has the width for the wordmark to read,
+                unlike the navbar, which uses the mark on its own. */}
+            <Link href="/" className="inline-block">
+              <Image
+                src="/images/awe-min-logo.png"
+                alt={SITE_NAME}
+                width={1200}
+                height={662}
+                sizes="192px"
+                className="h-auto w-48"
+              />
             </Link>
-            <p className="mt-4 max-w-xs font-sans text-base leading-relaxed text-white/50">
+            <p className="mt-6 max-w-xs font-sans text-base leading-relaxed text-white/50">
               {TAGLINE} — across the United Kingdom &amp; Nigeria.
             </p>
 

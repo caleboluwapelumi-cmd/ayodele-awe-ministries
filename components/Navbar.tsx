@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { NAV_LINKS } from "@/lib/constants";
@@ -18,6 +19,34 @@ function Indicator({ active }: { active: boolean }) {
         active ? "opacity-100" : "opacity-0"
       }`}
     />
+  );
+}
+
+/**
+ * Header brand lockup.
+ *
+ * The full logo's two-line wordmark is unreadable at header scale — at a 40px
+ * logo height the type lands under 6px — so the navbar carries the mark alone
+ * with the ministry name set in Clash Display beside it. The footer, which has
+ * the room, uses the complete lockup. The mark is decorative here because the
+ * text next to it already names the ministry.
+ */
+function Brand({ onClick }: { onClick: () => void }) {
+  return (
+    <Link href="/" onClick={onClick} className="flex items-center gap-3">
+      <Image
+        src="/images/awe-min-mark.png"
+        alt=""
+        aria-hidden
+        width={702}
+        height={662}
+        priority
+        className="h-9 w-auto"
+      />
+      <span className="font-serif text-lg font-bold tracking-wide text-white">
+        AOA Ministries
+      </span>
+    </Link>
   );
 }
 
@@ -85,13 +114,7 @@ export default function Navbar() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-16">
         {/* Logo */}
-        <Link
-          href="/"
-          onClick={closeMobile}
-          className="font-serif text-lg font-bold tracking-wide text-white"
-        >
-          AOA Ministries
-        </Link>
+        <Brand onClick={closeMobile} />
 
         {/* ── Desktop Nav ── */}
         <nav className="hidden items-start gap-8 lg:flex">
@@ -188,13 +211,7 @@ export default function Navbar() {
       >
         {/* Mobile header */}
         <div className="flex items-center justify-between px-4 py-5 sm:px-6">
-          <Link
-            href="/"
-            onClick={closeMobile}
-            className="font-serif text-lg font-bold tracking-wide text-white"
-          >
-            AOA Ministries
-          </Link>
+          <Brand onClick={closeMobile} />
           <button
             onClick={closeMobile}
             className="p-2 text-white transition-colors hover:text-white/80"

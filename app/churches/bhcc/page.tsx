@@ -1,12 +1,14 @@
 import { Metadata } from "next";
 import Image from "next/image";
+import { MapPin } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import { CHURCHES } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "BHCC — Building House Christian Centre",
-  description: "Building House Christian Centre — a Spirit-filled church in the United Kingdom.",
+  description: "Building House Christian Centre — a Spirit-filled church in Norwich, United Kingdom.",
 };
 
 const BELIEFS = [
@@ -15,11 +17,27 @@ const BELIEFS = [
   { title: "The Holy Spirit", desc: "We believe in the person and work of the Holy Spirit, including the gifts and power for ministry today." },
 ];
 
-const SERVICES = [
-  { title: "Sunday Service", time: "Time TBC", desc: "Main weekly gathering for worship, Word, and fellowship." },
-  { title: "Midweek Bible Study", time: "Time TBC", desc: "Deep dive into the Word of God." },
-  { title: "Prayer Meeting", time: "Time TBC", desc: "Corporate prayer and intercession." },
+const BHCC = CHURCHES.find((church) => church.acronym === "BHCC");
+
+const FOUNDATION = [
+  { title: "Vision", desc: BHCC?.vision },
+  { title: "Mission", desc: BHCC?.mission },
 ];
+
+const SERVICES = [
+  { title: "Sunday Service", time: "12:00 PM", desc: "Main weekly gathering for worship, Word, and fellowship." },
+  { title: "Thursday Midweek Service", time: "8:00 PM", desc: "Midweek gathering for prayer and the Word." },
+];
+
+/** "Iyanuoluwa Ayodele-Awe" → "IA". Used for the leaders whose photo is pending. */
+function initialsOf(name: string) {
+  return name
+    .split(/[\s-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
 
 export default function BHCCPage() {
   return (
@@ -60,7 +78,35 @@ export default function BHCCPage() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
       </section>
 
-      {/* ── 2. About ── */}
+      {/* ── 2. Vision & Mission ──
+          BLCN carries the same block as a two-column layout beside its printed
+          church-order card. BHCC has no such graphic, so this is text-only. */}
+      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl text-center">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl">
+            <SectionLabel tone="dark">Our Foundation</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              Vision &amp; Mission
+            </h2>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 text-left sm:grid-cols-2">
+            {FOUNDATION.map((item, i) => (
+              <AnimateIn key={item.title} delay={i * 0.1} className="h-full">
+                <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-blue-sky">
+                  {item.title}
+                </h3>
+                <p className="font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+                  {item.desc}
+                </p>
+              </AnimateIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. About ── */}
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
@@ -83,8 +129,8 @@ export default function BHCCPage() {
             <div className="space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
               <p>
                 Building House Christian Centre (BHCC) is a Spirit-filled church
-                community in the United Kingdom, established under the ministry
-                of Ayodele Oladapo Awe.
+                in Norwich, United Kingdom, established under the ministry of
+                Ayodele Oladapo Awe.
               </p>
               <p>
                 At BHCC, we are committed to building believers through the
@@ -92,16 +138,96 @@ export default function BHCCPage() {
                 God&apos;s primary vehicle for transformation in society.
               </p>
               <p>
-                From our weekly services to our prayer gatherings and community
-                outreaches, BHCC is a place where lives are changed and
-                destinies are shaped by the power of the gospel.
+                We gather twice each week — on Sunday and on Thursday — and BHCC
+                is a place where lives are changed and destinies are shaped by
+                the power of the gospel. New programmes and ministries are being
+                developed &mdash; stay connected for updates.
               </p>
             </div>
           </AnimateIn>
         </div>
       </section>
 
-      {/* ── 3. Beliefs ── */}
+      {/* ── 4. Our Story ── */}
+      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+          <SectionLabel tone="dark">Our Story</SectionLabel>
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+            How It Began
+          </h2>
+          <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+          <div className="space-y-4 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+            <p>
+              At an end-of-year retreat in 2023, Minister Ayodele Oladapo Awe was
+              taken in a trance and saw himself travelling to the city of
+              Norwich. There the Lord spoke to him, instructing him to begin a
+              work and calling it &ldquo;The Building House.&rdquo;
+            </p>
+            <p>
+              That word became the mandate the church carries today. Building
+              House Christian Centre fully began on {BHCC?.founded}.
+            </p>
+          </div>
+        </AnimateIn>
+      </section>
+
+      {/* ── 5. Leadership ── */}
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl text-center">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl">
+            <SectionLabel tone="light">Leadership</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              Meet the Team
+            </h2>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mx-auto mt-16 grid max-w-3xl grid-cols-1 gap-10 sm:grid-cols-2">
+            {BHCC?.leadership?.map((leader, i) => (
+              <AnimateIn key={leader.name} delay={i * 0.1} className="h-full">
+                <div className="group flex h-full flex-col border-t-2 border-blue-sky bg-cream">
+                  <div className="relative aspect-[3/4] w-full overflow-hidden">
+                    {leader.image ? (
+                      <Image
+                        src={leader.image}
+                        alt={leader.name}
+                        fill
+                        sizes="(min-width: 640px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      /* Photo pending from the client — initials stand in so the
+                         grid keeps its rhythm without a stock-photo stranger. */
+                      <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+                        <span
+                          aria-hidden
+                          className="font-serif text-5xl font-bold leading-none tracking-tight text-white/90"
+                        >
+                          {initialsOf(leader.name)}
+                        </span>
+                        <span className="mt-4 font-sans text-[0.65rem] uppercase tracking-[0.2em] text-white/40">
+                          Photo coming soon
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-8">
+                    <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">
+                      {leader.name}
+                    </h3>
+                    <p className="mt-2 font-sans text-xs uppercase tracking-widest text-wine">
+                      {leader.role}
+                    </p>
+                  </div>
+                </div>
+              </AnimateIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6. Beliefs ── */}
       <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
@@ -127,7 +253,7 @@ export default function BHCCPage() {
         </div>
       </section>
 
-      {/* ── 4. Services ── */}
+      {/* ── 7. Services ── */}
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
@@ -138,7 +264,7 @@ export default function BHCCPage() {
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="mx-auto mt-16 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
             {SERVICES.map((svc, i) => (
               <AnimateIn key={svc.title} delay={i * 0.1} className="h-full">
                 <div className="h-full border-t-2 border-blue-sky bg-cream p-8 text-center">
@@ -156,10 +282,35 @@ export default function BHCCPage() {
             ))}
           </div>
 
-          <AnimateIn direction="up">
+          <AnimateIn direction="up" className="mx-auto mt-12 max-w-4xl">
+            <div className="border-l-4 border-blue-sky bg-cream p-8 text-left">
+              <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-navy">
+                Visit Us
+              </h3>
+              <div className="flex items-start gap-3">
+                <MapPin
+                  aria-hidden
+                  className="mt-1 h-5 w-5 shrink-0 text-blue-sky"
+                />
+                <p className="font-sans text-base leading-relaxed text-muted">
+                  {BHCC?.address}
+                </p>
+              </div>
+              {BHCC?.email && (
+                <a
+                  href={`mailto:${BHCC.email}`}
+                  className="mt-4 inline-block font-sans text-sm text-wine underline-offset-4 transition-colors hover:text-wine-light hover:underline"
+                >
+                  {BHCC.email}
+                </a>
+              )}
+            </div>
+
             <p className="mt-12 font-sans text-base leading-relaxed text-muted">
-              Contact us for exact times and location details.
+              New programmes and ministries are being developed &mdash; stay
+              connected for updates.
             </p>
+
             <div className="mt-8">
               <Button href="/contact" variant="primary" size="lg">
                 Get in Touch
@@ -169,7 +320,7 @@ export default function BHCCPage() {
         </div>
       </section>
 
-      {/* ── 5. CTA ── */}
+      {/* ── 8. CTA ── */}
       <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
