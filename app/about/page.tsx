@@ -63,11 +63,12 @@ export default function AboutPage() {
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
-            <div className="relative aspect-[3/4] overflow-hidden">
+            <div className="relative aspect-square overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80"
+                src="/images/apostle-portrait.jpg"
                 alt="Minister Ayodele Oladapo Awe"
                 fill
+                priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover transition-transform duration-700 hover:scale-105"
               />

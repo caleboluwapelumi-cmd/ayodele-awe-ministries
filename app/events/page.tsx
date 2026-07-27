@@ -34,7 +34,7 @@ const UPCOMING = [
   {
     title: "BLCN Revival Meeting",
     date: "TBA",
-    location: "Nigeria",
+    location: "Ado Ekiti, Nigeria",
     imageUrl: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=600&q=80",
   },
 ];

@@ -6,6 +6,9 @@ export async function POST(request: Request) {
     const { fullName, email, phone, subject, message, newsletter } = body;
 
     // TODO: Integrate with email / CRM service
+    // Subject-based routing (once Resend is set up):
+    //   "Church Information (BLCN)" → blcnglobal@gmail.com
+    //   everything else             → general ministry inbox
     console.log("Contact form submission:", {
       fullName,
       email,

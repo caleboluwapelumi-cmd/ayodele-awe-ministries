@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Building2, BookOpen, MapPin, Handshake, BookMarked, Plane } from "lucide-react";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import NewsletterForm from "@/components/NewsletterForm";
@@ -19,6 +20,8 @@ type Expression = {
   icon: "building2" | "bookOpen" | "spotify" | "mapPin" | "handshake" | "bookMarked" | "plane";
   title: string;
   acronym?: string;
+  /** Real church logo, shown beside the acronym. Omitted until assets arrive. */
+  logo?: string;
   location?: string;
   description: string;
   cta: string;
@@ -44,7 +47,8 @@ const EXPRESSIONS: Expression[] = [
     icon: "building2",
     title: "Bethel Livingstone Christian Network",
     acronym: "BLCN",
-    location: "🇳🇬 Nigeria",
+    logo: "/images/blcn-logo.jpg",
+    location: "🇳🇬 Ado Ekiti, Nigeria",
     description:
       "A thriving network of believers across Nigeria dedicated to community-driven ministry, discipleship, and gospel outreach.",
     cta: "Visit BLCN",
@@ -190,14 +194,29 @@ export default function ExpressionsPage() {
                     </h3>
 
                     {(expr.acronym || expr.location) && (
-                      <p className="mb-4 font-sans text-xs uppercase tracking-widest text-muted">
-                        {expr.acronym && (
-                          <span className="mr-2 font-semibold text-wine">
-                            {expr.acronym}
+                      <div className="mb-4 flex items-center gap-3">
+                        {expr.logo && (
+                          /* Decorative — the acronym beside it already names the church */
+                          <span className="relative block h-9 w-9 shrink-0 overflow-hidden">
+                            <Image
+                              src={expr.logo}
+                              alt=""
+                              aria-hidden
+                              fill
+                              sizes="36px"
+                              className="object-cover"
+                            />
                           </span>
                         )}
-                        {expr.location}
-                      </p>
+                        <p className="font-sans text-xs uppercase tracking-widest text-muted">
+                          {expr.acronym && (
+                            <span className="mr-2 font-semibold text-wine">
+                              {expr.acronym}
+                            </span>
+                          )}
+                          {expr.location}
+                        </p>
+                      </div>
                     )}
 
                     <p className="mb-8 flex-1 font-sans text-base leading-relaxed text-muted">

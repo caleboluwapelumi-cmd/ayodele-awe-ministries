@@ -41,7 +41,7 @@ export default function HomePage() {
           <AnimateIn direction="left">
             <div className="relative aspect-square overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80"
+                src="/images/apostle-portrait.jpg"
                 alt="Minister Ayodele Oladapo Awe"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"

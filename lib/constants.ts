@@ -11,11 +11,19 @@ export const SOCIALS = {
   spotify: "#",
 } as const;
 
+export interface ServiceTime {
+  day: string;
+  time: string;
+}
+
 export interface Church {
   name: string;
   acronym: string;
   location: string;
   href: string;
+  address?: string;
+  serviceTimes?: ServiceTime[];
+  email?: string;
 }
 
 // NOTE: More expressions (books, outreaches, itineraries) will be added later.
@@ -29,8 +37,15 @@ export const CHURCHES: Church[] = [
   {
     name: "Bethel Livingstone Christian Network",
     acronym: "BLCN",
-    location: "Nigeria",
+    location: "Ado Ekiti, Nigeria",
     href: "/churches/blcn",
+    address:
+      "BETHEL Centre, Kajola Street, adjacent Olukayode Stadium, Ado Ekiti, Ekiti State, Nigeria",
+    serviceTimes: [
+      { day: "Sunday", time: "9:00 AM" },
+      { day: "Tuesday", time: "5:30 PM" },
+    ],
+    email: "blcnglobal@gmail.com",
   },
 ];
 

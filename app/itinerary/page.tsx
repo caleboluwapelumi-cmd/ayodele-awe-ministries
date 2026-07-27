@@ -29,7 +29,7 @@ const ITINERARY = [
     date: "TBA",
     badge: "Revival Meeting",
     title: "BLCN Revival Night",
-    location: "Nigeria",
+    location: "Ado Ekiti, Nigeria",
   },
 ];
 
@@ -144,8 +144,8 @@ export default function ItineraryPage() {
           <AnimateIn direction="right" className="hidden lg:block">
             <div className="relative aspect-[4/5] overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1588421357574-87938a86fa28?w=800&q=80"
-                alt="Minister Awe ministering"
+                src="/images/apostle-portrait.jpg"
+                alt="Minister Ayodele Oladapo Awe"
                 fill
                 sizes="50vw"
                 className="object-cover transition-transform duration-700 hover:scale-105"

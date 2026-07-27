@@ -1,8 +1,10 @@
 import { Metadata } from "next";
 import Image from "next/image";
+import { MapPin } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import { CHURCHES } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "BLCN — Bethel Livingstone Christian Network",
@@ -15,14 +17,15 @@ const BELIEFS = [
   { title: "The Holy Spirit", desc: "We believe in the person and work of the Holy Spirit, including the gifts and power for ministry today." },
 ];
 
+const BLCN = CHURCHES.find((church) => church.acronym === "BLCN");
+
 const SERVICES = [
-  { title: "Sunday Service", time: "Time TBC", desc: "Main weekly gathering for worship, Word, and fellowship." },
-  { title: "Midweek Bible Study", time: "Time TBC", desc: "Deep dive into the Word of God." },
-  { title: "Prayer Meeting", time: "Time TBC", desc: "Corporate prayer and intercession." },
+  { title: "Sunday Service", time: "9:00 AM", desc: "Main weekly gathering for worship, Word, and fellowship." },
+  { title: "Tuesday Service", time: "5:30 PM", desc: "Midweek gathering for prayer and the Word." },
 ];
 
 const NETWORK_STATS = [
-  { stat: "Multiple Locations", label: "Across Nigeria" },
+  { stat: "Ado Ekiti", label: "Ekiti State, Nigeria" },
   { stat: "One Network", label: "One Vision" },
   { stat: "Thousands Reached", label: "And Growing" },
 ];
@@ -46,6 +49,16 @@ export default function BLCNPage() {
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+            <div className="relative mx-auto mb-8 h-24 w-24 overflow-hidden">
+              <Image
+                src="/images/blcn-logo.jpg"
+                alt="Bethel Livingstone Christian Network logo"
+                fill
+                priority
+                sizes="96px"
+                className="object-cover"
+              />
+            </div>
             <SectionLabel tone="dark">Nigeria</SectionLabel>
             <h1 className="font-serif text-4xl font-black leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
               Bethel Livingstone Christian Network
@@ -66,7 +79,35 @@ export default function BLCNPage() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
       </section>
 
-      {/* ── 2. About ── */}
+      {/* ── 2. Church Order — vision, mission & values ── */}
+      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+            <SectionLabel tone="dark">Our Church Order</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              Vision, Mission &amp; Values
+            </h2>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          {/* White mat separates the graphic's own dark-blue top from the mid-blue section.
+              Width is capped under the 432px native width of the source so the browser
+              scales down rather than up. */}
+          <AnimateIn direction="up" className="mx-auto mt-16 max-w-[380px] bg-white p-4 shadow-xl">
+            <Image
+              src="/images/blcn-church-order.jpg"
+              alt="Bethel Livingstone Christian Network — Welcome Home. Our Vision: to be a global apostolic platform that stewards the supernatural, empowers believers to manifest God's presence, and transforms nations through the gospel of Christ and the reality of His kingdom. Our Mission: we are committed to preaching the gospel, making disciples in nations, and the presence of God in every sphere of influence. Our Values: God's Word, Discipleship, Effective Leadership, Excellence."
+              width={432}
+              height={1080}
+              quality={100}
+              sizes="348px"
+              className="h-auto w-full rounded-none"
+            />
+          </AnimateIn>
+        </div>
+      </section>
+
+      {/* ── 3. About ── */}
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
@@ -107,7 +148,7 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 3. Beliefs ── */}
+      {/* ── 4. Beliefs ── */}
       <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
@@ -133,7 +174,7 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 4. Services ── */}
+      {/* ── 5. Services ── */}
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
@@ -144,7 +185,7 @@ export default function BLCNPage() {
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="mx-auto mt-16 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
             {SERVICES.map((svc, i) => (
               <AnimateIn key={svc.title} delay={i * 0.1} className="h-full">
                 <div className="h-full border-t-2 border-blue-sky bg-cream p-8 text-center">
@@ -162,10 +203,22 @@ export default function BLCNPage() {
             ))}
           </div>
 
-          <AnimateIn direction="up">
-            <p className="mt-12 font-sans text-base leading-relaxed text-muted">
-              Contact us for service times and location details in Nigeria.
-            </p>
+          <AnimateIn direction="up" className="mx-auto mt-12 max-w-4xl">
+            <div className="border-l-4 border-blue-sky bg-cream p-8 text-left">
+              <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-navy">
+                Visit Us
+              </h3>
+              <div className="flex items-start gap-3">
+                <MapPin
+                  aria-hidden
+                  className="mt-1 h-5 w-5 shrink-0 text-blue-sky"
+                />
+                <p className="font-sans text-base leading-relaxed text-muted">
+                  {BLCN?.address}
+                </p>
+              </div>
+            </div>
+
             <div className="mt-8">
               <Button href="/contact" variant="primary" size="lg">
                 Get in Touch
@@ -175,7 +228,7 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 5. Network Vision ── */}
+      {/* ── 6. Network Vision ── */}
       <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up">
@@ -207,15 +260,15 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 6. CTA ── */}
+      {/* ── 7. CTA ── */}
       <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-            Be Part of the Network
+            Be Part of the Family
           </h2>
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
-            BLCN is a family spread across Nigeria. Find your place in the
-            network.
+            BLCN is a family in Ado Ekiti. Come as you are — there is a place
+            here for you.
           </p>
           <Button href="/contact" variant="wine" size="lg">
             Contact Us

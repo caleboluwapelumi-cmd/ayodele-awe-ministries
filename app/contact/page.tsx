@@ -12,6 +12,9 @@ import YouTubeIcon from "@/components/icons/YouTubeIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
 
+// TODO (email routing): once Resend is wired up in /api/contact, submissions with
+// subject "Church Information (BLCN)" should be routed to blcnglobal@gmail.com
+// rather than the general ministry inbox.
 const SUBJECTS = [
   "General Enquiry",
   "Book Minister Awe",
@@ -240,6 +243,8 @@ export default function ContactPage() {
                 enquire: "Enquire About BHCC",
                 href: "/churches/bhcc",
                 location: "United Kingdom (full address TBA)",
+                services: "Contact us for service schedule",
+                email: null,
               },
               {
                 region: "Nigeria",
@@ -247,7 +252,10 @@ export default function ContactPage() {
                 subject: "Church Information (BLCN)",
                 enquire: "Enquire About BLCN",
                 href: "/churches/blcn",
-                location: "Nigeria (full address TBA)",
+                location:
+                  "BETHEL Centre, Kajola Street, adjacent Olukayode Stadium, Ado Ekiti, Ekiti State, Nigeria",
+                services: "Sunday 9:00 AM · Tuesday 5:30 PM",
+                email: "blcnglobal@gmail.com",
               },
             ].map((church, i) => (
               <AnimateIn key={church.name} delay={i * 0.1} className="h-full">
@@ -268,8 +276,19 @@ export default function ContactPage() {
                     </p>
                     <p>
                       <span className="font-semibold text-white">Services:</span>{" "}
-                      Contact us for service schedule
+                      {church.services}
                     </p>
+                    {church.email && (
+                      <p>
+                        <span className="font-semibold text-white">Email:</span>{" "}
+                        <a
+                          href={`mailto:${church.email}`}
+                          className="underline-offset-4 transition-colors hover:text-blue-sky hover:underline"
+                        >
+                          {church.email}
+                        </a>
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <Button onClick={() => setSubjectAndScroll(church.subject)} variant="secondary">

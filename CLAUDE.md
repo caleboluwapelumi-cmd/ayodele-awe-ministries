@@ -156,9 +156,13 @@ lib/
 ---
 
 ## Assets Status
-All images are **Unsplash placeholders** — real assets pending from client:
-- Minister portrait
-- BHCC + BLCN church photos
+Real assets received (all in `public/images/`, all JPEG):
+- `apostle-portrait.jpg` — 640×640 minister portrait. Used on `/`, `/about`, `/itinerary`.
+- `blcn-logo.jpg` — 828×647, shofar emblem on a dark charcoal background (**not** transparent). Used on `/churches/blcn` hero + the BLCN card on `/churches`.
+- `blcn-church-order.jpg` — 432×1080 portrait graphic with BLCN vision/mission/values text baked in. Full text lives in its `alt`; do not duplicate it as body copy.
+
+Still Unsplash placeholders — pending from client:
+- BHCC logo + BHCC/BLCN church photos (BHCC stays acronym-only until its assets arrive)
 - Event banners
 - Ministry logo + favicon
 
