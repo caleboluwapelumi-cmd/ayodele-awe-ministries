@@ -19,6 +19,24 @@ const BELIEFS = [
 
 const BLCN = CHURCHES.find((church) => church.acronym === "BLCN");
 
+const FOUNDATION = [
+  {
+    title: "Vision",
+    desc: "To be a global apostolic platform that stewards the supernatural, empowers believers to manifest God's presence, and transforms nations through the gospel of Christ and the reality of His kingdom.",
+  },
+  {
+    title: "Mission",
+    desc: "We are committed to preaching the gospel, making disciples in nations, and the presence of God in every sphere of influence.",
+  },
+];
+
+const VALUES = [
+  "God's Word",
+  "Discipleship",
+  "Effective Leadership",
+  "Excellence",
+];
+
 const SERVICES = [
   { title: "Sunday Service", time: "9:00 AM", desc: "Main weekly gathering for worship, Word, and fellowship." },
   { title: "Tuesday Service", time: "5:30 PM", desc: "Midweek gathering for prayer and the Word." },
@@ -49,15 +67,23 @@ export default function BLCNPage() {
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
-            <div className="relative mx-auto mb-8 h-24 w-24 overflow-hidden">
-              <Image
-                src="/images/blcn-logo.jpg"
-                alt="Bethel Livingstone Christian Network logo"
-                fill
-                priority
-                sizes="96px"
-                className="object-cover"
+            <div className="relative mx-auto mb-10 h-40 w-40 sm:h-48 sm:w-48">
+              {/* Soft glow — the logo's own backdrop is near-black, so it needs
+                  separation from the dark hero behind it */}
+              <div
+                aria-hidden
+                className="absolute -inset-10 bg-[radial-gradient(circle,rgba(74,144,217,0.4),transparent_70%)] blur-2xl"
               />
+              <div className="relative h-full w-full overflow-hidden shadow-2xl ring-1 ring-white/15">
+                <Image
+                  src="/images/blcn-logo.jpg"
+                  alt="Bethel Livingstone Christian Network logo"
+                  fill
+                  priority
+                  sizes="(min-width: 640px) 192px, 160px"
+                  className="object-cover"
+                />
+              </div>
             </div>
             <SectionLabel tone="dark">Nigeria</SectionLabel>
             <h1 className="font-serif text-4xl font-black leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
@@ -81,28 +107,61 @@ export default function BLCNPage() {
 
       {/* ── 2. Church Order — vision, mission & values ── */}
       <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
-            <SectionLabel tone="dark">Our Church Order</SectionLabel>
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-5 lg:gap-16">
+          {/* White mat separates the graphic's own dark-blue top from the mid-blue
+              section. Width stays well under the 432px native width of the source
+              so the browser scales down rather than up. */}
+          <AnimateIn direction="left" className="lg:col-span-2">
+            <div className="mx-auto max-w-[280px] bg-white p-4 shadow-xl sm:max-w-[320px]">
+              <Image
+                src="/images/blcn-church-order.jpg"
+                alt="BLCN &quot;Welcome Home&quot; church order card, presenting the vision, mission and values set out alongside."
+                width={432}
+                height={1080}
+                quality={100}
+                sizes="(min-width: 640px) 288px, 248px"
+                className="h-auto w-full rounded-none"
+              />
+            </div>
+          </AnimateIn>
+
+          <AnimateIn direction="right" className="lg:col-span-3">
+            <SectionLabel tone="dark">Our Foundation</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Vision, Mission &amp; Values
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
-          </AnimateIn>
+            <div className="mb-10 h-0.5 w-16 bg-blue-sky" />
 
-          {/* White mat separates the graphic's own dark-blue top from the mid-blue section.
-              Width is capped under the 432px native width of the source so the browser
-              scales down rather than up. */}
-          <AnimateIn direction="up" className="mx-auto mt-16 max-w-[380px] bg-white p-4 shadow-xl">
-            <Image
-              src="/images/blcn-church-order.jpg"
-              alt="Bethel Livingstone Christian Network — Welcome Home. Our Vision: to be a global apostolic platform that stewards the supernatural, empowers believers to manifest God's presence, and transforms nations through the gospel of Christ and the reality of His kingdom. Our Mission: we are committed to preaching the gospel, making disciples in nations, and the presence of God in every sphere of influence. Our Values: God's Word, Discipleship, Effective Leadership, Excellence."
-              width={432}
-              height={1080}
-              quality={100}
-              sizes="348px"
-              className="h-auto w-full rounded-none"
-            />
+            <div className="space-y-8">
+              {FOUNDATION.map((item) => (
+                <div key={item.title}>
+                  <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-blue-sky">
+                    {item.title}
+                  </h3>
+                  <p className="font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+
+              <div>
+                <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-blue-sky">
+                  Values
+                </h3>
+                <ul className="flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-base text-white/70 sm:text-lg">
+                  {VALUES.map((value, i) => (
+                    <li key={value} className="flex items-center gap-x-3">
+                      {i > 0 && (
+                        <span aria-hidden className="text-blue-sky">
+                          &middot;
+                        </span>
+                      )}
+                      {value}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </AnimateIn>
         </div>
       </section>
