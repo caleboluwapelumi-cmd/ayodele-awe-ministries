@@ -4,17 +4,22 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
-import TelegramPost from "@/components/TelegramPost";
 import YouTubeEmbed from "@/components/YouTubeEmbed";
-import {
-  SERMONS,
-  SOCIALS,
-  TELEGRAM_CHANNEL,
-  YOUTUBE_UPLOADS_PLAYLIST_ID,
-} from "@/lib/constants";
+import { SOCIALS, YOUTUBE_UPLOADS_PLAYLIST_ID } from "@/lib/constants";
+import { getLatestSermons } from "@/lib/telegram";
 
-/** How many of the curated sermons to render players for on this page. */
-const FEATURED_COUNT = 6;
+/** How many of the newest Telegram sermons to list. */
+const SERMON_COUNT = 5;
+
+/** "26 June 2026" — en-GB in UTC so server and client agree. */
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
 
 export const metadata: Metadata = {
   title: "Telegram Teachings — Ayodele Oladapo Awe Ministries",
@@ -37,7 +42,11 @@ const CONTENT_TYPES = [
   },
 ];
 
-export default function TeachingsPage() {
+export default async function TeachingsPage() {
+  // Scraped from the public channel preview, revalidated hourly. Can legitimately
+  // come back empty — the section below renders a fallback for that.
+  const sermons = await getLatestSermons(SERMON_COUNT);
+
   return (
     <>
       {/* ── 1. Hero ── */}
@@ -87,45 +96,79 @@ export default function TeachingsPage() {
         </div>
       </section>
 
-      {/* ── 3. Listen — Telegram sermon players ── */}
+      {/* ── 3. Latest Sermons — live from the Telegram channel ── */}
       <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
             <SectionLabel tone="dark">Listen Now</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-              Recent Teachings
+              Latest Sermons
             </h2>
             <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
-              Press play below — no app needed. Every message is also available
-              in full on the Telegram channel.
+              Our 5 most recent teachings — updated automatically
             </p>
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2">
-            {SERMONS.slice(0, FEATURED_COUNT).map((sermon, i) => (
-              <AnimateIn
-                key={sermon.messageId}
-                delay={(i % 2) * 0.1}
-                className="h-full"
-              >
-                <div className="flex h-full flex-col border-t-2 border-blue-sky bg-blue-deep/40 p-6">
-                  <h3 className="mb-4 font-serif text-lg font-bold leading-tight text-white">
-                    {sermon.title}
-                  </h3>
-                  <TelegramPost
-                    post={`${TELEGRAM_CHANNEL}/${sermon.messageId}`}
-                  />
-                </div>
-              </AnimateIn>
-            ))}
-          </div>
+          {sermons.length > 0 ? (
+            <>
+              <ul className="mx-auto mt-16 max-w-4xl border-t border-white/10">
+                {sermons.map((sermon, i) => (
+                  <AnimateIn key={sermon.id} delay={i * 0.1}>
+                    <li className="flex flex-col gap-5 border-b border-white/10 py-7 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+                      <div className="min-w-0">
+                        <h3 className="font-serif text-lg font-bold leading-tight text-white">
+                          {sermon.title}
+                        </h3>
+                        <p className="mt-2 font-sans text-xs uppercase tracking-widest text-white/50">
+                          <time dateTime={sermon.date}>
+                            {formatDate(sermon.date)}
+                          </time>
+                          {sermon.duration && <> &middot; {sermon.duration}</>}
+                          {sermon.performer && <> &middot; {sermon.performer}</>}
+                        </p>
+                      </div>
 
-          <AnimateIn direction="up" className="mt-16 text-center">
-            <Button href={SOCIALS.telegram} variant="secondary" size="lg" external>
-              Browse the full library
-            </Button>
-          </AnimateIn>
+                      <Button
+                        href={sermon.url}
+                        variant="outline"
+                        external
+                        className="shrink-0 self-start text-white sm:self-auto"
+                      >
+                        Listen on Telegram
+                      </Button>
+                    </li>
+                  </AnimateIn>
+                ))}
+              </ul>
+
+              <AnimateIn direction="up" className="mt-16 text-center">
+                <Button
+                  href={SOCIALS.telegram}
+                  variant="secondary"
+                  size="lg"
+                  external
+                >
+                  Browse the full library
+                </Button>
+              </AnimateIn>
+            </>
+          ) : (
+            /* Fetch failed, or the channel has posted no audio recently. */
+            <AnimateIn direction="up" className="mt-16 text-center">
+              <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+                New teachings coming soon.
+              </p>
+              <Button
+                href={SOCIALS.telegram}
+                variant="secondary"
+                size="lg"
+                external
+              >
+                Browse the full library
+              </Button>
+            </AnimateIn>
+          )}
         </div>
       </section>
 

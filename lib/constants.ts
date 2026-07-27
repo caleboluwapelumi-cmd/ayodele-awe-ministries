@@ -35,35 +35,11 @@ export const TELEGRAM_CHANNEL = "bethelencounterlib";
  */
 export const YOUTUBE_UPLOADS_PLAYLIST_ID: string | null = null;
 
-export interface Sermon {
-  /** Telegram message ID of the audio post. */
-  messageId: number;
-  title: string;
-}
-
-/**
- * Curated sermon audio from the Telegram channel, newest first.
- *
- * Telegram offers no way to list a channel's posts without a bot token, so this
- * is maintained by hand. To add a new sermon: open the audio post in Telegram,
- * copy its link (t.me/bethelencounterlib/1344), and add the trailing number
- * plus its title to the TOP of this array. Nothing else needs changing.
- *
- * Each sermon posts as three messages — description, audio, cover image. The ID
- * needed here is the middle one (the audio itself).
+/*
+ * The hand-curated SERMONS array lived here. It is gone: `/media/teachings` now
+ * scrapes the channel's public preview at request time — see lib/telegram.ts.
+ * Sermons no longer need adding by hand; posting to Telegram is enough.
  */
-export const SERMONS: Sermon[] = [
-  { messageId: 1344, title: "The Shout Of Joy 1" },
-  { messageId: 1341, title: "Scent Of Water (Pt 2)" },
-  { messageId: 1338, title: "Scent Of Water (Pt 1)" },
-  { messageId: 1333, title: "The Kingdom Agenda" },
-  { messageId: 1317, title: "Understanding Faith: The Law Of Conversion (Pt 3)" },
-  { messageId: 1314, title: "Understanding Faith: The Law Of Conversion (Pt 2)" },
-  { messageId: 1312, title: "Understanding Faith: The Law Of Conversion (Pt 1)" },
-  { messageId: 1308, title: "Strengthen Yourself For Destiny" },
-  { messageId: 1294, title: "Functioning From Rest" },
-  { messageId: 1280, title: "Faith That Overcomes" },
-];
 
 export const SELAR_BOOK_URL = "https://tr.ee/VJOapqf39_";
 export const AMAZON_BOOK_URL = "https://tr.ee/uiJj6WRE9Q";

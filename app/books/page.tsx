@@ -4,6 +4,8 @@ import NewsletterForm from "@/components/NewsletterForm";
 import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
+import AmazonIcon from "@/components/icons/AmazonIcon";
+import SelarIcon from "@/components/icons/SelarIcon";
 import SectionLabel from "@/components/SectionLabel";
 import { AMAZON_BOOK_URL, SELAR_BOOK_URL, SOCIALS } from "@/lib/constants";
 
@@ -90,6 +92,7 @@ export default function BooksPage() {
                   </div>
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <Button href={book.selar} variant="primary" external>
+                      <SelarIcon size={20} />
                       Buy on Selar
                     </Button>
                     <Button
@@ -98,6 +101,7 @@ export default function BooksPage() {
                       className="text-blue-navy"
                       external
                     >
+                      <AmazonIcon size={20} />
                       Buy on Amazon
                     </Button>
                   </div>

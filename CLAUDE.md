@@ -58,6 +58,23 @@ There is **no `-DEFAULT` suffix** in Tailwind v4. Use `bg-blue` / `text-wine`, *
   authored — write them properly at the call site.
 - Wine is NEVER used as button bg on dark blue backgrounds.
 
+### No text-link CTAs
+**Every call to action is a `Button`.** There are no bare text links with a
+trailing arrow (`&rarr;`) anywhere — "Learn more →", "Open →", "Listen →" and
+friends were all converted. Inside cards, use `variant="outline"` with a colour
+passed via `className` (`text-white` on dark, `text-blue`/`text-wine` on light)
+so the CTA reads as a button without the weight of a solid fill.
+
+Exception: **Navbar and Footer navigation lists are not CTAs** — they stay plain
+links.
+
+⚠️ A `Button` with `href` renders an `<a>`, so a card whose CTA is a Button
+**cannot itself be a link** — nested anchors are invalid HTML. `ChurchCard`,
+`MediaLinks`, the `/media` quick-access grid and the `/media/music` platform
+grid were each changed from a wrapping `<a>`/`<Link>` to a plain `<div>` for
+exactly this reason. Keep the `group` class on that div so the image/heading
+hover effects still fire.
+
 ---
 
 ## Typography Rules
@@ -137,11 +154,8 @@ components/
   SpotifyEmbed.tsx        ← Spotify iframe player. Props: kind ('artist'|'show'|
                             'album'|'track'|'episode'), id (bare ID or a pasted
                             share URL), title, size ('compact' 152px | 'full' 352px)
-  TelegramPost.tsx        ← 'use client' — renders one public Telegram post via
-                            telegram-widget.js. Audio posts come with a play
-                            button. The widget is a self-replacing <script>, so
-                            it is injected into a ref'd div in useEffect and the
-                            container is cleared on cleanup (StrictMode safety)
+  icons/AmazonIcon.tsx    ← Amazon "a + smile", currentColor (Simple Icons, CC0)
+  icons/SelarIcon.tsx     ← Drawn "S" badge — Selar ships no public SVG mark
   YouTubeEmbed.tsx        ← youtube-nocookie player. Takes videoId OR playlistId
   icons/
     SpotifyIcon.tsx
@@ -154,6 +168,10 @@ components/
 lib/
   constants.ts            ← SITE_NAME, MINISTER_NAME, TAGLINE, NAV_LINKS, CHURCHES,
                             SOCIALS (minister), BLCN_SOCIALS (church), media/book URLs
+  telegram.ts             ← Server-side scrape of the public channel preview.
+                            getLatestSermons(n) → the n newest audio posts,
+                            revalidated hourly. Returns [] on any failure —
+                            callers MUST render an empty state
 ```
 
 ---
@@ -250,12 +268,41 @@ Still `#` placeholders — real URLs pending:
 - **Spotify** — `SPOTIFY_ARTIST_ID` / `SPOTIFY_PODCAST_ID` feed `SpotifyEmbed` on
   `/media` and `/media/music`. ⚠️ Visitors not logged into Spotify get **30-second
   previews**; full playback needs a Spotify login. Platform rule, not fixable here.
-- **Telegram** — `SERMONS` in `lib/constants.ts` is a hand-curated list of audio
-  post IDs, newest first, rendered as players on `/media/teachings`. Telegram has
-  no API to list channel posts without a bot token, so **new sermons must be added
-  by hand**: copy the audio post's link (`t.me/bethelencounterlib/1344`), add the
-  trailing number and title to the top of the array. Each sermon posts as three
-  messages (description → audio → cover image); the ID needed is the audio one.
+- **Telegram** — **live, no embed, no hosted audio.** `/media/teachings` lists the
+  5 most recent sermons by scraping the channel's public preview server-side via
+  `lib/telegram.ts`, refreshed hourly (`next: { revalidate: 3600 }`, so the route
+  is ISR — the build output shows `Revalidate 1h`). Each row is title, date and a
+  "Listen on Telegram" Button. **Sermons no longer need adding by hand** — posting
+  to Telegram is enough. The old hand-curated `SERMONS` array and the
+  `TelegramPost` embed component are both deleted.
+
+  ⚠️ **There is no on-site playback, by design, and Telegram cannot provide it.**
+  The `?embed=1` response for an audio post is static markup — a
+  `tgme_widget_message_document` card wrapped in a plain `<a>` to t.me. Verified
+  against the live endpoint: zero `<audio>` elements, no voice-player markup, no
+  media URL, no play control; `mode=tme` makes no difference. Don't reintroduce
+  the embed hoping for a player, and never write copy promising one.
+
+  **How the scrape works** (`lib/telegram.ts`):
+  - `t.me/s/<channel>` is server-rendered HTML holding the last 20 posts;
+    `?before=<id>` pages backwards. No bot token, no API key.
+  - A post counts as a sermon when its document icon carries the `audio`
+    modifier (`tgme_widget_message_document_icon … audio`). Text devotionals,
+    cover images and link previews are skipped.
+  - ⚠️ **Paging back is essential, not an optimisation.** The channel posts daily
+    text devotionals, so the newest page is routinely *all* text — a single fetch
+    returns zero sermons. `MAX_PAGES = 8` (~160 posts) walks back far enough.
+  - ⚠️ **No duration is available.** Audio-document markup carries only title and
+    performer. `Sermon.duration` is wired up (it reads a `_duration` node, which
+    voice notes and video do expose) but is empty for every post on this channel.
+    It renders only when present — never synthesise a value.
+  - Untagged uploads inherit their filename as the title, e.g. post 1331 is just
+    "Audio". `isGenericTitle` catches those and falls back to the first sentence
+    of the post caption.
+  - **This is scraping, not an API contract.** If Telegram restyles the preview,
+    the parser silently matches nothing and `getLatestSermons` returns `[]`. The
+    page renders "New teachings coming soon" plus a channel link in that case —
+    keep that fallback in place.
 - **YouTube** — `YOUTUBE_UPLOADS_PLAYLIST_ID` is `null`, so `/media/teachings`
   renders a link-out card instead of a player. YouTube cannot embed a channel by
   @handle. To switch the player on: take the channel ID (`UC…`), swap the leading

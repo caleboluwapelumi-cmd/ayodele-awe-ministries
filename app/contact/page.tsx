@@ -195,25 +195,25 @@ export default function ContactPage() {
               <div className="border-l-4 border-blue-sky pl-6">
                 <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Booking Minister Awe</h3>
                 <p className="mt-1 font-sans text-sm text-muted">For speaking engagements, church visits, conferences</p>
-                <button
+                <Button
                   onClick={() => setSubjectAndScroll("Book Minister Awe")}
-                  className="group mt-2 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-blue"
+                  variant="outline"
+                  className="mt-4 text-blue"
                 >
-                  Submit a Booking Request
-                  <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
-                </button>
+                  Submit a booking request
+                </Button>
               </div>
 
               <div className="border-l-4 border-blue-sky pl-6">
                 <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Prayer Requests</h3>
                 <p className="mt-1 font-sans text-sm text-muted">We pray over every request submitted</p>
-                <button
+                <Button
                   onClick={() => setSubjectAndScroll("Prayer Request")}
-                  className="group mt-2 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-blue"
+                  variant="outline"
+                  className="mt-4 text-blue"
                 >
-                  Submit a Prayer Request
-                  <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
-                </button>
+                  Submit a prayer request
+                </Button>
               </div>
             </div>
 
@@ -233,14 +233,14 @@ export default function ContactPage() {
                 </a>
               ))}
 
-              <a
+              <Button
                 href={SOCIALS.linktree}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-blue-sky transition-colors hover:text-blue"
+                variant="outline"
+                external
+                className="text-blue"
               >
-                All Links &rarr;
-              </a>
+                All links
+              </Button>
             </div>
           </AnimateIn>
         </div>

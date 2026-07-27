@@ -3,6 +3,7 @@ import { Link2 as LinkIcon } from "lucide-react";
 import { SITE_NAME, SOCIALS, TAGLINE } from "@/lib/constants";
 import NewsletterForm from "./NewsletterForm";
 import SectionLabel from "./SectionLabel";
+import Button from "./Button";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
@@ -61,21 +62,15 @@ export default function Footer() {
               ))}
             </div>
 
-            <a
+            <Button
               href={SOCIALS.linktree}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group mt-6 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white/60 transition-colors hover:text-blue-sky"
+              variant="outline"
+              external
+              className="mt-6 text-white"
             >
-              <LinkIcon size={14} />
-              All Links
-              <span
-                aria-hidden
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              >
-                &rarr;
-              </span>
-            </a>
+              <LinkIcon size={16} />
+              All links
+            </Button>
           </div>
 
           {/* Navigation */}

@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
 import { Building2, BookOpen, MapPin, Handshake, BookMarked, Plane } from "lucide-react";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
@@ -7,6 +6,7 @@ import NewsletterForm from "@/components/NewsletterForm";
 import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import SectionLabel from "@/components/SectionLabel";
+import Button from "@/components/Button";
 
 export const metadata: Metadata = {
   title: "Ministry Expressions — Ayodele Oladapo Awe Ministries",
@@ -61,7 +61,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Telegram Teachings",
     description:
       "A growing library of sermons, Bible studies, and prophetic messages from Minister Awe — accessible to believers anywhere in the world.",
-    cta: "Join Channel",
+    cta: "Join channel",
     href: "/media/teachings",
     accent: "sky",
   },
@@ -71,7 +71,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Music on Spotify",
     description:
       "Worship, gospel, and prophetic songs crafted to usher believers into the presence of God. Stream on Spotify and all major platforms.",
-    cta: "Stream Now",
+    cta: "Stream now",
     href: "/media/music",
     accent: "sky",
   },
@@ -81,7 +81,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Outreaches & Prayer Gatherings",
     description:
       "From the Norwich Prayer Surge to community outreaches in Nigeria — the ministry takes the gospel beyond the four walls into cities and nations.",
-    cta: "See Events",
+    cta: "See events",
     href: "/events",
     accent: "wine",
   },
@@ -91,7 +91,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Partners for the Ministry",
     description:
       "A community of believers co-labouring with the vision — sowing financially and in prayer to see the gospel advance across the UK and Nigeria.",
-    cta: "Become a Partner",
+    cta: "Become a partner",
     href: "/partners",
     accent: "wine",
   },
@@ -101,7 +101,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Books & Publications",
     description:
       "Written resources from Minister Awe to equip believers, strengthen the local church, and advance the kingdom — available now on Selar and Amazon.",
-    cta: "Browse Books",
+    cta: "Browse books",
     href: "/books",
     accent: "sky",
   },
@@ -111,7 +111,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Ministry Itinerary",
     description:
       "Stay updated on where Minister Awe is ministering next — conferences, church visits, and international engagements across the UK, Nigeria, and beyond.",
-    cta: "See Schedule",
+    cta: "See schedule",
     href: "/itinerary",
     accent: "wine",
   },
@@ -228,18 +228,13 @@ export default function ExpressionsPage() {
                         {expr.cta}
                       </span>
                     ) : (
-                      <Link
+                      <Button
                         href={expr.href}
-                        className="group inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-wine underline-offset-4 transition-colors hover:text-wine-light hover:underline"
+                        variant="outline"
+                        className="self-start text-wine"
                       >
                         {expr.cta}
-                        <span
-                          aria-hidden
-                          className="transition-transform duration-300 group-hover:translate-x-1"
-                        >
-                          &rarr;
-                        </span>
-                      </Link>
+                      </Button>
                     )}
                   </div>
                 </AnimateIn>

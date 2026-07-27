@@ -161,15 +161,9 @@ export default function MusicPage() {
               const pending = p.href === "#";
               return (
                 <AnimateIn key={p.name} delay={i * 0.1} className="h-full">
-                  <a
-                    href={p.href}
-                    {...(pending
-                      ? { "aria-disabled": true }
-                      : { target: "_blank", rel: "noopener noreferrer" })}
+                  <div
                     className={`group flex h-full min-h-[200px] flex-col items-center justify-center border border-white/5 bg-blue-deep/50 p-8 text-center transition-colors ${
-                      pending
-                        ? "pointer-events-none opacity-60"
-                        : "hover:border-white/20"
+                      pending ? "opacity-60" : "hover:border-white/20"
                     }`}
                   >
                     <div className="mb-4">
@@ -183,17 +177,16 @@ export default function MusicPage() {
                         Coming Soon
                       </span>
                     ) : (
-                      <span className="mt-6 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors group-hover:text-white">
+                      <Button
+                        href={p.href}
+                        variant="outline"
+                        external
+                        className="mt-6 text-white"
+                      >
                         Listen
-                        <span
-                          aria-hidden
-                          className="transition-transform duration-300 group-hover:translate-x-1"
-                        >
-                          &rarr;
-                        </span>
-                      </span>
+                      </Button>
                     )}
-                  </a>
+                  </div>
                 </AnimateIn>
               );
             })}

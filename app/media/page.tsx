@@ -93,20 +93,9 @@ export default function MediaPage() {
                 <p className="mb-6 font-sans text-sm text-muted">
                   Sermons · Bible Studies · Prophetic Messages
                 </p>
-                <a
-                  href={SOCIALS.telegram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-blue"
-                >
-                  Join Now
-                  <span
-                    aria-hidden
-                    className="transition-transform duration-300 group-hover:translate-x-1"
-                  >
-                    &rarr;
-                  </span>
-                </a>
+                <Button href={SOCIALS.telegram} variant="primary" external>
+                  Join now
+                </Button>
               </div>
             </div>
           </AnimateIn>
@@ -170,14 +159,10 @@ export default function MediaPage() {
           <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {QUICK_ACCESS.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
-                <a
-                  href={card.href}
-                  {...(card.href === "#"
-                    ? { "aria-disabled": true }
-                    : { target: "_blank", rel: "noopener noreferrer" })}
+                <div
                   className={`group flex h-full min-h-[200px] flex-col items-center justify-center bg-cream p-8 text-center shadow-sm transition-shadow duration-300 ${
                     card.href === "#"
-                      ? "pointer-events-none opacity-60"
+                      ? "opacity-60"
                       : "hover:shadow-lg"
                   }`}
                 >
@@ -190,16 +175,21 @@ export default function MediaPage() {
                   <p className="mt-2 font-sans text-sm leading-relaxed text-muted">
                     {card.desc}
                   </p>
-                  <span className="mt-6 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors group-hover:text-blue">
-                    {card.link}
-                    <span
-                      aria-hidden
-                      className="transition-transform duration-300 group-hover:translate-x-1"
-                    >
-                      &rarr;
+                  {card.href === "#" ? (
+                    <span className="mt-6 inline-flex items-center border border-blue-navy/20 px-3 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-widest text-muted">
+                      Coming Soon
                     </span>
-                  </span>
-                </a>
+                  ) : (
+                    <Button
+                      href={card.href}
+                      variant="outline"
+                      external
+                      className="mt-6 text-blue"
+                    >
+                      {card.link}
+                    </Button>
+                  )}
+                </div>
               </AnimateIn>
             ))}
           </div>
