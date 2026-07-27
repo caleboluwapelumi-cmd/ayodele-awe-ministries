@@ -1,4 +1,5 @@
 import { SOCIALS } from "@/lib/constants";
+import AnimateIn from "@/components/AnimateIn";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
@@ -29,29 +30,39 @@ const MEDIA_CARDS = [
 
 export default function MediaLinks() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {MEDIA_CARDS.map((card) => (
-        <a
-          key={card.title}
-          href={card.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group block bg-blue-deep/50 rounded-lg p-8 border border-white/5 hover:border-white/10 transition-all"
-        >
-          <div className="mb-6">
-            <card.Icon size={48} className="lg:hidden" />
-            <card.Icon size={64} className="hidden lg:block" />
-          </div>
-          <h3 className="font-serif text-xl text-white group-hover:text-blue-sky transition-colors mb-3">
-            {card.title}
-          </h3>
-          <p className="font-sans text-sm text-white/60 leading-relaxed mb-4">
-            {card.description}
-          </p>
-          <span className="font-sans text-sm text-blue-sky group-hover:text-white transition-colors">
-            Open →
-          </span>
-        </a>
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {MEDIA_CARDS.map((card, i) => (
+        <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
+          <a
+            href={card.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex h-full min-h-[200px] flex-col items-center justify-center border border-white/5 bg-blue-deep/50 p-8 text-center transition-colors hover:border-white/20"
+          >
+            <div className="mb-4">
+              <card.Icon size={48} className="lg:hidden" />
+              <card.Icon size={64} className="hidden lg:block" />
+            </div>
+
+            <h3 className="mt-2 font-serif text-xl font-bold leading-tight text-white transition-colors group-hover:text-blue-sky">
+              {card.title}
+            </h3>
+
+            <p className="mt-3 font-sans text-sm leading-relaxed text-white/60">
+              {card.description}
+            </p>
+
+            <span className="mt-6 inline-flex items-center gap-2 font-sans text-sm uppercase tracking-widest text-blue-sky transition-colors group-hover:text-white">
+              Open
+              <span
+                aria-hidden
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                &rarr;
+              </span>
+            </span>
+          </a>
+        </AnimateIn>
       ))}
     </div>
   );

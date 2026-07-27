@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import Button from "./Button";
+
+const INPUT_CLASS =
+  "w-full rounded-none border-b-2 border-white/20 bg-transparent px-0 py-3 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-blue-sky";
 
 export default function NewsletterForm() {
   const [firstName, setFirstName] = useState("");
@@ -29,37 +33,48 @@ export default function NewsletterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-4">
-        <input
-          type="text"
-          placeholder="First name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-          className="w-full bg-transparent border-b border-white/20 px-0 py-3 font-sans text-sm text-white placeholder-white/40 focus:outline-none focus:border-blue-sky transition-colors"
-        />
-        <input
-          type="email"
-          placeholder="Email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full bg-transparent border-b border-white/20 px-0 py-3 font-sans text-sm text-white placeholder-white/40 focus:outline-none focus:border-blue-sky transition-colors"
-        />
-      </div>
-      <button
+    <form
+      onSubmit={handleSubmit}
+      className="mx-auto flex w-full max-w-md flex-col gap-6"
+    >
+      <input
+        type="text"
+        placeholder="First name"
+        aria-label="First name"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        required
+        className={INPUT_CLASS}
+      />
+      <input
+        type="email"
+        placeholder="Email address"
+        aria-label="Email address"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        className={INPUT_CLASS}
+      />
+
+      <Button
         type="submit"
+        variant="secondary"
+        size="lg"
         disabled={status === "loading"}
-        className="w-full bg-wine text-white font-sans text-sm font-semibold px-6 py-3.5 rounded-lg hover:bg-wine-light transition-colors disabled:opacity-50"
+        className="w-full"
       >
         {status === "loading" ? "Subscribing…" : "Subscribe"}
-      </button>
+      </Button>
+
       {status === "success" && (
-        <p className="font-sans text-sm text-blue-sky">Thank you for subscribing.</p>
+        <p className="font-sans text-sm text-blue-sky">
+          Thank you for subscribing.
+        </p>
       )}
       {status === "error" && (
-        <p className="font-sans text-sm text-red-400">Something went wrong. Please try again.</p>
+        <p className="font-sans text-sm text-red-400">
+          Something went wrong. Please try again.
+        </p>
       )}
     </form>
   );

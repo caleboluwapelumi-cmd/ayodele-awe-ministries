@@ -13,6 +13,15 @@ interface TimeLeft {
   seconds: number;
 }
 
+const LABELS = ["Days", "Hours", "Min", "Sec"];
+
+const NUMBER_CLASS =
+  "font-serif font-black leading-none tabular-nums text-white text-4xl sm:text-6xl md:text-7xl";
+const LABEL_CLASS =
+  "mt-1 font-sans text-xs uppercase tracking-[0.2em] text-white/40";
+const SEPARATOR_CLASS =
+  "self-start mt-2 font-light text-white/20 text-2xl sm:text-4xl";
+
 function calculateTimeLeft(target: Date): TimeLeft | null {
   const diff = target.getTime() - Date.now();
   if (diff <= 0) return null;
@@ -24,22 +33,32 @@ function calculateTimeLeft(target: Date): TimeLeft | null {
   };
 }
 
+function Shell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex flex-wrap items-start justify-center gap-4 sm:gap-8">
+      {children}
+    </div>
+  );
+}
+
+/**
+ * `pending` is what both the server and the first client render produce, so
+ * hydration always matches; the interval takes over from there.
+ */
+type State =
+  | { status: "pending" }
+  | { status: "expired" }
+  | { status: "live"; timeLeft: TimeLeft };
+
 export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
-  const [expired, setExpired] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [state, setState] = useState<State>({ status: "pending" });
 
   useEffect(() => {
-    setMounted(true);
     const target = new Date(targetDate);
 
     function tick() {
       const tl = calculateTimeLeft(target);
-      if (tl) {
-        setTimeLeft(tl);
-      } else {
-        setExpired(true);
-      }
+      setState(tl ? { status: "live", timeLeft: tl } : { status: "expired" });
     }
 
     tick();
@@ -47,31 +66,28 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
     return () => clearInterval(interval);
   }, [targetDate]);
 
-  if (!mounted) {
+  if (state.status === "pending") {
     return (
-      <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
-        {["Days", "Hours", "Min", "Sec"].map((label) => (
-          <div key={label} className="text-center">
-            <span className="block font-serif text-3xl sm:text-4xl md:text-6xl text-blue-sky">--</span>
-            <span className="block font-sans text-xs uppercase tracking-widest text-white/50 mt-2">
-              {label}
-            </span>
+      <Shell>
+        {LABELS.map((label) => (
+          <div key={label} className="flex flex-col items-center">
+            <span className={NUMBER_CLASS}>--</span>
+            <span className={LABEL_CLASS}>{label}</span>
           </div>
         ))}
-      </div>
+      </Shell>
     );
   }
 
-  if (expired) {
+  if (state.status === "expired") {
     return (
-      <p className="font-serif text-xl text-blue-sky text-center">
+      <p className="text-center font-serif text-xl font-bold text-blue-sky">
         This event has started!
       </p>
     );
   }
 
-  if (!timeLeft) return null;
-
+  const { timeLeft } = state;
   const segments = [
     { label: "Days", value: timeLeft.days },
     { label: "Hours", value: timeLeft.hours },
@@ -80,22 +96,22 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
   ];
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-6">
+    <Shell>
       {segments.map((seg, i) => (
-        <div key={seg.label} className="flex items-center gap-2 sm:gap-6">
-          <div className="text-center">
-            <span className="block font-serif text-3xl sm:text-4xl md:text-6xl text-blue-sky tabular-nums">
+        <div key={seg.label} className="flex items-start gap-4 sm:gap-8">
+          <div className="flex flex-col items-center">
+            <span className={NUMBER_CLASS}>
               {String(seg.value).padStart(2, "0")}
             </span>
-            <span className="block font-sans text-xs uppercase tracking-widest text-white/50 mt-2">
-              {seg.label}
-            </span>
+            <span className={LABEL_CLASS}>{seg.label}</span>
           </div>
           {i < segments.length - 1 && (
-            <span className="text-white/20 text-lg sm:text-2xl font-light">:</span>
+            <span aria-hidden className={SEPARATOR_CLASS}>
+              :
+            </span>
           )}
         </div>
       ))}
-    </div>
+    </Shell>
   );
 }

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
+import Button from "./Button";
 
 interface EventCardProps {
   title: string;
@@ -17,40 +17,41 @@ export default function EventCard({
   registerLink,
 }: EventCardProps) {
   return (
-    <div className="group bg-gradient-to-br from-white to-[#EEF3FA] rounded-lg overflow-hidden">
-      {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+    <div className="group flex h-full flex-col bg-gradient-to-br from-white to-[#EEF3FA] shadow-lg transition-shadow duration-300 hover:shadow-xl">
+      {/* Image + date badge */}
+      <div className="relative aspect-video w-full overflow-hidden">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={title}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-700"
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div className="flex items-center justify-center h-full bg-cream">
-            <span className="font-sans text-xs text-muted uppercase tracking-wider">
+          <div className="flex h-full items-center justify-center bg-cream">
+            <span className="font-sans text-xs uppercase tracking-widest text-muted">
               Event Image
             </span>
           </div>
         )}
+
+        <span className="absolute left-4 top-4 bg-wine px-3 py-1 font-sans text-xs font-semibold uppercase tracking-widest text-white">
+          {date}
+        </span>
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <p className="font-sans text-xs uppercase tracking-widest text-wine mb-2">
-          {date}
-        </p>
-        <h3 className="font-serif text-xl text-blue-navy group-hover:text-blue transition-colors mb-1">
+      <div className="flex flex-1 flex-col p-6 sm:p-8">
+        <h3 className="mt-4 font-serif text-xl font-bold leading-tight text-blue-navy transition-colors group-hover:text-blue">
           {title}
         </h3>
-        <p className="font-sans text-sm text-muted mb-4">{location}</p>
-        <Link
-          href={registerLink}
-          className="inline-flex items-center font-sans text-sm font-semibold bg-blue text-white px-6 py-2.5 rounded-lg hover:bg-blue-deep transition-colors"
-        >
+        <p className="mb-8 mt-2 flex-1 font-sans text-xs uppercase tracking-widest text-muted">
+          {location}
+        </p>
+        <Button href={registerLink} variant="primary" className="self-start">
           Register
-        </Link>
+        </Button>
       </div>
     </div>
   );

@@ -19,43 +19,54 @@ export default function ChurchCard({
   href,
 }: ChurchCardProps) {
   return (
-    <Link href={href} className="group block bg-blue-deep/50 rounded-lg overflow-hidden border border-white/5 hover:border-white/10 transition-all">
-      {/* Image */}
-      {imageUrl && (
-        <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
+    <Link
+      href={href}
+      className="group flex h-full flex-col border border-white/5 bg-blue-deep/50 transition-colors hover:border-white/20"
+    >
+      {/* Image with the acronym set over it */}
+      <div className="relative aspect-video w-full overflow-hidden">
+        {imageUrl ? (
           <Image
             src={imageUrl}
             alt={name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-700"
+            sizes="(min-width: 640px) 50vw, 100vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
-        </div>
-      )}
+        ) : (
+          <div className="h-full w-full bg-blue-navy" />
+        )}
 
-      <div className="p-5 sm:p-8">
-        {/* Acronym */}
-        <span className="font-serif text-4xl font-bold text-white/30 group-hover:text-white/50 transition-colors">
+        {/* Scrim keeps the acronym legible against any photo */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80" />
+        <div className="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/20" />
+
+        <span className="absolute left-4 top-4 font-serif text-4xl font-black leading-none text-white">
           {acronym}
         </span>
+      </div>
 
-        {/* Name */}
-        <h3 className="font-serif text-xl text-white mt-4 mb-1 group-hover:text-white/80 transition-colors">
+      <div className="flex flex-1 flex-col p-6 sm:p-8">
+        <h3 className="mt-4 font-serif text-xl font-bold leading-tight text-white">
           {name}
         </h3>
 
-        {/* Location */}
-        <p className="font-sans text-xs uppercase tracking-wider text-muted mb-4">
+        <p className="mt-2 font-sans text-xs uppercase tracking-widest text-blue-sky">
           {location}
         </p>
 
-        {/* Description */}
-        <p className="font-sans text-sm text-white/60 leading-relaxed mb-6">
+        <p className="mb-8 mt-4 flex-1 font-sans text-base leading-relaxed text-white/60">
           {description}
         </p>
 
-        {/* Link */}
-        <span className="font-sans text-sm text-white/70 group-hover:text-white transition-colors">
-          Learn more →
+        <span className="inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-white/70 underline-offset-4 transition-colors group-hover:text-white group-hover:underline">
+          Learn more
+          <span
+            aria-hidden
+            className="transition-transform duration-300 group-hover:translate-x-1"
+          >
+            &rarr;
+          </span>
         </span>
       </div>
     </Link>

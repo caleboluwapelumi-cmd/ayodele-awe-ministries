@@ -1,7 +1,10 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
 import NewsletterForm from "@/components/NewsletterForm";
+import PageHero from "@/components/PageHero";
+import AnimateIn from "@/components/AnimateIn";
+import Button from "@/components/Button";
+import SectionLabel from "@/components/SectionLabel";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
@@ -12,229 +15,242 @@ export const metadata: Metadata = {
     "Access teachings, music, and messages from Minister Ayodele Oladapo Awe.",
 };
 
+const QUICK_ACCESS = [
+  { Icon: SpotifyIcon, title: "Music", desc: "Stream worship & gospel songs", link: "Listen" },
+  { Icon: TelegramIcon, title: "Teachings", desc: "Access sermons & Bible studies", link: "Join" },
+  { Icon: YouTubeIcon, title: "Videos", desc: "Watch live sessions & messages", link: "Watch" },
+  { Icon: SpotifyIcon, title: "Podcast", desc: "Listen on the go", link: "Listen" },
+];
+
 export default function MediaPage() {
   return (
     <>
       {/* ── 1. Page Hero ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 text-center">
-        <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
-          Media
-        </p>
-        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-          The Word &amp; The Worship
-        </h1>
-        <p className="font-sans text-lg text-white/70 max-w-2xl mx-auto">
-          Access teachings, music, and messages from Minister Ayodele Oladapo
-          Awe anywhere in the world
-        </p>
-      </section>
+      <PageHero
+        label="Media"
+        title={<>The Word &amp; The Worship</>}
+        subtitle="Access teachings, music, and messages from Minister Ayodele Oladapo Awe anywhere in the world"
+      />
 
       {/* ── 2. Teachings Section ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
-              Teachings
-            </p>
-            <h2 className="font-serif text-3xl text-blue-navy mb-6">
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
+          <AnimateIn direction="left">
+            <SectionLabel tone="light">Teachings</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
               Word of God on Telegram
             </h2>
-            <p className="font-sans text-muted leading-relaxed mb-4">
-              Minister Awe&apos;s teachings are made available through our
-              Telegram channel — a growing library of sermons, Bible studies,
-              and prophetic messages.
-            </p>
-            <p className="font-sans text-muted leading-relaxed mb-4">
-              Whether you are looking for foundational truths or deep prophetic
-              insights, the Telegram channel is your access point to the Word
-              taught with clarity and fire.
-            </p>
-            <p className="font-sans text-muted leading-relaxed mb-8">
-              Join the channel, share with your community, and let the Word of
-              God transform your life.
-            </p>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center font-sans text-sm font-semibold bg-blue text-white px-10 py-4 rounded-lg hover:bg-blue-deep transition-colors"
-            >
+            <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
+              <p>
+                Minister Awe&apos;s teachings are made available through our
+                Telegram channel — a growing library of sermons, Bible studies,
+                and prophetic messages.
+              </p>
+              <p>
+                Whether you are looking for foundational truths or deep
+                prophetic insights, the Telegram channel is your access point to
+                the Word taught with clarity and fire.
+              </p>
+              <p>
+                Join the channel, share with your community, and let the Word of
+                God transform your life.
+              </p>
+            </div>
+            <Button href="#" variant="primary" size="lg" external>
               Join Telegram Channel
-            </a>
-            <p className="font-sans text-xs text-muted mt-3">
+            </Button>
+            <p className="mt-4 font-sans text-xs uppercase tracking-widest text-muted">
               Free to join. New teachings posted regularly.
             </p>
-          </div>
-          <div className="relative bg-cream rounded-lg p-12 text-center border border-blue/10 overflow-hidden">
-            <Image
-              src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=800&q=80"
-              alt="Open Bible devotional"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-white/85" />
-            <div className="relative z-10">
-            <div className="mx-auto mb-6">
-              <TelegramIcon size={64} />
+          </AnimateIn>
+
+          <AnimateIn direction="right">
+            <div className="relative overflow-hidden border-t-2 border-blue-sky p-12 text-center">
+              <Image
+                src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=800&q=80"
+                alt=""
+                aria-hidden
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-white/85" />
+              <div className="relative z-10">
+                <div className="mx-auto mb-6 flex justify-center">
+                  <TelegramIcon size={64} />
+                </div>
+                <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-blue-navy">
+                  Telegram Teachings
+                </h3>
+                <p className="mb-6 font-sans text-sm text-muted">
+                  Sermons · Bible Studies · Prophetic Messages
+                </p>
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-blue"
+                >
+                  Join Now
+                  <span
+                    aria-hidden
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    &rarr;
+                  </span>
+                </a>
+              </div>
             </div>
-            <h3 className="font-serif text-xl text-blue-navy mb-2">
-              Telegram Teachings
-            </h3>
-            <p className="font-sans text-sm text-muted mb-6">
-              Sermons · Bible Studies · Prophetic Messages
-            </p>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-sans text-sm text-blue-sky hover:text-blue transition-colors"
-            >
-              Join Now →
-            </a>
-            </div>
-          </div>
+          </AnimateIn>
         </div>
       </section>
 
       {/* ── 3. Music Section ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
-        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div className="relative bg-blue-deep/50 rounded-lg p-12 text-center border border-white/5 overflow-hidden">
-            <Image
-              src="https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80"
-              alt="Worship band on stage"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-blue-navy/80" />
-            <div className="relative z-10">
-            <div className="mx-auto mb-6">
-              <SpotifyIcon size={64} />
+      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
+          <AnimateIn direction="left">
+            <div className="relative overflow-hidden border-t-2 border-blue-sky p-12 text-center">
+              <Image
+                src="https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80"
+                alt=""
+                aria-hidden
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-blue-navy/80" />
+              <div className="relative z-10">
+                <div className="mx-auto mb-6 flex justify-center">
+                  <SpotifyIcon size={64} />
+                </div>
+                <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-white">
+                  Music on Spotify
+                </h3>
+                <p className="mb-6 font-sans text-sm text-white/50">
+                  Worship · Gospel · Prophetic Songs
+                </p>
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-white"
+                >
+                  Listen Now
+                  <span
+                    aria-hidden
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    &rarr;
+                  </span>
+                </a>
+              </div>
             </div>
-            <h3 className="font-serif text-xl text-white mb-2">
-              Music on Spotify
-            </h3>
-            <p className="font-sans text-sm text-white/50 mb-6">
-              Worship · Gospel · Prophetic Songs
-            </p>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-sans text-sm text-blue-sky hover:text-white transition-colors"
-            >
-              Listen Now →
-            </a>
-            </div>
-          </div>
-          <div>
-            <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
-              Music
-            </p>
-            <h2 className="font-serif text-3xl text-white mb-6">
+          </AnimateIn>
+
+          <AnimateIn direction="right">
+            <SectionLabel tone="dark">Music</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Worship on Spotify
             </h2>
-            <p className="font-sans text-white/70 leading-relaxed mb-4">
-              Minister Awe&apos;s music is a vessel of encounter — crafted to
-              usher believers into the presence of God through worship,
-              prophetic songs, and gospel anthems.
-            </p>
-            <p className="font-sans text-white/70 leading-relaxed mb-4">
-              His discography spans worship, gospel, and prophetic music, each
-              song carrying a message of hope, revival, and the glory of God.
-            </p>
-            <p className="font-sans text-white/70 leading-relaxed mb-8">
-              Stream his music on Spotify, add it to your worship playlists,
-              and let the songs minister to you in your personal devotion and
-              corporate gatherings.
-            </p>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center font-sans text-sm font-semibold bg-wine text-white px-10 py-4 rounded-lg hover:bg-wine-light transition-colors"
-            >
+            <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+              <p>
+                Minister Awe&apos;s music is a vessel of encounter — crafted to
+                usher believers into the presence of God through worship,
+                prophetic songs, and gospel anthems.
+              </p>
+              <p>
+                His discography spans worship, gospel, and prophetic music, each
+                song carrying a message of hope, revival, and the glory of God.
+              </p>
+              <p>
+                Stream his music on Spotify, add it to your worship playlists,
+                and let the songs minister to you in your personal devotion and
+                corporate gatherings.
+              </p>
+            </div>
+            <Button href="#" variant="secondary" size="lg" external>
               Stream on Spotify
-            </a>
-            <p className="font-sans text-xs text-white/40 mt-3">
+            </Button>
+            <p className="mt-4 font-sans text-xs uppercase tracking-widest text-white/40">
               Available on all major streaming platforms.
             </p>
-          </div>
+          </AnimateIn>
         </div>
       </section>
 
       {/* ── 4. Quick Access ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
-        <div className="mx-auto max-w-7xl">
-          <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
-            Quick Access
-          </p>
-          <h2 className="font-serif text-3xl text-blue-navy mb-16">
-            Everything in One Place
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { Icon: SpotifyIcon, title: "Music", desc: "Stream worship & gospel songs", link: "Listen →" },
-              { Icon: TelegramIcon, title: "Teachings", desc: "Access sermons & Bible studies", link: "Join →" },
-              { Icon: YouTubeIcon, title: "Videos", desc: "Watch live sessions & messages", link: "Watch →" },
-              { Icon: SpotifyIcon, title: "Podcast", desc: "Listen on the go", link: "Listen →" },
-            ].map((card) => (
-              <a
-                key={card.title}
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-cream rounded-lg p-8 text-center block border border-blue/10 hover:border-blue/20 transition-all"
-              >
-                <div className="mx-auto mb-4 flex items-center justify-center">
-                  <card.Icon size={48} />
-                </div>
-                <h3 className="font-serif text-lg text-blue-navy group-hover:text-blue transition-colors mb-1">
-                  {card.title}
-                </h3>
-                <p className="font-sans text-sm text-muted mb-4">{card.desc}</p>
-                <span className="font-sans text-sm text-blue-sky group-hover:text-blue transition-colors">
-                  {card.link}
-                </span>
-              </a>
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl text-center">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl">
+            <SectionLabel tone="light">Quick Access</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              Everything in One Place
+            </h2>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {QUICK_ACCESS.map((card, i) => (
+              <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-full min-h-[200px] flex-col items-center justify-center bg-cream p-8 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg"
+                >
+                  <div className="mb-4 flex items-center justify-center">
+                    <card.Icon size={48} />
+                  </div>
+                  <h3 className="mt-2 font-serif text-lg font-bold leading-tight text-blue-navy transition-colors group-hover:text-blue">
+                    {card.title}
+                  </h3>
+                  <p className="mt-2 font-sans text-sm leading-relaxed text-muted">
+                    {card.desc}
+                  </p>
+                  <span className="mt-6 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors group-hover:text-blue">
+                    {card.link}
+                    <span
+                      aria-hidden
+                      className="transition-transform duration-300 group-hover:translate-x-1"
+                    >
+                      &rarr;
+                    </span>
+                  </span>
+                </a>
+              </AnimateIn>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── 5. Newsletter CTA ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep text-center">
-        <div className="mx-auto max-w-lg">
-          <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
-            Stay Updated
-          </p>
-          <h2 className="font-serif text-3xl text-white mb-4">
+      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+          <SectionLabel tone="dark">Stay Updated</SectionLabel>
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             New Content, Straight to Your Inbox
           </h2>
-          <p className="font-sans text-white/70 mb-10">
+          <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             Subscribe to get notified when new teachings and music are released.
           </p>
           <NewsletterForm />
-        </div>
+        </AnimateIn>
       </section>
 
       {/* ── 6. CTA Banner ── */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-serif text-3xl text-white mb-4">
+      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Invite Minister Awe to Minister
           </h2>
-          <p className="font-sans text-white/70 mb-10 max-w-xl mx-auto">
+          <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             Book Minister Ayodele Oladapo Awe for your church, conference, or
             event.
           </p>
-          <Link
-            href="/contact"
-            className="font-sans text-sm font-semibold bg-white text-wine px-10 py-4 rounded-lg hover:bg-cream transition-colors"
-          >
+          <Button href="/contact" variant="wine" size="lg">
             Book Now
-          </Link>
-        </div>
+          </Button>
+        </AnimateIn>
       </section>
     </>
   );

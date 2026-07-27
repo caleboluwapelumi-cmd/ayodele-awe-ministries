@@ -1,107 +1,187 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
+import AnimateIn from "@/components/AnimateIn";
+import Button from "@/components/Button";
+import SectionLabel from "@/components/SectionLabel";
 
 export const metadata: Metadata = {
   title: "BHCC — Building House Christian Centre",
   description: "Building House Christian Centre — a Spirit-filled church in the United Kingdom.",
 };
 
+const BELIEFS = [
+  { title: "The Bible", desc: "We believe the Bible is the infallible Word of God, the final authority in all matters of faith and conduct." },
+  { title: "Salvation", desc: "We believe in the death and resurrection of Jesus Christ as the only means of salvation for all mankind." },
+  { title: "The Holy Spirit", desc: "We believe in the person and work of the Holy Spirit, including the gifts and power for ministry today." },
+];
+
+const SERVICES = [
+  { title: "Sunday Service", time: "Time TBC", desc: "Main weekly gathering for worship, Word, and fellowship." },
+  { title: "Midweek Bible Study", time: "Time TBC", desc: "Deep dive into the Word of God." },
+  { title: "Prayer Meeting", time: "Time TBC", desc: "Corporate prayer and intercession." },
+];
+
 export default function BHCCPage() {
   return (
     <>
       {/* ── 1. Hero ── */}
-      <section
-        className="relative flex items-center justify-center min-h-screen overflow-hidden"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1920&q=80')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
+      <section className="relative flex min-h-screen items-center overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1920&q=80"
+          alt=""
+          aria-hidden
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto">
-          <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-6">United Kingdom</p>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2">Building House Christian Centre</h1>
-          <p className="font-serif text-2xl sm:text-3xl text-blue-sky mb-6">BHCC</p>
-          <p className="font-sans text-base sm:text-lg text-white/70 max-w-2xl mx-auto mb-8 sm:mb-10">Building the House of God in the United Kingdom</p>
-          <Link href="/contact" className="font-sans text-sm font-semibold bg-wine text-white px-10 py-4 rounded-lg hover:bg-wine-light transition-colors">Join Us</Link>
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-navy/90 via-transparent to-blue-navy/40" />
+
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+            <SectionLabel tone="dark">United Kingdom</SectionLabel>
+            <h1 className="font-serif text-4xl font-black leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
+              Building House Christian Centre
+            </h1>
+            <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-blue-sky sm:text-3xl">
+              BHCC
+            </p>
+            <div className="mx-auto mt-6 h-0.5 w-16 bg-blue-sky" />
+            <p className="mx-auto mb-10 mt-8 max-w-lg font-sans text-lg leading-relaxed text-white/60 sm:text-xl">
+              Building the House of God in the United Kingdom
+            </p>
+            <Button href="/contact" variant="secondary" size="lg">
+              Join Us
+            </Button>
+          </AnimateIn>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
       </section>
 
       {/* ── 2. About ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
-            <Image
-              src="https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=800&q=80"
-              alt="BHCC Church gathering"
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div>
-            <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">About BHCC</p>
-            <h2 className="font-serif text-3xl text-blue-navy mb-6">A House Being Built</h2>
-            <p className="font-sans text-muted leading-relaxed mb-4">Building House Christian Centre (BHCC) is a Spirit-filled church community in the United Kingdom, established under the ministry of Ayodele Oladapo Awe.</p>
-            <p className="font-sans text-muted leading-relaxed mb-4">At BHCC, we are committed to building believers through the Word, worship, and fellowship. We believe the local church is God&apos;s primary vehicle for transformation in society.</p>
-            <p className="font-sans text-muted leading-relaxed">From our weekly services to our prayer gatherings and community outreaches, BHCC is a place where lives are changed and destinies are shaped by the power of the gospel.</p>
-          </div>
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
+          <AnimateIn direction="left">
+            <div className="relative aspect-[3/4] overflow-hidden">
+              <Image
+                src="https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=800&q=80"
+                alt="BHCC church gathering"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover transition-transform duration-700 hover:scale-105"
+              />
+            </div>
+          </AnimateIn>
+
+          <AnimateIn direction="right">
+            <SectionLabel tone="light">About BHCC</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              A House Being Built
+            </h2>
+            <div className="space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
+              <p>
+                Building House Christian Centre (BHCC) is a Spirit-filled church
+                community in the United Kingdom, established under the ministry
+                of Ayodele Oladapo Awe.
+              </p>
+              <p>
+                At BHCC, we are committed to building believers through the
+                Word, worship, and fellowship. We believe the local church is
+                God&apos;s primary vehicle for transformation in society.
+              </p>
+              <p>
+                From our weekly services to our prayer gatherings and community
+                outreaches, BHCC is a place where lives are changed and
+                destinies are shaped by the power of the gospel.
+              </p>
+            </div>
+          </AnimateIn>
         </div>
       </section>
 
       {/* ── 3. Beliefs ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
-        <div className="mx-auto max-w-7xl">
-          <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Our Beliefs</p>
-          <h2 className="font-serif text-3xl text-white mb-16">What We Stand For</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
-            {[
-              { title: "The Bible", desc: "We believe the Bible is the infallible Word of God, the final authority in all matters of faith and conduct." },
-              { title: "Salvation", desc: "We believe in the death and resurrection of Jesus Christ as the only means of salvation for all mankind." },
-              { title: "The Holy Spirit", desc: "We believe in the person and work of the Holy Spirit, including the gifts and power for ministry today." },
-            ].map((card) => (
-              <div key={card.title} className="text-center">
-                <h3 className="font-serif text-xl text-blue-sky mb-4">{card.title}</h3>
-                <p className="font-sans text-sm text-white/70 leading-relaxed">{card.desc}</p>
-              </div>
+      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl text-center">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl">
+            <SectionLabel tone="dark">Our Beliefs</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              What We Stand For
+            </h2>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-3">
+            {BELIEFS.map((card, i) => (
+              <AnimateIn key={card.title} delay={i * 0.1}>
+                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-sky">
+                  {card.title}
+                </h3>
+                <p className="font-sans text-base leading-relaxed text-white/70">
+                  {card.desc}
+                </p>
+              </AnimateIn>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── 4. Services ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
-        <div className="mx-auto max-w-5xl">
-          <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Join Us</p>
-          <h2 className="font-serif text-3xl text-blue-navy mb-16">Service Times</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {[
-              { title: "Sunday Service", time: "Time TBC", desc: "Main weekly gathering for worship, Word, and fellowship." },
-              { title: "Midweek Bible Study", time: "Time TBC", desc: "Deep dive into the Word of God." },
-              { title: "Prayer Meeting", time: "Time TBC", desc: "Corporate prayer and intercession." },
-            ].map((svc) => (
-              <div key={svc.title} className="bg-cream rounded-lg p-8 text-center border border-blue/10">
-                <h3 className="font-serif text-lg text-blue-navy mb-1">{svc.title}</h3>
-                <p className="font-sans text-sm text-wine mb-3">{svc.time}</p>
-                <p className="font-sans text-sm text-muted leading-relaxed">{svc.desc}</p>
-              </div>
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl text-center">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl">
+            <SectionLabel tone="light">Join Us</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              Service Times
+            </h2>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {SERVICES.map((svc, i) => (
+              <AnimateIn key={svc.title} delay={i * 0.1} className="h-full">
+                <div className="h-full border-t-2 border-blue-sky bg-cream p-8 text-center">
+                  <h3 className="mb-2 font-serif text-lg font-bold leading-tight text-blue-navy">
+                    {svc.title}
+                  </h3>
+                  <p className="mb-4 font-sans text-xs uppercase tracking-widest text-wine">
+                    {svc.time}
+                  </p>
+                  <p className="font-sans text-base leading-relaxed text-muted">
+                    {svc.desc}
+                  </p>
+                </div>
+              </AnimateIn>
             ))}
           </div>
-          <p className="font-sans text-sm text-muted mt-10">Contact us for exact times and location details.</p>
-          <Link href="/contact" className="inline-flex items-center font-sans text-sm font-semibold bg-blue text-white px-10 py-4 rounded-lg hover:bg-blue-deep transition-colors mt-6">Get in Touch</Link>
+
+          <AnimateIn direction="up">
+            <p className="mt-12 font-sans text-base leading-relaxed text-muted">
+              Contact us for exact times and location details.
+            </p>
+            <div className="mt-8">
+              <Button href="/contact" variant="primary" size="lg">
+                Get in Touch
+              </Button>
+            </div>
+          </AnimateIn>
         </div>
       </section>
 
       {/* ── 5. CTA ── */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-wine-deep via-wine to-wine-light">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-serif text-3xl text-white mb-4">You Are Welcome Here</h2>
-          <p className="font-sans text-white/70 mb-10 max-w-xl mx-auto">BHCC is a family. Come as you are and encounter the living God.</p>
-          <Link href="/contact" className="font-sans text-sm font-semibold bg-white text-wine px-10 py-4 rounded-lg hover:bg-cream transition-colors">Contact Us</Link>
-        </div>
+      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+            You Are Welcome Here
+          </h2>
+          <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+            BHCC is a family. Come as you are and encounter the living God.
+          </p>
+          <Button href="/contact" variant="wine" size="lg">
+            Contact Us
+          </Button>
+        </AnimateIn>
       </section>
     </>
   );

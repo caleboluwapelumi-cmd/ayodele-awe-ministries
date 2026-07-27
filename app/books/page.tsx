@@ -1,7 +1,10 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import { BookMarked } from "lucide-react";
 import NewsletterForm from "@/components/NewsletterForm";
+import PageHero from "@/components/PageHero";
+import AnimateIn from "@/components/AnimateIn";
+import Button from "@/components/Button";
+import SectionLabel from "@/components/SectionLabel";
 
 export const metadata: Metadata = {
   title: "Books & Publications — Ayodele Oladapo Awe Ministries",
@@ -13,55 +16,48 @@ export default function BooksPage() {
   return (
     <>
       {/* ── 1. Hero ── */}
-      <section className="bg-gradient-to-br from-[#EEF3FA] to-white pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 text-center">
-        <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">
-          Resources
-        </p>
-        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-blue-navy mb-4">
-          Books &amp; Publications
-        </h1>
-        <p className="font-sans text-lg text-muted max-w-xl mx-auto">
-          Written to equip, strengthen, and build the believer
-        </p>
-      </section>
+      <PageHero
+        label="Resources"
+        title={<>Books &amp; Publications</>}
+        subtitle="Written to equip, strengthen, and build the believer"
+        variant="light"
+      />
 
       {/* ── 2. Coming Soon ── */}
-      <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-lg text-center">
-          <BookMarked size={80} className="mx-auto text-blue mb-8" />
-          <h2 className="font-serif text-3xl text-blue-navy mb-6">
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <AnimateIn direction="up" className="mx-auto max-w-2xl text-center">
+          <BookMarked size={72} className="mx-auto mb-8 text-blue" />
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
             Books Coming Soon
           </h2>
-          <p className="font-sans text-muted leading-relaxed mb-12">
+          <p className="mb-12 font-sans text-base leading-relaxed text-muted sm:text-lg">
             Minister Ayodele Oladapo Awe is currently working on written
             resources to equip believers and strengthen the local church. Stay
             connected to be notified when they are available.
           </p>
-          <p className="font-sans text-xs uppercase tracking-widest text-wine mb-6">
-            Be the first to know
-          </p>
-          <div className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep rounded-lg p-8">
+
+          <div className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep p-8 sm:p-12">
+            <SectionLabel tone="dark" className="mb-6">
+              Be the first to know
+            </SectionLabel>
             <NewsletterForm />
           </div>
-        </div>
+        </AnimateIn>
       </section>
 
       {/* ── 3. In the Meantime CTA ── */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-serif text-3xl text-white mb-4">
+      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             In the Meantime
           </h2>
-          <p className="font-sans text-white/70 mb-10 max-w-xl mx-auto">
+          <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             Access teachings, sermons, and messages on our Telegram channel.
           </p>
-          <Link
-            href="/media/teachings"
-            className="font-sans text-sm font-semibold bg-white text-wine px-10 py-4 rounded-lg hover:bg-cream transition-colors"
-          >
-            Join Telegram →
-          </Link>
-        </div>
+          <Button href="/media/teachings" variant="secondary" size="lg">
+            Join Telegram
+          </Button>
+        </AnimateIn>
       </section>
     </>
   );

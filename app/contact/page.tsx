@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, FormEvent, useCallback } from "react";
-import Link from "next/link";
 import NewsletterForm from "@/components/NewsletterForm";
+import AnimateIn from "@/components/AnimateIn";
+import Button from "@/components/Button";
+import PageHero from "@/components/PageHero";
+import SectionLabel from "@/components/SectionLabel";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
@@ -26,6 +29,17 @@ const SOCIAL_ICONS = [
   { name: "Telegram", href: "#", Icon: TelegramIcon },
   { name: "Spotify", href: "#", Icon: SpotifyIcon },
 ];
+
+const BOOKING_TYPES = [
+  { title: "Church Services", desc: "Sunday services, special services, anniversary events" },
+  { title: "Conferences & Retreats", desc: "Speakers for kingdom-focused gatherings" },
+  { title: "Prayer Gatherings", desc: "Corporate prayer and prophetic worship events" },
+];
+
+const FIELD_LABEL =
+  "mb-2 block font-sans text-xs font-semibold uppercase tracking-[0.2em] text-muted";
+const FIELD_INPUT =
+  "w-full rounded-none border-b-2 border-blue-navy/20 bg-transparent px-0 py-3 font-sans text-sm text-blue-navy outline-none transition-colors placeholder:text-blue-navy/30 focus:border-blue-sky";
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -66,181 +80,281 @@ export default function ContactPage() {
   return (
     <>
       {/* ── 1. Page Hero ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 text-center">
-        <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Contact</p>
-        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white mb-4">Get In Touch</h1>
-        <p className="font-sans text-lg text-white/70 max-w-2xl mx-auto">
-          We would love to hear from you — whether you have a question, want to book Minister Awe, or simply want to connect with the ministry
-        </p>
-      </section>
+      <PageHero
+        label="Contact"
+        title="Get In Touch"
+        subtitle="We would love to hear from you — whether you have a question, want to book Minister Awe, or simply want to connect with the ministry"
+      />
 
       {/* ── 2. Contact Grid ── */}
-      <section id="contact-form" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-5 gap-16">
+      <section
+        id="contact-form"
+        className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16"
+      >
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 lg:grid-cols-5">
           {/* Form (3/5) */}
-          <div className="lg:col-span-3">
-            <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Send a Message</p>
-            <h2 className="font-serif text-3xl text-blue-navy mb-10">Reach Out to Us</h2>
+          <AnimateIn direction="left" className="lg:col-span-3">
+            <SectionLabel tone="light">Send a Message</SectionLabel>
+            <h2 className="mb-10 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              Reach Out to Us
+            </h2>
 
             {status === "success" ? (
-              <div className="bg-cream rounded-lg p-10 text-center border border-blue/10">
-                <p className="font-serif text-xl text-wine mb-2">Message Received</p>
-                <p className="font-sans text-muted">Your message has been received. We will get back to you shortly.</p>
+              <div className="border-t-2 border-blue-sky bg-cream p-10 text-center">
+                <p className="mb-2 font-serif text-xl font-bold text-wine">
+                  Message Received
+                </p>
+                <p className="font-sans text-base leading-relaxed text-muted">
+                  Your message has been received. We will get back to you
+                  shortly.
+                </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="block font-sans text-xs uppercase tracking-wider text-muted mb-2">Full Name *</label>
-                  <input type="text" required value={form.fullName} onChange={(e) => update("fullName", e.target.value)} className="w-full bg-transparent border-b border-blue-navy/20 px-0 py-3 font-sans text-sm text-blue-navy placeholder-blue-navy/30 focus:outline-none focus:border-blue-sky transition-colors" placeholder="Your full name" />
+                  <label htmlFor="c-name" className={FIELD_LABEL}>Full Name *</label>
+                  <input id="c-name" type="text" required value={form.fullName} onChange={(e) => update("fullName", e.target.value)} className={FIELD_INPUT} placeholder="Your full name" />
                 </div>
                 <div>
-                  <label className="block font-sans text-xs uppercase tracking-wider text-muted mb-2">Email Address *</label>
-                  <input type="email" required value={form.email} onChange={(e) => update("email", e.target.value)} className="w-full bg-transparent border-b border-blue-navy/20 px-0 py-3 font-sans text-sm text-blue-navy placeholder-blue-navy/30 focus:outline-none focus:border-blue-sky transition-colors" placeholder="you@example.com" />
+                  <label htmlFor="c-email" className={FIELD_LABEL}>Email Address *</label>
+                  <input id="c-email" type="email" required value={form.email} onChange={(e) => update("email", e.target.value)} className={FIELD_INPUT} placeholder="you@example.com" />
                 </div>
                 <div>
-                  <label className="block font-sans text-xs uppercase tracking-wider text-muted mb-2">Phone Number</label>
-                  <input type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} className="w-full bg-transparent border-b border-blue-navy/20 px-0 py-3 font-sans text-sm text-blue-navy placeholder-blue-navy/30 focus:outline-none focus:border-blue-sky transition-colors" placeholder="+44 7000 000000" />
+                  <label htmlFor="c-phone" className={FIELD_LABEL}>Phone Number</label>
+                  <input id="c-phone" type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} className={FIELD_INPUT} placeholder="+44 7000 000000" />
                 </div>
                 <div>
-                  <label className="block font-sans text-xs uppercase tracking-wider text-muted mb-2">Subject</label>
-                  <select value={form.subject} onChange={(e) => update("subject", e.target.value)} className="w-full bg-transparent border-b border-blue-navy/20 px-0 py-3 font-sans text-sm text-blue-navy focus:outline-none focus:border-blue-sky transition-colors">
-                    {SUBJECTS.map((s) => (<option key={s} value={s}>{s}</option>))}
+                  <label htmlFor="c-subject" className={FIELD_LABEL}>Subject</label>
+                  <select id="c-subject" value={form.subject} onChange={(e) => update("subject", e.target.value)} className={FIELD_INPUT}>
+                    {SUBJECTS.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block font-sans text-xs uppercase tracking-wider text-muted mb-2">Message *</label>
-                  <textarea rows={5} required value={form.message} onChange={(e) => update("message", e.target.value)} className="w-full bg-transparent border-b border-blue-navy/20 px-0 py-3 font-sans text-sm text-blue-navy placeholder-blue-navy/30 focus:outline-none focus:border-blue-sky transition-colors resize-none" placeholder="Your message..." />
+                  <label htmlFor="c-message" className={FIELD_LABEL}>Message *</label>
+                  <textarea id="c-message" rows={5} required value={form.message} onChange={(e) => update("message", e.target.value)} className={`${FIELD_INPUT} resize-none`} placeholder="Your message..." />
                 </div>
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-4 w-4 rounded border-blue-navy/30 bg-transparent text-wine focus:ring-wine" />
+                <label className="flex cursor-pointer items-center gap-3">
+                  <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-4 w-4 rounded-none border-blue-navy/30 bg-transparent text-wine focus:ring-wine" />
                   <span className="font-sans text-sm text-muted">Subscribe me to the ministry newsletter</span>
                 </label>
-                <button type="submit" disabled={status === "loading"} className="w-full bg-blue text-white font-sans text-sm font-semibold px-8 py-4 rounded-lg hover:bg-blue-deep transition-colors disabled:opacity-50">
+
+                <Button type="submit" variant="primary" size="lg" disabled={status === "loading"} className="w-full">
                   {status === "loading" ? "Sending…" : "Send Message"}
-                </button>
-                {status === "error" && <p className="font-sans text-sm text-red-500 text-center">Something went wrong. Please try again.</p>}
+                </Button>
+
+                {status === "error" && (
+                  <p className="text-center font-sans text-sm text-red-500">
+                    Something went wrong. Please try again.
+                  </p>
+                )}
               </form>
             )}
-          </div>
+          </AnimateIn>
 
           {/* Info (2/5) */}
-          <div className="lg:col-span-2">
-            <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Contact Information</p>
-            <h2 className="font-serif text-3xl text-blue-navy mb-10">We Are Here</h2>
+          <AnimateIn direction="right" className="lg:col-span-2">
+            <SectionLabel tone="light">Contact Information</SectionLabel>
+            <h2 className="mb-10 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              We Are Here
+            </h2>
 
             <div className="space-y-6">
-              <div className="border-l-2 border-wine/40 pl-6">
-                <h3 className="font-sans text-sm font-medium text-blue-navy">Email</h3>
-                <p className="font-sans text-xs text-muted mt-0.5">Get in touch via email</p>
-                <p className="font-sans text-sm text-wine mt-1">contact@ayodeleaweministries.org</p>
+              <div className="border-l-4 border-blue-sky pl-6">
+                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Email</h3>
+                <p className="mt-1 font-sans text-sm text-muted">Get in touch via email</p>
+                <a href="mailto:contact@ayodeleaweministries.org" className="mt-2 inline-block font-sans text-sm text-wine underline-offset-4 transition-colors hover:text-wine-light hover:underline">
+                  contact@ayodeleaweministries.org
+                </a>
               </div>
-              <div className="border-l-2 border-wine/40 pl-6">
-                <h3 className="font-sans text-sm font-medium text-blue-navy">Ministry Base</h3>
-                <p className="font-sans text-xs text-muted mt-0.5">Our primary locations</p>
-                <p className="font-sans text-sm text-blue-navy/80 mt-1">United Kingdom &amp; Nigeria</p>
+
+              <div className="border-l-4 border-blue-sky pl-6">
+                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Ministry Base</h3>
+                <p className="mt-1 font-sans text-sm text-muted">Our primary locations</p>
+                <p className="mt-2 font-sans text-sm text-blue-navy/80">United Kingdom &amp; Nigeria</p>
               </div>
-              <div className="border-l-2 border-wine/40 pl-6">
-                <h3 className="font-sans text-sm font-medium text-blue-navy">Booking Minister Awe</h3>
-                <p className="font-sans text-xs text-muted mt-0.5">For speaking engagements, church visits, conferences</p>
-                <button onClick={() => setSubjectAndScroll("Book Minister Awe")} className="font-sans text-sm text-blue-sky hover:text-blue transition-colors mt-1">Submit a Booking Request →</button>
+
+              <div className="border-l-4 border-blue-sky pl-6">
+                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Booking Minister Awe</h3>
+                <p className="mt-1 font-sans text-sm text-muted">For speaking engagements, church visits, conferences</p>
+                <button
+                  onClick={() => setSubjectAndScroll("Book Minister Awe")}
+                  className="group mt-2 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-blue"
+                >
+                  Submit a Booking Request
+                  <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+                </button>
               </div>
-              <div className="border-l-2 border-wine/40 pl-6">
-                <h3 className="font-sans text-sm font-medium text-blue-navy">Prayer Requests</h3>
-                <p className="font-sans text-xs text-muted mt-0.5">We pray over every request submitted</p>
-                <button onClick={() => setSubjectAndScroll("Prayer Request")} className="font-sans text-sm text-blue-sky hover:text-blue transition-colors mt-1">Submit a Prayer Request →</button>
+
+              <div className="border-l-4 border-blue-sky pl-6">
+                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Prayer Requests</h3>
+                <p className="mt-1 font-sans text-sm text-muted">We pray over every request submitted</p>
+                <button
+                  onClick={() => setSubjectAndScroll("Prayer Request")}
+                  className="group mt-2 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-blue"
+                >
+                  Submit a Prayer Request
+                  <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+                </button>
               </div>
             </div>
 
             <div className="my-8 border-t border-blue-navy/10" />
 
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
+            <div className="flex flex-wrap items-center gap-3">
               {SOCIAL_ICONS.map(({ name, href, Icon }) => (
-                <a key={name} href={href} target="_blank" rel="noopener noreferrer" aria-label={name}>
-                  <Icon size={32} className="opacity-70 hover:opacity-100 transition-opacity" />
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={name}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-blue-navy/20 transition-colors hover:border-blue-sky"
+                >
+                  <Icon size={16} />
                 </a>
               ))}
             </div>
-          </div>
+          </AnimateIn>
         </div>
       </section>
 
       {/* ── 3. Churches Contact ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
-        <div className="mx-auto max-w-7xl">
-          <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Find a Church</p>
-          <h2 className="font-serif text-3xl text-white mb-12">Connect With Our Churches</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-left">
-            {/* BHCC */}
-            <div className="group bg-blue-deep/50 rounded-lg p-8 border border-white/5">
-              <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">United Kingdom</p>
-              <h3 className="font-serif text-xl text-white group-hover:text-blue-sky transition-colors mb-2">Building House Christian Centre</h3>
-              <p className="font-sans text-sm text-white/50 mb-6">For service times, location, and church-specific enquiries</p>
-              <div className="space-y-2 mb-8">
-                <p className="font-sans text-sm text-white/60"><span className="text-white font-medium">Location:</span> United Kingdom (full address TBA)</p>
-                <p className="font-sans text-sm text-white/60"><span className="text-white font-medium">Services:</span> Contact us for service schedule</p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={() => setSubjectAndScroll("Church Information (BHCC)")} className="font-sans text-sm font-semibold bg-wine text-white px-8 py-3 rounded-lg hover:bg-wine-light transition-colors">Enquire About BHCC</button>
-                <Link href="/churches/bhcc" className="font-sans text-sm font-semibold border border-white/20 text-white px-8 py-3 rounded-lg hover:border-white/40 transition-colors text-center">Learn More</Link>
-              </div>
-            </div>
-            {/* BLCN */}
-            <div className="group bg-blue-deep/50 rounded-lg p-8 border border-white/5">
-              <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Nigeria</p>
-              <h3 className="font-serif text-xl text-white group-hover:text-blue-sky transition-colors mb-2">Bethel Livingstone Christian Network</h3>
-              <p className="font-sans text-sm text-white/50 mb-6">For service times, location, and church-specific enquiries</p>
-              <div className="space-y-2 mb-8">
-                <p className="font-sans text-sm text-white/60"><span className="text-white font-medium">Location:</span> Nigeria (full address TBA)</p>
-                <p className="font-sans text-sm text-white/60"><span className="text-white font-medium">Services:</span> Contact us for service schedule</p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={() => setSubjectAndScroll("Church Information (BLCN)")} className="font-sans text-sm font-semibold bg-wine text-white px-8 py-3 rounded-lg hover:bg-wine-light transition-colors">Enquire About BLCN</button>
-                <Link href="/churches/blcn" className="font-sans text-sm font-semibold border border-white/20 text-white px-8 py-3 rounded-lg hover:border-white/40 transition-colors text-center">Learn More</Link>
-              </div>
-            </div>
+      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl text-center">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl">
+            <SectionLabel tone="dark">Find a Church</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              Connect With Our Churches
+            </h2>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mt-16 grid grid-cols-1 gap-8 text-left sm:grid-cols-2">
+            {[
+              {
+                region: "United Kingdom",
+                name: "Building House Christian Centre",
+                subject: "Church Information (BHCC)",
+                enquire: "Enquire About BHCC",
+                href: "/churches/bhcc",
+                location: "United Kingdom (full address TBA)",
+              },
+              {
+                region: "Nigeria",
+                name: "Bethel Livingstone Christian Network",
+                subject: "Church Information (BLCN)",
+                enquire: "Enquire About BLCN",
+                href: "/churches/blcn",
+                location: "Nigeria (full address TBA)",
+              },
+            ].map((church, i) => (
+              <AnimateIn key={church.name} delay={i * 0.1} className="h-full">
+                <div className="flex h-full flex-col border-t-2 border-blue-sky bg-blue-deep/50 p-8">
+                  <SectionLabel tone="dark" className="mb-4">
+                    {church.region}
+                  </SectionLabel>
+                  <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-white">
+                    {church.name}
+                  </h3>
+                  <p className="mb-6 font-sans text-base leading-relaxed text-white/50">
+                    For service times, location, and church-specific enquiries
+                  </p>
+                  <div className="mb-8 flex-1 space-y-2 font-sans text-sm text-white/60">
+                    <p>
+                      <span className="font-semibold text-white">Location:</span>{" "}
+                      {church.location}
+                    </p>
+                    <p>
+                      <span className="font-semibold text-white">Services:</span>{" "}
+                      Contact us for service schedule
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button onClick={() => setSubjectAndScroll(church.subject)} variant="secondary">
+                      {church.enquire}
+                    </Button>
+                    <Button href={church.href} variant="outline" className="text-white">
+                      Learn More
+                    </Button>
+                  </div>
+                </div>
+              </AnimateIn>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ── 4. Booking ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
-        <div className="mx-auto max-w-3xl">
-          <p className="font-sans text-xs uppercase tracking-widest text-wine mb-4">Speaking Engagements</p>
-          <h2 className="font-serif text-3xl text-blue-navy mb-6">Book Minister Ayodele Oladapo Awe</h2>
-          <p className="font-sans text-muted leading-relaxed mb-16">Minister Awe is available to minister at churches, conferences, retreats, prayer gatherings, and special events across the UK, Nigeria, and beyond. To submit a booking request, use the contact form above and select &ldquo;Book Minister Awe&rdquo; as the subject.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
-            {[
-              { title: "Church Services", desc: "Sunday services, special services, anniversary events" },
-              { title: "Conferences & Retreats", desc: "Speakers for kingdom-focused gatherings" },
-              { title: "Prayer Gatherings", desc: "Corporate prayer and prophetic worship events" },
-            ].map((card) => (
-              <div key={card.title} className="text-center">
-                <h3 className="font-serif text-lg text-wine mb-3">{card.title}</h3>
-                <p className="font-sans text-sm text-muted leading-relaxed">{card.desc}</p>
-              </div>
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-3xl text-center">
+          <AnimateIn direction="up">
+            <SectionLabel tone="light">Speaking Engagements</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              Book Minister Ayodele Oladapo Awe
+            </h2>
+            <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
+              Minister Awe is available to minister at churches, conferences,
+              retreats, prayer gatherings, and special events across the UK,
+              Nigeria, and beyond. To submit a booking request, use the contact
+              form above and select &ldquo;Book Minister Awe&rdquo; as the
+              subject.
+            </p>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mb-12 mt-16 grid grid-cols-1 gap-12 sm:grid-cols-3">
+            {BOOKING_TYPES.map((card, i) => (
+              <AnimateIn key={card.title} delay={i * 0.1}>
+                <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-wine">
+                  {card.title}
+                </h3>
+                <p className="font-sans text-base leading-relaxed text-muted">
+                  {card.desc}
+                </p>
+              </AnimateIn>
             ))}
           </div>
-          <button onClick={() => setSubjectAndScroll("Book Minister Awe")} className="font-sans text-sm font-semibold bg-blue text-white px-10 py-4 rounded-lg hover:bg-blue-deep transition-colors">Submit a Booking Request</button>
+
+          <Button onClick={() => setSubjectAndScroll("Book Minister Awe")} variant="primary" size="lg">
+            Submit a Booking Request
+          </Button>
         </div>
       </section>
 
       {/* ── 5. Newsletter ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep text-center">
-        <div className="mx-auto max-w-lg">
-          <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">Stay Connected</p>
-          <h2 className="font-serif text-3xl text-white mb-4">Join Our Mailing List</h2>
-          <p className="font-sans text-white/70 mb-10">Get ministry updates, event announcements, and teachings delivered to your inbox.</p>
+      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+          <SectionLabel tone="dark">Stay Connected</SectionLabel>
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+            Join Our Mailing List
+          </h2>
+          <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+            Get ministry updates, event announcements, and teachings delivered
+            to your inbox.
+          </p>
           <NewsletterForm />
-        </div>
+        </AnimateIn>
       </section>
 
       {/* ── 6. Scripture ── */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA] text-center">
-        <div className="mx-auto max-w-3xl">
-          <span className="font-serif text-6xl text-wine leading-none block mb-4">&ldquo;</span>
-          <p className="font-serif text-lg md:text-xl text-blue-navy/80 leading-relaxed italic mb-6">How beautiful are the feet of those who bring good news!</p>
-          <p className="font-sans text-sm text-muted">— Romans 10:15</p>
-        </div>
+      <section className="relative overflow-hidden bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 select-none font-serif text-[200px] leading-none text-blue-navy/5"
+        >
+          &ldquo;
+        </span>
+
+        <AnimateIn direction="fade" className="relative z-10 mx-auto max-w-3xl text-center">
+          <p className="mb-6 font-serif text-xl font-bold italic leading-relaxed text-blue-navy/80 md:text-2xl">
+            How beautiful are the feet of those who bring good news!
+          </p>
+          <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted">
+            Romans 10:15
+          </p>
+        </AnimateIn>
       </section>
     </>
   );

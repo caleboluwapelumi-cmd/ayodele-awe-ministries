@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Building2, BookOpen, MapPin, Handshake, BookMarked, Plane } from "lucide-react";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import NewsletterForm from "@/components/NewsletterForm";
+import PageHero from "@/components/PageHero";
+import AnimateIn from "@/components/AnimateIn";
+import SectionLabel from "@/components/SectionLabel";
 
 export const metadata: Metadata = {
   title: "Ministry Expressions — Ayodele Oladapo Awe Ministries",
@@ -32,7 +35,7 @@ const EXPRESSIONS: Expression[] = [
     location: "🇬🇧 United Kingdom",
     description:
       "A Spirit-filled church community in the UK committed to building lives, raising leaders, and establishing the house of God through the Word and worship.",
-    cta: "Visit BHCC →",
+    cta: "Visit BHCC",
     href: "/churches/bhcc",
     accent: "blue",
   },
@@ -44,7 +47,7 @@ const EXPRESSIONS: Expression[] = [
     location: "🇳🇬 Nigeria",
     description:
       "A thriving network of believers across Nigeria dedicated to community-driven ministry, discipleship, and gospel outreach.",
-    cta: "Visit BLCN →",
+    cta: "Visit BLCN",
     href: "/churches/blcn",
     accent: "blue",
   },
@@ -54,7 +57,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Telegram Teachings",
     description:
       "A growing library of sermons, Bible studies, and prophetic messages from Minister Awe — accessible to believers anywhere in the world.",
-    cta: "Join Channel →",
+    cta: "Join Channel",
     href: "/media/teachings",
     accent: "sky",
   },
@@ -64,7 +67,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Music on Spotify",
     description:
       "Worship, gospel, and prophetic songs crafted to usher believers into the presence of God. Stream on Spotify and all major platforms.",
-    cta: "Stream Now →",
+    cta: "Stream Now",
     href: "/media/music",
     accent: "sky",
   },
@@ -74,7 +77,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Outreaches & Prayer Gatherings",
     description:
       "From the Norwich Prayer Surge to community outreaches in Nigeria — the ministry takes the gospel beyond the four walls into cities and nations.",
-    cta: "See Events →",
+    cta: "See Events",
     href: "/events",
     accent: "wine",
   },
@@ -84,7 +87,7 @@ const EXPRESSIONS: Expression[] = [
     title: "Partners for the Ministry",
     description:
       "A community of believers co-labouring with the vision — sowing financially and in prayer to see the gospel advance across the UK and Nigeria.",
-    cta: "Become a Partner →",
+    cta: "Become a Partner",
     href: "/partners",
     accent: "wine",
   },
@@ -104,14 +107,21 @@ const EXPRESSIONS: Expression[] = [
     title: "Ministry Itinerary",
     description:
       "Stay updated on where Minister Awe is ministering next — conferences, church visits, and international engagements across the UK, Nigeria, and beyond.",
-    cta: "See Schedule →",
+    cta: "See Schedule",
     href: "/itinerary",
     accent: "wine",
   },
 ];
 
+const UNITING_VALUES = [
+  { title: "The Word", desc: "Rooted in Scripture, every ministry expression is built on the Word of God." },
+  { title: "Worship", desc: "Cultivating atmospheres of genuine encounter with God." },
+  { title: "Discipleship", desc: "Making and maturing disciples across both nations." },
+  { title: "Mission", desc: "Taking the gospel to the ends of the earth." },
+];
+
 /* ─── Icon renderer ─── */
-const ICON_SIZE = 28;
+const ICON_SIZE = 20;
 
 function ExpressionIcon({ type }: { type: Expression["icon"] }) {
   const cls = "shrink-0";
@@ -140,7 +150,7 @@ const ACCENT_BORDER: Record<Expression["accent"], string> = {
 };
 
 const ACCENT_CATEGORY: Record<Expression["accent"], string> = {
-  blue: "text-blue-sky",
+  blue: "text-blue",
   wine: "text-wine",
   sky: "text-blue-sky",
 };
@@ -150,113 +160,115 @@ export default function ExpressionsPage() {
   return (
     <>
       {/* ── 1. Hero ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep pt-32 sm:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 text-center">
-        <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
-          The Full Picture
-        </p>
-        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white mb-4">
-          Ministry Expressions
-        </h1>
-        <p className="font-sans text-lg text-white/70 max-w-2xl mx-auto">
-          Every dimension of the mandate — churches, outreaches, teachings, music, and more
-        </p>
-      </section>
+      <PageHero
+        label="The Full Picture"
+        title="Ministry Expressions"
+        subtitle="Every dimension of the mandate — churches, outreaches, teachings, music, and more"
+      />
 
       {/* ── 2. Expressions Grid ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-[#EEF3FA]">
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {EXPRESSIONS.map((expr) => (
-              <div
-                key={expr.title}
-                className={`bg-white rounded-lg border-l-4 ${ACCENT_BORDER[expr.accent]} p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col`}
-              >
-                {/* Icon + category */}
-                <div className="flex items-center gap-3 mb-5">
-                  <div className={ACCENT_CATEGORY[expr.accent]}>
-                    <ExpressionIcon type={expr.icon} />
-                  </div>
-                  <span
-                    className={`font-sans text-[0.65rem] uppercase tracking-widest font-semibold ${ACCENT_CATEGORY[expr.accent]}`}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {EXPRESSIONS.map((expr, i) => {
+              const comingSoon = expr.cta === "Coming Soon";
+              return (
+                <AnimateIn key={expr.title} delay={(i % 3) * 0.1} className="h-full">
+                  <div
+                    className={`flex h-full flex-col border-l-4 bg-white p-8 shadow-sm transition-shadow duration-300 hover:shadow-lg ${ACCENT_BORDER[expr.accent]}`}
                   >
-                    {expr.category}
-                  </span>
-                </div>
+                    {/* Category label */}
+                    <span
+                      className={`mb-5 inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-widest ${ACCENT_CATEGORY[expr.accent]}`}
+                    >
+                      <ExpressionIcon type={expr.icon} />
+                      {expr.category}
+                    </span>
 
-                {/* Title */}
-                <h3 className="font-serif text-xl text-blue-navy mb-1">
-                  {expr.title}
-                </h3>
+                    <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-blue-navy">
+                      {expr.title}
+                    </h3>
 
-                {/* Acronym + location */}
-                {(expr.acronym || expr.location) && (
-                  <p className="font-sans text-xs text-muted mb-3">
-                    {expr.acronym && (
-                      <span className="font-semibold text-wine mr-2">{expr.acronym}</span>
+                    {(expr.acronym || expr.location) && (
+                      <p className="mb-4 font-sans text-xs uppercase tracking-widest text-muted">
+                        {expr.acronym && (
+                          <span className="mr-2 font-semibold text-wine">
+                            {expr.acronym}
+                          </span>
+                        )}
+                        {expr.location}
+                      </p>
                     )}
-                    {expr.location}
-                  </p>
-                )}
 
-                {/* Description */}
-                <p className="font-sans text-sm text-muted leading-relaxed mb-6 flex-1">
-                  {expr.description}
-                </p>
+                    <p className="mb-8 flex-1 font-sans text-base leading-relaxed text-muted">
+                      {expr.description}
+                    </p>
 
-                {/* CTA */}
-                <Link
-                  href={expr.href}
-                  className={`inline-flex items-center font-sans text-sm font-semibold transition-colors ${
-                    expr.cta === "Coming Soon"
-                      ? "text-muted/50 cursor-default"
-                      : "text-wine hover:text-wine-light"
-                  }`}
-                >
-                  {expr.cta}
-                </Link>
-              </div>
-            ))}
+                    {comingSoon ? (
+                      <span className="font-sans text-xs font-semibold uppercase tracking-widest text-muted/50">
+                        {expr.cta}
+                      </span>
+                    ) : (
+                      <Link
+                        href={expr.href}
+                        className="group inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-wine underline-offset-4 transition-colors hover:text-wine-light hover:underline"
+                      >
+                        {expr.cta}
+                        <span
+                          aria-hidden
+                          className="transition-transform duration-300 group-hover:translate-x-1"
+                        >
+                          &rarr;
+                        </span>
+                      </Link>
+                    )}
+                  </div>
+                </AnimateIn>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* ── 3. Shared Vision ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-deep to-blue text-center">
-        <div className="mx-auto max-w-7xl">
-          <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
-            One Vision
-          </p>
-          <h2 className="font-serif text-3xl text-white mb-16">What Unites Every Expression</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-            {[
-              { title: "The Word", desc: "Rooted in Scripture, every ministry expression is built on the Word of God." },
-              { title: "Worship", desc: "Cultivating atmospheres of genuine encounter with God." },
-              { title: "Discipleship", desc: "Making and maturing disciples across both nations." },
-              { title: "Mission", desc: "Taking the gospel to the ends of the earth." },
-            ].map((card) => (
-              <div key={card.title} className="text-center">
-                <h3 className="font-serif text-lg text-blue-sky mb-3">{card.title}</h3>
-                <p className="font-sans text-sm text-white/70 leading-relaxed">{card.desc}</p>
-              </div>
+      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl text-center">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl">
+            <SectionLabel tone="dark">One Vision</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              What Unites Every Expression
+            </h2>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
+            {UNITING_VALUES.map((card, i) => (
+              <AnimateIn key={card.title} delay={i * 0.1}>
+                <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-blue-sky">
+                  {card.title}
+                </h3>
+                <p className="font-sans text-base leading-relaxed text-white/70">
+                  {card.desc}
+                </p>
+              </AnimateIn>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── 4. More Expressions Coming + Newsletter ── */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-navy to-blue-deep">
-        <div className="mx-auto max-w-lg text-center">
-          <p className="font-sans text-xs uppercase tracking-widest text-blue-sky mb-4">
-            Stay Updated
-          </p>
-          <h2 className="font-serif text-3xl text-white mb-4">
+      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+          <SectionLabel tone="dark">Stay Updated</SectionLabel>
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             More Expressions Coming
           </h2>
-          <p className="font-sans text-white/70 mb-10">
-            The mandate is expanding. Books, training programmes, and more ministry expressions are being added. Stay updated as we grow.
+          <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+            The mandate is expanding. Books, training programmes, and more
+            ministry expressions are being added. Stay updated as we grow.
           </p>
           <NewsletterForm />
-        </div>
+        </AnimateIn>
       </section>
     </>
   );
