@@ -95,7 +95,7 @@ app/
     page.tsx
     teachings/page.tsx    ← Telegram teachings page
     music/page.tsx        ← Spotify music page
-  books/page.tsx          ← Coming soon
+  books/page.tsx          ← Book showcase + Selar/Amazon buy buttons
   itinerary/page.tsx
   partners/page.tsx
   contact/page.tsx
@@ -111,7 +111,12 @@ components/
   PageHero.tsx            ← Shared hero for all inner pages. variant: dark | light
   Navbar.tsx              ← Transparent on desktop hero, solid on scroll; always solid on mobile
   Footer.tsx
-  HeroSection.tsx         ← Homepage full-screen hero (left-aligned, editorial)
+  HeroSection.tsx         ← 'use client' — homepage full-screen hero (left-aligned,
+                            editorial). Crossfading background slideshow: slides
+                            stacked absolutely, 6s interval, opacity-only
+                            transition, clickable dots. `useState(0)` initial
+                            index keeps SSR and first client render identical —
+                            never seed the index from Date.now()/random.
   CountdownTimer.tsx      ← 'use client', renders a 'pending' placeholder first so SSR/client hydration match
   NewsletterForm.tsx
   EventCard.tsx
@@ -122,10 +127,12 @@ components/
     TelegramIcon.tsx
     YouTubeIcon.tsx
     InstagramIcon.tsx
+    ThreadsIcon.tsx
     FacebookIcon.tsx
 
 lib/
-  constants.ts            ← SITE_NAME, MINISTER_NAME, TAGLINE, NAV_LINKS, CHURCHES, SOCIALS
+  constants.ts            ← SITE_NAME, MINISTER_NAME, TAGLINE, NAV_LINKS, CHURCHES,
+                            SOCIALS (minister), BLCN_SOCIALS (church), media/book URLs
 ```
 
 ---
@@ -150,7 +157,8 @@ lib/
 - **BHCC** = Building House Christian **Centre** (UK) — use **British English** for all BHCC content
 - **BLCN** = Bethel Livingstone Christian Network (Nigeria) — standard English
 - **Key event:** Norwich Prayer Surge (UK) — date TBA, placeholder countdown active
-- **Media:** Spotify music + Telegram teachings (links are `#` placeholders — real URLs pending)
+- **Media:** Spotify music + the "Babylonian Legends" podcast ("Everything Faith and Family") + Telegram teachings — all live, see Assets Status
+- **Books:** "Walking with the Holy Spirit: Insights for Supernatural Living" — on sale via Selar and Amazon. Title and subtitle are separate fields on `/books` so the heading stays readable; subtitle uses the small-caps `blue-sky` treatment.
 - **Tagline:** "Raising Voices, Building Houses, Transforming Nations"
 
 ---
@@ -158,6 +166,26 @@ lib/
 ## Assets Status
 Real assets received (all in `public/images/`, all JPEG):
 - `apostle-portrait.jpg` — 640×640 minister portrait. Used on `/`, `/about`, `/itinerary`.
+- `apostle-1.jpg` — 2560×1696 landscape, minister preaching with mic; subject
+  right of centre. Homepage hero slide 1.
+- `apostle-2.jpg` — 1928×2560 **portrait**, minister at a lectern; subject high
+  and left of frame. Homepage hero slide 2 — needs `object-[30%_25%]` so the
+  full-bleed hero crop doesn't cut his head off.
+
+⚠️ Two lessons from how these arrived, both worth repeating for future assets:
+
+1. **Filenames.** They came in as `apostle-1.jpeg.JPG` / `apostle-2.jpeg.jpg`
+   (double extension, one uppercase) and were renamed. Keep image filenames
+   lowercase single-extension — Vercel's filesystem is case-sensitive, Windows
+   is not, so a casing mismatch builds locally and 404s in production.
+2. **Downscale before committing.** They were 4928×3264 (5.2 MB) and 3072×4080
+   (2.1 MB) camera originals. Pushing them blew past GitHub's request window
+   and the push failed with HTTP 408. Cap the long edge at 2560px and re-encode
+   at quality ~82 (`sharp` is already a dependency) — that took the pair from
+   7.3 MB to 586 KB with no visible quality loss. Next.js resizes on serve, so
+   oversized sources buy nothing and bloat the repo permanently.
+- `walking-with-the-holy-spirit.**jpeg**` — 800×1135 book cover. Note the
+  `.jpeg` extension; every other image in the folder is `.jpg`. Used on `/books`.
 - `blcn-logo.jpg` — 828×647, shofar emblem on a dark charcoal background (**not** transparent). Used on `/churches/blcn` hero + the BLCN card on `/churches`.
 - `blcn-church-order.jpg` — 432×1080 portrait graphic with BLCN vision/mission/values text baked in. Full text lives in its `alt`; do not duplicate it as body copy.
 
@@ -166,11 +194,49 @@ Still Unsplash placeholders — pending from client:
 - Event banners
 - Ministry logo + favicon
 
-All social/platform links are `#` placeholders — real URLs pending:
-- Spotify artist URL
-- Telegram channel URL
-- YouTube channel URL
-- Instagram, Facebook
+Live links (in `lib/constants.ts`):
+- `SOCIALS.spotify` — Spotify artist page
+- `SOCIALS.telegram` — Telegram channel
+- `SOCIALS.instagram` — Instagram
+- `SOCIALS.threads` — Threads (`ThreadsIcon` is `currentColor`, unlike the other
+  brand icons which carry hardcoded fills — the wrapping anchor sets its colour)
+- `SOCIALS.linktree` — Linktree hub ("All Links" in Footer + Contact)
+- `SPOTIFY_PODCAST_URL` — Spotify podcast show ("Babylonian Legends")
+- `SPOTIFY_PODCAST_NAME` / `SPOTIFY_PODCAST_TAGLINE` — podcast title + "Everything Faith and Family"
+- `SOCIALS.youtube` — YouTube channel (@ayodeleawelive)
+- `SOCIALS.facebook` — the minister's Facebook (`web.facebook.com/awe.ayo`)
+- `SELAR_BOOK_URL` / `AMAZON_BOOK_URL` — book purchase links
+- `ANCHOR_FM_URL` — Anchor.fm podcast host, in the `/media/music` platform grid
+
+`BLCN_SOCIALS` (also hung off the BLCN entry in `CHURCHES` as `socials`) holds
+the church's **own** accounts — separate from the minister's `SOCIALS`:
+YouTube @blcnglobal, Instagram @blcnekiti + @blcnglobal, Facebook /blcnglobal.
+Surfaced on `/churches/blcn` ("Follow BLCN") and the BLCN card on `/contact`.
+
+Both Facebook URLs use the `web.facebook.com` host as supplied by the client,
+not `www.` — leave them as given.
+
+Every social icon in the Footer and on `/contact` is now live, so the
+`href === "#"` dimming guard was removed from both rows — `SOCIALS` is `as
+const`, so TypeScript rejects the comparison once no value is `"#"`. If a link
+ever needs pulling again, re-add the guard alongside the placeholder.
+
+Still `#` placeholders — real URLs pending:
+- Apple Music, Audiomack (music page platform grid)
+- Event registration links (`registerLink` on `/` and `/events`)
+
+Anything still on `#` is rendered dimmed + `pointer-events-none`, with a
+"Coming Soon" badge where the card has room. Never give a `#` href
+`target="_blank"` — it opens an empty tab.
+
+`/books` is fully populated — real title, subtitle, two-paragraph description
+and cover artwork are all in place. Nothing outstanding on that page.
+
+The cover renders in an `aspect-[2/3]` box with `object-cover`. The source is
+800×1135 (0.705), so ~23px is trimmed from each side. Checked against the
+artwork: the nearest text sits ~78px in, so nothing is clipped. If the cover
+is ever replaced with tighter margins, switch the container to
+`aspect-[800/1135]` (or the new image's ratio) to show it uncropped.
 
 ---
 
@@ -196,7 +262,7 @@ All social/platform links are `#` placeholders — real URLs pending:
 - No flat solid backgrounds — always use gradient pairs
 - No gold — that was the old design system. Current system is blue/wine/white
 - Responsive grid rule: always `grid-cols-1` base, scale up with `sm:` and `lg:`
-- **Sharp corners everywhere** — buttons, cards and panels are `rounded-none`. The only rounded elements are the social icon circles in the Footer/Contact page.
+- **Sharp corners everywhere** — buttons, cards and panels are `rounded-none`. The only rounded elements are the social icon circles in the Footer/Contact page and the hero slideshow dot indicators.
 - Wrap every card, heading block and column in `AnimateIn`. Grid children get a staggered `delay={index * 0.1}` and `className="h-full"` so the wrapper inherits the grid cell height.
 - Images live in an `overflow-hidden` container with `object-cover transition-transform duration-700 group-hover:scale-105`.
 - Any photo carrying text over it needs a scrim (`bg-gradient-to-b from-black/70 via-transparent to-black/80` or similar).

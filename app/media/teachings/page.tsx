@@ -4,6 +4,7 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import { SOCIALS } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Telegram Teachings — Ayodele Oladapo Awe Ministries",
@@ -69,7 +70,7 @@ export default function TeachingsPage() {
                 through this platform.
               </p>
             </div>
-            <Button href="#" variant="primary" size="lg" external>
+            <Button href={SOCIALS.telegram} variant="primary" size="lg" external>
               Join Telegram Channel
             </Button>
           </AnimateIn>
@@ -111,7 +112,7 @@ export default function TeachingsPage() {
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             Join the channel today and let the Word transform your life.
           </p>
-          <Button href="#" variant="wine" size="lg" external>
+          <Button href={SOCIALS.telegram} variant="wine" size="lg" external>
             Join Telegram Channel
           </Button>
         </AnimateIn>

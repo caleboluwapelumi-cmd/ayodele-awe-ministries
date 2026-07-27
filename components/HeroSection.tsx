@@ -1,22 +1,59 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import AnimateIn from "./AnimateIn";
 import Button from "./Button";
 import SectionLabel from "./SectionLabel";
 import { MINISTER_NAME, TAGLINE } from "@/lib/constants";
 
+const SLIDE_DURATION_MS = 6000;
+
+/**
+ * Hero backdrop rotation. These sit behind the headline and are purely
+ * decorative (aria-hidden) — the h1 already names the minister, so announcing
+ * a rotating set of images would only add noise for screen readers.
+ *
+ * `position` compensates for the two photos being different orientations:
+ * apostle-2 is portrait (3072x4080), so a full-bleed hero crops most of its
+ * height. Biasing up and left keeps the subject — who sits high and to the
+ * left of frame — from being cropped out on wide viewports.
+ */
+const SLIDES = [
+  { src: "/images/apostle-1.jpg", position: "object-center" },
+  { src: "/images/apostle-2.jpg", position: "object-[30%_25%]" },
+];
+
 export default function HeroSection() {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(
+      () => setActive((i) => (i + 1) % SLIDES.length),
+      SLIDE_DURATION_MS,
+    );
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden">
-      {/* Background */}
-      <Image
-        src="https://images.unsplash.com/photo-1609234656432-603ef6e4b079?w=1920&q=80"
-        alt=""
-        aria-hidden
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover"
-      />
+      {/* Background slideshow — every slide is stacked in the same box so the
+          section height never depends on which one is showing */}
+      <div aria-hidden className="absolute inset-0">
+        {SLIDES.map((slide, i) => (
+          <Image
+            key={slide.src}
+            src={slide.src}
+            alt=""
+            fill
+            priority={i === 0}
+            sizes="100vw"
+            className={`object-cover transition-opacity duration-1000 ease-in-out ${
+              slide.position
+            } ${i === active ? "opacity-100" : "opacity-0"}`}
+          />
+        ))}
+      </div>
 
       {/* Overlays — flat dark for legibility, then a navy wash into the next section */}
       <div className="absolute inset-0 bg-black/60" />
@@ -48,6 +85,22 @@ export default function HeroSection() {
             </Button>
           </div>
         </AnimateIn>
+      </div>
+
+      {/* Slide indicators */}
+      <div className="absolute inset-x-0 bottom-10 z-20 flex items-center justify-center gap-3">
+        {SLIDES.map((slide, i) => (
+          <button
+            key={slide.src}
+            type="button"
+            onClick={() => setActive(i)}
+            aria-label={`Show image ${i + 1} of ${SLIDES.length}`}
+            aria-current={i === active}
+            className={`h-2 w-2 rounded-full transition-colors duration-300 ${
+              i === active ? "bg-white" : "bg-white/40 hover:bg-white/70"
+            }`}
+          />
+        ))}
       </div>
 
       {/* Fade into the following section */}

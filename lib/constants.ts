@@ -4,16 +4,36 @@ export const TAGLINE =
   "Raising Voices, Building Houses, Transforming Nations";
 
 export const SOCIALS = {
-  instagram: "#",
-  youtube: "#",
-  facebook: "#",
-  telegram: "#",
-  spotify: "#",
+  instagram: "https://www.instagram.com/official_ayodeleawe",
+  threads: "https://www.threads.com/@official_ayodeleawe",
+  telegram: "https://t.me/bethelencounterlib",
+  spotify:
+    "https://open.spotify.com/artist/5WpAgkKg8zUcHp806EQ8LW?si=AZb7UmEcRPuB9TLBbDOQcQ",
+  linktree: "https://linktr.ee/official_ayodeleawe",
+  youtube: "https://www.youtube.com/@ayodeleawelive",
+  facebook: "https://web.facebook.com/awe.ayo",
 } as const;
+
+export const SPOTIFY_PODCAST_URL =
+  "https://open.spotify.com/show/7g3Ft514KFHvK57KFlWgNh?si=a3bb9917b35a4fc1";
+export const SPOTIFY_PODCAST_NAME = "Babylonian Legends";
+export const SPOTIFY_PODCAST_TAGLINE = "Everything Faith and Family";
+
+export const ANCHOR_FM_URL = "https://anchor.fm/ayodele-awe";
+
+export const SELAR_BOOK_URL = "https://tr.ee/VJOapqf39_";
+export const AMAZON_BOOK_URL = "https://tr.ee/uiJj6WRE9Q";
 
 export interface ServiceTime {
   day: string;
   time: string;
+}
+
+export interface ChurchSocials {
+  youtube?: string;
+  instagramEkiti?: string;
+  instagramGlobal?: string;
+  facebook?: string;
 }
 
 export interface Church {
@@ -24,7 +44,20 @@ export interface Church {
   address?: string;
   serviceTimes?: ServiceTime[];
   email?: string;
+  /** Church-run accounts — distinct from the minister's own SOCIALS. */
+  socials?: ChurchSocials;
 }
+
+/**
+ * BLCN's own channels. Exported separately so pages that don't already look up
+ * CHURCHES (e.g. /contact) can import them directly.
+ */
+export const BLCN_SOCIALS: ChurchSocials = {
+  youtube: "https://www.youtube.com/@blcnglobal",
+  instagramEkiti: "https://www.instagram.com/blcnekiti/",
+  instagramGlobal: "https://www.instagram.com/blcnglobal/",
+  facebook: "https://web.facebook.com/blcnglobal",
+};
 
 // NOTE: More expressions (books, outreaches, itineraries) will be added later.
 export const CHURCHES: Church[] = [
@@ -46,6 +79,7 @@ export const CHURCHES: Church[] = [
       { day: "Tuesday", time: "5:30 PM" },
     ],
     email: "blcnglobal@gmail.com",
+    socials: BLCN_SOCIALS,
   },
 ];
 

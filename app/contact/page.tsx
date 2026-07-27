@@ -10,7 +10,16 @@ import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
+import ThreadsIcon from "@/components/icons/ThreadsIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
+import { BLCN_SOCIALS, SOCIALS } from "@/lib/constants";
+
+const BLCN_SOCIAL_LINKS = [
+  { name: "BLCN Global on YouTube", href: BLCN_SOCIALS.youtube, Icon: YouTubeIcon },
+  { name: "BLCN Ekiti on Instagram", href: BLCN_SOCIALS.instagramEkiti, Icon: InstagramIcon },
+  { name: "BLCN Global on Instagram", href: BLCN_SOCIALS.instagramGlobal, Icon: InstagramIcon },
+  { name: "BLCN Global on Facebook", href: BLCN_SOCIALS.facebook, Icon: FacebookIcon },
+];
 
 // TODO (email routing): once Resend is wired up in /api/contact, submissions with
 // subject "Church Information (BLCN)" should be routed to blcnglobal@gmail.com
@@ -26,11 +35,12 @@ const SUBJECTS = [
 ] as const;
 
 const SOCIAL_ICONS = [
-  { name: "Instagram", href: "#", Icon: InstagramIcon },
-  { name: "Facebook", href: "#", Icon: FacebookIcon },
-  { name: "YouTube", href: "#", Icon: YouTubeIcon },
-  { name: "Telegram", href: "#", Icon: TelegramIcon },
-  { name: "Spotify", href: "#", Icon: SpotifyIcon },
+  { name: "Instagram", href: SOCIALS.instagram, Icon: InstagramIcon },
+  { name: "Threads", href: SOCIALS.threads, Icon: ThreadsIcon },
+  { name: "Facebook", href: SOCIALS.facebook, Icon: FacebookIcon },
+  { name: "YouTube", href: SOCIALS.youtube, Icon: YouTubeIcon },
+  { name: "Telegram", href: SOCIALS.telegram, Icon: TelegramIcon },
+  { name: "Spotify", href: SOCIALS.spotify, Icon: SpotifyIcon },
 ];
 
 const BOOKING_TYPES = [
@@ -213,11 +223,20 @@ export default function ContactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={name}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-blue-navy/20 transition-colors hover:border-blue-sky"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-blue-navy/20 text-blue-navy transition-colors hover:border-blue-sky"
                 >
                   <Icon size={16} />
                 </a>
               ))}
+
+              <a
+                href={SOCIALS.linktree}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-blue-sky transition-colors hover:text-blue"
+              >
+                All Links &rarr;
+              </a>
             </div>
           </AnimateIn>
         </div>
@@ -245,6 +264,7 @@ export default function ContactPage() {
                 location: "United Kingdom (full address TBA)",
                 services: "Contact us for service schedule",
                 email: null,
+                socials: null,
               },
               {
                 region: "Nigeria",
@@ -256,6 +276,7 @@ export default function ContactPage() {
                   "BETHEL Centre, Kajola Street, adjacent Olukayode Stadium, Ado Ekiti, Ekiti State, Nigeria",
                 services: "Sunday 9:00 AM · Tuesday 5:30 PM",
                 email: "blcnglobal@gmail.com",
+                socials: BLCN_SOCIAL_LINKS,
               },
             ].map((church, i) => (
               <AnimateIn key={church.name} delay={i * 0.1} className="h-full">
@@ -290,6 +311,28 @@ export default function ContactPage() {
                       </p>
                     )}
                   </div>
+
+                  {church.socials && (
+                    <div className="mb-8 flex items-center gap-3">
+                      <span className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white/40">
+                        Follow
+                      </span>
+                      {church.socials.map(({ name, href, Icon }) => (
+                        <a
+                          key={name}
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={name}
+                          title={name}
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-blue-sky hover:text-blue-sky"
+                        >
+                          <Icon size={18} />
+                        </a>
+                      ))}
+                    </div>
+                  )}
+
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <Button onClick={() => setSubjectAndScroll(church.subject)} variant="secondary">
                       {church.enquire}

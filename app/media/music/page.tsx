@@ -1,21 +1,30 @@
 import { Metadata } from "next";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
-import { Music, Headphones, Radio, Disc3 } from "lucide-react";
+import { Music, Headphones, Radio, Disc3, Mic } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import {
+  ANCHOR_FM_URL,
+  SOCIALS,
+  SPOTIFY_PODCAST_NAME,
+  SPOTIFY_PODCAST_TAGLINE,
+  SPOTIFY_PODCAST_URL,
+} from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Music & Worship — Ayodele Oladapo Awe Ministries",
   description:
-    "Worship, gospel, and prophetic songs from Minister Awe — stream on Spotify and all major platforms.",
+    "Worship, gospel, and prophetic songs from Minister Awe — plus the Babylonian Legends podcast. Stream on Spotify and all major platforms.",
 };
 
+// Spotify and Anchor.fm are live; Apple Music and Audiomack are still pending.
+// Anchor.fm took the YouTube Music slot to keep the grid at four across.
 const PLATFORMS = [
-  { name: "Spotify", icon: "spotify", href: "#" },
+  { name: "Spotify", icon: "spotify", href: SOCIALS.spotify },
+  { name: "Anchor.fm", icon: "podcast", href: ANCHOR_FM_URL },
   { name: "Apple Music", icon: "music", href: "#" },
-  { name: "YouTube Music", icon: "headphones", href: "#" },
   { name: "Audiomack", icon: "disc", href: "#" },
 ] as const;
 
@@ -39,6 +48,8 @@ function PlatformIcon({ type, size = 32 }: { type: string; size?: number }) {
   switch (type) {
     case "spotify":
       return <SpotifyIcon size={size} className={cls} />;
+    case "podcast":
+      return <Mic size={size} className={`${cls} text-purple-400`} />;
     case "music":
       return <Music size={size} className={`${cls} text-pink-400`} />;
     case "headphones":
@@ -93,7 +104,7 @@ export default function MusicPage() {
                 the presence of the Most High.
               </p>
             </div>
-            <Button href="#" variant="primary" size="lg" external>
+            <Button href={SOCIALS.spotify} variant="primary" size="lg" external>
               Open Spotify
             </Button>
           </AnimateIn>
@@ -140,37 +151,91 @@ export default function MusicPage() {
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {PLATFORMS.map((p, i) => (
-              <AnimateIn key={p.name} delay={i * 0.1} className="h-full">
-                <a
-                  href={p.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex h-full min-h-[200px] flex-col items-center justify-center border border-white/5 bg-blue-deep/50 p-8 text-center transition-colors hover:border-white/20"
-                >
-                  <div className="mb-4">
-                    <PlatformIcon type={p.icon} />
-                  </div>
-                  <h3 className="mt-2 font-serif text-xl font-bold leading-tight text-white">
-                    {p.name}
-                  </h3>
-                  <span className="mt-6 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors group-hover:text-white">
-                    Listen
-                    <span
-                      aria-hidden
-                      className="transition-transform duration-300 group-hover:translate-x-1"
-                    >
-                      &rarr;
-                    </span>
-                  </span>
-                </a>
-              </AnimateIn>
-            ))}
+            {PLATFORMS.map((p, i) => {
+              const pending = p.href === "#";
+              return (
+                <AnimateIn key={p.name} delay={i * 0.1} className="h-full">
+                  <a
+                    href={p.href}
+                    {...(pending
+                      ? { "aria-disabled": true }
+                      : { target: "_blank", rel: "noopener noreferrer" })}
+                    className={`group flex h-full min-h-[200px] flex-col items-center justify-center border border-white/5 bg-blue-deep/50 p-8 text-center transition-colors ${
+                      pending
+                        ? "pointer-events-none opacity-60"
+                        : "hover:border-white/20"
+                    }`}
+                  >
+                    <div className="mb-4">
+                      <PlatformIcon type={p.icon} />
+                    </div>
+                    <h3 className="mt-2 font-serif text-xl font-bold leading-tight text-white">
+                      {p.name}
+                    </h3>
+                    {pending ? (
+                      <span className="mt-6 inline-flex items-center border border-white/20 px-3 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-widest text-white/50">
+                        Coming Soon
+                      </span>
+                    ) : (
+                      <span className="mt-6 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors group-hover:text-white">
+                        Listen
+                        <span
+                          aria-hidden
+                          className="transition-transform duration-300 group-hover:translate-x-1"
+                        >
+                          &rarr;
+                        </span>
+                      </span>
+                    )}
+                  </a>
+                </AnimateIn>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ── 5. CTA Banner ── */}
+      {/* ── 5. Podcast ── */}
+      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
+          <AnimateIn direction="left">
+            <div className="flex items-center justify-center bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep p-16 shadow-xl">
+              <Mic size={120} className="text-blue-sky" />
+            </div>
+          </AnimateIn>
+
+          <AnimateIn direction="right">
+            <SectionLabel tone="light">Also On</SectionLabel>
+            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              {SPOTIFY_PODCAST_NAME}
+            </h2>
+            <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-blue-sky">
+              {SPOTIFY_PODCAST_TAGLINE}
+            </p>
+            <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
+              <p>
+                Beyond the music, Minister Ayodele Oladapo Awe shares
+                conversations, reflections, and teaching in podcast form —
+                available to stream free on Spotify.
+              </p>
+              <p>
+                Follow the show to get every new episode as soon as it drops,
+                wherever you listen.
+              </p>
+            </div>
+            <Button
+              href={SPOTIFY_PODCAST_URL}
+              variant="primary"
+              size="lg"
+              external
+            >
+              Listen on Spotify
+            </Button>
+          </AnimateIn>
+        </div>
+      </section>
+
+      {/* ── 6. CTA Banner ── */}
       <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
@@ -179,7 +244,7 @@ export default function MusicPage() {
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             Press play and let God meet you where you are.
           </p>
-          <Button href="#" variant="wine" size="lg" external>
+          <Button href={SOCIALS.spotify} variant="wine" size="lg" external>
             Stream Now
           </Button>
         </AnimateIn>

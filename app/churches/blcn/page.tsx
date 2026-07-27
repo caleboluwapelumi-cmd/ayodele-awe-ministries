@@ -4,7 +4,10 @@ import { MapPin } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
-import { CHURCHES } from "@/lib/constants";
+import YouTubeIcon from "@/components/icons/YouTubeIcon";
+import InstagramIcon from "@/components/icons/InstagramIcon";
+import FacebookIcon from "@/components/icons/FacebookIcon";
+import { BLCN_SOCIALS, CHURCHES } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "BLCN — Bethel Livingstone Christian Network",
@@ -40,6 +43,33 @@ const VALUES = [
 const SERVICES = [
   { title: "Sunday Service", time: "9:00 AM", desc: "Main weekly gathering for worship, Word, and fellowship." },
   { title: "Tuesday Service", time: "5:30 PM", desc: "Midweek gathering for prayer and the Word." },
+];
+
+const BLCN_SOCIAL_LINKS = [
+  {
+    name: "YouTube",
+    label: "BLCN Global",
+    href: BLCN_SOCIALS.youtube,
+    Icon: YouTubeIcon,
+  },
+  {
+    name: "Instagram",
+    label: "BLCN Ekiti",
+    href: BLCN_SOCIALS.instagramEkiti,
+    Icon: InstagramIcon,
+  },
+  {
+    name: "Instagram",
+    label: "BLCN Global",
+    href: BLCN_SOCIALS.instagramGlobal,
+    Icon: InstagramIcon,
+  },
+  {
+    name: "Facebook",
+    label: "BLCN Global",
+    href: BLCN_SOCIALS.facebook,
+    Icon: FacebookIcon,
+  },
 ];
 
 const NETWORK_STATS = [
@@ -287,7 +317,49 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 6. Network Vision ── */}
+      {/* ── 6. Follow BLCN ── */}
+      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-5xl text-center">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl">
+            <SectionLabel tone="dark">Connect</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              Follow BLCN
+            </h2>
+            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+              Catch services, testimonies, and updates from the network on our
+              own channels.
+            </p>
+            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+          </AnimateIn>
+
+          <div className="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-4">
+            {BLCN_SOCIAL_LINKS.map((social, i) => (
+              <AnimateIn
+                key={`${social.name}-${social.label}`}
+                delay={i * 0.1}
+                className="h-full"
+              >
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-full flex-col items-center justify-center border border-white/10 bg-blue-deep/50 p-8 text-center transition-colors hover:border-white/30"
+                >
+                  <social.Icon size={28} />
+                  <span className="mt-4 font-serif text-base font-bold leading-tight text-white transition-colors group-hover:text-blue-sky">
+                    {social.name}
+                  </span>
+                  <span className="mt-1 font-sans text-xs uppercase tracking-[0.15em] text-white/50">
+                    {social.label}
+                  </span>
+                </a>
+              </AnimateIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7. Network Vision ── */}
       <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up">
@@ -319,7 +391,7 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 7. CTA ── */}
+      {/* ── 8. CTA ── */}
       <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

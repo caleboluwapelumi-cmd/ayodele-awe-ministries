@@ -8,6 +8,12 @@ import SectionLabel from "@/components/SectionLabel";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
+import {
+  SOCIALS,
+  SPOTIFY_PODCAST_NAME,
+  SPOTIFY_PODCAST_TAGLINE,
+  SPOTIFY_PODCAST_URL,
+} from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Media — Ayodele Oladapo Awe Ministries",
@@ -16,10 +22,10 @@ export const metadata: Metadata = {
 };
 
 const QUICK_ACCESS = [
-  { Icon: SpotifyIcon, title: "Music", desc: "Stream worship & gospel songs", link: "Listen" },
-  { Icon: TelegramIcon, title: "Teachings", desc: "Access sermons & Bible studies", link: "Join" },
-  { Icon: YouTubeIcon, title: "Videos", desc: "Watch live sessions & messages", link: "Watch" },
-  { Icon: SpotifyIcon, title: "Podcast", desc: "Listen on the go", link: "Listen" },
+  { Icon: SpotifyIcon, title: "Music", desc: "Stream worship & gospel songs", link: "Listen", href: SOCIALS.spotify },
+  { Icon: TelegramIcon, title: "Teachings", desc: "Access sermons & Bible studies", link: "Join", href: SOCIALS.telegram },
+  { Icon: YouTubeIcon, title: "Videos", desc: "Watch live sessions & messages", link: "Watch", href: SOCIALS.youtube },
+  { Icon: SpotifyIcon, title: SPOTIFY_PODCAST_NAME, desc: SPOTIFY_PODCAST_TAGLINE, link: "Listen", href: SPOTIFY_PODCAST_URL },
 ];
 
 export default function MediaPage() {
@@ -56,7 +62,7 @@ export default function MediaPage() {
                 God transform your life.
               </p>
             </div>
-            <Button href="#" variant="primary" size="lg" external>
+            <Button href={SOCIALS.telegram} variant="primary" size="lg" external>
               Join Telegram Channel
             </Button>
             <p className="mt-4 font-sans text-xs uppercase tracking-widest text-muted">
@@ -86,7 +92,7 @@ export default function MediaPage() {
                   Sermons · Bible Studies · Prophetic Messages
                 </p>
                 <a
-                  href="#"
+                  href={SOCIALS.telegram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-blue"
@@ -130,7 +136,7 @@ export default function MediaPage() {
                   Worship · Gospel · Prophetic Songs
                 </p>
                 <a
-                  href="#"
+                  href={SOCIALS.spotify}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-blue-sky transition-colors hover:text-white"
@@ -168,7 +174,7 @@ export default function MediaPage() {
                 corporate gatherings.
               </p>
             </div>
-            <Button href="#" variant="secondary" size="lg" external>
+            <Button href={SOCIALS.spotify} variant="secondary" size="lg" external>
               Stream on Spotify
             </Button>
             <p className="mt-4 font-sans text-xs uppercase tracking-widest text-white/40">
@@ -193,10 +199,15 @@ export default function MediaPage() {
             {QUICK_ACCESS.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
                 <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex h-full min-h-[200px] flex-col items-center justify-center bg-cream p-8 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg"
+                  href={card.href}
+                  {...(card.href === "#"
+                    ? { "aria-disabled": true }
+                    : { target: "_blank", rel: "noopener noreferrer" })}
+                  className={`group flex h-full min-h-[200px] flex-col items-center justify-center bg-cream p-8 text-center shadow-sm transition-shadow duration-300 ${
+                    card.href === "#"
+                      ? "pointer-events-none opacity-60"
+                      : "hover:shadow-lg"
+                  }`}
                 >
                   <div className="mb-4 flex items-center justify-center">
                     <card.Icon size={48} />

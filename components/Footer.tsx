@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Link2 as LinkIcon } from "lucide-react";
 import { SITE_NAME, SOCIALS, TAGLINE } from "@/lib/constants";
 import NewsletterForm from "./NewsletterForm";
 import SectionLabel from "./SectionLabel";
@@ -6,6 +7,7 @@ import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
+import ThreadsIcon from "@/components/icons/ThreadsIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
 
 const FOOTER_LINKS = [
@@ -20,6 +22,7 @@ const FOOTER_LINKS = [
 
 const SOCIAL_ICONS = [
   { name: "Instagram", href: SOCIALS.instagram, Icon: InstagramIcon },
+  { name: "Threads", href: SOCIALS.threads, Icon: ThreadsIcon },
   { name: "Facebook", href: SOCIALS.facebook, Icon: FacebookIcon },
   { name: "YouTube", href: SOCIALS.youtube, Icon: YouTubeIcon },
   { name: "Telegram", href: SOCIALS.telegram, Icon: TelegramIcon },
@@ -57,6 +60,22 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+
+            <a
+              href={SOCIALS.linktree}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group mt-6 inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white/60 transition-colors hover:text-blue-sky"
+            >
+              <LinkIcon size={14} />
+              All Links
+              <span
+                aria-hidden
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                &rarr;
+              </span>
+            </a>
           </div>
 
           {/* Navigation */}

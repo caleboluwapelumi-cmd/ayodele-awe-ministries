@@ -100,8 +100,8 @@ const EXPRESSIONS: Expression[] = [
     icon: "bookMarked",
     title: "Books & Publications",
     description:
-      "Written resources from Minister Awe to equip believers, strengthen the local church, and advance the kingdom. Coming soon.",
-    cta: "Coming Soon",
+      "Written resources from Minister Awe to equip believers, strengthen the local church, and advance the kingdom — available now on Selar and Amazon.",
+    cta: "Browse Books",
     href: "/books",
     accent: "sky",
   },
