@@ -332,12 +332,17 @@ them on this site is deliberate, not an unfinished section.
 ## The three ministry expressions (`/ministry`)
 `MINISTRY_PROGRAMMES` in `lib/constants.ts` is the list of named programmes the
 ministry runs, each tagged with one of three `ProgrammeCategory` values —
-`"Apostolic & Prophetic"`, `"Pastoral & Teaching"`, `"Evangelistic"`. `/ministry`
-is its only consumer: it renders three expression cards and filters the constant
-by `category` to build the tag row under each card's prose.
+`"Apostolic & Prophetic"`, `"Pastoral & Teaching"`, `"Evangelistic"`. It has two
+consumers:
 
-- **Add a programme to the constant and it appears on the page** — no page edit.
-  That is the whole point of it living in `constants.ts` rather than inline.
+- **`/ministry`** renders three expression cards and filters the constant by
+  `category` to build the tag row under each card's prose.
+- **`/events`** renders the whole list flat in its "Ongoing Programmes" section
+  (see below) — a *description of what the ministry runs*, explicitly not a
+  schedule.
+
+- **Add a programme to the constant and it appears on both pages** — no page
+  edit. That is the whole point of it living in `constants.ts` rather than inline.
 - The programme names are also written into the card prose (client-supplied
   copy), so the tag row **intentionally duplicates** them. The tags exist to make
   three dense paragraphs scannable; don't "de-duplicate" by deleting them.
@@ -347,8 +352,37 @@ by `category` to build the tag row under each card's prose.
   Partnership Conference would sit naturally under `/partners`. The rest (SHM,
   OTIN, Discipleship Retreats, Special Apostolic Visits, Healing Ministry,
   Summer Harvest Campaign UK) are better served by an `/events` filter than by
-  pages of their own. **None of these have pages yet — the data is captured, not
-  routed.**
+  pages of their own. **None of these have pages yet — the data is captured and
+  listed, not routed.**
+
+### "Ongoing Programmes" on `/events`
+The section sits between the "All Events" band and "What God Has Done", and its
+whole job is to say *what the ministry runs regularly* without implying *when*.
+Everything about the treatment is load-bearing on that distinction — a programme
+name rendered like an event is exactly the failure the Content Integrity Notes
+exist to prevent. So:
+
+- **No date field, no image, no per-item CTA.** Each tile is name + optional
+  acronym badge + category label, and that is all. One `Button` serves the whole
+  section ("Interested in any of these?" → `/contact`).
+- **Never render these through `EventCard`.** That component's shape — image,
+  date badge, location, Register button — is the visual grammar of a scheduled
+  event. The tiles use `border-t-2 border-blue-sky`, the same idiom `/ministry`
+  uses for its expression cards and `/itinerary` for `ENGAGEMENT_TYPES`, i.e.
+  the site's established "this describes what we do" treatment.
+- The subtitle ends "join us as dates are announced" — the one place the absence
+  of dates is stated outright. Keep it.
+- ⚠️ **The stagger is `(i % 3) * 0.1`, not `i * 0.1`.** `AnimateIn` fires on each
+  element's own scroll-in, so with ten tiles a flat index stagger would leave the
+  last one invisible for 0.9s after it was already on screen. This is the one
+  documented exception to the `delay={index * 0.1}` grid rule; it applies to any
+  grid long enough for the accumulated delay to outrun the scroll.
+- Adding the section took the light slot before "What God Has Done", so that
+  empty state moved to the mid-blue treatment (`from-blue-deep to-blue`,
+  `tone="dark"`, `border-l-4 border-blue-sky bg-white/5` panel). `/events` now
+  alternates light → mid → light → mid → navy → wine. Two identical light
+  gradients stacked have no visible seam, which is why it was restyled rather
+  than left alone.
 
 **`/about` was restructured around this split.** It now runs: page hero → bio
 (portrait + RDP pull-quote + the real two-paragraph biography) → the mandate

@@ -6,6 +6,7 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import { MINISTRY_PROGRAMMES } from "@/lib/constants";
 import { PRAYER_SURGE, nextPrayerSurge } from "@/lib/prayer-surge";
 
 export const metadata: Metadata = {
@@ -176,22 +177,92 @@ export default function EventsPage() {
       </section>
 
       {/*
-        ── 4. Past Events ──
-        Empty state by design. Nothing goes in here until the client supplies
-        real photos and testimonies — never invented gatherings.
+        ── 4. Ministry Programmes ──
+        MINISTRY_PROGRAMMES are named, recurring programmes with NO date
+        attached — real, but not scheduled. The treatment here is deliberately
+        NOT an event listing: no date field, no image, no per-item register
+        CTA, one CTA for the whole section. Nothing a visitor could read as a
+        calendar entry. The `border-t-2 border-blue-sky` tile is the same idiom
+        `/ministry` and `/itinerary` use for "this describes what we do", which
+        is the opposite signal to an `EventCard`.
+        See Content Integrity Notes in CLAUDE.md before changing any of that.
       */}
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+            <SectionLabel tone="light">Ongoing Programmes</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+              Recurring Ministry Expressions
+            </h2>
+            <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+            <p className="font-sans text-base leading-relaxed text-muted sm:text-lg">
+              Beyond single gatherings, these programmes carry the mandate
+              forward &mdash; join us as dates are announced
+            </p>
+          </AnimateIn>
+
+          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {MINISTRY_PROGRAMMES.map((programme, i) => (
+              <AnimateIn
+                key={programme.name}
+                /**
+                 * Staggered by column, not by index. `AnimateIn` fires on each
+                 * element's own scroll-in, so a flat `i * 0.1` would leave the
+                 * tenth tile blank for 0.9s after it was already in view.
+                 */
+                delay={(i % 3) * 0.1}
+                className="h-full"
+              >
+                <div className="flex h-full flex-col border-t-2 border-blue-sky bg-white p-6 sm:p-8">
+                  <div className="flex flex-1 flex-wrap items-start gap-x-3 gap-y-2">
+                    <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">
+                      {programme.name}
+                    </h3>
+                    {programme.acronym && (
+                      <span className="shrink-0 bg-blue-sky/10 px-2 py-1 font-sans text-xs font-semibold uppercase tracking-widest text-blue">
+                        {programme.acronym}
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-6 border-t border-blue-sky/20 pt-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-wine">
+                    {programme.category}
+                  </p>
+                </div>
+              </AnimateIn>
+            ))}
+          </div>
+
+          <AnimateIn direction="up" className="mt-16 text-center">
+            <p className="mb-6 font-sans text-base leading-relaxed text-muted sm:text-lg">
+              Interested in any of these?
+            </p>
+            <Button href="/contact" variant="primary" size="lg">
+              Get in touch
+            </Button>
+          </AnimateIn>
+        </div>
+      </section>
+
+      {/*
+        ── 5. Past Events ──
+        Empty state by design. Nothing goes in here until the client supplies
+        real photos and testimonies — never invented gatherings.
+        Mid-blue rather than light: the Programmes section above took the light
+        slot, and two identical light gradients stacked would erase the seam
+        between them. The page now alternates light → mid → light → mid → navy.
+      */}
+      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
-          <SectionLabel tone="light">Past Events</SectionLabel>
-          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+          <SectionLabel tone="dark">Past Events</SectionLabel>
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             What God Has Done
           </h2>
           <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
-          <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
+          <p className="mb-8 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             A testimony of His faithfulness
           </p>
-          <div className="border-l-4 border-wine bg-cream p-8 text-left">
-            <p className="font-sans text-base leading-relaxed text-muted sm:text-lg">
+          <div className="border-l-4 border-blue-sky bg-white/5 p-8 text-left">
+            <p className="font-sans text-base leading-relaxed text-white/70 sm:text-lg">
               Photos and testimonies from past gatherings will be shared here
               soon.
             </p>
@@ -199,7 +270,7 @@ export default function EventsPage() {
         </AnimateIn>
       </section>
 
-      {/* ── 5. Newsletter CTA ── */}
+      {/* ── 6. Newsletter CTA ── */}
       <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Never Miss an Event</SectionLabel>
@@ -214,7 +285,7 @@ export default function EventsPage() {
         </AnimateIn>
       </section>
 
-      {/* ── 6. CTA Banner ── */}
+      {/* ── 7. CTA Banner ── */}
       <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
