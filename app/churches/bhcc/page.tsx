@@ -58,6 +58,30 @@ export default function BHCCPage() {
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+            {/* Emblem only, not the supplied lockup: `bhcc-logo.jpg` is a 810×243
+                horizontal lockup floating in a 1080×1080 white square, so in this
+                square slot its "CHRISTIAN CENTRE" line would land under 4px. The
+                h1 directly below already spells the name out. See `bhcc-mark.png`
+                in Assets Status. */}
+            <div className="relative mx-auto mb-10 h-40 w-40 sm:h-48 sm:w-48">
+              {/* Soft glow — matches BLCN's hero badge. The white plate carries
+                  most of the separation here; the glow keeps the two heroes
+                  reading as a pair. */}
+              <div
+                aria-hidden
+                className="absolute -inset-10 bg-[radial-gradient(circle,rgba(74,144,217,0.4),transparent_70%)] blur-2xl"
+              />
+              <div className="relative h-full w-full overflow-hidden shadow-2xl ring-1 ring-white/15">
+                <Image
+                  src="/images/bhcc-mark.png"
+                  alt="Building House Christian Centre logo"
+                  fill
+                  priority
+                  sizes="(min-width: 640px) 192px, 160px"
+                  className="object-cover"
+                />
+              </div>
+            </div>
             <SectionLabel tone="dark">United Kingdom</SectionLabel>
             <h1 className="font-serif text-4xl font-bold leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
               Building House Christian Centre

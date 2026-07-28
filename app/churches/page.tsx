@@ -20,7 +20,11 @@ type Expression = {
   icon: "building2" | "bookOpen" | "spotify" | "mapPin" | "handshake" | "bookMarked" | "plane";
   title: string;
   acronym?: string;
-  /** Real church logo, shown beside the acronym. Omitted until assets arrive. */
+  /**
+   * Real church logo, shown beside the acronym. Rendered in a 36px square, so
+   * point it at a square emblem — BHCC uses the `-mark` derivative, not its
+   * horizontal lockup. Omitted for the non-church expressions.
+   */
   logo?: string;
   location?: string;
   description: string;
@@ -35,6 +39,7 @@ const EXPRESSIONS: Expression[] = [
     icon: "building2",
     title: "Building House Christian Centre",
     acronym: "BHCC",
+    logo: "/images/bhcc-mark.png",
     location: "🇬🇧 Norwich, United Kingdom",
     description:
       "A Spirit-filled church in Norwich committed to building lives, raising leaders, and establishing the house of God through the Word and worship.",

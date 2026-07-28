@@ -456,10 +456,36 @@ Real assets received (all in `public/images/`, all JPEG):
   so extending with a transparent background and then flattening leaves the padding
   clear — the plate is made by compositing the mark onto an opaque navy canvas.
 - `blcn-church-order.jpg` — 432×1080 portrait graphic with BLCN vision/mission/values text baked in. Full text lives in its `alt`; do not duplicate it as body copy.
+- `bhcc-logo.jpg` — 1080×1080, the supplied BHCC lockup. ⚠️ **The artwork is not
+  square.** It is an 810×243 horizontal lockup (emblem 242×243 at x109/y425, a
+  38px gap, then a 530×98 two-line wordmark) floating in a mostly-white 1080px
+  square. Dropped into a square slot it renders as a near-blank tile with a
+  sub-4px "CHRISTIAN CENTRE" line. **Nothing renders this file directly** — it is
+  the master the mark is cut from. Use it only where there is real width.
+- `bhcc-mark.png` — 640×640, the emblem alone (orange arc + navy house + hammer),
+  cropped from the lockup and padded to ~14% margins, exactly as `awe-min-mark.png`
+  was cut from `awe-min-logo.png`. This is BHCC's counterpart to `blcn-logo.jpg`
+  and the file every square slot uses: the `/churches/bhcc` hero badge
+  (`h-40 w-40 sm:h-48 sm:w-48`) and the BHCC card's `h-9 w-9` badge on `/churches`.
+  ⚠️ **White plate, deliberately not transparent** — the emblem is navy and
+  orange, so a transparent mark would vanish against the dark hero. That is the
+  inverse of `awe-min-mark.png`, which is white-on-transparent and needs a dark
+  background. ⚠️ Regenerating it takes **two `sharp` passes**: the pipeline order
+  is extract → resize → extend, so chaining `.extend()` before `.resize()` scales
+  the padding too and yields 718×717. Pad in one pass, resize in the next. Palette
+  PNG (`palette: true`) — flat two-colour art, 85 KB against 409 KB truecolour.
 
 Still Unsplash placeholders — pending from client:
-- BHCC logo + BHCC/BLCN church photos (BHCC stays acronym-only until its assets arrive)
+- BHCC/BLCN church photos (the `/churches/bhcc` hero background is still a stock
+  photo — see below for why the logo can't stand in for it)
 - Event banners
+
+⚠️ **BLCN's blurred-logo hero background has no BHCC equivalent, on purpose.**
+`/churches/blcn` uses `blcn-logo.jpg` as its own hero backdrop (`scale-125
+blur-2xl` under a `bg-black/40` scrim) because that emblem sits on near-black and
+blurs into usable dark texture. BHCC's mark is on white: blurred full-bleed it
+washes to a flat grey field under the same scrim, losing both the artwork and the
+imagery. The BHCC hero keeps a photo. Don't "finish the mirror" by porting it.
 
 ⚠️ **The ministry logo master is lost.** Only the 1200×662 derivative survives (see
 the filename warning above). Ask the client to re-supply the original if a larger
