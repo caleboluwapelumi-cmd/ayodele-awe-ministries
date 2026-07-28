@@ -13,9 +13,14 @@ export const metadata: Metadata = {
     "Ayodele Oladapo Awe (RDP) — Revivalist, Discipler and Pointer. Founder and president of Ayodele Oladapo Awe Ministries, an apostolic ministry advancing God's Kingdom through revival, discipleship, evangelism and the ministry of the Holy Spirit.",
 };
 
+/**
+ * First person, and deliberately so — /about is the one page written in the
+ * Pastor's own voice. Every fact here is the client-supplied biography; only
+ * the person of the verbs changed. Don't quietly revert it to third person.
+ */
 const BIO = [
-  "Ayodele Oladapo Awe, also known as RDP, is a Revivalist, Discipler, and Pointer with a divine mandate to raise believers who steward the presence of God and manifest the realities of His Kingdom. Called by God into ministry in 2014, his life and ministry are marked by a passion to see revival awaken hearts, disciples matured in Christ, and the lost pointed to Jesus through the demonstration of the Gospel.",
-  "He is the founder and president of Ayodele Oladapo Awe Ministries, an apostolic ministry committed to advancing God's Kingdom through revival, discipleship, evangelism, leadership development, and the ministry of the Holy Spirit.",
+  "I'm Ayodele Oladapo Awe — known to many simply as RDP: a Revivalist, a Discipler and a Pointer. God has entrusted me with a mandate to raise believers who steward His presence and manifest the realities of His Kingdom. He called me into ministry in 2014, and everything since has been shaped by one passion: to see revival awaken hearts, disciples matured in Christ, and the lost pointed to Jesus through the demonstration of the Gospel.",
+  "I serve as the founder and president of Ayodele Oladapo Awe Ministries, an apostolic ministry committed to advancing God's Kingdom through revival, discipleship, evangelism, leadership development, and the ministry of the Holy Spirit.",
 ];
 
 const MANDATE = [
@@ -42,7 +47,7 @@ const EXPRESSIONS_TEASER =
   "The mandate takes shape in three ways: apostolically, through revival gatherings that stir the Church into deeper intimacy with God; pastorally, through churches, teaching and discipleship that mature believers in Christ; and evangelistically, through campaigns and healing outreaches that point the lost to Jesus. Each carries the same burden — that His presence would be stewarded and His Kingdom made visible among the nations.";
 
 const FAMILY =
-  "Ayodele is married to Iyanuoluwa, and together they are devoted to serving God and equipping people to live lives of wholehearted devotion to Christ.";
+  "I am married to Iyanuoluwa, and together we are devoted to serving God and equipping people to live lives of wholehearted devotion to Christ.";
 
 const STATS = [
   { stat: "2 Churches", label: "UK & Nigeria" },
@@ -71,9 +76,14 @@ export default function AboutPage() {
     <>
       {/* ── 1. Page Hero ── */}
       <PageHero
-        label="The Pastor"
-        title="About the Pastor"
-        subtitle="A life surrendered to the Gospel of Jesus Christ"
+        label="In My Own Words"
+        title="Let Me Introduce Myself"
+        subtitle="I'm Ayodele — a husband, a pastor, and a man captured by the presence of God. Here is a little of the story He has been writing."
+        backgroundImage="/images/apostle-key.jpg"
+        imageAlt="Pastor Ayodele Oladapo Awe at the keyboard"
+        /* Portrait source in a wide slot — bias the crop upward so his face
+           stays in frame rather than centring on the keys. */
+        imagePosition="object-[50%_22%]"
       />
 
       {/* ── 2. Bio Section ── */}
@@ -85,7 +95,6 @@ export default function AboutPage() {
                 src="/images/apostle-portrait.jpg"
                 alt="Pastor Ayodele Oladapo Awe"
                 fill
-                priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover transition-transform duration-700 hover:scale-105"
               />
@@ -93,7 +102,7 @@ export default function AboutPage() {
           </AnimateIn>
 
           <AnimateIn direction="right">
-            <SectionLabel tone="light">Biography</SectionLabel>
+            <SectionLabel tone="light">My Story</SectionLabel>
             <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
               Ayodele Oladapo Awe <span className="text-muted">(RDP)</span>
             </h2>
@@ -160,7 +169,7 @@ export default function AboutPage() {
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="light">In Practice</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
-            How the Mandate Is Lived Out
+            How I Live This Out
           </h2>
           <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
           <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -242,8 +251,8 @@ export default function AboutPage() {
             Join the Movement
           </h2>
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
-            Whether in the UK or Nigeria, there is a place for you in this
-            ministry.
+            Whether you are in the UK or Nigeria, there is a place for you in
+            this ministry. I would love to welcome you.
           </p>
           <div className="flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center">
             <Button href="/churches" variant="wine" size="lg">

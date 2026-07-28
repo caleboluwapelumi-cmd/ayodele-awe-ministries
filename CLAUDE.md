@@ -187,7 +187,14 @@ components/
   AnimateIn.tsx           ← 'use client' — Framer Motion scroll reveal. Props: direction 'up'|'left'|'right'|'fade', delay, className
   Button.tsx              ← THE button. Variants: primary | secondary | outline | wine. Sizes: default | lg
   SectionLabel.tsx        ← The small-caps eyebrow above every heading. tone: dark | light | onAccent
-  PageHero.tsx            ← Shared hero for all inner pages. variant: dark | light
+  PageHero.tsx            ← Shared hero for all inner pages. variant: dark | light.
+                            Optional `backgroundImage` (+ `imageAlt`,
+                            `imagePosition`) puts a photo behind the copy under
+                            the standard navy/wine scrim; it forces the dark
+                            treatment, so `variant` is ignored when set. Omit
+                            `imageAlt` for a purely decorative backdrop (the
+                            image is then `aria-hidden`); pass it when the photo
+                            is part of the page's subject, as on `/about`
   Navbar.tsx              ← Transparent on desktop hero, solid on scroll; always solid
                             on mobile. Its local `Brand` component is used by both the
                             desktop bar and the mobile menu header: `awe-min-mark.png`
@@ -389,6 +396,16 @@ exist to prevent. So:
   gradients stacked have no visible seam, which is why it was restyled rather
   than left alone.
 
+⚠️ **`/about` is written in the first person — it is the one page in the
+Pastor's own voice.** The hero reads "Let Me Introduce Myself" over
+`apostle-key.jpg`, and `BIO`, `FAMILY` and the "How I Live This Out" heading all
+say "I"/"we". Every fact in `BIO` is still the client-supplied biography
+verbatim in substance; only the person of the verbs changed. Don't revert it to
+third person, and keep new copy added to this page in the same voice. The
+`metadata` description stays third person — it is for search results, not for
+the reader. Every **other** page (including `/ministry`, which carries the
+expression copy) remains third person.
+
 **`/about` was restructured around this split.** It now runs: page hero → bio
 (portrait + RDP pull-quote + the real two-paragraph biography) → the mandate
 (the umbrella vision, unchanged) → a short "How the Mandate Is Lived Out" teaser
@@ -412,6 +429,15 @@ Real assets received (all in `public/images/`, all JPEG):
 - `apostle-2.jpg` — 1928×2560 **portrait**, minister at a lectern; subject high
   and left of frame. Homepage hero slide 2 — needs `object-[30%_25%]` so the
   full-bleed hero crop doesn't cut his head off.
+- `apostle-key.jpg` — 720×960 **portrait**, the Pastor at a keyboard, head bowed;
+  face at roughly 45% across and 30% down. The `/about` `PageHero` background.
+  Needs `object-[50%_22%]`: a ~2:1 hero crop of a 0.75 portrait shows only ~38%
+  of its height, and centring lands on the keys. Verified by simulating the
+  `object-cover` maths at 1280×644 — at 22% the crop runs source rows 132–494,
+  face centred with headroom. It is only 720px wide, so it upscales ~2× at
+  desktop; that is acceptable **because** it sits under the full navy + wine
+  scrim and reads as texture (same reasoning as the BLCN blurred-logo hero).
+  Don't reuse it anywhere it would render unscrimmed at width.
 
 ⚠️ Two lessons from how these arrived, both worth repeating for future assets:
 
