@@ -78,6 +78,14 @@ export interface Church {
   mission?: string;
   /** Human-readable founding date, e.g. "9 February 2025". */
   founded?: string;
+  /**
+   * The church's own square emblem in `public/images/`. Never a photograph —
+   * this is the church's identity, so it is the one image allowed to stand for
+   * the church before real photos arrive. BHCC points at the `-mark`
+   * derivative, not its horizontal lockup, because every consumer is a square
+   * or near-square slot.
+   */
+  logo?: string;
   leadership?: ChurchLeader[];
   /** Church-run accounts — distinct from the minister's own SOCIALS. */
   socials?: ChurchSocials;
@@ -113,6 +121,7 @@ export const CHURCHES: Church[] = [
     mission:
       "We exist to Equip saints that would worship God accurately, sound in doctrine and bear witness with power to the resurrected Christ.",
     founded: "9 February 2025",
+    logo: "/images/bhcc-mark.png",
     leadership: [
       {
         name: "Ayodele Oladapo Awe",
@@ -135,6 +144,7 @@ export const CHURCHES: Church[] = [
       { day: "Tuesday", time: "5:30 PM" },
     ],
     email: "blcnglobal@gmail.com",
+    logo: "/images/blcn-logo.jpg",
     socials: BLCN_SOCIALS,
   },
 ];

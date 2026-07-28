@@ -133,15 +133,26 @@ export default function BHCCPage() {
       {/* ── 3. About ── */}
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
+          {/* The church's own lockup, not a stock photograph — a generic photo
+              captioned "BHCC church gathering" reads as a photo of BHCC. This
+              is the one slot that renders `bhcc-logo.jpg` rather than the mark:
+              the plate is ~512px wide, so the lockup lands ~380px across and
+              the "CHRISTIAN CENTRE" line stays legible (see Assets Status for
+              why small square slots must use `bhcc-mark.png` instead). White
+              mat + ring separates the logo's own white ground from the light
+              section. Swap in a real photo of the congregation when one
+              arrives. */}
           <AnimateIn direction="left">
-            <div className="relative aspect-[3/4] overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=800&q=80"
-                alt="BHCC church gathering"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover transition-transform duration-700 hover:scale-105"
-              />
+            <div className="mx-auto aspect-square w-full max-w-lg bg-gradient-to-br from-white to-[#EEF3FA] p-6 shadow-xl ring-1 ring-blue-navy/10 sm:p-10">
+              <div className="relative h-full w-full">
+                <Image
+                  src="/images/bhcc-logo.jpg"
+                  alt="Building House Christian Centre logo"
+                  fill
+                  sizes="(min-width: 1024px) 512px, 100vw"
+                  className="object-contain"
+                />
+              </div>
             </div>
           </AnimateIn>
 

@@ -205,15 +205,22 @@ export default function BLCNPage() {
       {/* ── 3. About ── */}
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
+          {/* The church's own emblem, not a stock photograph — a generic photo
+              captioned "BLCN church gathering" reads as a photo of BLCN. The
+              same white mat + shadow the church-order card uses above, so the
+              emblem's near-black ground has an edge against the light section.
+              Swap in a real photo of the congregation when one arrives. */}
           <AnimateIn direction="left">
-            <div className="relative aspect-[3/4] overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80"
-                alt="BLCN church gathering"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover transition-transform duration-700 hover:scale-105"
-              />
+            <div className="mx-auto aspect-square w-full max-w-lg bg-gradient-to-br from-white to-[#EEF3FA] p-6 shadow-xl ring-1 ring-blue-navy/10 sm:p-10">
+              <div className="relative h-full w-full">
+                <Image
+                  src="/images/blcn-logo.jpg"
+                  alt="Bethel Livingstone Christian Network logo"
+                  fill
+                  sizes="(min-width: 1024px) 512px, 100vw"
+                  className="object-contain"
+                />
+              </div>
             </div>
           </AnimateIn>
 

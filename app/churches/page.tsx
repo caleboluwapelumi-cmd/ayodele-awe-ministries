@@ -7,6 +7,7 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import SectionLabel from "@/components/SectionLabel";
 import Button from "@/components/Button";
+import { CHURCHES } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Ministry Expressions — Ayodele Oladapo Awe Ministries",
@@ -33,13 +34,21 @@ type Expression = {
   accent: "blue" | "wine" | "sky";
 };
 
+/**
+ * Emblem paths are never written out here — `CHURCHES[].logo` in constants.ts
+ * is the single source, so a renamed asset changes in one place. The rest of
+ * this list has no counterpart in constants.ts and stays literal.
+ */
+const logoFor = (acronym: string) =>
+  CHURCHES.find((church) => church.acronym === acronym)?.logo;
+
 const EXPRESSIONS: Expression[] = [
   {
     category: "Church",
     icon: "building2",
     title: "Building House Christian Centre",
     acronym: "BHCC",
-    logo: "/images/bhcc-mark.png",
+    logo: logoFor("BHCC"),
     location: "🇬🇧 Norwich, United Kingdom",
     description:
       "A Spirit-filled church in Norwich committed to building lives, raising leaders, and establishing the house of God through the Word and worship.",
@@ -52,7 +61,7 @@ const EXPRESSIONS: Expression[] = [
     icon: "building2",
     title: "Bethel Livingstone Christian Network",
     acronym: "BLCN",
-    logo: "/images/blcn-logo.jpg",
+    logo: logoFor("BLCN"),
     location: "🇳🇬 Ado Ekiti, Nigeria",
     description:
       "A thriving network of believers across Nigeria dedicated to community-driven ministry, discipleship, and gospel outreach.",

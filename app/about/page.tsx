@@ -50,18 +50,19 @@ const STATS = [
   { stat: "2 Nations", label: "One Mandate" },
 ];
 
-const CHURCH_COPY: Record<string, { description: string; imageUrl: string }> = {
+/**
+ * Card copy only — the card image is each church's own emblem, read from
+ * `CHURCHES[].logo`. There is no stock photograph here on purpose: a generic
+ * photo in a card headed "BHCC" reads as a photo of BHCC.
+ */
+const CHURCH_COPY: Record<string, { description: string }> = {
   BHCC: {
     description:
       "A vibrant, Spirit-led community in the United Kingdom committed to building lives and raising leaders through the Word of God.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1470116945706-e6bf5d5a53ca?w=800&q=80",
   },
   BLCN: {
     description:
       "A thriving network of believers in Nigeria dedicated to community-driven ministry, discipleship, and gospel outreach.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80",
   },
 };
 
@@ -225,7 +226,7 @@ export default function AboutPage() {
                   acronym={church.acronym}
                   description={CHURCH_COPY[church.acronym].description}
                   location={church.location}
-                  imageUrl={CHURCH_COPY[church.acronym].imageUrl}
+                  logoUrl={church.logo}
                   href={church.href}
                 />
               </AnimateIn>

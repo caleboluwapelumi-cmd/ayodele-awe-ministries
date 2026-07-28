@@ -204,7 +204,11 @@ components/
   CountdownTimer.tsx      ← 'use client', renders a 'pending' placeholder first so SSR/client hydration match
   NewsletterForm.tsx
   EventCard.tsx
-  ChurchCard.tsx
+  ChurchCard.tsx        ← Two image modes. `logoUrl` (what both callers use) →
+                          the emblem contained on a light plate, no scrim, and
+                          the acronym moves into the body. `imageUrl` → the old
+                          full-bleed crop + scrim + acronym overlay, reserved
+                          for a real photo of that congregation
   MediaLinks.tsx
   SpotifyEmbed.tsx        ← Spotify iframe player. Props: kind ('artist'|'show'|
                             'album'|'track'|'episode'), id (bare ID or a pasted
@@ -225,7 +229,8 @@ lib/
                             SOCIALS (the Pastor's), BLCN_SOCIALS (church),
                             MINISTRY_PROGRAMMES, media/book URLs.
                             `Church` carries address / serviceTimes / email /
-                            vision / mission / founded / leadership / socials —
+                            vision / mission / founded / logo / leadership /
+                            socials —
                             all optional, so pages read them with `?.` and render
                             nothing when a field is absent. Both BHCC and BLCN are
                             fully populated; page copy sources address, email,
@@ -476,9 +481,60 @@ Real assets received (all in `public/images/`, all JPEG):
   PNG (`palette: true`) — flat two-colour art, 85 KB against 409 KB truecolour.
 
 Still Unsplash placeholders — pending from client:
-- BHCC/BLCN church photos (the `/churches/bhcc` hero background is still a stock
-  photo — see below for why the logo can't stand in for it)
+- The `/churches/bhcc` hero background (see below for why the logo can't stand
+  in for it). This is the **only** stock image left anywhere on the site that
+  represents a church — see "No stock imagery stands for a church" below.
 - Event banners
+
+### ⚠️ No stock imagery stands for a church
+A placeholder photo is obviously a placeholder *only when nothing labels it*. A
+stock photo inside a card headed "BHCC", or captioned `alt="BHCC church
+gathering"`, is read by every visitor as a photograph of BHCC — the same failure
+mode the Content Integrity Notes describe for invented events. Where an image is
+needed to carry a church's identity, **use that church's own emblem**, never a
+photograph of strangers. Cleared on 28 July 2026:
+
+- `CHURCHES[].logo` in `constants.ts` holds each church's square emblem
+  (`bhcc-mark.png`, `blcn-logo.jpg`). It is the single source — `/` and `/about`
+  both read `church.logo` straight through to `ChurchCard`, so neither page
+  names an image path.
+- `ChurchCard`'s `logoUrl` mode is **contained on a light plate**
+  (`from-white to-[#EEF3FA]`, `object-contain p-8`), not cropped full-bleed. A
+  light plate because the two emblems carry opposite grounds — BHCC is
+  navy/orange on white, BLCN sits on near-black — and only a light panel keeps
+  both legible in the same grid row. There is no scrim in this mode (nothing is
+  set over the artwork), so the acronym moves out of the image overlay and into
+  the body line beside the location.
+- The "About BHCC" / "About BLCN" sections on the two church pages use the same
+  idea at panel scale: `aspect-square` white mat, `shadow-xl ring-1
+  ring-blue-navy/10`, `object-contain`. The mat is the idiom already used by the
+  `blcn-church-order.jpg` card further up `/churches/blcn`.
+- ⚠️ **The BHCC "About" panel is the one place `bhcc-logo.jpg` renders
+  directly.** At `max-w-lg` the lockup lands ~380px across and the "CHRISTIAN
+  CENTRE" line stays legible; every smaller square slot must keep using
+  `bhcc-mark.png` (see the warning on the file above).
+- `ChurchCard.imageUrl` was kept, not deleted — it is the path a real
+  congregation photo takes when one arrives. Nothing passes it today.
+- Removed in this pass: `photo-1470116945706…` (BHCC) and
+  `photo-1583743814966…` (BLCN), which appeared four times between them —
+  `/` and `/about` church cards, and the About sections of both church pages.
+  Neither depicted the church.
+- `/churches` already used the emblems (as 36px badges) and needed no visual
+  change, but its `EXPRESSIONS` literal had the two paths written out again.
+  They now come from a `logoFor(acronym)` helper reading `CHURCHES`, so every
+  **cross-page** consumer of a church emblem (`/`, `/about`, `/churches`) goes
+  through `CHURCHES[].logo`. The array's seven non-church entries stay literal;
+  they have no counterpart in constants.ts.
+- ⚠️ **A church's own page is the exception and still names files directly.**
+  `/churches/bhcc` renders `bhcc-mark.png` in the hero badge but
+  `bhcc-logo.jpg` in the About panel, and `/churches/blcn` renders
+  `blcn-logo.jpg` three ways (blurred backdrop, crisp badge, About panel).
+  These are page-specific renditions of different assets, so one `logo` field
+  cannot express them — don't try to route them through constants.ts.
+- **Not affected:** the decorative Unsplash textures behind the `/about`
+  mandate, the `/` and `/partners` partnership bands and the `/media` Telegram
+  card. Those are `aria-hidden` backdrops under a heavy scrim, labelled as
+  nothing — they carry no claim about a church.
 
 ⚠️ **BLCN's blurred-logo hero background has no BHCC equivalent, on purpose.**
 `/churches/blcn` uses `blcn-logo.jpg` as its own hero backdrop (`scale-125
