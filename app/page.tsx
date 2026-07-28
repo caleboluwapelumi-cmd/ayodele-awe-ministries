@@ -9,10 +9,13 @@ import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
 import { CHURCHES } from "@/lib/constants";
+import { PRAYER_SURGE, nextPrayerSurge } from "@/lib/prayer-surge";
 
-const COUNTDOWN_TARGET = new Date(
-  Date.now() + 90 * 24 * 60 * 60 * 1000
-).toISOString();
+/**
+ * The Prayer Surge date is derived from the current time, so this page has to
+ * be re-rendered rather than frozen at build — see lib/prayer-surge.ts.
+ */
+export const revalidate = 3600;
 
 const CHURCH_COPY: Record<string, { description: string; imageUrl: string }> = {
   BHCC: {
@@ -30,6 +33,8 @@ const CHURCH_COPY: Record<string, { description: string; imageUrl: string }> = {
 };
 
 export default function HomePage() {
+  const surge = nextPrayerSurge();
+
   return (
     <>
       {/* ── 1. Hero ── */}
@@ -123,21 +128,30 @@ export default function HomePage() {
 
           <AnimateIn direction="up" className="mt-12 max-w-md">
             <EventCard
-              title="Norwich Prayer Surge"
-              date="Coming Soon"
-              location="Norwich, United Kingdom"
+              title={PRAYER_SURGE.title}
+              date={surge.shortDate}
+              location={PRAYER_SURGE.location}
               imageUrl="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=1200&q=80"
-              registerLink="#"
+              registerLink="/events"
+              ctaLabel="Event details"
             />
           </AnimateIn>
 
           {/* Full-width band so the countdown numerals have room to breathe */}
           <AnimateIn direction="up" className="mt-16">
             <div className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-6 py-12 text-center sm:px-12 sm:py-16">
-              <SectionLabel tone="dark">Counting Down</SectionLabel>
+              <SectionLabel tone="dark">Next Gathering</SectionLabel>
+              <p className="mt-3 font-serif text-2xl font-bold leading-tight text-white sm:text-3xl">
+                {surge.fullDate}
+              </p>
               <div className="mt-8">
-                <CountdownTimer targetDate={COUNTDOWN_TARGET} />
+                <CountdownTimer targetDate={surge.startsAt} />
               </div>
+              <p className="mx-auto mt-10 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+                Join us every last Saturday of the month at 10:00 AM and become
+                part of what God is doing in Norwich through united,
+                Spirit-filled prayer.
+              </p>
             </div>
           </AnimateIn>
         </div>

@@ -7,6 +7,8 @@ interface EventCardProps {
   location: string;
   imageUrl?: string;
   registerLink: string;
+  /** Overrides the CTA wording for events with no registration to complete. */
+  ctaLabel?: string;
 }
 
 export default function EventCard({
@@ -15,6 +17,7 @@ export default function EventCard({
   location,
   imageUrl,
   registerLink,
+  ctaLabel = "Register",
 }: EventCardProps) {
   return (
     <div className="group flex h-full flex-col bg-gradient-to-br from-white to-[#EEF3FA] shadow-lg transition-shadow duration-300 hover:shadow-xl">
@@ -50,7 +53,7 @@ export default function EventCard({
           {location}
         </p>
         <Button href={registerLink} variant="primary" className="self-start">
-          Register
+          {ctaLabel}
         </Button>
       </div>
     </div>

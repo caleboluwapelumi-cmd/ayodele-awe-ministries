@@ -184,6 +184,10 @@ lib/
                             getLatestSermons(n) → the n newest audio posts,
                             revalidated hourly. Returns [] on any failure —
                             callers MUST render an empty state
+  prayer-surge.ts         ← PRAYER_SURGE (title, location, schedule wording,
+                            time range, Isaiah 32:15) + nextPrayerSurge(),
+                            which derives the next last-Saturday-of-month
+                            10:00 Europe/London occurrence. See below
 ```
 
 ---
@@ -207,7 +211,10 @@ lib/
 - **Minister:** Ayodele Oladapo Awe — Nigerian-born, UK-based
 - **BHCC** = Building House Christian **Centre** — Norwich, UK. Use **British English** for all BHCC content. Founded 9 February 2025; led by Ayodele Oladapo Awe (Lead Pastor) and Iyanuoluwa Ayodele-Awe (Co-Pastor). The founding-story section on `/churches/bhcc` retells a testimony the client supplied — it is a real account of a trance at a 2023 end-of-year retreat, so keep it reverent and don't embellish it.
 - **BLCN** = Bethel Livingstone Christian Network (Nigeria) — standard English
-- **Key event:** Norwich Prayer Surge (UK) — date TBA, placeholder countdown active
+- **Key event:** Norwich Prayer Surge (UK) — **recurring**, last Saturday of every
+  month, 10:00 AM–5:00 PM (7 hours), Norwich. Vision text is built on Isaiah 32:15
+  ("until the Spirit is poured upon us from on high…"), quoted on `/events`. There
+  is no fixed date to hard-code — see `lib/prayer-surge.ts`
 - **Media:** Spotify music + the "Babylonian Legends" podcast ("Everything Faith and Family") + Telegram teachings — all live, see Assets Status
 - **Books:** "Walking with the Holy Spirit: Insights for Supernatural Living" — on sale via Selar and Amazon. Title and subtitle are separate fields on `/books` so the heading stays readable; subtitle uses the small-caps `blue-sky` treatment.
 - **Tagline:** "Raising Voices, Building Houses, Transforming Nations"
@@ -317,7 +324,28 @@ ever needs pulling again, re-add the guard alongside the placeholder.
 
 Still `#` placeholders — real URLs pending:
 - Apple Music, Audiomack (music page platform grid)
-- Event registration links (`registerLink` on `/` and `/events`)
+- `registerLink` for "BHCC Special Service" and "BLCN Revival Meeting" on
+  `/events` — both still TBA. The Prayer Surge no longer uses one: it is an open
+  monthly meeting, so its CTA points at `/contact` (and `/` points at `/events`).
+
+## The Norwich Prayer Surge countdown
+`lib/prayer-surge.ts` computes the next occurrence instead of storing a date,
+because the gathering recurs on the **last Saturday of every month at 10:00**.
+
+⚠️ **Call `nextPrayerSurge()` inside the component, never at module scope.**
+Module constants are evaluated once when the module loads and would survive
+every revalidation, re-freezing the date. Both `/` and `/events` therefore set
+`export const revalidate = 3600` — the build output shows `Revalidate 1h` on
+them, alongside `/media/teachings`.
+
+- The 10:00 start is **Europe/London wall-clock**, resolved to a UTC instant via
+  `Intl.DateTimeFormat` offset lookup, so it stays 10:00 through BST and GMT
+  alike. One offset correction suffices: 10:00 is nowhere near a DST boundary.
+- A gathering in progress still counts as "next" until its 7 hours are up, so
+  the countdown reads "This event has started!" rather than jumping to next
+  month mid-meeting.
+- `EventCard` takes an optional `ctaLabel` (default `"Register"`) for events
+  with no registration to complete.
 
 ## On-site players
 - **Spotify** — `SPOTIFY_ARTIST_ID` / `SPOTIFY_PODCAST_ID` feed `SpotifyEmbed` on
