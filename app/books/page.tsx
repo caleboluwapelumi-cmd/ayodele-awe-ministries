@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import NewsletterForm from "@/components/NewsletterForm";
-import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import AmazonIcon from "@/components/icons/AmazonIcon";
@@ -33,16 +32,80 @@ const BOOKS = [
   },
 ];
 
+/**
+ * The hero features one title. With a second book the hero keeps carrying this
+ * one and the new title appears in the section below — swap the index (or add
+ * a `featured` flag) if that ever needs to change.
+ */
+const FEATURED = BOOKS[0];
+
 export default function BooksPage() {
   return (
     <>
-      {/* ── 1. Hero ── */}
-      <PageHero
-        label="Resources"
-        title={<>Books &amp; Publications</>}
-        subtitle="Written to equip, strengthen, and build the believer"
-        variant="light"
-      />
+      {/* ── 1. Hero — the cover IS the hero ── */}
+      {/* The one inner page that does not use `PageHero`: the cover is 800×1135
+          portrait and `PageHero` crops its backdrop full-bleed, which at ~2:1
+          would show a third of the artwork and slice the title lettering. Here
+          it renders whole, beside the copy, with a blurred enlargement of
+          itself as the backdrop (the BLCN logo-hero idiom) so the field carries
+          the cover's own colour. Rhythm, type scale and the blue-sky rule are
+          copied from `PageHero` so the page still reads as part of the set. */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <Image
+          src={FEATURED.cover}
+          alt=""
+          aria-hidden
+          fill
+          priority
+          sizes="100vw"
+          className="scale-110 object-cover opacity-25 blur-3xl"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-navy/85 via-blue-deep/60 to-wine-deep/85" />
+
+        <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <AnimateIn direction="left">
+            <SectionLabel tone="dark">Books &amp; Publications</SectionLabel>
+            <h1 className="font-serif text-4xl font-bold leading-tight tracking-tight text-white sm:text-6xl">
+              {FEATURED.title}
+            </h1>
+            <div className="mt-6 h-0.5 w-16 bg-blue-sky" />
+            <p className="mt-8 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+              {FEATURED.subtitle} — written to equip, strengthen, and build the
+              believer.
+            </p>
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <Button href={FEATURED.selar} variant="secondary" external>
+                <SelarIcon size={20} />
+                Buy on Selar
+              </Button>
+              <Button
+                href={FEATURED.amazon}
+                variant="outline"
+                className="text-white"
+                external
+              >
+                <AmazonIcon size={20} />
+                Buy on Amazon
+              </Button>
+            </div>
+          </AnimateIn>
+
+          <AnimateIn direction="right">
+            {/* No aspect box and no `object-cover` — the intrinsic 800×1135
+                ratio renders the artwork uncropped, which is the whole point of
+                giving it the hero. */}
+            <Image
+              src={FEATURED.cover}
+              alt={`Cover of ${FEATURED.title}: ${FEATURED.subtitle} by Ayodele Oladapo Awe`}
+              width={FEATURED.coverWidth}
+              height={FEATURED.coverHeight}
+              priority
+              sizes="(min-width: 1024px) 420px, (min-width: 640px) 360px, 80vw"
+              className="mx-auto w-full max-w-[280px] shadow-2xl ring-1 ring-white/10 sm:max-w-sm lg:mx-0 lg:ml-auto lg:max-w-md"
+            />
+          </AnimateIn>
+        </div>
+      </section>
 
       {/* ── 2. The Books ── */}
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
@@ -50,7 +113,7 @@ export default function BooksPage() {
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
             <SectionLabel tone="light">Available Now</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
-              Books &amp; Publications
+              Inside the Book
             </h2>
             <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
               Written resources from Pastor Ayodele Oladapo Awe — order your
@@ -59,54 +122,43 @@ export default function BooksPage() {
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
+          {/* The cover is not repeated here — it carries the hero above at full
+              size, and a second rendition one scroll later reads as a mistake
+              rather than as emphasis. */}
           <div className="mt-16 space-y-16">
             {BOOKS.map((book) => (
-              <div
+              <AnimateIn
                 key={book.title}
-                className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-12 sm:grid-cols-2"
+                direction="up"
+                className="mx-auto max-w-3xl border-t-2 border-blue-sky pt-10"
               >
-                <AnimateIn direction="left">
-                  <div className="group mx-auto aspect-[2/3] w-full max-w-xs overflow-hidden rounded-none shadow-xl">
-                    <Image
-                      src={book.cover}
-                      alt={`Cover of ${book.title}: ${book.subtitle} by Ayodele Oladapo Awe`}
-                      width={book.coverWidth}
-                      height={book.coverHeight}
-                      sizes="(min-width: 640px) 320px, 100vw"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  </div>
-                </AnimateIn>
-
-                <AnimateIn direction="right">
-                  <h3 className="mb-3 font-serif text-2xl font-bold leading-tight text-blue-navy sm:text-3xl">
-                    {book.title}
-                  </h3>
-                  <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-blue-sky">
-                    {book.subtitle}
-                  </p>
-                  <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
-                    {book.description.map((para) => (
-                      <p key={para}>{para}</p>
-                    ))}
-                  </div>
-                  <div className="flex flex-col gap-3 sm:flex-row">
-                    <Button href={book.selar} variant="primary" external>
-                      <SelarIcon size={20} />
-                      Buy on Selar
-                    </Button>
-                    <Button
-                      href={book.amazon}
-                      variant="outline"
-                      className="text-blue-navy"
-                      external
-                    >
-                      <AmazonIcon size={20} />
-                      Buy on Amazon
-                    </Button>
-                  </div>
-                </AnimateIn>
-              </div>
+                <h3 className="mb-3 font-serif text-2xl font-bold leading-tight text-blue-navy sm:text-3xl">
+                  {book.title}
+                </h3>
+                <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-blue-sky">
+                  {book.subtitle}
+                </p>
+                <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
+                  {book.description.map((para) => (
+                    <p key={para}>{para}</p>
+                  ))}
+                </div>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Button href={book.selar} variant="primary" external>
+                    <SelarIcon size={20} />
+                    Buy on Selar
+                  </Button>
+                  <Button
+                    href={book.amazon}
+                    variant="outline"
+                    className="text-blue-navy"
+                    external
+                  >
+                    <AmazonIcon size={20} />
+                    Buy on Amazon
+                  </Button>
+                </div>
+              </AnimateIn>
             ))}
           </div>
         </div>

@@ -174,7 +174,9 @@ app/
     page.tsx
     teachings/page.tsx    ← Telegram teachings page
     music/page.tsx        ← Spotify music page
-  books/page.tsx          ← Book showcase + Selar/Amazon buy buttons
+  books/page.tsx          ← Book showcase + Selar/Amazon buy buttons. ⚠️ The only
+                            inner page with a bespoke hero — the cover is the hero
+                            (see the /books note under Assets Status)
   itinerary/page.tsx
   partners/page.tsx
   contact/page.tsx
@@ -460,7 +462,11 @@ Real assets received (all in `public/images/`, all JPEG):
    7.3 MB to 586 KB with no visible quality loss. Next.js resizes on serve, so
    oversized sources buy nothing and bloat the repo permanently.
 - `walking-with-the-holy-spirit.**jpeg**` — 800×1135 book cover. Note the
-  `.jpeg` extension; every other image in the folder is `.jpg`. Used on `/books`.
+  `.jpeg` extension; every other image in the folder is `.jpg`. It **is** the
+  `/books` hero (see the `/books` note further down), rendered twice within
+  that one section: whole and crisp beside the copy, and as its own blurred
+  backdrop (`scale-110 opacity-25 blur-3xl`, the BLCN logo-hero idiom) so the
+  field carries the cover's colour. ⚠️ It appears nowhere else on the page.
 - `blcn-logo.jpg` — 828×647, shofar emblem on a dark charcoal background (**not**
   transparent). Used three ways on `/churches/blcn`: the crisp badge in the hero,
   the **hero background image itself** (`scale-125 object-cover blur-2xl` inside an
@@ -686,11 +692,29 @@ Anything still on `#` is rendered dimmed + `pointer-events-none`, with a
 `/books` is fully populated — real title, subtitle, two-paragraph description
 and cover artwork are all in place. Nothing outstanding on that page.
 
-The cover renders in an `aspect-[2/3]` box with `object-cover`. The source is
-800×1135 (0.705), so ~23px is trimmed from each side. Checked against the
-artwork: the nearest text sits ~78px in, so nothing is clipped. If the cover
-is ever replaced with tighter margins, switch the container to
-`aspect-[800/1135]` (or the new image's ratio) to show it uncropped.
+### ⚠️ `/books` is the one inner page that does NOT use `PageHero`
+The cover **is** the hero: a two-column section (copy + buy Buttons left, the
+cover right at `lg`), over a blurred enlargement of the cover itself. This is a
+deliberate exception to the "don't hand-roll inner-page heroes" rule, because
+`PageHero`'s backdrop is `object-cover` full-bleed and the cover is a 0.705
+portrait — a ~2:1 crop shows barely a third of its height and slices the title
+lettering, which then sits directly under the `h1`. The section copies
+`PageHero`'s rhythm, type scale and `w-16 h-0.5 bg-blue-sky` rule verbatim so
+the page still reads as part of the set; keep them in step if `PageHero`
+changes. Everything else on the site still goes through `PageHero`.
+
+- The cover renders at its **intrinsic** 800×1135 with no aspect box and no
+  `object-cover`, so it is uncropped — the point of giving it the hero. It is
+  also the one image on the site outside an `overflow-hidden` hover-scale
+  container: it is the subject, not a card thumbnail.
+- **The cover is not repeated below the hero.** The section under it ("Inside
+  the Book") is text only — title, subtitle, description, buy Buttons on a
+  `border-t-2 border-blue-sky` block. A second full-size rendition one scroll
+  later reads as a mistake, not emphasis. It previously sat in an
+  `aspect-[2/3]` `object-cover` box there; that block is gone.
+- `FEATURED = BOOKS[0]` drives the hero, while the section below still maps the
+  whole `BOOKS` array. Add a second title and it appears below while the hero
+  keeps carrying the first.
 
 ---
 
@@ -724,4 +748,4 @@ is ever replaced with tighter margins, switch the container to
 - Wrap every card, heading block and column in `AnimateIn`. Grid children get a staggered `delay={index * 0.1}` and `className="h-full"` so the wrapper inherits the grid cell height.
 - Images live in an `overflow-hidden` container with `object-cover transition-transform duration-700 group-hover:scale-105`.
 - Any photo carrying text over it needs a scrim (`bg-gradient-to-b from-black/70 via-transparent to-black/80` or similar).
-- Don't hand-roll section labels, buttons or inner-page heroes — use `SectionLabel`, `Button`, `PageHero`.
+- Don't hand-roll section labels, buttons or inner-page heroes — use `SectionLabel`, `Button`, `PageHero`. The single exception is the `/books` hero, where the book cover is the subject and `PageHero`'s full-bleed backdrop crop would destroy it — see the `/books` note above.
