@@ -221,7 +221,8 @@ components/
                             'album'|'track'|'episode'), id (bare ID or a pasted
                             share URL), title, size ('compact' 152px | 'full' 352px)
   icons/AmazonIcon.tsx    ← Amazon "a + smile", currentColor (Simple Icons, CC0)
-  icons/SelarIcon.tsx     ← Drawn "S" badge — Selar ships no public SVG mark
+                            (`SelarIcon`, the drawn stand-in "S" badge, is gone —
+                            the real wordmark arrived, see Assets Status)
   YouTubeEmbed.tsx        ← youtube-nocookie player. Takes videoId OR playlistId
   icons/
     SpotifyIcon.tsx
@@ -463,6 +464,26 @@ Real assets received (all in `public/images/`, all JPEG):
   `.jpeg` extension; every other image in the folder is `.jpg`. Used on
   `/books`, twice: as the `PageHero` background image and, crisp, in the book
   block below it.
+- `selar-logo.png` — 188×148 **transparent** Selar wordmark, deep plum
+  (~#601050) script. ⚠️ **Nothing renders this file** — the artwork is a 138×73
+  horizontal wordmark floating in a 188×148 canvas (35px of clear space above,
+  40px below), so dropped into any slot it renders at roughly half the height
+  it should. It is the master, kept as supplied.
+- `selar-wordmark-white.png` — 138×73, the same wordmark trimmed flush to its
+  ink and recoloured **all white**. This is the file that renders: the "Buy on
+  Selar" button on `/books`, sitting directly on the blue `primary` pill with
+  no plate behind it. All padding is the caller's job. Replaced
+  `components/icons/SelarIcon.tsx`, the drawn "S" badge that stood in while
+  Selar had no usable mark; that component is deleted.
+  ⚠️ **White on transparent — every placement must be dark**, same constraint
+  as `awe-min-logo.png`. If the mark is ever needed on a light section, cut a
+  plum rendition from the master rather than putting a plate behind this one.
+  The `alt` is empty and it is `aria-hidden` because the button label already
+  reads "Buy on Selar".
+  ⚠️ Regenerate it from the **alpha channel**, not by filling the plum: extract
+  the ink box, then drive R/G/B to 255 across every pixel and leave alpha
+  untouched. The alpha carries the glyph shape *and* its antialiased edges, so
+  a colour-key or threshold approach leaves a plum fringe on the curves.
 - `blcn-logo.jpg` — 828×647, shofar emblem on a dark charcoal background (**not**
   transparent). Used three ways on `/churches/blcn`: the crisp badge in the hero,
   the **hero background image itself** (`scale-125 object-cover blur-2xl` inside an

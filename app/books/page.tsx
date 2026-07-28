@@ -5,7 +5,6 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import AmazonIcon from "@/components/icons/AmazonIcon";
-import SelarIcon from "@/components/icons/SelarIcon";
 import SectionLabel from "@/components/SectionLabel";
 import { AMAZON_BOOK_URL, SELAR_BOOK_URL, SOCIALS } from "@/lib/constants";
 
@@ -93,7 +92,17 @@ export default function BooksPage() {
                   </div>
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <Button href={book.selar} variant="primary" external>
-                      <SelarIcon size={20} />
+                      {/* The all-white rendition, so the mark sits straight on
+                          the blue pill with no plate behind it. Decorative:
+                          the label beside it already says Selar. */}
+                      <Image
+                        src="/images/selar-wordmark-white.png"
+                        alt=""
+                        aria-hidden
+                        width={138}
+                        height={73}
+                        className="h-4 w-auto"
+                      />
                       Buy on Selar
                     </Button>
                     <Button
