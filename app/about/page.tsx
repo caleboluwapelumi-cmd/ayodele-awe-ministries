@@ -10,8 +10,13 @@ import { CHURCHES } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "About — Ayodele Oladapo Awe Ministries",
   description:
-    "Learn about Ayodele Oladapo Awe — a Nigerian-born, UK-based minister of the Gospel.",
+    "Ayodele Oladapo Awe (RDP) — Revivalist, Discipler and Pointer. Founder and president of Ayodele Oladapo Awe Ministries, an apostolic ministry advancing God's Kingdom through revival, discipleship, evangelism and the ministry of the Holy Spirit.",
 };
+
+const BIO = [
+  "Ayodele Oladapo Awe, also known as RDP, is a Revivalist, Discipler, and Pointer with a divine mandate to raise believers who steward the presence of God and manifest the realities of His Kingdom. Called by God into ministry in 2014, his life and ministry are marked by a passion to see revival awaken hearts, disciples matured in Christ, and the lost pointed to Jesus through the demonstration of the Gospel.",
+  "He is the founder and president of Ayodele Oladapo Awe Ministries, an apostolic ministry committed to advancing God's Kingdom through revival, discipleship, evangelism, leadership development, and the ministry of the Holy Spirit.",
+];
 
 const MANDATE = [
   {
@@ -28,9 +33,20 @@ const MANDATE = [
   },
 ];
 
+/**
+ * Teaser copy only — the three expressions are set out in full, with their
+ * programme lists, on /ministry. Keep this a summary; don't re-import the
+ * card copy here or the two pages will drift.
+ */
+const EXPRESSIONS_TEASER =
+  "The mandate takes shape in three ways: apostolically, through revival gatherings that stir the Church into deeper intimacy with God; pastorally, through churches, teaching and discipleship that mature believers in Christ; and evangelistically, through campaigns and healing outreaches that point the lost to Jesus. Each carries the same burden — that His presence would be stewarded and His Kingdom made visible among the nations.";
+
+const FAMILY =
+  "Ayodele is married to Iyanuoluwa, and together they are devoted to serving God and equipping people to live lives of wholehearted devotion to Christ.";
+
 const STATS = [
   { stat: "2 Churches", label: "UK & Nigeria" },
-  { stat: "10+ Years", label: "In Ministry" },
+  { stat: "Since 2014", label: "Called into Ministry" },
   { stat: "2 Nations", label: "One Mandate" },
 ];
 
@@ -54,8 +70,8 @@ export default function AboutPage() {
     <>
       {/* ── 1. Page Hero ── */}
       <PageHero
-        label="The Minister"
-        title="About the Minister"
+        label="The Pastor"
+        title="About the Pastor"
         subtitle="A life surrendered to the Gospel of Jesus Christ"
       />
 
@@ -66,7 +82,7 @@ export default function AboutPage() {
             <div className="relative aspect-square overflow-hidden">
               <Image
                 src="/images/apostle-portrait.jpg"
-                alt="Minister Ayodele Oladapo Awe"
+                alt="Pastor Ayodele Oladapo Awe"
                 fill
                 priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
@@ -78,40 +94,30 @@ export default function AboutPage() {
           <AnimateIn direction="right">
             <SectionLabel tone="light">Biography</SectionLabel>
             <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
-              Ayodele Oladapo Awe
+              Ayodele Oladapo Awe <span className="text-muted">(RDP)</span>
             </h2>
             <p className="mb-8 font-sans text-xs uppercase tracking-[0.2em] text-wine">
-              Minister of the Gospel
+              Pastor &middot; Founder &amp; President
             </p>
+
+            {/* The tagline the initials stand for — sits directly under the
+                name so "RDP" reads as its acronym without needing a gloss. */}
+            <blockquote className="mb-8 border-l-4 border-blue-sky pl-6">
+              <p className="font-serif text-2xl font-bold italic leading-tight text-blue-navy sm:text-3xl">
+                Revivalist. Discipler. Pointer.
+              </p>
+            </blockquote>
+
             <div className="space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
-              <p>
-                Nigerian-born, UK-based minister of the gospel with a burning
-                mandate to see souls saved, believers built up, and the house of
-                God established across nations.
-              </p>
-              <p>
-                His ministry spans the United Kingdom and Nigeria, expressed
-                through two thriving church communities — Building House
-                Christian Centre (BHCC) in the UK and Bethel Livingstone
-                Christian Network (BLCN) in Nigeria.
-              </p>
-              <p>
-                Known for his depth in the Word, prophetic worship, and
-                apostolic grace, Minister Awe has been used by God to ignite
-                revival fires and raise a generation of worshippers and kingdom
-                builders.
-              </p>
-              <p>
-                Beyond the pulpit, he is a teacher, a builder, and a shepherd —
-                committed to discipleship, prayer, and the advancement of the
-                gospel in every sphere of life.
-              </p>
+              {BIO.map((para) => (
+                <p key={para.slice(0, 40)}>{para}</p>
+              ))}
             </div>
           </AnimateIn>
         </div>
       </section>
 
-      {/* ── 3. Mandate Section ── */}
+      {/* ── 3. Mandate — the umbrella vision the expressions below serve ── */}
       <section className="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <Image
           src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&q=80"
@@ -133,7 +139,7 @@ export default function AboutPage() {
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {MANDATE.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
                 <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-sky">
@@ -148,21 +154,35 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 4. Calling Section ── */}
+      {/* ── 4. Ministry teaser — the detail lives at /ministry ── */}
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+          <SectionLabel tone="light">In Practice</SectionLabel>
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            How the Mandate Is Lived Out
+          </h2>
+          <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+          <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
+            {EXPRESSIONS_TEASER}
+          </p>
+          <Button href="/ministry" variant="primary" size="lg">
+            Explore Ministry Expressions
+          </Button>
+        </AnimateIn>
+      </section>
+
+      {/* ── 5. Life & Family ── */}
+      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
-            <SectionLabel tone="light">The Calling</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
-              A Life Given to the Gospel
+            <SectionLabel tone="dark">Life &amp; Family</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              Serving Together
             </h2>
-            <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
-              Minister Awe&apos;s calling is rooted in the Great Commission — to
-              go, preach, and make disciples. His ministry is marked by a
-              passion for revival, a love for the local church, and a deep
-              commitment to raising the next generation of kingdom builders.
+            <p className="mb-8 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+              {FAMILY}
             </p>
-            <Button href="/partners" variant="primary" size="lg">
+            <Button href="/partners" variant="secondary" size="lg">
               Partner With Us
             </Button>
           </AnimateIn>
@@ -170,11 +190,11 @@ export default function AboutPage() {
           <div className="space-y-4">
             {STATS.map((item, i) => (
               <AnimateIn key={item.stat} direction="right" delay={i * 0.1}>
-                <div className="border-t-2 border-blue-sky bg-cream px-8 py-8 text-center">
-                  <p className="font-serif text-2xl font-bold leading-tight text-blue-navy sm:text-3xl">
+                <div className="border-t-2 border-blue-sky bg-blue-deep/50 px-8 py-8 text-center">
+                  <p className="font-serif text-2xl font-bold leading-tight text-white sm:text-3xl">
                     {item.stat}
                   </p>
-                  <p className="mt-2 font-sans text-xs uppercase tracking-[0.2em] text-muted">
+                  <p className="mt-2 font-sans text-xs uppercase tracking-[0.2em] text-white/50">
                     {item.label}
                   </p>
                 </div>
@@ -184,7 +204,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 5. Churches Teaser ── */}
+      {/* ── 6. Churches Teaser ── */}
       <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
@@ -214,7 +234,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 6. CTA Banner ── */}
+      {/* ── 7. CTA Banner ── */}
       <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

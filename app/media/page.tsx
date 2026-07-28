@@ -20,7 +20,7 @@ import {
 export const metadata: Metadata = {
   title: "Media — Ayodele Oladapo Awe Ministries",
   description:
-    "Access teachings, music, and messages from Minister Ayodele Oladapo Awe.",
+    "Access teachings, music, and messages from Pastor Ayodele Oladapo Awe.",
 };
 
 const QUICK_ACCESS = [
@@ -37,7 +37,7 @@ export default function MediaPage() {
       <PageHero
         label="Media"
         title={<>The Word &amp; The Worship</>}
-        subtitle="Access teachings, music, and messages from Minister Ayodele Oladapo Awe anywhere in the world"
+        subtitle="Access teachings, music, and messages from Pastor Ayodele Oladapo Awe anywhere in the world"
       />
 
       {/* ── 2. Teachings Section ── */}
@@ -50,7 +50,7 @@ export default function MediaPage() {
             </h2>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
               <p>
-                Minister Awe&apos;s teachings are made available through our
+                Pastor Awe&apos;s teachings are made available through our
                 Telegram channel — a growing library of sermons, Bible studies,
                 and prophetic messages.
               </p>
@@ -121,7 +121,7 @@ export default function MediaPage() {
             </h2>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
               <p>
-                Minister Awe&apos;s music is a vessel of encounter — crafted to
+                Pastor Awe&apos;s music is a vessel of encounter — crafted to
                 usher believers into the presence of God through worship,
                 prophetic songs, and gospel anthems.
               </p>
@@ -214,10 +214,10 @@ export default function MediaPage() {
       <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-            Invite Minister Awe to Minister
+            Invite Pastor Awe to Minister
           </h2>
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
-            Book Minister Ayodele Oladapo Awe for your church, conference, or
+            Book Pastor Ayodele Oladapo Awe for your church, conference, or
             event.
           </p>
           <Button href="/contact" variant="wine" size="lg">

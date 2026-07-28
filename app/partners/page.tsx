@@ -27,7 +27,7 @@ const TIERS = [
     name: "Covenant Partner",
     badge: "Highest Level",
     description: "A covenant commitment to this ministry — joining us as a spiritual investor in the harvest across nations.",
-    benefits: ["Everything in Partner", "Direct access to Minister Awe", "Special recognition", "Prophetic declarations over your life"],
+    benefits: ["Everything in Partner", "Direct access to Pastor Awe", "Special recognition", "Prophetic declarations over your life"],
     buttonText: "Become a Covenant Partner",
     featured: false,
   },
@@ -145,7 +145,7 @@ export default function PartnersPage() {
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {WHY_PARTNER.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
                 <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-wine">
@@ -309,7 +309,7 @@ export default function PartnersPage() {
                 <textarea id="p-message" rows={4} value={form.message} onChange={(e) => update("message", e.target.value)} className={`${FIELD_INPUT} resize-none`} placeholder="Tell us anything you'd like us to know" />
               </div>
               <label className="flex cursor-pointer items-center gap-3">
-                <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-4 w-4 rounded-none border-white/30 bg-transparent text-wine focus:ring-wine" />
+                <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-5 w-5 shrink-0 rounded-none border-white/30 bg-transparent text-wine focus:ring-wine" />
                 <span className="font-sans text-sm text-white/60">I would like to receive the ministry newsletter</span>
               </label>
 

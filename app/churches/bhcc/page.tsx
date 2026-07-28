@@ -158,7 +158,7 @@ export default function BHCCPage() {
           <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
           <div className="space-y-4 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             <p>
-              At an end-of-year retreat in 2023, Minister Ayodele Oladapo Awe was
+              At an end-of-year retreat in 2023, Pastor Ayodele Oladapo Awe was
               taken in a trance and saw himself travelling to the city of
               Norwich. There the Lord spoke to him, instructing him to begin a
               work and calling it &ldquo;The Building House.&rdquo;
@@ -238,7 +238,7 @@ export default function BHCCPage() {
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {BELIEFS.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
                 <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-sky">

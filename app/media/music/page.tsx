@@ -19,7 +19,7 @@ import {
 export const metadata: Metadata = {
   title: "Music & Worship — Ayodele Oladapo Awe Ministries",
   description:
-    "Worship, gospel, and prophetic songs from Minister Awe — plus the Babylonian Legends podcast. Stream on Spotify and all major platforms.",
+    "Worship, gospel, and prophetic songs from Pastor Awe — plus the Babylonian Legends podcast. Stream on Spotify and all major platforms.",
 };
 
 // Spotify and Anchor.fm are live; Apple Music and Audiomack are still pending.
@@ -100,7 +100,7 @@ export default function MusicPage() {
               </p>
               <p>
                 Spanning worship, gospel, and prophetic genres, the music of
-                Minister Awe carries the weight of God&apos;s presence — birthed
+                Pastor Awe carries the weight of God&apos;s presence — birthed
                 from the place of prayer and designed to minister to the heart
                 of every listener.
               </p>
@@ -128,7 +128,7 @@ export default function MusicPage() {
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
             {GENRES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
                 <div className="h-full border-t-2 border-blue-sky bg-cream p-8 text-center">
@@ -216,7 +216,7 @@ export default function MusicPage() {
             </p>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
               <p>
-                Beyond the music, Minister Ayodele Oladapo Awe shares
+                Beyond the music, Pastor Ayodele Oladapo Awe shares
                 conversations, reflections, and teaching in podcast form —
                 available to stream free on Spotify.
               </p>

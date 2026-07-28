@@ -60,7 +60,7 @@ const EXPRESSIONS: Expression[] = [
     icon: "bookOpen",
     title: "Telegram Teachings",
     description:
-      "A growing library of sermons, Bible studies, and prophetic messages from Minister Awe — accessible to believers anywhere in the world.",
+      "A growing library of sermons, Bible studies, and prophetic messages from Pastor Awe — accessible to believers anywhere in the world.",
     cta: "Join channel",
     href: "/media/teachings",
     accent: "sky",
@@ -100,7 +100,7 @@ const EXPRESSIONS: Expression[] = [
     icon: "bookMarked",
     title: "Books & Publications",
     description:
-      "Written resources from Minister Awe to equip believers, strengthen the local church, and advance the kingdom — available now on Selar and Amazon.",
+      "Written resources from Pastor Awe to equip believers, strengthen the local church, and advance the kingdom — available now on Selar and Amazon.",
     cta: "Browse books",
     href: "/books",
     accent: "sky",
@@ -110,7 +110,7 @@ const EXPRESSIONS: Expression[] = [
     icon: "plane",
     title: "Ministry Itinerary",
     description:
-      "Stay updated on where Minister Awe is ministering next — conferences, church visits, and international engagements across the UK, Nigeria, and beyond.",
+      "Stay updated on where Pastor Awe is ministering next — conferences, church visits, and international engagements across the UK, Nigeria, and beyond.",
     cta: "See schedule",
     href: "/itinerary",
     accent: "wine",

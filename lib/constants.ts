@@ -139,6 +139,41 @@ export const CHURCHES: Church[] = [
   },
 ];
 
+export type ProgrammeCategory =
+  | "Apostolic & Prophetic"
+  | "Pastoral & Teaching"
+  | "Evangelistic";
+
+export interface MinistryProgramme {
+  name: string;
+  /** Short form the ministry uses in speech, e.g. "SHM". `null` when it has none. */
+  acronym: string | null;
+  category: ProgrammeCategory;
+}
+
+/**
+ * The named programmes through which the ministry's three expressions are
+ * carried out. `/ministry` is the only consumer today — it groups them by
+ * `category` into the tag row under each expression card. Captured here
+ * (rather than inline in the page) so any of these can graduate to its own
+ * page or an /events filter without the copy having to be re-sourced.
+ *
+ * Fire Fest Europe Tour and the Great Light Campaign are the two most likely
+ * to want dedicated landing pages — both read as recurring flagship events.
+ */
+export const MINISTRY_PROGRAMMES: MinistryProgramme[] = [
+  { name: "Special Apostolic Visits", acronym: null, category: "Apostolic & Prophetic" },
+  { name: "Special Holyghost Meetings", acronym: "SHM", category: "Apostolic & Prophetic" },
+  { name: "Holyghost Convocation", acronym: "HC", category: "Apostolic & Prophetic" },
+  { name: "One Thing Is Needful", acronym: "OTIN", category: "Pastoral & Teaching" },
+  { name: "Discipleship Retreats", acronym: null, category: "Pastoral & Teaching" },
+  { name: "Partnership Conference", acronym: null, category: "Pastoral & Teaching" },
+  { name: "Great Light Campaign", acronym: "GLC", category: "Evangelistic" },
+  { name: "Summer Harvest Campaign UK", acronym: null, category: "Evangelistic" },
+  { name: "Healing Ministry", acronym: null, category: "Evangelistic" },
+  { name: "Fire Fest Europe Tour", acronym: null, category: "Evangelistic" },
+];
+
 export type NavLink = {
   label: string;
   href: string;
@@ -154,6 +189,9 @@ export const NAV_LINKS: NavLink[] = [
     href: "/churches",
     dropdown: true,
     children: [
+      // The Pastor's ministry overview sits above the church/media groupings —
+      // it is what the rest of the list is an outworking of.
+      { label: "Ministry", href: "/ministry" },
       { label: "All Expressions", href: "/churches" },
       { label: "\u2014 Churches \u2014", href: "/churches", desc: "" },
       { label: "BHCC \u2014 Building House Christian Centre", href: "/churches/bhcc" },

@@ -47,7 +47,7 @@ export default function HomePage() {
             <div className="relative aspect-square overflow-hidden">
               <Image
                 src="/images/apostle-portrait.jpg"
-                alt="Minister Ayodele Oladapo Awe"
+                alt="Pastor Ayodele Oladapo Awe"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover transition-transform duration-700 hover:scale-105"
@@ -56,7 +56,7 @@ export default function HomePage() {
           </AnimateIn>
 
           <AnimateIn direction="right">
-            <SectionLabel tone="light">About the Minister</SectionLabel>
+            <SectionLabel tone="light">About the Pastor</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
               A Voice Sent with Purpose
             </h2>

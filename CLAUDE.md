@@ -1,7 +1,16 @@
 # CLAUDE.md — AOA Ministries Project Context
 
 ## What This Project Is
-A full ministry website for **Ayodele Oladapo Awe Ministries** — a minister of the Gospel based in the UK with churches in both the UK and Nigeria. Built in Next.js App Router + Tailwind CSS, deployed on Vercel, source on GitHub.
+A full ministry website for **Ayodele Oladapo Awe Ministries** — a Pastor based in the UK with churches in both the UK and Nigeria. Built in Next.js App Router + Tailwind CSS, deployed on Vercel, source on GitHub.
+
+⚠️ **The title is "Pastor", never "Minister".** All user-facing copy was migrated
+in one pass — headings, alt text, metadata, section labels and the `/contact`
+subject option ("Book Pastor Awe"). The **variable** `MINISTER_NAME` in
+`lib/constants.ts` deliberately keeps its old name (renaming would touch every
+import); only its rendered context changed. Two occurrences of "Minister" survive
+on purpose because they are the **verb**, not the title: "Invite Pastor Awe to
+Minister" (`/media`) and "Let the Worship Minister to You" (`/media/music`).
+Don't "fix" those.
 
 ---
 
@@ -109,12 +118,53 @@ hover effects still fire.
 
 ---
 
+## Responsive rules (audited — don't regress these)
+The layout was swept with a headless-Chrome probe across 320/360/390/414/768/
+1024/1100/1280px on every route, measuring real horizontal overflow (with the
+`overflow-x-hidden` band-aid disabled) and tap-target sizes. It currently comes
+back clean. The findings that produced these rules:
+
+- **Three-column card grids start at `md:`, never `sm:`.** At the `sm` breakpoint
+  (640px) a `sm:grid-cols-3` gave 165px text columns — roughly 20 characters a
+  line, far below a readable measure. Every text-bearing 3-col grid is
+  `grid-cols-1 md:grid-cols-3`. Icon/stat tiles with a word or two are the
+  exception and may go narrower (the BLCN "Follow" grid is `grid-cols-2
+  sm:grid-cols-4` on purpose).
+- **`AnimateIn` degrades `left`/`right` to `up` below `lg`.** The 40px horizontal
+  offset pushed full-width blocks ~24px past a 320px viewport — that overflow,
+  not anything in the page markup, is why `<body>` carries `overflow-x-hidden`.
+  Below `lg` the columns have stacked anyway, so a sideways reveal is meaningless.
+  It also honours `prefers-reduced-motion` by falling back to `fade`.
+  ⚠️ Both media queries are read in an **effect**, with `false` as the initial
+  state, because `initial="hidden"` is serialised into the SSR markup as an
+  inline transform — resolving them during render is a hydration mismatch.
+- **`overflow-x-hidden` on `<body>` is now a safety net, not load-bearing.** The
+  probe finds zero overflow with it removed. Leave it, but if new overflow ever
+  appears, fix the source rather than trusting this to hide it.
+- **The mobile menu panel is `top-0 h-dvh`, never `top-0 bottom-0`.** Its parent
+  `<header>` has `backdrop-blur-md`, and a backdrop filter makes an element the
+  containing block for its `fixed` descendants — so inset-based sizing resolves
+  against the ~80px header, not the viewport. The panel also needs
+  `overflow-y-auto overscroll-contain`: with the Expressions accordion open the
+  list is ~476px tall and does not fit a phone in landscape.
+- **Tap targets:** interactive controls get ≥40px. The hero slideshow dots keep
+  their 8px visual size inside an `h-11 w-11` button; social icon circles are
+  `h-10 w-10 shrink-0` everywhere (Footer and `/contact`). ⚠️ The `shrink-0`
+  matters — in a `flex` row those circles were being squeezed to 28px wide and
+  rendering as ovals. Inline email links in prose are left at text height, which
+  is the standard exemption.
+
+---
+
 ## Project Structure
 ```
 app/
   layout.tsx              ← Navbar + Footer wrap
   page.tsx                ← Homepage
-  about/page.tsx
+  about/page.tsx          ← Bio, mandate, ministry teaser, life & family, stats
+  ministry/page.tsx       ← "Three Expressions of Ministry" in full — the three
+                            cards, their MINISTRY_PROGRAMMES tag rows, the vision
+                            close and an invite CTA
   churches/
     page.tsx              ← "All Expressions" overview page
     bhcc/page.tsx         ← Building House Christian Centre (UK) — British English
@@ -172,7 +222,8 @@ components/
 
 lib/
   constants.ts            ← SITE_NAME, MINISTER_NAME, TAGLINE, NAV_LINKS, CHURCHES,
-                            SOCIALS (minister), BLCN_SOCIALS (church), media/book URLs.
+                            SOCIALS (the Pastor's), BLCN_SOCIALS (church),
+                            MINISTRY_PROGRAMMES, media/book URLs.
                             `Church` carries address / serviceTimes / email /
                             vision / mission / founded / leadership / socials —
                             all optional, so pages read them with `?.` and render
@@ -197,6 +248,7 @@ lib/
 - **Mobile (<lg):** always `bg-blue-navy` — no transparency
 - **Active links:** `usePathname()` from `next/navigation`
 - **Expressions dropdown** (replaces "Churches"):
+  - Ministry → `/ministry`  ← the overview the rest of the list outworks
   - All Expressions → `/churches`
   - BHCC → `/churches/bhcc`
   - BLCN → `/churches/blcn`
@@ -208,7 +260,12 @@ lib/
 ---
 
 ## Ministry Context
-- **Minister:** Ayodele Oladapo Awe — Nigerian-born, UK-based
+- **Pastor:** Ayodele Oladapo Awe (RDP) — Nigerian-born, UK-based. **RDP** =
+  **R**evivalist, **D**iscipler, **P**ointer, the tagline set as a pull-quote
+  directly under his name on `/about` so the acronym reads without a gloss.
+  Called into ministry in **2014**; founder and president of the ministry.
+  He is married to **Iyanuoluwa** — the family line on `/about` is deliberately
+  brief and mentions no children. Client-supplied; don't expand it.
 - **BHCC** = Building House Christian **Centre** — Norwich, UK. Use **British English** for all BHCC content. Founded 9 February 2025; led by Ayodele Oladapo Awe (Lead Pastor) and Iyanuoluwa Ayodele-Awe (Co-Pastor). The founding-story section on `/churches/bhcc` retells a testimony the client supplied — it is a real account of a trance at a 2023 end-of-year retreat, so keep it reverent and don't embellish it.
 - **BLCN** = Bethel Livingstone Christian Network (Nigeria) — standard English
 - **Key event:** Norwich Prayer Surge (UK) — **recurring**, last Saturday of every
@@ -218,6 +275,93 @@ lib/
 - **Media:** Spotify music + the "Babylonian Legends" podcast ("Everything Faith and Family") + Telegram teachings — all live, see Assets Status
 - **Books:** "Walking with the Holy Spirit: Insights for Supernatural Living" — on sale via Selar and Amazon. Title and subtitle are separate fields on `/books` so the heading stays readable; subtitle uses the small-caps `blue-sky` treatment.
 - **Tagline:** "Raising Voices, Building Houses, Transforming Nations"
+
+⚠️ **"Building Houses" is plural only in the tagline and the matching mandate
+pillar on `/about`.** The church is **Building House Christian Centre**
+(singular) — confirmed by the client. Client copy has arrived with the plural
+church name before; correct it to singular on sight.
+
+---
+
+## Content Integrity Notes
+⚠️ **Never invent an event, a date, or a testimony as scaffolding.** A
+placeholder photo is obviously a placeholder; a placeholder *event* is
+indistinguishable from a real one, and on a ministry site it becomes a false
+claim about what God has done. Use an honest empty state instead — every one of
+them on this site is deliberate, not an unfinished section.
+
+- **The Norwich Prayer Surge is the ONLY confirmed real event on the site.**
+  Everything else in `MINISTRY_PROGRAMMES` is a *named programme* with no date
+  attached — real, but not scheduled. Don't promote one to a dated event.
+- **Its banner image is still an Unsplash placeholder** (`photo-1524368535928…`,
+  used on both `/` and `/events`). Needs a real photo or banner from the client.
+- **Its vision paragraphs are written-to-brief copy**, not a verbatim client
+  statement — the three paragraphs under "Until the wilderness becomes a
+  fruitful field" on `/events` were composed from the client's description of
+  the gathering. The Isaiah 32:15 quotation itself is scripture and is fine.
+  **Flag the surrounding prose for client review/approval.**
+- **Past events, other upcoming events and itinerary entries were fabricated as
+  UI scaffolding and were removed on 28 July 2026.** For the record, so they are
+  not mistaken for lost real content if they surface in git history:
+  - `/events` past events — "Kingdom Advancement Conference" (2024), "Night of
+    Encounter" (2024), "Building House Prayer Summit" (2023), each captioned
+    "God moved powerfully at this gathering." All invented. The 2023 date was
+    also impossible: BHCC was founded 9 February 2025.
+  - `/events` upcoming — "BHCC Special Service" and "BLCN Revival Meeting",
+    both `date: "TBA"` with `registerLink: "#"`. The churches are real; these
+    specific services were not.
+  - `/itinerary` — "BHCC Sunday Service", "International Ministry Engagement"
+    and "BLCN Revival Night", all `date: "TBA"`. The middle one had location
+    "TBA" too and so carried no information at all.
+- **Do NOT reintroduce invented events or dates as placeholder content.** The
+  empty states now in place:
+  - `/events` "All Events" — an announcement band, no grid. The featured
+    section directly above already carries the Prayer Surge in full, so a
+    one-card grid would only repeat it. Kept as a section so the page keeps its
+    light → dark → light rhythm.
+  - `/events` "What God Has Done" — heading and subtitle retained, with
+    "Photos and testimonies from past gatherings will be shared here soon."
+  - `/itinerary` "Upcoming Engagements" — heading retained, with the
+    check-back-soon message and a "Request an invitation" Button.
+  `ENGAGEMENT_TYPES` on `/itinerary` (Church Services, Conferences, Prayer
+  Gatherings) **stays** — those describe what the Pastor is available for, they
+  are not claimed bookings.
+
+---
+
+## The three ministry expressions (`/ministry`)
+`MINISTRY_PROGRAMMES` in `lib/constants.ts` is the list of named programmes the
+ministry runs, each tagged with one of three `ProgrammeCategory` values —
+`"Apostolic & Prophetic"`, `"Pastoral & Teaching"`, `"Evangelistic"`. `/ministry`
+is its only consumer: it renders three expression cards and filters the constant
+by `category` to build the tag row under each card's prose.
+
+- **Add a programme to the constant and it appears on the page** — no page edit.
+  That is the whole point of it living in `constants.ts` rather than inline.
+- The programme names are also written into the card prose (client-supplied
+  copy), so the tag row **intentionally duplicates** them. The tags exist to make
+  three dense paragraphs scannable; don't "de-duplicate" by deleting them.
+- **Fire Fest Europe Tour** and the **Great Light Campaign (GLC)** are the two
+  most likely to want their own landing pages later — both read as recurring
+  flagship events. Holyghost Convocation (an annual anchor) is next in line, and
+  Partnership Conference would sit naturally under `/partners`. The rest (SHM,
+  OTIN, Discipleship Retreats, Special Apostolic Visits, Healing Ministry,
+  Summer Harvest Campaign UK) are better served by an `/events` filter than by
+  pages of their own. **None of these have pages yet — the data is captured, not
+  routed.**
+
+**`/about` was restructured around this split.** It now runs: page hero → bio
+(portrait + RDP pull-quote + the real two-paragraph biography) → the mandate
+(the umbrella vision, unchanged) → a short "How the Mandate Is Lived Out" teaser
+with a Button to `/ministry` → "Life & Family" (family line, stats, Partner CTA,
+mid-blue) → churches teaser → CTA banner. The full expression cards live **only**
+on `/ministry`; `/about` carries a summary paragraph (`EXPRESSIONS_TEASER`).
+⚠️ Don't re-import the card copy into `/about` — keep the summary a summary or
+the two pages drift.
+
+"Ministry" is the first item in the Navbar's **Expressions** dropdown (above
+"All Expressions") and sits between About and Expressions in the Footer nav. It
+is not a top-level nav item: eight top-level links overflow the `lg` breakpoint.
 
 ---
 
@@ -324,9 +468,11 @@ ever needs pulling again, re-add the guard alongside the placeholder.
 
 Still `#` placeholders — real URLs pending:
 - Apple Music, Audiomack (music page platform grid)
-- `registerLink` for "BHCC Special Service" and "BLCN Revival Meeting" on
-  `/events` — both still TBA. The Prayer Surge no longer uses one: it is an open
-  monthly meeting, so its CTA points at `/contact` (and `/` points at `/events`).
+
+`/events` has no `#` links left — the two placeholder events that carried them
+were removed (see Content Integrity Notes). The Prayer Surge never needed one:
+it is an open monthly meeting, so its CTA points at `/contact` (and `/` points
+at `/events`).
 
 ## The Norwich Prayer Surge countdown
 `lib/prayer-surge.ts` computes the next occurrence instead of storing a date,

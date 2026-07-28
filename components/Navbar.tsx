@@ -203,7 +203,14 @@ export default function Navbar() {
 
       {/* ── Mobile full-screen slide-down ── */}
       <div
-        className={`fixed inset-x-0 bottom-0 top-0 z-40 bg-blue-navy/98 backdrop-blur-md transition-all duration-300 lg:hidden ${
+        /* h-dvh, not `top-0 bottom-0`: the parent <header> has backdrop-blur,
+           which makes it the containing block for its fixed descendants, so
+           inset-based sizing here resolves against the ~80px header rather than
+           the viewport. overflow-y-auto is then load-bearing — with the
+           Expressions accordion open the list is ~476px tall and does not fit a
+           phone in landscape. overscroll-contain stops scroll chaining to the
+           page behind. */
+        className={`fixed inset-x-0 top-0 z-40 h-dvh overflow-y-auto overscroll-contain bg-blue-navy/98 backdrop-blur-md transition-all duration-300 lg:hidden ${
           mobileOpen
             ? "pointer-events-auto translate-y-0 opacity-100"
             : "pointer-events-none -translate-y-4 opacity-0"
@@ -222,7 +229,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile links */}
-        <nav className="space-y-1 px-4 pt-6 sm:px-6">
+        <nav className="space-y-1 px-4 pb-16 pt-6 sm:px-6">
           {NAV_LINKS.map((link) =>
             link.dropdown ? (
               <div key={link.label}>

@@ -63,7 +63,7 @@ export default function HeroSection() {
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
         <AnimateIn direction="up" className="max-w-3xl">
           <SectionLabel tone="dark">
-            Minister of the Gospel &mdash; UK &amp; Nigeria
+            Pastor &mdash; UK &amp; Nigeria
           </SectionLabel>
 
           <h1 className="mb-6 font-serif text-5xl font-bold leading-none tracking-tight text-white sm:text-7xl md:text-8xl">
@@ -88,7 +88,9 @@ export default function HeroSection() {
       </div>
 
       {/* Slide indicators */}
-      <div className="absolute inset-x-0 bottom-10 z-20 flex items-center justify-center gap-3">
+      {/* The dot stays 8px; the button around it is a full 44px tap target, so
+          the control is reachable on touch without changing how it looks. */}
+      <div className="absolute inset-x-0 bottom-10 z-20 flex items-center justify-center">
         {SLIDES.map((slide, i) => (
           <button
             key={slide.src}
@@ -96,10 +98,16 @@ export default function HeroSection() {
             onClick={() => setActive(i)}
             aria-label={`Show image ${i + 1} of ${SLIDES.length}`}
             aria-current={i === active}
-            className={`h-2 w-2 rounded-full transition-colors duration-300 ${
-              i === active ? "bg-white" : "bg-white/40 hover:bg-white/70"
-            }`}
-          />
+            className="group flex h-11 w-11 items-center justify-center"
+          >
+            <span
+              className={`h-2 w-2 rounded-full transition-colors duration-300 ${
+                i === active
+                  ? "bg-white"
+                  : "bg-white/40 group-hover:bg-white/70"
+              }`}
+            />
+          </button>
         ))}
       </div>
 

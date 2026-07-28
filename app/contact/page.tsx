@@ -28,7 +28,7 @@ const BLCN_SOCIAL_LINKS = [
 //   "Church Information (BLCN)" → blcnglobal@gmail.com
 const SUBJECTS = [
   "General Enquiry",
-  "Book Minister Awe",
+  "Book Pastor Awe",
   "Church Information (BHCC)",
   "Church Information (BLCN)",
   "Partnership Enquiry",
@@ -102,7 +102,7 @@ export default function ContactPage() {
       <PageHero
         label="Contact"
         title="Get In Touch"
-        subtitle="We would love to hear from you — whether you have a question, want to book Minister Awe, or simply want to connect with the ministry"
+        subtitle="We would love to hear from you — whether you have a question, want to book Pastor Awe, or simply want to connect with the ministry"
       />
 
       {/* ── 2. Contact Grid ── */}
@@ -155,7 +155,7 @@ export default function ContactPage() {
                   <textarea id="c-message" rows={5} required value={form.message} onChange={(e) => update("message", e.target.value)} className={FIELD_TEXTAREA} placeholder="Your message..." />
                 </div>
                 <label className="flex cursor-pointer items-center gap-3">
-                  <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-4 w-4 rounded border-blue-navy/30 bg-transparent text-wine focus:ring-wine" />
+                  <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-5 w-5 shrink-0 rounded border-blue-navy/30 bg-transparent text-wine focus:ring-wine" />
                   <span className="font-sans text-sm text-muted">Subscribe me to the ministry newsletter</span>
                 </label>
 
@@ -195,10 +195,10 @@ export default function ContactPage() {
               </div>
 
               <div className="border-l-4 border-blue-sky pl-6">
-                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Booking Minister Awe</h3>
+                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Booking Pastor Awe</h3>
                 <p className="mt-1 font-sans text-sm text-muted">For speaking engagements, church visits, conferences</p>
                 <Button
-                  onClick={() => setSubjectAndScroll("Book Minister Awe")}
+                  onClick={() => setSubjectAndScroll("Book Pastor Awe")}
                   variant="outline"
                   className="mt-4 text-blue"
                 >
@@ -229,7 +229,7 @@ export default function ContactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={name}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-blue-navy/20 text-blue-navy transition-colors hover:border-blue-sky"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-blue-navy/20 text-blue-navy transition-colors hover:border-blue-sky"
                 >
                   <Icon size={16} />
                 </a>
@@ -320,7 +320,7 @@ export default function ContactPage() {
                   </div>
 
                   {church.socials && (
-                    <div className="mb-8 flex items-center gap-3">
+                    <div className="mb-8 flex flex-wrap items-center gap-3">
                       <span className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white/40">
                         Follow
                       </span>
@@ -332,7 +332,7 @@ export default function ContactPage() {
                           rel="noopener noreferrer"
                           aria-label={name}
                           title={name}
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-blue-sky hover:text-blue-sky"
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-blue-sky hover:text-blue-sky"
                         >
                           <Icon size={18} />
                         </a>
@@ -361,19 +361,19 @@ export default function ContactPage() {
           <AnimateIn direction="up">
             <SectionLabel tone="light">Speaking Engagements</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
-              Book Minister Ayodele Oladapo Awe
+              Book Pastor Ayodele Oladapo Awe
             </h2>
             <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
-              Minister Awe is available to minister at churches, conferences,
+              Pastor Awe is available to minister at churches, conferences,
               retreats, prayer gatherings, and special events across the UK,
               Nigeria, and beyond. To submit a booking request, use the contact
-              form above and select &ldquo;Book Minister Awe&rdquo; as the
+              form above and select &ldquo;Book Pastor Awe&rdquo; as the
               subject.
             </p>
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mb-12 mt-16 grid grid-cols-1 gap-12 sm:grid-cols-3">
+          <div className="mb-12 mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {BOOKING_TYPES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
                 <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-wine">
@@ -386,7 +386,7 @@ export default function ContactPage() {
             ))}
           </div>
 
-          <Button onClick={() => setSubjectAndScroll("Book Minister Awe")} variant="primary" size="lg">
+          <Button onClick={() => setSubjectAndScroll("Book Pastor Awe")} variant="primary" size="lg">
             Submit a Booking Request
           </Button>
         </div>

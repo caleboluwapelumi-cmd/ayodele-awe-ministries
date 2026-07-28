@@ -24,13 +24,13 @@ function formatDate(iso: string): string {
 export const metadata: Metadata = {
   title: "Telegram Teachings — Ayodele Oladapo Awe Ministries",
   description:
-    "Access sermons, Bible studies, and prophetic messages from Minister Awe via Telegram.",
+    "Access sermons, Bible studies, and prophetic messages from Pastor Awe via Telegram.",
 };
 
 const CONTENT_TYPES = [
   {
     title: "Sermons",
-    desc: "Weekly messages from Minister Awe rooted in the Word and delivered with prophetic insight.",
+    desc: "Weekly messages from Pastor Awe rooted in the Word and delivered with prophetic insight.",
   },
   {
     title: "Bible Studies",
@@ -72,7 +72,7 @@ export default async function TeachingsPage() {
             </h2>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
               <p>
-                Minister Ayodele Oladapo Awe&apos;s Telegram channel is a
+                Pastor Ayodele Oladapo Awe&apos;s Telegram channel is a
                 growing library of sermons, Bible studies, and prophetic
                 messages — curated to build faith and equip believers wherever
                 they are.
@@ -181,7 +181,7 @@ export default async function TeachingsPage() {
               Services on YouTube
             </h2>
             <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg">
-              Full services, live sessions, and video messages from Minister
+              Full services, live sessions, and video messages from Pastor
               Awe.
             </p>
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
@@ -219,7 +219,7 @@ export default async function TeachingsPage() {
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {CONTENT_TYPES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
                 <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-sky">

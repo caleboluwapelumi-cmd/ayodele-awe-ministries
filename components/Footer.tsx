@@ -15,6 +15,7 @@ import FacebookIcon from "@/components/icons/FacebookIcon";
 const FOOTER_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
+  { label: "Ministry", href: "/ministry" },
   { label: "Expressions", href: "/churches" },
   { label: "Events", href: "/events" },
   { label: "Media", href: "/media" },
@@ -62,7 +63,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={name}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-blue-sky hover:text-blue-sky"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-blue-sky hover:text-blue-sky"
                 >
                   <Icon size={16} />
                 </a>
@@ -85,12 +86,14 @@ export default function Footer() {
             <SectionLabel tone="dark" className="mb-6">
               Navigation
             </SectionLabel>
-            <ul className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-1">
+            {/* gap-y is small because each link carries its own py-2 — the text
+                is 14px tall, so without it the tap target is unusably short. */}
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-1 sm:grid-cols-1">
               {FOOTER_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white/60 transition-colors hover:text-white"
+                    className="inline-block py-2 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white/60 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>

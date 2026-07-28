@@ -53,7 +53,7 @@ export default function BooksPage() {
               Books &amp; Publications
             </h2>
             <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
-              Written resources from Minister Ayodele Oladapo Awe — order your
+              Written resources from Pastor Ayodele Oladapo Awe — order your
               copy on Selar or Amazon and let the Word take root.
             </p>
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />

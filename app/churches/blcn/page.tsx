@@ -226,7 +226,7 @@ export default function BLCNPage() {
               <p>
                 Bethel Livingstone Christian Network (BLCN) is a thriving church
                 network in Nigeria, birthed out of the apostolic mandate of
-                Minister Ayodele Oladapo Awe.
+                Pastor Ayodele Oladapo Awe.
               </p>
               <p>
                 BLCN exists to raise a generation of believers who are grounded
@@ -254,7 +254,7 @@ export default function BLCNPage() {
             <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {BELIEFS.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
                 <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-sky">
@@ -380,7 +380,7 @@ export default function BLCNPage() {
             </p>
           </AnimateIn>
 
-          <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
             {NETWORK_STATS.map((item, i) => (
               <AnimateIn key={item.stat} delay={i * 0.1} className="h-full">
                 <div className="h-full border-t-2 border-blue-sky bg-blue-deep/50 px-8 py-8 text-center">
