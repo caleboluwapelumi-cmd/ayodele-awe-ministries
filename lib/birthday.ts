@@ -63,12 +63,41 @@ export function birthdayPhase(now: number = Date.now()): BirthdayPhase {
  * type without importing anything server-side.
  */
 export interface Testimony {
+  /**
+   * A UUID, written at submission time.
+   *
+   * ⚠️ Optional because records stored before archiving existed do not have
+   * one. Never read it directly — go through `testimonyId()`, which falls back
+   * for those. A record with no `id` is a legacy record, not a broken one.
+   */
+  id?: string;
   name: string;
   location: string;
   message: string;
   email: string;
   /** ISO 8601, UTC. */
   submittedAt: string;
+  /**
+   * Set by the GET handler from the archive set — **never** part of the stored
+   * record. Archiving does not rewrite the testimony; see the route module.
+   */
+  archived?: boolean;
+}
+
+/**
+ * The stable identity of a testimony, for archiving.
+ *
+ * ⚠️ It must not be the record's position in the list. The list is `LPUSH`ed,
+ * so every new submission shifts every existing index by one — an index-based
+ * id would silently retarget the archive set the moment anyone submits.
+ *
+ * Records written from 3 August 2026 carry a UUID. Older ones fall back to
+ * their timestamp and name, which is stable for a record that is never
+ * rewritten. Two testimonies would have to be stored in the same millisecond
+ * *under the same name* to collide, and only among those legacy records.
+ */
+export function testimonyId(testimony: Testimony): string {
+  return testimony.id ?? `${testimony.submittedAt}::${testimony.name}`;
 }
 
 /** "3 August 2026" — for prose that shouldn't repeat the weekday. */

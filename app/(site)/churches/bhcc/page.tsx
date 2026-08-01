@@ -43,18 +43,17 @@ export default function BHCCPage() {
   return (
     <>
       {/* ── 1. Hero ── */}
-      <section className="relative flex min-h-screen items-center overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1920&q=80"
-          alt=""
+      {/* ⚠️ STILL PENDING a real photograph of the BHCC congregation — this is a
+          gradient placeholder, not the finished hero. It replaced a stock church
+          interior: that image was `priority`, so it blocked LCP, and a stock
+          photo behind a heading that names BHCC is read as a photo *of* BHCC,
+          which "No stock imagery stands for a church" rules out. A gradient
+          claims nothing. Swap in the real photo when the client supplies it. */}
+      <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+        <div
           aria-hidden
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
+          className="absolute inset-0 bg-gradient-to-t from-blue-navy via-transparent to-blue-navy/50"
         />
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-navy/90 via-transparent to-blue-navy/40" />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">

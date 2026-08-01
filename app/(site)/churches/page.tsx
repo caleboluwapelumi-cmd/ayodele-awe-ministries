@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { Building2, BookOpen, MapPin, Handshake, BookMarked, Plane } from "lucide-react";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
+import { CountryFlag, type CountryCode } from "@/components/icons/FlagIcons";
 import NewsletterForm from "@/components/NewsletterForm";
 import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
@@ -28,6 +29,13 @@ type Expression = {
    */
   logo?: string;
   location?: string;
+  /**
+   * ⚠️ A country code, not an emoji. `location` used to open with 🇬🇧 / 🇳🇬,
+   * which render as the bare letters "GB"/"NG" — or an empty box — in every
+   * browser on Windows, because Segoe UI Emoji ships no regional-indicator
+   * glyphs. The flags are drawn instead; see components/icons/FlagIcons.tsx.
+   */
+  flag?: CountryCode;
   description: string;
   cta: string;
   href: string;
@@ -49,7 +57,8 @@ const EXPRESSIONS: Expression[] = [
     title: "Building House Christian Centre",
     acronym: "BHCC",
     logo: logoFor("BHCC"),
-    location: "🇬🇧 Norwich, United Kingdom",
+    flag: "GB",
+    location: "Norwich, United Kingdom",
     description:
       "A Spirit-filled church in Norwich committed to building lives, raising leaders, and establishing the house of God through the Word and worship.",
     cta: "Visit BHCC",
@@ -62,7 +71,8 @@ const EXPRESSIONS: Expression[] = [
     title: "Bethel Livingstone Christian Network",
     acronym: "BLCN",
     logo: logoFor("BLCN"),
-    location: "🇳🇬 Ado Ekiti, Nigeria",
+    flag: "NG",
+    location: "Ado Ekiti, Nigeria",
     description:
       "A thriving network of believers across Nigeria dedicated to community-driven ministry, discipleship, and gospel outreach.",
     cta: "Visit BLCN",
@@ -222,11 +232,19 @@ export default function ExpressionsPage() {
                             />
                           </span>
                         )}
-                        <p className="font-sans text-xs uppercase tracking-widest text-muted">
+                        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-sans text-xs uppercase tracking-widest text-muted">
                           {expr.acronym && (
-                            <span className="mr-2 font-semibold text-wine">
+                            <span className="font-semibold text-wine">
                               {expr.acronym}
                             </span>
+                          )}
+                          {/* Decorative — the location text names the country.
+                              2:1, the ratio the flags are drawn at. */}
+                          {expr.flag && (
+                            <CountryFlag
+                              code={expr.flag}
+                              className="h-3 w-6 shrink-0"
+                            />
                           )}
                           {expr.location}
                         </p>

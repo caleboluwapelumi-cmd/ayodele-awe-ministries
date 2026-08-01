@@ -19,7 +19,9 @@ Don't "fix" those.
 - **Styling:** Tailwind CSS **v4** — there is **no `tailwind.config.ts`**. The theme lives in `app/globals.css` under `@theme inline { … }`.
 - **Fonts:** Clash Display only (400/500/600/700) — one face for headings and body alike. Self-hosted from `app/fonts/*.woff2` via `next/font/local`; not a Google font. Playfair Display and Inter were removed.
 - **Animation:** Framer Motion, via the `AnimateIn` wrapper (see Components)
-- **Images:** Next.js `<Image>` — Unsplash placeholders until real assets arrive
+- **Images:** Next.js `<Image>`, AVIF→WebP, **all local** — no remote image host
+  is used any more. Gradient placeholders stand in where real photography is
+  still pending (see Assets Status)
 - **Icons:** Custom SVG components in `components/icons/` (Spotify, Telegram, YouTube, Instagram, Facebook) + `lucide-react`
 - **Forms:** Plain React `useState` (no React Hook Form) — API routes at `/api/newsletter`, `/api/contact`, `/api/partner`, `/api/birthday-testimony`
 - **Storage:** `@vercel/kv` — **only** `/api/birthday-testimony` uses it. Nothing else on the site has a datastore
@@ -208,6 +210,7 @@ any URL — `app/(site)/about/page.tsx` is still `/about`, and the build output
 is unchanged route for route.
 
 ```
+vercel.json               ← `regions: ["lhr1"]` only. See "Deployment region"
 app/
   layout.tsx              ← <html>/<body>, font, metadataBase. NO chrome
   (site)/                 ← route group: everything that gets Navbar + Footer
@@ -242,7 +245,9 @@ app/
     contact/route.ts
     partner/route.ts
     birthday-testimony/route.ts  ← POST stores to KV + emails via Resend;
-                                   GET lists all. ⚠️ GET is unauthenticated
+                                   GET lists (`?include=active|archived|all`,
+                                   default active); PATCH archives/restores one.
+                                   ⚠️ GET is unauthenticated; PATCH is NOT
     birthday-admin/route.ts      ← POST { password } → { ok }. Exists because a
                                    client component cannot read a non-
                                    NEXT_PUBLIC env var
@@ -272,6 +277,10 @@ components/
                             transition, clickable dots. `useState(0)` initial
                             index keeps SSR and first client render identical —
                             never seed the index from Date.now()/random.
+                            ⚠️ Slides after the first are NOT rendered until
+                            2.5s after hydration — see "The hero slideshow
+                            defers slide 2" below. Don't collapse that back to
+                            a plain `.map()`.
   CountdownTimer.tsx      ← 'use client', renders a 'pending' placeholder first so SSR/client hydration match
   BirthdayCountdown.tsx   ← 'use client' — the /birthday centrepiece. Same 'pending'
                             hydration contract as CountdownTimer, but resolves the
@@ -284,7 +293,16 @@ components/
   BirthdayTestimonyForm.tsx ← 'use client' — posts to /api/birthday-testimony.
                             ⚠️ Fields are `text-base` (16px) and that is not a
                             style choice: iOS Safari zooms the viewport on focus
-                            for anything smaller and never zooms back out
+                            for anything smaller and never zooms back out.
+                            Its success state is also where giving is offered —
+                            see "Giving is a modal" below
+  BirthdayGiving.tsx      ← 'use client' — `GivingProvider` (owns the account
+                            data + the modal), `useGiving()` and `GiveButton`.
+                            The ONLY route to the account details; there is no
+                            giving section on the page. See below
+  icons/FlagIcons.tsx     ← `UnitedKingdomFlag`, `NigeriaFlag`, `CountryFlag`.
+                            Drawn SVG, because 🇬🇧/🇳🇬 emoji have no glyph on
+                            Windows. See "Country flags" below
   CopyToClipboard.tsx     ← 'use client' — exports `CopyField` (labelled account row
                             + copy icon button) and `SharePage` (native share sheet
                             where supported, else copy, plus a WhatsApp link).
@@ -339,8 +357,12 @@ lib/
                             prayer-surge.ts now imports them rather than
                             defining its own. Behaviour is unchanged
   birthday.ts             ← The 3 August 2026 birthday: BIRTHDAY_STARTS_AT /
-                            BIRTHDAY_ENDS_AT (ISO), birthdayPhase(), and the
-                            shared `Testimony` shape. See below
+                            BIRTHDAY_ENDS_AT (ISO), birthdayPhase(), the shared
+                            `Testimony` shape and `testimonyId()`. See below
+  admin-auth.ts           ← `checkAdminPassword()`, the timing-safe compare
+                            against BIRTHDAY_ADMIN_PASSWORD. Server-only —
+                            shared by /api/birthday-admin and the PATCH on
+                            /api/birthday-testimony
 ```
 
 ---
@@ -395,8 +417,10 @@ them on this site is deliberate, not an unfinished section.
 - **The Norwich Prayer Surge is the ONLY confirmed real event on the site.**
   Everything else in `MINISTRY_PROGRAMMES` is a *named programme* with no date
   attached — real, but not scheduled. Don't promote one to a dated event.
-- **Its banner image is still an Unsplash placeholder** (`photo-1524368535928…`,
-  used on both `/` and `/events`). Needs a real photo or banner from the client.
+- **Its banner is a gradient placeholder** on both `/` and `/events`. It was an
+  Unsplash crowd shot carrying `alt="Norwich Prayer Surge"` — a photo of
+  strangers presented as a photo of this gathering — removed 2 August 2026.
+  Needs a real photo or banner from the client; don't put stock back.
 - **Its vision paragraphs are written-to-brief copy**, not a verbatim client
   statement — the three paragraphs under "Until the wilderness becomes a
   fruitful field" on `/events` were composed from the client's description of
@@ -589,11 +613,21 @@ Real assets received (all in `public/images/`, all JPEG):
   Derived by connected-component analysis: the three mark shapes each span >25% of
   the lockup height while no wordmark letter exceeds 12%, which separates them
   cleanly — the mark and wordmark overlap horizontally, so no column crop works.
-- `app/icon.png` (512×512) + `app/apple-icon.png` (180×180) — the mark, padded 13%,
-  on a solid `#0A1628` navy plate. App Router file conventions, so Next emits the
-  `<link rel="icon">` / `apple-touch-icon` tags itself; there is **no** `<head>`
-  markup and no `icons` key in `metadata`. The create-next-app `app/favicon.ico`
-  was deleted, so `/favicon.ico` now 404s by design.
+- `app/icon.png` (512×512) + `app/apple-icon.png` (180×180) + `app/favicon.ico`
+  (16/32/48) — the mark, padded 13%, on a solid `#0A1628` navy plate. App Router
+  file conventions, so Next emits the `<link rel="icon">` / `apple-touch-icon`
+  tags itself; there is **no** `<head>` markup and no `icons` key in `metadata`.
+  ⚠️ **`favicon.ico` is required, not redundant — restored 2 August 2026.** The
+  create-next-app one had been deleted on the reasoning that `icon.png` covers
+  it. It does not: browsers request `/favicon.ico` at the origin root regardless
+  of the `<link>` tags, for bookmarks, history entries, new-tab tiles and in-app
+  browsers that never parse the head. With the file absent that request 404s,
+  and a 404 is what gets cached. See "Why the favicon looked broken" below.
+  ⚠️ It is a **PNG-compressed ICO** built from `icon.png` — `sharp` cannot write
+  ICO, so the container is assembled by hand (6-byte ICONDIR + one 16-byte
+  ICONDIRENTRY per size + the PNG blobs). PNG-in-ICO keeps the alpha channel and
+  avoids hand-rolling a BMP/DIB encoder with its bottom-up rows and AND mask.
+  Regenerate it the same way if `icon.png` ever changes.
   ⚠️ The navy plate is deliberate: the mark is white, so a transparent icon would
   vanish in a light browser tab. ⚠️ `sharp` applies `flatten` **before** `extend`,
   so extending with a transparent background and then flattening leaves the padding
@@ -618,11 +652,48 @@ Real assets received (all in `public/images/`, all JPEG):
   the padding too and yields 718×717. Pad in one pass, resize in the next. Palette
   PNG (`palette: true`) — flat two-colour art, 85 KB against 409 KB truecolour.
 
-Still Unsplash placeholders — pending from client:
+### ⚠️ There are no Unsplash images left on the site (2 August 2026)
+**Nothing on any page fetches a remote image.** Every `<Image>` now points at a
+file in `public/images/`. The seven Unsplash placeholders were replaced with CSS
+gradients — see "Gradient placeholders" below for the list and the reasoning.
+
+Still pending real photography from the client — now on **gradient
+placeholders**, not stock photos:
 - The `/churches/bhcc` hero background (see below for why the logo can't stand
-  in for it). This is the **only** stock image left anywhere on the site that
-  represents a church — see "No stock imagery stands for a church" below.
-- Event banners
+  in for it).
+- The Norwich Prayer Surge banner, on `/events` and in the `/` event card.
+
+### Gradient placeholders (replaced Unsplash, 2 August 2026)
+All seven were `aria-hidden` decorative backdrops under heavy scrims, or — worse
+— stock photos labelled as something real. Each cost every visitor a cross-origin
+fetch through the image optimiser, and four were `priority`, so they blocked LCP
+for imagery the scrim had already all but erased. They are now pure CSS:
+
+| Where | Was | Now |
+|---|---|---|
+| `/` partnership band | `photo-1529156069898…` | `from-wine-deep via-blue-navy to-blue-navy` + a cross gradient |
+| `/partners` hero | `photo-1529156069898…` (`priority`) | standard dark hero + navy wash |
+| `/churches/bhcc` hero | `photo-1438232992991…` (`priority`) | standard dark hero + navy wash |
+| `/about` mandate | `photo-1500530855697…` | standard dark hero + navy wash |
+| `/events` featured | `photo-1524368535928…` | dark hero gradient + `awe-min-mark.png` at `opacity-25` |
+| `/` event card | same, via `EventCard imageUrl` | `EventCard`'s no-image branch |
+| `/media` Telegram card | `photo-1529070538774…` | `from-white to-[#EEF3FA]` |
+
+- ⚠️ **Two of these were content-integrity problems, not just performance
+  ones.** The Prayer Surge photo carried `alt="Norwich Prayer Surge"` and the
+  BHCC hero sat behind a heading naming BHCC — both presented photographs of
+  strangers as pictures of a real gathering and a real church, exactly what
+  "No stock imagery stands for a church" and the Content Integrity Notes rule
+  out. **Do not restore a stock photo to either slot.** Only a real photograph
+  from the client belongs there.
+- **`EventCard`'s no-image branch is now load-bearing** and was restyled to
+  match: it was a flat `bg-cream` plate reading "Event Image", which broke the
+  no-flat-backgrounds rule. It is now the dark hero gradient with the ministry
+  mark at `opacity-25`. `imageUrl` is still supported — nothing passes it today.
+- The gradients reuse the palette each section already resolved to under its
+  scrim, so the visual change is close to nil. `images.unsplash.com` stays in
+  `next.config.ts` `remotePatterns` so a future real Unsplash image needs no
+  config change; it grants nothing on its own.
 
 ### ⚠️ No stock imagery stands for a church
 A placeholder photo is obviously a placeholder *only when nothing labels it*. A
@@ -669,17 +740,20 @@ photograph of strangers. Cleared on 28 July 2026:
   `blcn-logo.jpg` three ways (blurred backdrop, crisp badge, About panel).
   These are page-specific renditions of different assets, so one `logo` field
   cannot express them — don't try to route them through constants.ts.
-- **Not affected:** the decorative Unsplash textures behind the `/about`
-  mandate, the `/` and `/partners` partnership bands and the `/media` Telegram
-  card. Those are `aria-hidden` backdrops under a heavy scrim, labelled as
-  nothing — they carry no claim about a church.
+- **Not affected at the time:** the decorative Unsplash textures behind the
+  `/about` mandate, the `/` and `/partners` partnership bands and the `/media`
+  Telegram card. Those were `aria-hidden` backdrops under a heavy scrim,
+  labelled as nothing — they carried no claim about a church. They were removed
+  later anyway, on performance grounds — see "Gradient placeholders" above.
 
 ⚠️ **BLCN's blurred-logo hero background has no BHCC equivalent, on purpose.**
 `/churches/blcn` uses `blcn-logo.jpg` as its own hero backdrop (`scale-125
 blur-2xl` under a `bg-black/40` scrim) because that emblem sits on near-black and
 blurs into usable dark texture. BHCC's mark is on white: blurred full-bleed it
 washes to a flat grey field under the same scrim, losing both the artwork and the
-imagery. The BHCC hero keeps a photo. Don't "finish the mirror" by porting it.
+imagery. Don't "finish the mirror" by porting it — the BHCC hero is on a
+gradient placeholder awaiting a real congregation photo (see "Gradient
+placeholders"), and a washed-out blurred mark is not an improvement on that.
 
 ⚠️ **The ministry logo master is lost.** Only the 1200×662 derivative survives (see
 the filename warning above). Ask the client to re-supply the original if a larger
@@ -749,8 +823,13 @@ them, alongside `/media/teachings`.
 
 ## The birthday page (`/birthday`)
 A one-off page for Pastor Awe's birthday, **Monday 3 August 2026**, built 1
-August 2026 to be shared by direct link that evening. Five sections: hero →
-countdown → testimony form → giving/account details → closing + share.
+August 2026 to be shared by direct link that evening. Four sections: hero →
+countdown → testimony form → closing + share.
+
+⚠️ **It was five.** A giving section carrying the UK and Nigeria account details
+sat between the testimony form and the close until 3 August 2026; it is now a
+modal. See "Giving is a modal" below before adding anything to this page that
+asks for money.
 
 ### ⚠️ It is a standalone site, not a page of this one
 **The main site has not launched.** `/birthday` is the only URL being shared,
@@ -765,18 +844,71 @@ itself**. Isolated on 1 August 2026:
   route for route. This was the cheapest way to give one branch different
   chrome; there is no other App Router mechanism for it short of a second root
   layout, which would duplicate `<html>`.
-- **The ministry lockup at the top of the hero is NOT a link.** `awe-min-logo.png`
-  at `h-11 sm:h-14`, plain `<Image>`, no anchor. That is the whole point —
-  brand presence without a way through to an unlaunched site. Don't "fix" it
-  into a `<Link href="/">`.
-- The only hrefs the page emits are `#testimony` and `#give`. Verified against
-  the built HTML. `SharePage` shares `window.location.href`, i.e. `/birthday`
-  itself, never the site root.
+- **The ministry lockup at the top of the hero links to `/birthday` — itself.**
+  `awe-min-logo.png` at `h-11 sm:h-14` inside a `<Link href="/birthday">`
+  (`aria-label="Back to top"`), added 2 August 2026 as a back-to-top affordance.
+  ⚠️ **It must never become `<Link href="/">`.** The isolation rule is unchanged:
+  no anchor on this page may leave it while the main site is unlaunched.
+  ⚠️ Known cosmetic side effect: on the custom domain `/` is *rewritten* to
+  `/birthday`, so a visitor sitting on the bare domain who clicks the lockup has
+  the address bar change from `ayodeleaweministries.com` to
+  `…/birthday`. Same page, same content — only the URL cosmetics. If that ever
+  matters more than the affordance, swap the `Link` for a small client component
+  calling `window.scrollTo`, which changes no URL at all.
+- The only hrefs the page emits are `/birthday` and `#testimony`. Verified
+  against the built HTML. (`#give` went with the giving section — giving is a
+  button that opens a modal now, not an anchor.) `SharePage` shares
+  `window.location.href`, i.e. `/birthday` itself, never the site root.
 - `/birthday/admin` inherits the birthday layout and so also lost its chrome,
   which is correct — it never wanted it. It still uses the **main site**
   palette, deliberately: it is a private utility, not part of the shareable.
 - **Don't "fix" its absence from the nav.** It was never in the Navbar or
   Footer; now it cannot reach them either.
+
+### ⚠️ The custom domain serves `/birthday` only (`middleware.ts`)
+**ayodeleaweministries.com currently only serves `/birthday` via middleware
+redirect. Full site remains on the `.vercel.app` URL until ready to launch
+properly. Remove this middleware when the full site is ready to go live on the
+custom domain.**
+
+`middleware.ts` at the project root does a host check and nothing else. On
+`ayodeleaweministries.com` / `www.ayodeleaweministries.com`:
+
+| Path | Behaviour |
+|---|---|
+| `/` | **Rewritten** to `/birthday` — the address bar keeps the bare domain |
+| anything else (`/about`, `/partners`, `/churches/bhcc`, …) | **307** redirect to `/birthday` |
+| `/birthday`, `/birthday/admin` | untouched |
+| `/api/*` | untouched — the testimony form depends on `/api/birthday-testimony` |
+
+Every other host — the `.vercel.app` deployment URL, previews, localhost —
+falls through untouched and gets the full site. That host check is the whole
+reason this is middleware and not a `redirects()` entry in `next.config.ts`,
+which cannot see the request host.
+
+- ⚠️ **The matcher excludes any path with a file extension**, and that is
+  load-bearing rather than tidiness. `/birthday`'s `og:image` resolves through
+  `metadataBase` to `https://ayodeleaweministries.com/images/apostle-portrait.jpg`,
+  which the WhatsApp and Facebook crawlers fetch **directly** — redirect it and
+  every shared link loses its preview image. The same exclusion covers
+  `/icon.png` and `/apple-icon.png`. `_next/*` (JS, CSS, the Clash Display
+  woff2 files) is excluded alongside it.
+- ⚠️ **The redirect is 307, never 301/308.** A permanent redirect is cached by
+  the browser indefinitely, so every visitor who touched the domain pre-launch
+  would keep landing on `/birthday` after the file is deleted — with no way to
+  clear it from our side. `NextResponse.redirect` defaults to 307; leave it.
+- ⚠️ **The host list is an exact-match `Set`, not `host.includes(...)`.** A
+  `Host` header is attacker-controlled, and a substring test also matches
+  `ayodeleaweministries.com.example.org`.
+- ⚠️ **Next 16 deprecates the `middleware.ts` filename in favour of `proxy.ts`**
+  (`next build` warns: "The `middleware` file convention is deprecated"). It
+  still works — Next renames `proxy.js` → `middleware.js` in the build output
+  for compatibility. Silencing the warning is a pure file rename, no code
+  change. Kept as `middleware.ts` because the file is temporary.
+- ⚠️ **The domain here is `.com`; the ministry's email addresses in this file
+  are `.org`** (`contact@ayodeleaweministries.org`). That is as supplied — if
+  both TLDs are pointed at this project, add the `.org` hosts to
+  `LOCKED_DOMAINS` or they will serve the whole unlaunched site.
 
 ### Palette and treatment
 It runs on its own **white / deep blue / orange** palette — see the `bday-*`
@@ -788,11 +920,14 @@ before touching any orange on this page.
   radial glows (orange behind the copy, blue behind the portrait), drifting
   confetti dots, and the site's only animated type (the `.shimmer-text` sweep
   in `globals.css`, now an orange sweep).
-- **Section rhythm is dark → dark → light → dark → light.** White carries the
-  two longest sections (testimonies, closing) so it reads as the dominant base;
-  deep blue takes the hero, the countdown band and the giving cards. Ending on
-  white is why the layout sets `bg-white` — otherwise an iOS overscroll bounce
-  at the foot shows the navy `<body>`.
+- **Section rhythm is dark → dark → light → light.** White carries the two
+  longest sections (testimonies, closing) so it reads as the dominant base; deep
+  blue takes the hero and the countdown band. Ending on white is why the layout
+  sets `bg-white` — otherwise an iOS overscroll bounce at the foot shows the
+  navy `<body>`. The two light sections meet at `#F1F5FA` (testimonies run
+  `white → #F1F5FA`, the close runs `#F1F5FA → white`), so there is no seam
+  where the giving section used to break them up. The deep-blue treatment did
+  not disappear with it — it moved to the giving modal's panel.
 - ⚠️ **The hero portrait is a circle**, `rounded-full` with a glow ring. Every
   other image container on the site is sharp-cornered — this is a deliberate
   one-page exception for a celebratory medallion, not a slip.
@@ -801,12 +936,88 @@ before touching any orange on this page.
   Under `prefers-reduced-motion` the sweep stops and the text returns to solid
   white.
 - **British English** ("honour"), matching the ministry's UK base.
-- The giving section is headed **"Give to God's Servant"** (`id="give"`). It
-  was "Sow a Seed of Honour" (`id="honour"`) until 1 August 2026; the seed
-  language went with it, from the subtitle, the hero CTA, the page metadata and
-  the native-share text. Nothing outside this page linked to `#honour`.
-- Scripture: Proverbs 3:9 closes the giving section, Hebrews 13:7 the page.
-  Both are quoted scripture, not written-to-brief copy.
+- The giving **modal** is headed **"Give to God's Servant"**. It was a page
+  section headed "Sow a Seed of Honour" (`id="honour"`) until 1 August 2026 —
+  the seed language went then, from the subtitle, the hero CTA, the page
+  metadata and the native-share text — and stopped being a section at all on 3
+  August 2026. Nothing outside this page ever linked to `#honour` or `#give`.
+- Scripture: 1 Timothy 5:17 closes the giving modal (it was Proverbs 3:9 until
+  1 August 2026 — changed with the "Give to God's Servant" heading, since the
+  double-honour verse is about the servant rather than the firstfruits),
+  Hebrews 13:7 the page. Both are quoted scripture, not written-to-brief copy.
+  ⚠️ Both follow the same convention: **NKJV wording, British spelling** —
+  "double honour", "labour", where NKJV prints "honor"/"labor". Don't
+  Americanise them back to match a printed NKJV.
+
+### ⚠️ Giving is a modal, and the page never asks for it first
+Changed 3 August 2026. Account details used to be a full section in plain view;
+they are now behind `components/BirthdayGiving.tsx` and reachable from exactly
+two places, in this order:
+
+1. **The testimony form's success state** — after someone has actually shared
+   something, under a rule, headed "If you would love to give to Pastor Ayodele,
+   please kindly use the button below." This is the intended path.
+2. **One quiet `outline` button in the closing section**, for anyone who wants
+   to give without writing a testimony. Deliberately a size down from the share
+   CTA beside it.
+
+⚠️ **The hero's second CTA is gone.** It read "Give to God's servant" and
+pointed at `#give`. Giving asked for in the first screenful is what this change
+exists to undo — don't put a give button back in the hero, and don't restore the
+section. If a visible giving section is ever wanted again that is a conversation
+with the client, not a refactor.
+
+- `GIVING` still lives in `app/birthday/page.tsx` and is handed to
+  `GivingProvider` as a prop. ⚠️ That means `flag` must be a **serialisable**
+  country code (`"GB"`/`"NG"`), never a component — see "Country flags" below.
+- ⚠️ **The details are still in the page source**, in the RSC payload, because
+  they cross to a client component as a prop. The change is about what the page
+  *asks* of a visitor, not about hiding public bank details. Don't add a fetch
+  to "protect" them.
+- ⚠️ **The modal is rendered by the provider, as a sibling of the page — never
+  beside a trigger.** Both triggers sit inside an `AnimateIn`, whose
+  `motion.div` carries a transform, and a transformed ancestor becomes the
+  containing block for its `fixed` descendants. A modal mounted in there sizes
+  itself against that card. Exactly the trap the mobile menu panel hit.
+- The panel reuses the old section's treatment verbatim —
+  `from-bday-blue via-bday-navy to-bday-blue`, `border-t-2 border-bday-orange`,
+  `bg-white/[0.07]` cards, `CopyField` — so every contrast figure in the palette
+  notes still holds. Sharp corners, like every other panel on the site.
+- Escape closes it, so does the backdrop, so does either close control; `<body>`
+  scroll is frozen while it is open; Tab is trapped inside the panel; focus
+  returns to whatever opened it. `useReducedMotion()` collapses the animation to
+  a plain fade.
+- `GiveButton` renders **nothing** outside a `GivingProvider`, and the testimony
+  form gates its whole CTA block on `useGiving()` being non-null. That is what
+  lets `BirthdayTestimonyForm` stay mountable anywhere.
+
+### ⚠️ Country flags are drawn SVG, never emoji
+`components/icons/FlagIcons.tsx`. Reported 3 August 2026 as "the flags show on
+my phone but not on my PC", and it is a real platform gap rather than a font
+preference: **Segoe UI Emoji ships no regional-indicator glyphs**, so Chrome,
+Edge and Firefox on Windows render 🇬🇧 as the bare letters "GB" — or an empty
+box — while iOS, Android and macOS show the flag. On a page whose account
+details someone is about to act on, that reads as broken.
+
+- Two flags, two components, `CountryFlag({ code })` to pick between them. ⚠️
+  **Don't install `flag-icons` or similar** — ~260 flags and a stylesheet for a
+  site that needs two.
+- Replaced in both places emoji flags appeared: the `/birthday` account cards
+  and the BHCC/BLCN location lines on `/churches`. `Expression.flag` on
+  `/churches` is now a separate field from `location`, which is plain text again.
+- ⚠️ **Both use a 60×30 viewBox (1:2, the official ratio for both flags), so
+  every call site must pass a 2:1 class pair** — `h-3 w-6`, `h-5 w-10`.
+  Otherwise the artwork letterboxes inside its own box.
+- ⚠️ **The Union Flag's red saltire is four hand-computed polygons, not a
+  `clipPath`.** The usual construction clips a stroke, which needs an SVG `id` —
+  and an id must be unique per document, while these render twice per page (two
+  giving cards, two church cards). A duplicate id makes the second instance clip
+  against the first. The polygons are that clip resolved by hand; the maths is
+  in the file. Verified by rasterising with `sharp`.
+- Both are `aria-hidden`. Every call site names the country in adjacent text
+  ("United Kingdom", "Norwich, United Kingdom"), so announcing the flag would
+  only repeat it. A call site where nothing else names the country needs its own
+  visually-hidden label.
 
 ### ⚠️ Mobile is the primary target, not a fallback
 This link travels by WhatsApp; effectively everyone arrives on a phone. The
@@ -879,6 +1090,40 @@ then emails the ministry via Resend. `GET` returns the list, newest first —
   set every endpoint degrades honestly (503 + a readable message), which is the
   state a fresh clone is in.
 
+### Archiving — what the admin's "Delete" actually does
+Added 3 August 2026. **Nothing is ever removed from KV.** The testimonies are
+wanted for a possible public testimony wall on the main site later, so "delete"
+means "take out of the admin's active list" and no more.
+
+- `birthday-testimonies` stays append-only. A second key,
+  **`birthday-testimonies-archived`, is a Redis SET of ids**; the GET handler
+  subtracts one from the other.
+- ⚠️ **A set of ids, not an `archived` flag on the record.** A Redis list cannot
+  be updated by identity — flipping a flag means `LSET` at an index, and the
+  index of every record shifts each time someone submits, because the list is
+  `LPUSH`ed. Read-modify-write on the whole list is worse still: a submission
+  landing mid-flight would be overwritten. `SADD` is one atomic write that
+  touches nothing else. **Verified**: archiving a record, then posting a new
+  testimony, leaves the archive pinned to the right record.
+- ⚠️ **`testimonyId()` in `lib/birthday.ts` is the only way to get a
+  testimony's id, and it must never be the list index** — see above. Records
+  written from 3 August carry a `crypto.randomUUID()`; older ones fall back to
+  `` `${submittedAt}::${name}` ``, which is stable for a record that is never
+  rewritten. **A record with no `id` is a legacy record, not a broken one** —
+  verified that one archives and restores exactly like a current one.
+- `id` and `archived` are **resolved by the GET handler, never stored**, so a
+  legacy record reads back identically to a current one for every consumer.
+- `GET ?include=` takes `active` (default), `archived` or `all`. The default
+  keeps every pre-existing caller behaving as it did.
+- `PATCH { password, id, archived }` moves one record between the two states.
+  Anything other than an explicit `archived: false` archives — restoring has to
+  be asked for.
+- ⚠️ **PATCH takes the admin password; the GET deliberately does not.** Reading
+  everything by URL is an accepted exposure on a page with a ~48-hour life
+  (below). Letting anyone who finds the URL hide testimonies from the ministry
+  is not the same trade. `lib/admin-auth.ts` holds the timing-safe compare that
+  both this and `/api/birthday-admin` use.
+
 ### ⚠️ Admin page security — read this before extending it
 `/birthday/admin` is a **utility page, not linked from anywhere**, and its gate
 is **obscurity, not security**. Accepted deliberately for a page with a ~48-hour
@@ -896,12 +1141,22 @@ useful life. Specifically:
   literal client-side comparison would have meant publishing the password. The
   env var keeps the name, the gate behaves identically, the secret stays server-
   side.
-- Unlock state lives in `sessionStorage` under `birthday-admin-ok`, so a refresh
-  does not re-prompt. It is a UI convenience with no bearing on the above.
+- ⚠️ **Unlock state is the password itself**, held in `sessionStorage` under
+  `birthday-admin-key` (it was a bare `"true"` flag under `birthday-admin-ok`
+  until 3 August 2026). The archive PATCH is authenticated and the page has to
+  be able to send the password with it. That is a deliberate trade:
+  `sessionStorage` is same-origin, dies with the tab, and is readable only by
+  script already running on this page — whereas an unauthenticated PATCH would
+  let anyone who found the URL hide testimonies from the ministry.
+- The page has **Active / Archived** views. Deleting archives; the Archived view
+  is the undo, with a Restore button per row. A `window.confirm` guards the
+  delete, and a standing note at the foot of the list says archiving is not
+  destruction — so nobody working the page has to have read this file.
 
-**If this page outlives the birthday**, the fix is one change: require the
-password on the GET handler too (send it as a header from the admin page). Until
-then, treat the URL as the secret and don't publish it.
+**If this page outlives the birthday**, the fix is two changes: require the
+password on the GET handler too (send it as a header from the admin page), and
+replace the `sessionStorage` password with a real session cookie. Until then,
+treat the URL as the secret and don't publish it.
 
 ## On-site players
 - **Spotify** — `SPOTIFY_ARTIST_ID` / `SPOTIFY_PODCAST_ID` feed `SpotifyEmbed` on
@@ -962,6 +1217,108 @@ is ever replaced with tighter margins, switch the container to
 
 The cover is also the `/books` `PageHero` background image (`backgroundImage`
 on `PageHero`, under the standard navy + wine scrim).
+
+---
+
+## Why the favicon looked broken on the custom domain (2 August 2026)
+Reported as "the favicon shows on `.vercel.app` but not on
+ayodeleaweministries.com". **Neither `middleware.ts` nor `metadataBase` was
+involved** — both were checked against the live domain and both were fine:
+
+```
+https://www.ayodeleaweministries.com/icon.png        200  image/png  31145 B
+https://www.ayodeleaweministries.com/apple-icon.png  200  image/png   8791 B
+https://www.ayodeleaweministries.com/favicon.ico     404              <-- the bug
+https://ayodeleaweministries.com/icon.png            308 -> www.
+```
+
+⚠️ **`metadataBase` cannot affect a favicon, so don't go looking there.** Icons
+produced by the App Router file conventions are emitted as **root-relative**
+hrefs — `<link rel="icon" href="/icon.png?icon.41466375.png">` — and are never
+resolved against `metadataBase`. Only `openGraph`/`twitter` image paths are.
+
+⚠️ **The middleware matcher was already correct.** `/icon.png`, `/apple-icon.png`
+and `/favicon.ico` all contain a `.`, so the `(?!_next/|.*\.)` lookahead
+excludes them. Verified live: `/icon.png` returns the actual PNG on the custom
+domain, not a redirect to `/birthday`.
+
+The three real contributors, in order:
+
+1. **`/favicon.ico` 404'd** because the file had been deleted deliberately. That
+   is the fix — the file is back. See the Assets Status entry above.
+2. **The apex 308s to `www.`**, so `ayodeleaweministries.com` and
+   `www.ayodeleaweministries.com` are **separate origins for favicon caching**.
+   An icon learned on one does not populate the other, and the link being shared
+   is the bare apex. This is a Vercel domain setting, not something in the repo;
+   it is fine to leave, but it is why a first visit can look iconless.
+3. **Browsers cache favicons far more aggressively than pages**, in a store the
+   normal reload path does not clear — Chrome keeps a separate favicon database.
+   A 404 learned during the pre-launch window persists well past the fix, so
+   **expect the icon not to appear immediately even now that it is correct.**
+   Verify with a hard-reload in a fresh profile, or by requesting
+   `/favicon.ico` directly, rather than by looking at a tab that has already
+   cached the miss.
+
+⚠️ Because of (3), **do not treat a still-missing tab icon as evidence the fix
+failed.** Check the HTTP status of `/favicon.ico`, which is the thing actually
+under our control.
+
+---
+
+## Performance decisions (audited 2 August 2026 — don't regress these)
+A build-output and asset audit produced the four changes below. Measured
+baseline before the pass: ~693–714 KB First Load JS per route (uncompressed),
+seven cross-origin Unsplash fetches, and 586 KB of hero artwork downloaded at
+once on `/`.
+
+### Deployment region
+`vercel.json` sets `regions: ["lhr1"]` (London) and contains nothing else.
+Vercel's default is `iad1` (Washington DC), which is the wrong side of an ocean
+from a UK/Nigeria audience. Static assets are edge-cached either way, but the
+**image optimiser runs in the function region** — so on a cache miss a Norwich
+visitor was routing through Virginia and back. Don't drop this file.
+
+### The hero slideshow defers slide 2
+⚠️ **`loading="lazy"` does not defer an in-viewport image, and that was the
+bug.** All hero slides are stacked at `inset-0`, so slide 2 was on screen from
+first paint; lazy loading only defers images that are *off* screen. Both slides
+therefore downloaded together — 586 KB, with `apostle-2.jpg` (417 KB, the
+largest file in the repo) competing against the LCP image for bandwidth while
+being invisible for the first six seconds.
+
+`HeroSection` now returns `null` for slide index > 0 until a 2.5s timer fires
+after hydration. **An `<img>` that is not in the document is never fetched** —
+that is the whole mechanism, and hinting at the loader cannot substitute for it.
+Verified against the built HTML: `apostle-2` appears nowhere in the server
+markup for `/`.
+
+- The flag starts `false` on both server and first client render, so hydration
+  still matches — the same contract `AnimateIn` keeps for its media queries.
+- 2.5s clears first paint and still leaves 3.5s before the 6s crossfade.
+- ⚠️ **The dots set the flag too.** A tap inside the first 2.5s would otherwise
+  select a slide that is not mounted and leave the hero blank.
+- `priority` and `loading` are passed as a spread, never both at once — Next
+  throws if it sees both on one `<Image>`.
+
+### Image format and cache TTL (`next.config.ts`)
+- `formats: ["image/avif", "image/webp"]` — AVIF is ~20–30% smaller. The cost
+  is slower encoding on a cache **miss**, paid once per (image, width).
+- `minimumCacheTTL: 2678400` (31 days, up from Next's 4-hour default). Every
+  optimised image is now a build-time asset, so nothing can change behind a URL
+  without a redeploy — and a deploy busts the cache anyway, since the cache key
+  includes the build ID. The short default was buying repeated AVIF encodes of
+  files that never change.
+
+### Known, deliberately not fixed
+- **framer-motion is ~118 KB on all 15 content routes.** It is imported by only
+  three components, but `AnimateIn` is used ~134 times, so it lands in the
+  shared chunk everywhere. Removing it means reimplementing `AnimateIn` on
+  IntersectionObserver + CSS across every call site — a real win, but a much
+  larger change than this pass.
+- **The Telegram scrape is ~5s per page, up to `MAX_PAGES = 8` sequentially.**
+  Not currently user-facing: `/media/teachings` is ISR, so the cost lands on a
+  background regeneration, not a request. It would become user-facing if the
+  channel's recent posts go all-text and the walk-back deepens.
 
 ---
 
@@ -1027,7 +1384,19 @@ precise about:
   exist. Confirm it receives mail before relying on the default.
 - `metadataBase` was added to `app/layout.tsx` for the birthday page's
   `og:image`, but it benefits every page — WhatsApp and Facebook will not fetch
-  a relative image path. Set `NEXT_PUBLIC_SITE_URL` once the domain is live.
+  a relative image path.
+- ⚠️ **Production no longer depends on `NEXT_PUBLIC_SITE_URL` being set.**
+  `VERCEL_URL` is the *deployment-specific* host
+  (`ayodele-awe-ministries-<hash>.vercel.app`), never the custom domain, so
+  while it was the production fallback every live `og:image` pointed at a
+  deployment URL. The chain is now
+  `NEXT_PUBLIC_SITE_URL` → **`https://www.ayodeleaweministries.com` when
+  `VERCEL_ENV === "production"`** → `VERCEL_URL` (right for previews, where the
+  deployment host *is* the address being shared) → localhost.
+- ⚠️ **`www.`, not the apex.** Vercel 308s the apex to `www.`; naming the apex
+  would put a redirect in front of every link-preview crawler.
+- ⚠️ **`metadataBase` has nothing to do with the favicon** — see "Why the
+  favicon looked broken on the custom domain".
 
 ## What Still Needs Building
 - [ ] Newsletter API wired to Brevo or Mailchimp
@@ -1044,10 +1413,15 @@ precise about:
       now set in `layout.tsx`; `/birthday` is the first page with full
       `openGraph` + `twitter` blocks and is the pattern to copy
 - [ ] Custom 404 page
-- [x] Favicon — `app/icon.png` + `app/apple-icon.png`, the ministry mark on navy
+- [x] Favicon — `app/icon.png` + `app/apple-icon.png` + `app/favicon.ico`, the
+      ministry mark on navy. ⚠️ The `.ico` is required; see "Why the favicon
+      looked broken on the custom domain"
 - [ ] Page transition animations (Framer Motion)
 - [ ] Real assets swapped in when client provides them
-- [ ] Custom domain pointed to Vercel
+- [ ] Custom domain pointed to Vercel — in progress. `ayodeleaweministries.com`
+      is being connected, but `middleware.ts` locks it to `/birthday` only
+      while the main site is unlaunched. **Delete `middleware.ts` at launch.**
+      See "The custom domain serves `/birthday` only"
 - [ ] Google Analytics
 
 ---

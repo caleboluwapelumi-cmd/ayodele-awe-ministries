@@ -25,14 +25,33 @@ const clashDisplay = localFont({
 });
 
 /**
+ * The canonical production host.
+ *
+ * ⚠️ `www.`, not the apex — Vercel 308s `ayodeleaweministries.com` to
+ * `www.ayodeleaweministries.com`, so naming the apex here would send every
+ * link-preview crawler through a redirect before it reached the image.
+ *
+ * ⚠️ This does NOT affect the favicon. Icons that come from the App Router file
+ * conventions (`app/icon.png`, `app/apple-icon.png`, `app/favicon.ico`) are
+ * emitted as root-relative hrefs and never resolved against `metadataBase`.
+ */
+const PRODUCTION_URL = "https://www.ayodeleaweministries.com";
+
+/**
  * `metadataBase` resolves relative `openGraph.images` paths to absolute URLs —
- * WhatsApp, Facebook and X will not fetch a relative one. Set
- * NEXT_PUBLIC_SITE_URL to the custom domain once it is pointed at Vercel;
- * VERCEL_URL covers preview and production deploys in the meantime, and the
- * localhost fallback keeps `next build` quiet.
+ * WhatsApp, Facebook and X will not fetch a relative one.
+ *
+ * ⚠️ `VERCEL_URL` is the *deployment-specific* hostname
+ * (`ayodele-awe-ministries-<hash>.vercel.app`), never the custom domain. It was
+ * the production fallback until 2 August 2026, which meant every `og:image` on
+ * the live site pointed at a deployment URL rather than at
+ * ayodeleaweministries.com. Production now pins the real host and `VERCEL_URL`
+ * is left to do the job it is actually right for — preview deploys, where the
+ * deployment hostname *is* the address being shared.
  */
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_ENV === "production" ? PRODUCTION_URL : null) ??
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ??
   "http://localhost:3000";
 

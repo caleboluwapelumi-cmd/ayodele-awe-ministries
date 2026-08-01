@@ -37,13 +37,20 @@ export default function EventsPage() {
       <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
-            <div className="relative aspect-video overflow-hidden">
+            {/* ⚠️ STILL PENDING a real banner/photo of the Prayer Surge.
+                Gradient placeholder in the meantime — the stock crowd shot this
+                replaced carried `alt="Norwich Prayer Surge"`, i.e. it presented
+                strangers as a photograph of this gathering. The mark is the
+                ministry's own and claims nothing about who was in the room. */}
+            <div className="relative flex aspect-video items-center justify-center overflow-hidden bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
               <Image
-                src="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=1200&q=80"
-                alt="Norwich Prayer Surge"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover transition-transform duration-700 hover:scale-105"
+                src="/images/awe-min-mark.png"
+                alt=""
+                aria-hidden
+                width={702}
+                height={662}
+                sizes="128px"
+                className="h-24 w-auto opacity-25"
               />
             </div>
           </AnimateIn>

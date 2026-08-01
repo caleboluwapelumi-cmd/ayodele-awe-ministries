@@ -59,15 +59,38 @@
  * this URL can read every testimony, including submitters' email addresses. It
  * is obscurity, not security, accepted deliberately for a short-lived page. See
  * CLAUDE.md → "The birthday page".
+ *
+ * PATCH is **not** left open the same way: it mutates, so it takes the admin
+ * password. Reading everything by URL is an accepted exposure; letting anyone
+ * hide testimonies from the ministry is not.
  */
 
 import { NextResponse } from "next/server";
-import type { Testimony } from "@/lib/birthday";
+import { testimonyId, type Testimony } from "@/lib/birthday";
+import { checkAdminPassword } from "@/lib/admin-auth";
 
 // Reads request state and external stores — never prerender or cache it.
 export const dynamic = "force-dynamic";
 
 const KEY = "birthday-testimonies";
+
+/**
+ * Archiving — the "delete" the admin page offers.
+ *
+ * ⚠️ Nothing is ever removed from KV. `KEY` stays append-only and `ARCHIVE_KEY`
+ * is a Redis **set of ids** listing what the admin has hidden; the GET handler
+ * subtracts one from the other. The testimonies themselves survive for a future
+ * public testimony wall on the main site, which is the whole point — "delete"
+ * here means "take out of the admin's active list", never "destroy".
+ *
+ * A set of ids rather than an `archived` flag on the record because a Redis
+ * list cannot be updated by identity — flipping a flag would mean `LSET` at an
+ * index, and the index of every record shifts each time someone submits (the
+ * list is `LPUSH`ed). Read-modify-write on the whole list would be worse still:
+ * a submission landing mid-flight would be overwritten. Adding an id to a set
+ * is a single atomic `SADD` that touches nothing else.
+ */
+const ARCHIVE_KEY = "birthday-testimonies-archived";
 
 const MAX_NAME = 120;
 const MAX_LOCATION = 120;
@@ -233,6 +256,9 @@ export async function POST(request: Request) {
 
   const raw = (body ?? {}) as Record<string, unknown>;
   const testimony: Testimony = {
+    // Written at submission so archiving has something stable to key on. Older
+    // records predate this and fall back inside `testimonyId()`.
+    id: crypto.randomUUID(),
     name: field(raw.name, MAX_NAME),
     location: field(raw.location, MAX_LOCATION),
     message: field(raw.message, MAX_MESSAGE),
@@ -290,7 +316,21 @@ export async function POST(request: Request) {
   return NextResponse.json({ success: true });
 }
 
-export async function GET() {
+/**
+ * `?include=` picks which slice comes back. Default `active`, so every existing
+ * caller keeps the behaviour it had before archiving existed — the admin page's
+ * plain `GET /api/birthday-testimony` now simply stops showing what has been
+ * archived.
+ */
+type Include = "active" | "archived" | "all";
+
+function parseInclude(value: string | null): Include {
+  return value === "archived" || value === "all" ? value : "active";
+}
+
+export async function GET(request: Request) {
+  const include = parseInclude(new URL(request.url).searchParams.get("include"));
+
   // Reads take the read-only token where one is configured.
   const kv = await getKv(true);
   if (!kv) {
@@ -301,7 +341,12 @@ export async function GET() {
   }
 
   try {
-    const rows = await kv.lrange<string | Testimony>(KEY, 0, -1);
+    const [rows, archivedIds] = await Promise.all([
+      kv.lrange<string | Testimony>(KEY, 0, -1),
+      kv.smembers<string[]>(ARCHIVE_KEY),
+    ]);
+
+    const archived = new Set(archivedIds ?? []);
 
     // Upstash deserialises JSON automatically on some clients and not others,
     // so entries come back as either a parsed object or the raw string.
@@ -314,7 +359,16 @@ export async function GET() {
           return null;
         }
       })
-      .filter((row): row is Testimony => Boolean(row));
+      .filter((row): row is Testimony => Boolean(row))
+      .map((row) => {
+        const id = testimonyId(row);
+        // `id` and `archived` are resolved here rather than stored, so a legacy
+        // record reads back exactly like a current one to every consumer.
+        return { ...row, id, archived: archived.has(id) };
+      })
+      .filter((row) =>
+        include === "all" ? true : include === "archived" ? row.archived : !row.archived
+      );
 
     return NextResponse.json({ success: true, testimonies });
   } catch (error) {
@@ -324,4 +378,70 @@ export async function GET() {
       { status: 500 }
     );
   }
+}
+
+/**
+ * Archive or restore one testimony: `{ password, id, archived }`.
+ *
+ * ⚠️ This is the only mutating endpoint here that is not open, and the password
+ * check is the point — see the header comment. It also means the admin page has
+ * to keep the password for the session rather than a bare "unlocked" flag.
+ *
+ * The testimony itself is never touched. Archiving adds its id to a set,
+ * restoring removes it; the record stays in the list either way.
+ */
+export async function PATCH(request: Request) {
+  let body: Record<string, unknown> = {};
+  try {
+    body = ((await request.json()) ?? {}) as Record<string, unknown>;
+  } catch {
+    return NextResponse.json(
+      { success: false, error: "Invalid request" },
+      { status: 400 }
+    );
+  }
+
+  const check = checkAdminPassword(body.password);
+  if (!check.ok) {
+    return NextResponse.json(
+      { success: false, error: check.error },
+      { status: check.status }
+    );
+  }
+
+  const id = typeof body.id === "string" ? body.id.trim() : "";
+  if (!id) {
+    return NextResponse.json(
+      { success: false, error: "A testimony id is required." },
+      { status: 400 }
+    );
+  }
+
+  // Anything other than an explicit `false` archives — the destructive-looking
+  // direction is the default, restoring has to be asked for.
+  const archive = body.archived !== false;
+
+  const kv = await getKv();
+  if (!kv) {
+    return NextResponse.json(
+      { success: false, error: "Storage is not configured." },
+      { status: 503 }
+    );
+  }
+
+  try {
+    if (archive) {
+      await kv.sadd(ARCHIVE_KEY, id);
+    } else {
+      await kv.srem(ARCHIVE_KEY, id);
+    }
+  } catch (error) {
+    console.error("Birthday testimony archive update failed:", error);
+    return NextResponse.json(
+      { success: false, error: "Could not update the testimony." },
+      { status: 503 }
+    );
+  }
+
+  return NextResponse.json({ success: true, id, archived: archive });
 }

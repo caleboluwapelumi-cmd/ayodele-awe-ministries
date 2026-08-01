@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import Image from "next/image";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
@@ -86,18 +85,14 @@ export default function PartnersPage() {
   return (
     <>
       {/* ── 1. Hero ── */}
-      <section className="relative flex min-h-screen items-center overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=80"
-          alt=""
+      {/* Gradient hero, not a photo — see the note on the homepage partnership
+          band. This one was `priority`, so it was blocking LCP for an image the
+          scrim rendered all but invisible. */}
+      <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+        <div
           aria-hidden
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
+          className="absolute inset-0 bg-gradient-to-t from-blue-navy via-transparent to-blue-navy/60"
         />
-        <div className="absolute inset-0 bg-black/65" />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-navy/90 via-transparent to-blue-navy/40" />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
           <AnimateIn direction="up" className="max-w-3xl">

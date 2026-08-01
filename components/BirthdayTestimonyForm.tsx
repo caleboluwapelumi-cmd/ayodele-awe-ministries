@@ -2,11 +2,17 @@
 
 import { FormEvent, useState } from "react";
 import Button from "@/components/Button";
+import { GiveButton, useGiving } from "@/components/BirthdayGiving";
 
 /**
  * Testimony submission for /birthday. Plain `useState` like every other form on
  * the site — no React Hook Form. Posts to /api/birthday-testimony, which stores
  * to KV and emails the ministry.
+ *
+ * ⚠️ The success state is also where giving is offered, and that is the whole
+ * shape of the page: there is no giving section any more, so a testimony comes
+ * first and the invitation to give follows it. Keep the CTA below the thank-you
+ * and behind a rule — it is an aside, not the point. See BirthdayGiving.tsx.
  */
 
 const FIELD_LABEL =
@@ -28,6 +34,9 @@ const FIELD_TEXTAREA = `${FIELD_BASE} resize-none rounded-3xl`;
 const EMPTY = { name: "", location: "", message: "", email: "" };
 
 export default function BirthdayTestimonyForm() {
+  // `null` outside a GivingProvider, in which case the giving CTA is simply not
+  // offered — the form still works anywhere it is mounted.
+  const giving = useGiving();
   const [form, setForm] = useState(EMPTY);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
@@ -80,6 +89,18 @@ export default function BirthdayTestimonyForm() {
         >
           Share another testimony
         </Button>
+
+        {giving && (
+          <div className="mt-8 border-t border-bday-blue/10 pt-8">
+            <p className="mx-auto mb-6 max-w-md font-sans text-base leading-relaxed text-bday-ink">
+              If you would love to give to Pastor Ayodele, please kindly use the
+              button below.
+            </p>
+            <GiveButton className="w-full sm:w-auto">
+              Give to Pastor Ayodele
+            </GiveButton>
+          </div>
+        )}
       </div>
     );
   }

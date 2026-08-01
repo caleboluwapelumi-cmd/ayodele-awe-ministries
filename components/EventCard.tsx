@@ -32,10 +32,20 @@ export default function EventCard({
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center bg-cream">
-            <span className="font-sans text-xs uppercase tracking-widest text-muted">
-              Event Image
-            </span>
+          /* Gradient placeholder, not a stock photo. A photograph of strangers
+             under an event's name reads as a photo *of that event* — the same
+             failure the Content Integrity Notes describe. The ministry mark on
+             the standard dark-hero gradient claims nothing. */
+          <div className="flex h-full items-center justify-center bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+            <Image
+              src="/images/awe-min-mark.png"
+              alt=""
+              aria-hidden
+              width={702}
+              height={662}
+              sizes="80px"
+              className="h-16 w-auto opacity-25"
+            />
           </div>
         )}
 

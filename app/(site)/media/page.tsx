@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Image from "next/image";
 import NewsletterForm from "@/components/NewsletterForm";
 import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
@@ -73,30 +72,22 @@ export default function MediaPage() {
           </AnimateIn>
 
           <AnimateIn direction="right">
-            <div className="relative overflow-hidden border-t-2 border-blue-sky p-12 text-center">
-              <Image
-                src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=800&q=80"
-                alt=""
-                aria-hidden
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-white/85" />
-              <div className="relative z-10">
-                <div className="mx-auto mb-6 flex justify-center">
-                  <TelegramIcon size={64} />
-                </div>
-                <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-blue-navy">
-                  Telegram Teachings
-                </h3>
-                <p className="mb-6 font-sans text-sm text-muted">
-                  Sermons · Bible Studies · Prophetic Messages
-                </p>
-                <Button href={SOCIALS.telegram} variant="primary" external>
-                  Join now
-                </Button>
+            {/* Light-section gradient, not a photo. The decorative Unsplash
+                texture that was here sat under a bg-white/85 wash, so it was
+                barely perceptible — and still cost a cross-origin fetch. */}
+            <div className="overflow-hidden border-t-2 border-blue-sky bg-gradient-to-br from-white to-[#EEF3FA] p-12 text-center">
+              <div className="mx-auto mb-6 flex justify-center">
+                <TelegramIcon size={64} />
               </div>
+              <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-blue-navy">
+                Telegram Teachings
+              </h3>
+              <p className="mb-6 font-sans text-sm text-muted">
+                Sermons · Bible Studies · Prophetic Messages
+              </p>
+              <Button href={SOCIALS.telegram} variant="primary" external>
+                Join now
+              </Button>
             </div>
           </AnimateIn>
         </div>

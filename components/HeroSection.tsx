@@ -10,6 +10,23 @@ import { MINISTER_NAME, TAGLINE } from "@/lib/constants";
 const SLIDE_DURATION_MS = 6000;
 
 /**
+ * How long after hydration the non-leading slides are allowed into the DOM.
+ *
+ * ⚠️ `loading="lazy"` does NOT defer these on its own, and that was the bug.
+ * Every slide is stacked at `inset-0`, so slide 2 is *inside the viewport* from
+ * the first paint — lazy loading only defers images that are off-screen, so the
+ * browser fetched all 586 KB of hero artwork at once and slide 2 (417 KB, the
+ * largest file in the repo) competed with slide 1 for bandwidth while slide 1
+ * was the LCP element.
+ *
+ * An <img> that is not in the document is never fetched, so the fix is to keep
+ * the later slides out of the markup rather than to hint at the loader. 2.5s
+ * clears first paint comfortably and still leaves 3.5s of headroom before the
+ * 6s crossfade needs the image decoded.
+ */
+const DEFERRED_SLIDE_DELAY_MS = 2500;
+
+/**
  * Hero backdrop rotation. These sit behind the headline and are purely
  * decorative (aria-hidden) — the h1 already names the minister, so announcing
  * a rotating set of images would only add noise for screen readers.
@@ -26,6 +43,20 @@ const SLIDES = [
 
 export default function HeroSection() {
   const [active, setActive] = useState(0);
+  /**
+   * `false` on the server and on the first client render alike, so the deferred
+   * slides are absent from the SSR markup and hydration still matches — the
+   * same contract `AnimateIn` keeps for its media queries.
+   */
+  const [deferredMounted, setDeferredMounted] = useState(false);
+
+  useEffect(() => {
+    const id = setTimeout(
+      () => setDeferredMounted(true),
+      DEFERRED_SLIDE_DELAY_MS,
+    );
+    return () => clearTimeout(id);
+  }, []);
 
   useEffect(() => {
     const id = setInterval(
@@ -40,19 +71,30 @@ export default function HeroSection() {
       {/* Background slideshow — every slide is stacked in the same box so the
           section height never depends on which one is showing */}
       <div aria-hidden className="absolute inset-0">
-        {SLIDES.map((slide, i) => (
-          <Image
-            key={slide.src}
-            src={slide.src}
-            alt=""
-            fill
-            priority={i === 0}
-            sizes="100vw"
-            className={`object-cover transition-opacity duration-1000 ease-in-out ${
-              slide.position
-            } ${i === active ? "opacity-100" : "opacity-0"}`}
-          />
-        ))}
+        {SLIDES.map((slide, i) => {
+          // Slide 0 is the LCP element and always renders. The rest stay out of
+          // the DOM until the delay above has run — see DEFERRED_SLIDE_DELAY_MS
+          // for why `loading="lazy"` cannot do this job here.
+          if (i > 0 && !deferredMounted) return null;
+
+          return (
+            <Image
+              key={slide.src}
+              src={slide.src}
+              alt=""
+              fill
+              // Never both: Next throws if `priority` and `loading` are passed
+              // together.
+              {...(i === 0
+                ? { priority: true }
+                : { loading: "lazy" as const })}
+              sizes="100vw"
+              className={`object-cover transition-opacity duration-1000 ease-in-out ${
+                slide.position
+              } ${i === active ? "opacity-100" : "opacity-0"}`}
+            />
+          );
+        })}
       </div>
 
       {/* Overlays — flat dark for legibility, then a navy wash into the next section */}
@@ -95,7 +137,13 @@ export default function HeroSection() {
           <button
             key={slide.src}
             type="button"
-            onClick={() => setActive(i)}
+            onClick={() => {
+              // A tap inside the first 2.5s would otherwise select a slide that
+              // is not in the DOM yet and leave the hero blank, so an explicit
+              // choice mounts them immediately.
+              setDeferredMounted(true);
+              setActive(i);
+            }}
             aria-label={`Show image ${i + 1} of ${SLIDES.length}`}
             aria-current={i === active}
             className="group flex h-11 w-11 items-center justify-center"

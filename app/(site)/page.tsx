@@ -132,7 +132,6 @@ export default function HomePage() {
               title={PRAYER_SURGE.title}
               date={surge.shortDate}
               location={PRAYER_SURGE.location}
-              imageUrl="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=1200&q=80"
               registerLink="/events"
               ctaLabel="Event details"
             />
@@ -178,17 +177,15 @@ export default function HomePage() {
       </section>
 
       {/* ── 6. Partners ── */}
-      <section className="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <Image
-          src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600&q=80"
-          alt=""
+      {/* The backdrop is a CSS gradient, not a photo. It was a decorative
+          Unsplash image (aria-hidden) sitting under a black/70 scrim, so almost
+          none of it survived to the eye — but every visitor still paid for a
+          cross-origin fetch through the image optimiser. Same look, no request. */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-wine-deep via-blue-navy to-blue-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div
           aria-hidden
-          fill
-          sizes="100vw"
-          className="object-cover"
+          className="absolute inset-0 bg-gradient-to-tr from-wine/25 via-transparent to-blue-deep/40"
         />
-        <div className="absolute inset-0 bg-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-br from-wine-deep/70 via-transparent to-blue-navy/70" />
 
         <AnimateIn direction="up" className="relative z-10 mx-auto max-w-3xl text-center">
           <SectionLabel tone="onAccent">Partnership</SectionLabel>

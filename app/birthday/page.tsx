@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
 import BirthdayConfetti from "@/components/BirthdayConfetti";
 import BirthdayCountdown from "@/components/BirthdayCountdown";
 import BirthdayTestimonyForm from "@/components/BirthdayTestimonyForm";
-import { CopyField, SharePage } from "@/components/CopyToClipboard";
+import {
+  GiveButton,
+  GivingProvider,
+  type GivingAccount,
+} from "@/components/BirthdayGiving";
+import { SharePage } from "@/components/CopyToClipboard";
 import { BIRTHDAY, BIRTHDAY_DATE_SHORT } from "@/lib/birthday";
 import { MINISTER_NAME } from "@/lib/constants";
 
@@ -23,7 +29,14 @@ import { MINISTER_NAME } from "@/lib/constants";
  * ⚠️ It also has its own palette — white primary, deep blue secondary, orange
  * accent — carried by the `bday-*` tokens in globals.css. None of the site's
  * blue/wine classes appear here. Section rhythm alternates dark → dark →
- * light → dark → light, so white carries the two longest sections.
+ * light → light, so white carries the two longest sections.
+ *
+ * ⚠️ There is no giving section. Account details used to be a fifth section
+ * sitting in plain view between the testimony form and the close; they now live
+ * in a modal (components/BirthdayGiving.tsx) reachable only from the testimony
+ * form's success state and one quiet link in the closing section. The page asks
+ * for a testimony first and offers a way to give second — putting bank details
+ * back on the page inverts that. Don't.
  *
  * British English throughout ("honour"), matching the ministry's UK base.
  */
@@ -60,6 +73,8 @@ export const metadata: Metadata = {
 /**
  * Real account details, client-supplied 1 August 2026. Nothing else reads this
  * array and no CMS is involved — to change an account, edit the string here.
+ * It is handed to `GivingProvider`, which renders it inside the modal; nothing
+ * on the page itself shows it.
  *
  * ⚠️ The two account NAMES differ on purpose: "Ayodele Awe" on the UK account,
  * "Ayodele Oladapo Awe" on the Nigerian one. That is how each bank holds them.
@@ -71,11 +86,15 @@ export const metadata: Metadata = {
  * hyphens because that is the form people check against their banking app; UK
  * banks accept it with or without them.
  *
+ * ⚠️ `flag` is an ISO country code, not the 🇬🇧/🇳🇬 emoji it replaced — those
+ * have no glyph on Windows desktop browsers and rendered as "GB"/"NG" or an
+ * empty box. See components/icons/FlagIcons.tsx.
+ *
  * `mono` sets `tabular-nums` so digits line up. Use it for numbers only.
  */
-const GIVING = [
+const GIVING: GivingAccount[] = [
   {
-    flag: "🇬🇧",
+    flag: "GB",
     region: "United Kingdom",
     fields: [
       { label: "Bank Name", value: "HSBC Bank", mono: false },
@@ -85,7 +104,7 @@ const GIVING = [
     ],
   },
   {
-    flag: "🇳🇬",
+    flag: "NG",
     region: "Nigeria",
     fields: [
       { label: "Bank Name", value: "Access Bank", mono: false },
@@ -97,7 +116,10 @@ const GIVING = [
 
 export default function BirthdayPage() {
   return (
-    <>
+    /* The provider owns the giving modal and renders it as a sibling of the
+       page, outside every `AnimateIn` — see the note in BirthdayGiving.tsx for
+       why that placement is not optional. */
+    <GivingProvider accounts={GIVING}>
       {/* ── 1. Hero ───────────────────────────────────────────────────────── */}
       {/* `min-h-[100svh]`, not `min-h-screen`: `vh` on mobile Safari is the
           viewport *without* browser chrome, so a full-height hero is clipped
@@ -111,18 +133,22 @@ export default function BirthdayPage() {
         />
         <BirthdayConfetti />
 
-        {/* The ministry lockup. ⚠️ Deliberately NOT a link — the page offers no
-            route to the rest of the site, which has not launched. White on
-            transparent, so it only ever sits on a dark section. */}
+        {/* The ministry lockup — links to `/birthday`, i.e. back to the top of
+            this page. ⚠️ It must NEVER point at `/`: the page still offers no
+            route to the rest of the site, which has not launched. This is a
+            back-to-top affordance only. White on transparent, so it only ever
+            sits on a dark section. */}
         <div className="relative z-10 mx-auto flex w-full max-w-7xl shrink-0 justify-center lg:justify-start">
-          <Image
-            src="/images/awe-min-logo.png"
-            alt="Ayodele Awe Ministries"
-            width={1200}
-            height={662}
-            priority
-            className="h-11 w-auto sm:h-14"
-          />
+          <Link href="/birthday" aria-label="Back to top">
+            <Image
+              src="/images/awe-min-logo.png"
+              alt="Ayodele Awe Ministries"
+              width={1200}
+              height={662}
+              priority
+              className="h-11 w-auto sm:h-14"
+            />
+          </Link>
         </div>
 
         <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center py-10 sm:py-14">
@@ -170,6 +196,12 @@ export default function BirthdayPage() {
               <p className="mx-auto mb-10 max-w-xl text-balance font-sans text-lg leading-relaxed text-white/75 sm:text-xl lg:mx-0">
                 A Life of Revival, Discipleship, and Pointing Others to Christ
               </p>
+              {/* ⚠️ One CTA, and it is the testimony. There was a second
+                  button here pointing at `#give`; it went with the giving
+                  section. Giving is now offered after a testimony has been
+                  shared, and quietly in the closing section — putting it back
+                  in the hero would make it the first thing the page asks for,
+                  which is the opposite of the intent. */}
               <div className="mx-auto flex max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center lg:mx-0 lg:justify-start">
                 <Button
                   href="#testimony"
@@ -178,14 +210,6 @@ export default function BirthdayPage() {
                   className="w-full sm:w-auto"
                 >
                   Share your testimony
-                </Button>
-                <Button
-                  href="#give"
-                  variant="outline"
-                  size="lg"
-                  className="w-full text-white sm:w-auto"
-                >
-                  Give to God&rsquo;s servant
                 </Button>
               </div>
             </AnimateIn>
@@ -239,70 +263,7 @@ export default function BirthdayPage() {
         </div>
       </section>
 
-      {/* ── 4. Giving ─────────────────────────────────────────────────────── */}
-      <section
-        id="give"
-        className="relative overflow-hidden bg-gradient-to-br from-bday-blue via-bday-navy to-bday-blue px-4 py-20 sm:px-6 sm:py-28 lg:px-16"
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_100%,rgba(235,100,52,0.22),transparent_60%)]"
-        />
-
-        <div className="relative z-10 mx-auto max-w-5xl">
-          <AnimateIn direction="up" className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
-            <SectionLabel tone="bdayDark">Giving</SectionLabel>
-            <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-              Give to God&rsquo;s Servant
-            </h2>
-            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/75 sm:text-lg">
-              As we celebrate his life, you may also honour him with a birthday
-              gift of appreciation.
-            </p>
-            <div className="mx-auto h-0.5 w-16 bg-bday-orange" />
-          </AnimateIn>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
-            {GIVING.map((account, i) => (
-              <AnimateIn key={account.region} delay={i * 0.1} className="h-full">
-                <div className="flex h-full flex-col border-t-2 border-bday-orange bg-white/[0.07] p-6 backdrop-blur-sm sm:p-8">
-                  <div className="mb-4 flex items-center gap-3 sm:mb-6">
-                    <span aria-hidden className="text-3xl leading-none">
-                      {account.flag}
-                    </span>
-                    <h3 className="font-serif text-xl font-bold leading-tight text-white">
-                      {account.region} Account
-                    </h3>
-                  </div>
-
-                  <div className="flex-1">
-                    {account.fields.map((f) => (
-                      <CopyField
-                        key={f.label}
-                        label={f.label}
-                        value={f.value}
-                        mono={f.mono}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </AnimateIn>
-            ))}
-          </div>
-
-          <AnimateIn direction="up" className="mx-auto mt-12 max-w-2xl text-center sm:mt-16">
-            <p className="text-balance font-serif text-lg font-bold italic leading-relaxed text-white/85">
-              &ldquo;Honour the Lord with your possessions, and with the
-              firstfruits of all your increase.&rdquo;
-            </p>
-            <p className="mt-4 font-sans text-xs uppercase tracking-[0.2em] text-bday-orange-light">
-              Proverbs 3:9
-            </p>
-          </AnimateIn>
-        </div>
-      </section>
-
-      {/* ── 5. Closing ────────────────────────────────────────────────────── */}
+      {/* ── 4. Closing ────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#F1F5FA] to-white px-4 py-20 sm:px-6 sm:py-28 lg:px-16">
         <span
           aria-hidden
@@ -333,12 +294,31 @@ export default function BirthdayPage() {
             </p>
           </div>
 
+          {/* The second, quieter way into the giving modal — for anyone who
+              wants to give without writing a testimony first. Deliberately an
+              `outline` button and one size down from the share CTA below it:
+              the page's ask is the testimony, this is an aside.
+              ⚠️ `bday-orange-deep` (5.1:1 on white), never the brand
+              `bday-orange` — that is 3.3:1 and fails AA at this size. */}
+          <div className="mx-auto mb-14 max-w-md">
+            <p className="mb-5 font-sans text-base leading-relaxed text-bday-ink">
+              You may also honour him with a birthday gift of appreciation.
+            </p>
+            <GiveButton
+              variant="outline"
+              size="default"
+              className="w-full text-bday-orange-deep hover:bg-bday-orange-deep/5 sm:w-auto"
+            >
+              Give to Pastor Ayodele
+            </GiveButton>
+          </div>
+
           <p className="mb-6 font-sans text-base font-semibold text-bday-blue">
             Know someone who should celebrate with us?
           </p>
           <SharePage />
         </AnimateIn>
       </section>
-    </>
+    </GivingProvider>
   );
 }

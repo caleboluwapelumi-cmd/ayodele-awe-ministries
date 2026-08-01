@@ -128,17 +128,14 @@ export default function AboutPage() {
       </section>
 
       {/* ── 3. Mandate — the umbrella vision the expressions below serve ── */}
-      <section className="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <Image
-          src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&q=80"
-          alt=""
+      {/* Gradient backdrop, not a photo — the former Unsplash texture sat under
+          a blue-navy/85 wash plus a second gradient, so the section already read
+          as this gradient. It just cost a network request to get here. */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div
           aria-hidden
-          fill
-          sizes="100vw"
-          className="object-cover"
+          className="absolute inset-0 bg-gradient-to-t from-blue-navy/60 via-transparent to-blue-navy/30"
         />
-        <div className="absolute inset-0 bg-blue-navy/85" />
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-navy/80 via-blue-deep/60 to-wine-deep/80" />
 
         <div className="relative z-10 mx-auto max-w-7xl text-center">
           <AnimateIn direction="up">
