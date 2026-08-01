@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import "./globals.css";
 
 /**
@@ -45,6 +43,19 @@ export const metadata: Metadata = {
     "Raising Voices, Building Houses, Transforming Nations — The official ministry of Ayodele Oladapo Awe, serving communities across the United Kingdom and Nigeria.",
 };
 
+/**
+ * The root layout carries `<html>`/`<body>`, the font and `metadataBase` — and
+ * nothing else. Chrome lives one level down:
+ *
+ *   app/(site)/layout.tsx  → Navbar + Footer, wraps the whole main site
+ *   app/birthday/layout.tsx → no chrome at all
+ *
+ * `/birthday` is a standalone shareable sent by direct link while the main site
+ * is still unlaunched, so it must not offer any route out of itself. Route
+ * groups are the App Router's way of giving one branch of the tree different
+ * chrome without changing any URL — `(site)` is parenthesised, so `/about` is
+ * still `/about`. See CLAUDE.md → "The birthday page".
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -53,9 +64,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning className={`${clashDisplay.variable} antialiased overflow-x-hidden`}>
-        <Navbar />
-        <main className="pt-[72px] lg:pt-0">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );

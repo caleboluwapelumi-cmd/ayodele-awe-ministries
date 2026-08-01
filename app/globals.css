@@ -13,6 +13,39 @@
   --color-wine-deep: #4A0D20;
   --color-muted: #6B7A99;
 
+  /* ── /birthday only ────────────────────────────────────────────────────
+     The birthday page is a standalone shareable with its own palette:
+     white primary, deep blue secondary, orange accent. These are additive —
+     nothing above changes, so the main site is untouched when it launches.
+
+     ⚠️ There are three oranges and they are NOT interchangeable. #EB6434 is
+     only 3.3:1 on white and 4.0:1 on the deep blue — fine for a 60px numeral
+     (AA large is 3:1), nowhere near enough for a 12px label. Each measured
+     figure below is against the ground that tone actually renders on, which
+     is why the light one is not simply the brand colour lightened:
+       --color-bday-orange       #EB6434  the brand accent. Glows, rules,
+                                          borders, display-size numerals only.
+       --color-bday-orange-deep  #BC4820  5.1:1 under white — the solid CTA
+                                          fill; also small accent text on the
+                                          light sections, where it is 4.7:1
+                                          even on the #F1F5FA tint (the
+                                          brighter #C74E23 was 4.2:1 there).
+       --color-bday-orange-dark  #9C3A18  the CTA hover, 6.9:1 under white.
+       --color-bday-orange-light #FF9A70  small accent text on DARK only —
+                                          4.8:1 at the brightest point of the
+                                          hero's orange glow, 6.3:1 on flat
+                                          deep blue. It is 2.2:1 on white, so
+                                          it must never touch a light section.
+     --color-bday-ink is body copy on the light sections, 6.9:1 at worst. */
+  --color-bday-navy: #011E3C;
+  --color-bday-blue: #013161;
+  --color-bday-blue-mid: #024A8F;
+  --color-bday-orange: #EB6434;
+  --color-bday-orange-deep: #BC4820;
+  --color-bday-orange-dark: #9C3A18;
+  --color-bday-orange-light: #FF9A70;
+  --color-bday-ink: #45566B;
+
   /* Typography — Clash Display everywhere.
      `--font-serif` is kept as an alias so the ~15 pages using the `font-serif`
      utility on headings need no edits; it no longer means an actual serif. */
@@ -77,7 +110,7 @@ section[id] {
   background-image: linear-gradient(
     100deg,
     #ffffff 35%,
-    var(--color-blue-sky) 48%,
+    var(--color-bday-orange-light) 48%,
     #ffffff 62%
   );
   background-size: 200% 100%;

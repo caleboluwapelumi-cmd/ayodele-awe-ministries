@@ -11,22 +11,33 @@ import { BIRTHDAY, BIRTHDAY_DATE_SHORT } from "@/lib/birthday";
 import { MINISTER_NAME } from "@/lib/constants";
 
 /**
- * The birthday page — a one-off, deliberately the most dramatic page on the
- * site. It is NOT in the Navbar: it is shared by direct link and is expected to
- * fall out of use after the day itself. See CLAUDE.md → "The birthday page".
+ * The birthday page — a standalone, one-off experience.
+ *
+ * ⚠️ It is NOT part of the main site. The main site has not launched; this
+ * link is the only thing being shared. So the page sits outside the `(site)`
+ * route group and renders with no Navbar, no Footer and **no link to any
+ * other route** — the ministry lockup at the top of the hero is a brand mark,
+ * deliberately not an anchor. The only navigation is the two on-page hash
+ * jumps below. See app/birthday/layout.tsx and CLAUDE.md.
+ *
+ * ⚠️ It also has its own palette — white primary, deep blue secondary, orange
+ * accent — carried by the `bday-*` tokens in globals.css. None of the site's
+ * blue/wine classes appear here. Section rhythm alternates dark → dark →
+ * light → dark → light, so white carries the two longest sections.
  *
  * British English throughout ("honour"), matching the ministry's UK base.
  */
 
+const SHARE_DESCRIPTION =
+  "Join us in celebrating Pastor Ayodele's birthday — share a testimony and honour God's servant";
+
 export const metadata: Metadata = {
   title: "Celebrating Pastor Ayodele Oladapo Awe 🎉",
-  description:
-    "Join us in celebrating Pastor Ayodele's birthday — share a testimony and sow a seed of honour",
+  description: SHARE_DESCRIPTION,
   openGraph: {
     type: "website",
     title: "Celebrating Pastor Ayodele Oladapo Awe 🎉",
-    description:
-      "Join us in celebrating Pastor Ayodele's birthday — share a testimony and sow a seed of honour",
+    description: SHARE_DESCRIPTION,
     images: [
       {
         // 640×640. Square previews render fine on WhatsApp, which is where this
@@ -41,8 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Celebrating Pastor Ayodele Oladapo Awe 🎉",
-    description:
-      "Join us in celebrating Pastor Ayodele's birthday — share a testimony and sow a seed of honour",
+    description: SHARE_DESCRIPTION,
     images: ["/images/apostle-portrait.jpg"],
   },
 };
@@ -89,80 +99,114 @@ export default function BirthdayPage() {
   return (
     <>
       {/* ── 1. Hero ───────────────────────────────────────────────────────── */}
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-wine-deep via-blue-navy to-blue-deep px-4 py-24 sm:px-6 lg:px-16">
-        {/* Soft radial glows — wine behind the copy, blue-sky behind the
+      {/* `min-h-[100svh]`, not `min-h-screen`: `vh` on mobile Safari is the
+          viewport *without* browser chrome, so a full-height hero is clipped
+          top and bottom until the address bar collapses. */}
+      <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-gradient-to-br from-bday-navy via-bday-blue to-bday-navy px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-10 lg:px-16">
+        {/* Soft radial glows — orange behind the copy, blue behind the
             portrait — so the gradient does not read as a flat wash. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_35%,rgba(139,35,70,0.45),transparent_55%),radial-gradient(circle_at_78%_60%,rgba(74,144,217,0.35),transparent_55%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_75%,rgba(235,100,52,0.30),transparent_58%),radial-gradient(circle_at_78%_22%,rgba(2,74,143,0.65),transparent_60%)]"
         />
         <BirthdayConfetti />
 
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
-          <AnimateIn direction="left">
-            <SectionLabel tone="dark">{BIRTHDAY.fullDate}</SectionLabel>
-            <h1 className="mb-6 font-serif text-5xl font-bold leading-tight tracking-tight text-white sm:text-7xl md:text-8xl">
-              Celebrating{" "}
-              <span className="shimmer-text">Pastor {MINISTER_NAME}</span>
-            </h1>
-            <div className="mb-8 h-0.5 w-16 bg-blue-sky" />
-            <p className="mb-10 max-w-xl font-sans text-lg leading-relaxed text-white/70 sm:text-xl">
-              A Life of Revival, Discipleship, and Pointing Others to Christ
-            </p>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button href="#testimony" variant="secondary" size="lg">
-                Share your testimony
-              </Button>
-              <Button
-                href="#honour"
-                variant="outline"
-                size="lg"
-                className="text-white"
-              >
-                Sow a seed of honour
-              </Button>
-            </div>
-          </AnimateIn>
+        {/* The ministry lockup. ⚠️ Deliberately NOT a link — the page offers no
+            route to the rest of the site, which has not launched. White on
+            transparent, so it only ever sits on a dark section. */}
+        <div className="relative z-10 mx-auto flex w-full max-w-7xl shrink-0 justify-center lg:justify-start">
+          <Image
+            src="/images/awe-min-logo.png"
+            alt="Ayodele Awe Ministries"
+            width={1200}
+            height={662}
+            priority
+            className="h-11 w-auto sm:h-14"
+          />
+        </div>
 
-          {/* Portrait medallion. ⚠️ Circular on purpose — the site's image
-              containers are otherwise sharp-cornered, but a celebratory
-              portrait under a glow ring is the one place that rule is set
-              aside. See CLAUDE.md. */}
-          <AnimateIn direction="right" className="flex justify-center">
-            <div className="relative">
-              <div
-                aria-hidden
-                className="absolute -inset-8 rounded-full bg-[radial-gradient(circle,rgba(74,144,217,0.35),transparent_70%)] blur-2xl"
-              />
-              <div className="relative h-64 w-64 overflow-hidden rounded-full ring-4 ring-white/20 ring-offset-4 ring-offset-transparent sm:h-80 sm:w-80 md:h-96 md:w-96">
-                <Image
-                  src="/images/apostle-portrait.jpg"
-                  alt={`Pastor ${MINISTER_NAME}`}
-                  fill
-                  priority
-                  sizes="(min-width: 768px) 384px, (min-width: 640px) 320px, 256px"
-                  className="object-cover"
+        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center py-10 sm:py-14">
+          <div className="grid w-full grid-cols-1 items-center gap-10 sm:gap-14 lg:grid-cols-2 lg:gap-16">
+            {/* Portrait medallion. ⚠️ Circular on purpose — the site's image
+                containers are otherwise sharp-cornered, but a celebratory
+                portrait under a glow ring is the one place that rule is set
+                aside. See CLAUDE.md.
+
+                ⚠️ `order-first lg:order-last`: the h1 stays first in the DOM
+                (it is the page's heading, and the preview crawlers read it),
+                but on a phone the medallion should lead — it is what makes the
+                page read as a celebration in the first screenful. */}
+            <AnimateIn
+              direction="right"
+              className="order-first flex justify-center lg:order-last"
+            >
+              <div className="relative">
+                <div
+                  aria-hidden
+                  className="absolute -inset-6 rounded-full bg-[radial-gradient(circle,rgba(235,100,52,0.40),transparent_70%)] blur-2xl sm:-inset-8"
                 />
+                <div className="relative h-56 w-56 overflow-hidden rounded-full ring-4 ring-bday-orange/40 ring-offset-4 ring-offset-transparent sm:h-72 sm:w-72 lg:h-80 lg:w-80 xl:h-96 xl:w-96">
+                  <Image
+                    src="/images/apostle-portrait.jpg"
+                    alt={`Pastor ${MINISTER_NAME}`}
+                    fill
+                    priority
+                    sizes="(min-width: 1280px) 384px, (min-width: 1024px) 320px, (min-width: 640px) 288px, 224px"
+                    className="object-cover"
+                  />
+                </div>
               </div>
-            </div>
-          </AnimateIn>
+            </AnimateIn>
+
+            <AnimateIn direction="left" className="text-center lg:text-left">
+              <SectionLabel tone="bdayDark">{BIRTHDAY.fullDate}</SectionLabel>
+              {/* The name runs to 26 characters, so the base step is 40px, not
+                  48px — at 48px "Celebrating" alone fills a 375px line. */}
+              <h1 className="mb-6 text-balance font-serif text-[2.5rem] font-bold leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl">
+                Celebrating{" "}
+                <span className="shimmer-text">Pastor {MINISTER_NAME}</span>
+              </h1>
+              <div className="mx-auto mb-8 h-0.5 w-16 bg-bday-orange lg:mx-0" />
+              <p className="mx-auto mb-10 max-w-xl text-balance font-sans text-lg leading-relaxed text-white/75 sm:text-xl lg:mx-0">
+                A Life of Revival, Discipleship, and Pointing Others to Christ
+              </p>
+              <div className="mx-auto flex max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center lg:mx-0 lg:justify-start">
+                <Button
+                  href="#testimony"
+                  variant="birthday"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Share your testimony
+                </Button>
+                <Button
+                  href="#give"
+                  variant="outline"
+                  size="lg"
+                  className="w-full text-white sm:w-auto"
+                >
+                  Give to God&rsquo;s servant
+                </Button>
+              </div>
+            </AnimateIn>
+          </div>
         </div>
       </section>
 
       {/* ── 2. Countdown ──────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="relative overflow-hidden bg-gradient-to-b from-bday-navy via-bday-blue to-bday-navy px-4 py-20 sm:px-6 sm:py-28 lg:px-16">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(107,21,48,0.5),transparent_60%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(235,100,52,0.28),transparent_62%)]"
         />
 
         <div className="relative z-10 mx-auto max-w-7xl">
-          <AnimateIn direction="up" className="mx-auto mb-16 max-w-3xl text-center">
-            <SectionLabel tone="dark">{BIRTHDAY_DATE_SHORT}</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+          <AnimateIn direction="up" className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
+            <SectionLabel tone="bdayDark">{BIRTHDAY_DATE_SHORT}</SectionLabel>
+            <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Counting Down to His Special Day
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-bday-orange" />
           </AnimateIn>
 
           <AnimateIn direction="fade">
@@ -174,19 +218,19 @@ export default function BirthdayPage() {
       {/* ── 3. Testimonies ────────────────────────────────────────────────── */}
       <section
         id="testimony"
-        className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16"
+        className="bg-gradient-to-b from-white to-[#F1F5FA] px-4 py-20 sm:px-6 sm:py-28 lg:px-16"
       >
         <div className="mx-auto max-w-3xl">
-          <AnimateIn direction="up" className="mb-12 text-center">
-            <SectionLabel tone="light">Testimonies</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+          <AnimateIn direction="up" className="mb-10 text-center sm:mb-12">
+            <SectionLabel tone="bdayLight">Testimonies</SectionLabel>
+            <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-bday-blue sm:text-4xl md:text-5xl">
               Share How He&rsquo;s Blessed Your Life
             </h2>
-            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg">
+            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-bday-ink sm:text-lg">
               Your words are a gift — share a testimony, a memory, or a word of
               appreciation for Pastor Ayodele&rsquo;s life and ministry.
             </p>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-bday-orange" />
           </AnimateIn>
 
           <AnimateIn direction="up" delay={0.1}>
@@ -197,27 +241,32 @@ export default function BirthdayPage() {
 
       {/* ── 4. Giving ─────────────────────────────────────────────────────── */}
       <section
-        id="honour"
-        className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16"
+        id="give"
+        className="relative overflow-hidden bg-gradient-to-br from-bday-blue via-bday-navy to-bday-blue px-4 py-20 sm:px-6 sm:py-28 lg:px-16"
       >
-        <div className="mx-auto max-w-7xl">
-          <AnimateIn direction="up" className="mx-auto mb-16 max-w-3xl text-center">
-            <SectionLabel tone="dark">Giving</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-              Sow a Seed of Honour
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_100%,rgba(235,100,52,0.22),transparent_60%)]"
+        />
+
+        <div className="relative z-10 mx-auto max-w-5xl">
+          <AnimateIn direction="up" className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
+            <SectionLabel tone="bdayDark">Giving</SectionLabel>
+            <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              Give to God&rsquo;s Servant
             </h2>
-            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
-              As we celebrate his life, you may also sow a birthday seed of
-              appreciation and honour.
+            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/75 sm:text-lg">
+              As we celebrate his life, you may also honour him with a birthday
+              gift of appreciation.
             </p>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-bday-orange" />
           </AnimateIn>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
             {GIVING.map((account, i) => (
               <AnimateIn key={account.region} delay={i * 0.1} className="h-full">
-                <div className="flex h-full flex-col border-t-2 border-blue-sky bg-blue-navy/40 p-8">
-                  <div className="mb-6 flex items-center gap-3">
+                <div className="flex h-full flex-col border-t-2 border-bday-orange bg-white/[0.07] p-6 backdrop-blur-sm sm:p-8">
+                  <div className="mb-4 flex items-center gap-3 sm:mb-6">
                     <span aria-hidden className="text-3xl leading-none">
                       {account.flag}
                     </span>
@@ -241,12 +290,12 @@ export default function BirthdayPage() {
             ))}
           </div>
 
-          <AnimateIn direction="up" className="mx-auto mt-16 max-w-2xl text-center">
-            <p className="font-serif text-lg font-bold italic leading-relaxed text-white/80">
+          <AnimateIn direction="up" className="mx-auto mt-12 max-w-2xl text-center sm:mt-16">
+            <p className="text-balance font-serif text-lg font-bold italic leading-relaxed text-white/85">
               &ldquo;Honour the Lord with your possessions, and with the
               firstfruits of all your increase.&rdquo;
             </p>
-            <p className="mt-4 font-sans text-xs uppercase tracking-[0.2em] text-blue-sky">
+            <p className="mt-4 font-sans text-xs uppercase tracking-[0.2em] text-bday-orange-light">
               Proverbs 3:9
             </p>
           </AnimateIn>
@@ -254,35 +303,37 @@ export default function BirthdayPage() {
       </section>
 
       {/* ── 5. Closing ────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#F1F5FA] to-white px-4 py-20 sm:px-6 sm:py-28 lg:px-16">
         <span
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 select-none font-serif text-[200px] leading-none text-white/5"
+          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 select-none font-serif text-[140px] leading-none text-bday-blue/[0.06] sm:text-[200px]"
         >
           &ldquo;
         </span>
 
         <AnimateIn direction="fade" className="relative z-10 mx-auto max-w-3xl text-center">
-          <SectionLabel tone="onAccent">With Thanksgiving</SectionLabel>
-          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+          <SectionLabel tone="bdayLight">With Thanksgiving</SectionLabel>
+          <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-bday-blue sm:text-4xl md:text-5xl">
             Happy Birthday, Pastor Ayodele
           </h2>
-          <p className="mx-auto mb-10 max-w-2xl font-sans text-base leading-relaxed text-white/75 sm:text-lg">
+          <p className="mx-auto mb-10 max-w-2xl font-sans text-base leading-relaxed text-bday-ink sm:text-lg">
             From Norwich to Ado Ekiti and far beyond, we thank God for a life
             given to revival, to discipleship, and to pointing people to Christ.
             May the years ahead be fuller still.
           </p>
 
-          <p className="mx-auto mb-3 max-w-2xl font-serif text-lg font-bold italic leading-relaxed text-white sm:text-xl">
-            &ldquo;Remember those who rule over you, who have spoken the word of
-            God to you, whose faith follow, considering the outcome of their
-            conduct.&rdquo;
-          </p>
-          <p className="mb-12 font-sans text-xs uppercase tracking-[0.2em] text-white/60">
-            Hebrews 13:7
-          </p>
+          <div className="mx-auto mb-12 max-w-2xl border-t-2 border-bday-orange bg-white p-6 shadow-sm sm:p-8">
+            <p className="text-balance font-serif text-lg font-bold italic leading-relaxed text-bday-blue sm:text-xl">
+              &ldquo;Remember those who rule over you, who have spoken the word
+              of God to you, whose faith follow, considering the outcome of
+              their conduct.&rdquo;
+            </p>
+            <p className="mt-4 font-sans text-xs uppercase tracking-[0.2em] text-bday-orange-deep">
+              Hebrews 13:7
+            </p>
+          </div>
 
-          <p className="mb-6 font-sans text-base font-semibold text-white">
+          <p className="mb-6 font-sans text-base font-semibold text-bday-blue">
             Know someone who should celebrate with us?
           </p>
           <SharePage />

@@ -43,6 +43,41 @@ Don't "fix" those.
 --color-muted:      #6B7A99
 ```
 
+### ⚠️ `/birthday` has its own palette — these tokens are additive
+The birthday page is a standalone shareable and runs on white / deep blue /
+orange, not the site's blue/wine. Its tokens live in the same `@theme inline`
+block, prefixed `bday-`, and **nothing above changed** — the main site is
+untouched for launch.
+
+```
+--color-bday-navy:         #011E3C  ← gradient dark end
+--color-bday-blue:         #013161  ← secondary; headings on white
+--color-bday-blue-mid:     #024A8F  ← gradient light end, glows, confetti
+--color-bday-orange:       #EB6434  ← THE brand accent
+--color-bday-orange-deep:  #BC4820  ← solid CTA fill; accent text on light
+--color-bday-orange-dark:  #9C3A18  ← CTA hover
+--color-bday-orange-light: #FF9A70  ← accent text on dark
+--color-bday-ink:          #45566B  ← body copy on the light sections
+```
+
+⚠️ **The three oranges are not interchangeable, and picking by eye will fail
+contrast.** #EB6434 is 3.3:1 on white and 4.0:1 on the deep blue — that clears
+AA *large* (3:1) so it is right for a 60px countdown numeral, a glow, a rule or
+a border, and wrong for every piece of small text on the page. Each figure
+below is measured against the ground the tone actually renders on:
+
+| Tone | Use | Measured |
+|---|---|---|
+| `bday-orange-deep` | CTA fill (white label); 12px accent text on light | 5.1:1 under white, 4.7:1 on the `#F1F5FA` tint |
+| `bday-orange-dark` | CTA hover | 6.9:1 under white |
+| `bday-orange-light` | 12px accent text on **dark only** | 4.8:1 at the brightest point of the hero glow; **2.2:1 on white** |
+
+⚠️ **Measure against the card, not the section.** The countdown tiles and the
+giving cards are `bg-white/[0.07]`, which lifts their ground appreciably. White
+text at `/50` is 4.4:1 on the flat deep blue but only **3.6:1** on the card — the
+label opacities in `CopyField` (`/70`) and `BirthdayCountdown` (`/65`) are set
+from the card figure and are not free to be dialled back down.
+
 ### ⚠️ Class naming (Tailwind v4)
 There is **no `-DEFAULT` suffix** in Tailwind v4. Use `bg-blue` / `text-wine`, **never** `bg-blue-DEFAULT` / `bg-wine-DEFAULT` — those silently produce no styles.
 
@@ -62,6 +97,11 @@ There is **no `-DEFAULT` suffix** in Tailwind v4. Use `bg-blue` / `text-wine`, *
 | Dark blue (navy/deep) | `secondary` | `bg-white text-blue-navy hover:bg-cream` |
 | Wine / accent | `wine` | `bg-white text-wine hover:bg-cream` |
 | Any (secondary action) | `outline` | `border border-current hover:bg-white/10` — pass `className="text-white"` on dark |
+| **`/birthday` only** | `birthday` | `bg-bday-orange-deep text-white hover:bg-bday-orange-dark` |
+
+⚠️ The `birthday` fill is `bday-orange-deep` (#BC4820), **not** the brand
+`bday-orange` (#EB6434) — white on the brand orange is 3.3:1 and fails AA for a
+16px label. It reads as the same orange. Don't "correct" it to the brand token.
 
 - Sizes: `size="default"` (`px-8 py-3.5 text-sm`) or `size="lg"` (`px-10 py-4 text-base`).
 - All buttons are **pills** (`rounded-full`), **sentence case**, no letter-spacing.
@@ -102,7 +142,7 @@ hover effects still fire.
 - All headings: `font-serif` (→ Clash Display), `leading-tight`
 - `h1`: `font-serif font-bold tracking-tight` — 700 is the heaviest weight the font ships
 - `h2`/`h3`: `font-serif font-bold` — **never** `font-medium` or lighter on a heading
-- Section labels above headings: use `components/SectionLabel.tsx` (`font-sans text-xs font-semibold uppercase tracking-[0.2em]`), `tone="light"` on light sections, `tone="dark"` on dark, `tone="onAccent"` on wine
+- Section labels above headings: use `components/SectionLabel.tsx` (`font-sans text-xs font-semibold uppercase tracking-[0.2em]`), `tone="light"` on light sections, `tone="dark"` on dark, `tone="onAccent"` on wine. `/birthday` adds `tone="bdayDark"` / `tone="bdayLight"` — see the birthday palette above for why each takes a different orange
 - Body copy: `font-sans text-base sm:text-lg leading-relaxed`
 - Body text on dark: `text-white/70` · on light: `text-muted`
 - Heading size scale — h1 (page hero): `text-4xl sm:text-6xl`; h1 (full-screen hero): `text-5xl sm:text-7xl md:text-8xl`; h2: `text-3xl sm:text-4xl md:text-5xl`
@@ -159,32 +199,44 @@ back clean. The findings that produced these rules:
 ---
 
 ## Project Structure
+⚠️ **The tree has two chrome branches.** `app/layout.tsx` carries `<html>`,
+`<body>`, the font and `metadataBase` — and no chrome at all. The Navbar and
+Footer live in `app/(site)/layout.tsx`, and `/birthday` sits **outside** that
+group with its own minimal layout so it renders neither. See "The birthday
+page" below for why. `(site)` is a route group, so it contributes nothing to
+any URL — `app/(site)/about/page.tsx` is still `/about`, and the build output
+is unchanged route for route.
+
 ```
 app/
-  layout.tsx              ← Navbar + Footer wrap
-  page.tsx                ← Homepage
-  about/page.tsx          ← Bio, mandate, ministry teaser, life & family, stats
-  ministry/page.tsx       ← "Three Expressions of Ministry" in full — the three
+  layout.tsx              ← <html>/<body>, font, metadataBase. NO chrome
+  (site)/                 ← route group: everything that gets Navbar + Footer
+    layout.tsx            ← Navbar + <main className="pt-[72px] lg:pt-0"> + Footer
+    page.tsx              ← Homepage
+    about/page.tsx        ← Bio, mandate, ministry teaser, life & family, stats
+    ministry/page.tsx     ← "Three Expressions of Ministry" in full — the three
                             cards, their MINISTRY_PROGRAMMES tag rows, the vision
                             close and an invite CTA
-  churches/
-    page.tsx              ← "All Expressions" overview page
-    bhcc/page.tsx         ← Building House Christian Centre (UK) — British English
-    blcn/page.tsx         ← Bethel Livingstone Christian Network (Nigeria)
-  events/page.tsx
-  media/
-    page.tsx
-    teachings/page.tsx    ← Telegram teachings page
-    music/page.tsx        ← Spotify music page
-  books/page.tsx          ← Book showcase + Selar/Amazon buy buttons
-  itinerary/page.tsx
-  partners/page.tsx
-  contact/page.tsx
-  birthday/
-    page.tsx              ← One-off birthday page, 3 August 2026. NOT in the
-                            Navbar — shared by direct link only. See below
+    churches/
+      page.tsx            ← "All Expressions" overview page
+      bhcc/page.tsx       ← Building House Christian Centre (UK) — British English
+      blcn/page.tsx       ← Bethel Livingstone Christian Network (Nigeria)
+    events/page.tsx
+    media/
+      page.tsx
+      teachings/page.tsx  ← Telegram teachings page
+      music/page.tsx      ← Spotify music page
+    books/page.tsx        ← Book showcase + Selar/Amazon buy buttons
+    itinerary/page.tsx
+    partners/page.tsx
+    contact/page.tsx
+  birthday/               ← OUTSIDE (site): standalone, no Navbar, no Footer
+    layout.tsx            ← bare <main className="bg-white">
+    page.tsx              ← One-off birthday page, 3 August 2026. Shared by
+                            direct link only. See below
     admin/page.tsx        ← Password-gated testimony reader. Utility page,
-                            no hero, no reveals, not linked from anywhere
+                            no hero, no reveals, not linked from anywhere.
+                            Inherits the birthday layout, so no chrome either
   api/
     newsletter/route.ts
     contact/route.ts
@@ -229,7 +281,10 @@ components/
                             hero. ⚠️ Positions are a hard-coded table, NEVER
                             Math.random() (hydration). Honours prefers-reduced-motion
                             by rendering the dots still, not by removing them
-  BirthdayTestimonyForm.tsx ← 'use client' — posts to /api/birthday-testimony
+  BirthdayTestimonyForm.tsx ← 'use client' — posts to /api/birthday-testimony.
+                            ⚠️ Fields are `text-base` (16px) and that is not a
+                            style choice: iOS Safari zooms the viewport on focus
+                            for anything smaller and never zooms back out
   CopyToClipboard.tsx     ← 'use client' — exports `CopyField` (labelled account row
                             + copy icon button) and `SharePage` (native share sheet
                             where supported, else copy, plus a WhatsApp link).
@@ -697,15 +752,47 @@ A one-off page for Pastor Awe's birthday, **Monday 3 August 2026**, built 1
 August 2026 to be shared by direct link that evening. Five sections: hero →
 countdown → testimony form → giving/account details → closing + share.
 
-**It is deliberately NOT in the Navbar or the Footer.** It is a time-limited
-shareable, not site navigation — the only way in is the link the Pastor sends.
-Don't "fix" its absence from the nav.
+### ⚠️ It is a standalone site, not a page of this one
+**The main site has not launched.** `/birthday` is the only URL being shared,
+so the page is isolated from the rest of the tree and offers **no route out of
+itself**. Isolated on 1 August 2026:
+
+- `app/layout.tsx` was stripped to `<html>`/`<body>` + font + `metadataBase`.
+  The Navbar and Footer moved into **`app/(site)/layout.tsx`**, and every main
+  site route moved under `app/(site)/`. `/birthday` stays outside the group
+  with `app/birthday/layout.tsx`, a bare `<main className="bg-white">`.
+- Route groups change no URLs — the build output before and after is identical,
+  route for route. This was the cheapest way to give one branch different
+  chrome; there is no other App Router mechanism for it short of a second root
+  layout, which would duplicate `<html>`.
+- **The ministry lockup at the top of the hero is NOT a link.** `awe-min-logo.png`
+  at `h-11 sm:h-14`, plain `<Image>`, no anchor. That is the whole point —
+  brand presence without a way through to an unlaunched site. Don't "fix" it
+  into a `<Link href="/">`.
+- The only hrefs the page emits are `#testimony` and `#give`. Verified against
+  the built HTML. `SharePage` shares `window.location.href`, i.e. `/birthday`
+  itself, never the site root.
+- `/birthday/admin` inherits the birthday layout and so also lost its chrome,
+  which is correct — it never wanted it. It still uses the **main site**
+  palette, deliberately: it is a private utility, not part of the shareable.
+- **Don't "fix" its absence from the nav.** It was never in the Navbar or
+  Footer; now it cannot reach them either.
+
+### Palette and treatment
+It runs on its own **white / deep blue / orange** palette — see the `bday-*`
+tokens in the Color System section, and read the three-oranges warning there
+before touching any orange on this page.
 
 - **It is the one page allowed to be more dramatic than the rest of the site.**
-  Full-viewport hero on `from-wine-deep via-blue-navy to-blue-deep`, layered
-  radial glows, drifting confetti dots, and the site's only animated type (the
-  `.shimmer-text` sweep in `globals.css`). Section rhythm is dark → dark →
-  light → mid → wine.
+  Full-viewport hero on `from-bday-navy via-bday-blue to-bday-navy`, layered
+  radial glows (orange behind the copy, blue behind the portrait), drifting
+  confetti dots, and the site's only animated type (the `.shimmer-text` sweep
+  in `globals.css`, now an orange sweep).
+- **Section rhythm is dark → dark → light → dark → light.** White carries the
+  two longest sections (testimonies, closing) so it reads as the dominant base;
+  deep blue takes the hero, the countdown band and the giving cards. Ending on
+  white is why the layout sets `bg-white` — otherwise an iOS overscroll bounce
+  at the foot shows the navy `<body>`.
 - ⚠️ **The hero portrait is a circle**, `rounded-full` with a glow ring. Every
   other image container on the site is sharp-cornered — this is a deliberate
   one-page exception for a celebratory medallion, not a slip.
@@ -714,8 +801,38 @@ Don't "fix" its absence from the nav.
   Under `prefers-reduced-motion` the sweep stops and the text returns to solid
   white.
 - **British English** ("honour"), matching the ministry's UK base.
+- The giving section is headed **"Give to God's Servant"** (`id="give"`). It
+  was "Sow a Seed of Honour" (`id="honour"`) until 1 August 2026; the seed
+  language went with it, from the subtitle, the hero CTA, the page metadata and
+  the native-share text. Nothing outside this page linked to `#honour`.
 - Scripture: Proverbs 3:9 closes the giving section, Hebrews 13:7 the page.
   Both are quoted scripture, not written-to-brief copy.
+
+### ⚠️ Mobile is the primary target, not a fallback
+This link travels by WhatsApp; effectively everyone arrives on a phone. The
+decisions below are load-bearing at 375–430px:
+
+- **The hero is `min-h-[100svh]`, never `min-h-screen`.** `vh` on mobile Safari
+  is the viewport *without* browser chrome, so a full-height hero is clipped top
+  and bottom until the address bar collapses.
+- **The portrait medallion leads on mobile** — `order-first lg:order-last`. The
+  `h1` stays first in the DOM (it is the page heading and the preview crawlers
+  read it); only the visual order flips. A phone's first screenful should read
+  as a celebration.
+- **The `h1` base step is `text-[2.5rem]`, not `text-5xl`.** At 48px
+  "Celebrating" alone fills a 375px line. `text-balance` on every heading.
+- **The countdown is `grid-cols-2 sm:grid-cols-4`.** Four tiles across 375px
+  leaves ~80px each and caps the numerals near 36px; 2×2 gives ~165px and lets
+  them run at 60px, which is the point of a countdown. It also replaced a
+  `flex-wrap` + `min-w` shell that could wrap into a ragged 3+1.
+- **Buttons are `w-full sm:w-auto`** inside a `max-w-sm` column.
+- **Touch targets:** the `CopyField` copy buttons are `h-11 w-11` (44px) — they
+  are tapped mid-transfer on a phone more than anything else on the page. Form
+  fields are `py-4`, ~56px.
+- ⚠️ **No confetti dot sits past 94% left.** Dots are positioned by their
+  top-left corner and are up to 8px wide; the layer's `overflow-hidden` clips
+  an overhanging one, but the margin keeps the artwork whole rather than
+  half-cut.
 
 ### The countdown
 `lib/birthday.ts` resolves midnight 3 August 2026 **Europe/London** to a UTC
@@ -919,10 +1036,10 @@ precise about:
       maps "Church Information (BHCC)" → `Info.buildinghousecc@gmail.com` and
       "(BLCN)" → `blcnglobal@gmail.com`) and passed through as `cc`; nothing is
       sent yet, so wiring Resend is a one-line change at that call site.
-- [ ] Real UK/Nigeria account details pasted into the `GIVING` array in
-      `app/birthday/page.tsx`. It currently ships `"[Bank Name]"`-style
-      placeholders, which render live — clear any row the ministry does not
-      want shown rather than leaving bracket text on the page
+- [x] Real UK/Nigeria account details in the `GIVING` array in
+      `app/birthday/page.tsx` — client-supplied 1 August 2026, placeholders
+      gone. The two account **names** differ by bank on purpose; see the
+      comment on the array
 - [ ] SEO metadata per page (title, description, og:image). `metadataBase` is
       now set in `layout.tsx`; `/birthday` is the first page with full
       `openGraph` + `twitter` blocks and is the pattern to copy

@@ -15,24 +15,31 @@ import { motion, useReducedMotion } from "framer-motion";
  * not.
  */
 
-/** left %, top %, size px, colour class, seconds per cycle, delay seconds. */
+/**
+ * left %, top %, size px, colour class, seconds per cycle, delay seconds.
+ *
+ * ⚠️ No dot sits past 94% left. Each is positioned by its top-left corner and
+ * is up to 8px wide, so a dot at 99% would push the layer — and the page —
+ * past the viewport on a 375px screen. The layer's own `overflow-hidden`
+ * clips it, but the margin keeps the artwork intact rather than half-cut.
+ */
 const DOTS: [number, number, number, string, number, number][] = [
-  [6, 18, 6, "bg-blue-sky/50", 7, 0],
+  [6, 18, 6, "bg-bday-orange/60", 7, 0],
   [14, 62, 4, "bg-white/40", 9, 1.2],
-  [21, 30, 8, "bg-wine-light/50", 8, 0.6],
-  [28, 78, 5, "bg-blue-sky/40", 10, 2.1],
+  [21, 30, 8, "bg-bday-blue-mid/70", 8, 0.6],
+  [28, 78, 5, "bg-bday-orange/45", 10, 2.1],
   [35, 12, 4, "bg-white/30", 7.5, 1.7],
-  [42, 55, 7, "bg-wine-light/40", 9.5, 0.3],
-  [49, 86, 5, "bg-blue-sky/50", 8.5, 2.6],
+  [42, 55, 7, "bg-bday-orange-light/50", 9.5, 0.3],
+  [49, 86, 5, "bg-bday-blue-mid/60", 8.5, 2.6],
   [57, 24, 6, "bg-white/35", 11, 1.1],
-  [64, 68, 4, "bg-wine-light/50", 7, 3.0],
-  [71, 40, 8, "bg-blue-sky/40", 9, 0.9],
+  [64, 68, 4, "bg-bday-orange/55", 7, 3.0],
+  [71, 40, 8, "bg-bday-blue-mid/50", 9, 0.9],
   [78, 14, 5, "bg-white/40", 10.5, 2.3],
-  [84, 72, 6, "bg-wine-light/40", 8, 1.5],
-  [91, 34, 4, "bg-blue-sky/50", 9.5, 0.4],
-  [96, 58, 5, "bg-white/30", 7.5, 2.8],
-  [10, 44, 5, "bg-wine-light/40", 10, 1.9],
-  [66, 92, 4, "bg-blue-sky/40", 8.5, 0.7],
+  [84, 72, 6, "bg-bday-orange-light/45", 8, 1.5],
+  [90, 34, 4, "bg-bday-orange/60", 9.5, 0.4],
+  [94, 58, 5, "bg-white/30", 7.5, 2.8],
+  [10, 44, 5, "bg-bday-orange-light/40", 10, 1.9],
+  [66, 92, 4, "bg-bday-blue-mid/60", 8.5, 0.7],
 ];
 
 export default function BirthdayConfetti() {

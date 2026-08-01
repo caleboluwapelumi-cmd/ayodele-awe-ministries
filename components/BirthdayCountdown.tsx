@@ -34,14 +34,31 @@ type State =
 
 const SEGMENTS = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
+/**
+ * ⚠️ The numerals are `bday-orange` (#EB6434), which is 4.0:1 on the deep blue
+ * — below AA for body copy but comfortably past the 3:1 large-text threshold
+ * at 60px+. Nothing smaller on this page may use that tone; the unit labels
+ * below stay white for exactly that reason.
+ */
 const NUMBER_CLASS =
-  "font-serif font-bold leading-none tabular-nums text-white text-5xl sm:text-7xl md:text-8xl";
+  "font-serif font-bold leading-none tabular-nums text-bday-orange text-6xl sm:text-6xl md:text-7xl lg:text-8xl";
+/** ⚠️ /65 measured against the tile's `bg-white/[0.07]`, not the section — 5.5:1. */
 const UNIT_LABEL_CLASS =
-  "mt-3 font-sans text-[0.625rem] font-semibold uppercase tracking-[0.25em] text-white/45 sm:text-xs";
+  "mt-3 font-sans text-[0.625rem] font-semibold uppercase tracking-[0.25em] text-white/65 sm:text-xs";
 
-/** Sharp-cornered tile per the site's card rule — only the buttons are pills. */
+/**
+ * Sharp-cornered tile per the site's card rule — only the buttons are pills.
+ *
+ * ⚠️ 2×2 below `sm`, 4-across above. Four tiles in a row on a 375px screen
+ * leaves ~80px each, which caps the numerals at about 36px; 2×2 gives ~165px
+ * and lets them run at 60px, which is the whole point of a countdown. The
+ * grid also replaces the old `flex-wrap` + `min-w`, so the tiles can no longer
+ * wrap into a ragged 3+1.
+ */
+const GRID_CLASS =
+  "mx-auto grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:gap-6";
 const TILE_CLASS =
-  "flex min-w-[4.5rem] flex-1 flex-col items-center border-t-2 border-blue-sky bg-white/5 px-3 py-6 backdrop-blur-sm sm:min-w-[8rem] sm:px-6 sm:py-10";
+  "flex flex-col items-center border-t-2 border-bday-orange bg-white/[0.07] px-2 py-7 backdrop-blur-sm sm:px-6 sm:py-10";
 
 function phaseFor(now: number): Exclude<BirthdayPhase, "before"> | "before" {
   if (now < Date.parse(BIRTHDAY_STARTS_AT)) return "before";
@@ -60,11 +77,7 @@ function timeLeftTo(target: number, now: number): TimeLeft {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="mx-auto flex max-w-4xl flex-wrap justify-center gap-3 sm:gap-6">
-      {children}
-    </div>
-  );
+  return <div className={GRID_CLASS}>{children}</div>;
 }
 
 /** The celebratory message that replaces the clock on and after the day. */
@@ -76,7 +89,7 @@ function Celebration({ status }: { status: "during" | "after" }) {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="mx-auto max-w-2xl text-center"
     >
-      <p className="mb-6 font-serif text-4xl font-bold leading-tight text-white sm:text-6xl">
+      <p className="mb-6 text-balance font-serif text-[2.25rem] font-bold leading-tight text-white sm:text-5xl md:text-6xl">
         {status === "during" ? (
           <>Today We Celebrate Him! 🎉</>
         ) : (
@@ -89,7 +102,12 @@ function Celebration({ status }: { status: "during" | "after" }) {
           : "Thank you to everyone who celebrated with us. The testimonies are still open, and every word still blesses him."}
       </p>
       <div className="mt-10">
-        <Button href="#testimony" variant="secondary" size="lg">
+        <Button
+          href="#testimony"
+          variant="birthday"
+          size="lg"
+          className="w-full sm:w-auto"
+        >
           Share your testimony
         </Button>
       </div>

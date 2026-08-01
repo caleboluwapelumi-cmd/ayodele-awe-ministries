@@ -10,9 +10,18 @@ import Button from "@/components/Button";
  */
 
 const FIELD_LABEL =
-  "mb-2 block font-sans text-xs font-semibold uppercase tracking-[0.2em] text-muted";
+  "mb-2 block font-sans text-xs font-semibold uppercase tracking-[0.2em] text-bday-ink";
+
+/**
+ * ⚠️ `text-base` (16px) is not a style choice — iOS Safari zooms the whole
+ * viewport on focus for any input under 16px, and the page never zooms back
+ * out. Every control here must stay at 16px or larger.
+ *
+ * `py-4` takes the single-line fields to ~56px, comfortably past the 44px
+ * touch-target minimum.
+ */
 const FIELD_BASE =
-  "w-full border border-blue-navy/20 bg-white px-6 py-3.5 font-sans text-sm text-blue-navy outline-none transition-colors placeholder:text-blue-navy/40 focus:border-blue-sky";
+  "w-full border border-bday-blue/20 bg-white px-5 py-4 font-sans text-base text-bday-blue outline-none transition-colors placeholder:text-bday-ink/50 focus:border-bday-orange sm:px-6";
 const FIELD_INPUT = `${FIELD_BASE} rounded-full`;
 const FIELD_TEXTAREA = `${FIELD_BASE} resize-none rounded-3xl`;
 
@@ -56,18 +65,18 @@ export default function BirthdayTestimonyForm() {
 
   if (status === "success") {
     return (
-      <div className="border-t-2 border-blue-sky bg-cream p-10 text-center">
-        <p className="mb-3 font-serif text-2xl font-bold leading-tight text-wine">
+      <div className="border-t-2 border-bday-orange bg-white p-8 text-center shadow-sm sm:p-10">
+        <p className="mb-3 text-balance font-serif text-2xl font-bold leading-tight text-bday-blue">
           Thank you — your words have been received
         </p>
-        <p className="mx-auto max-w-md font-sans text-base leading-relaxed text-muted">
+        <p className="mx-auto max-w-md font-sans text-base leading-relaxed text-bday-ink">
           They will bless Pastor Ayodele. If you would like to add another
           memory, you are very welcome to.
         </p>
         <Button
           onClick={() => setStatus("idle")}
           variant="outline"
-          className="mt-8 text-blue"
+          className="mt-8 w-full text-bday-blue hover:bg-bday-blue/5 sm:w-auto"
         >
           Share another testimony
         </Button>
@@ -141,7 +150,7 @@ export default function BirthdayTestimonyForm() {
 
       <Button
         type="submit"
-        variant="primary"
+        variant="birthday"
         size="lg"
         disabled={status === "loading"}
         className="w-full"

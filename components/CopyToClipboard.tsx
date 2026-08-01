@@ -80,13 +80,18 @@ export function CopyField({
   const { copied, copy } = useCopy(value);
 
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-white/10 py-4 last:border-b-0">
+    <div className="flex items-center justify-between gap-3 border-b border-white/10 py-4 last:border-b-0 sm:gap-4">
+      {/* ⚠️ `min-w-0` + `break-words`: without it a long account name is an
+          unbreakable flex item and pushes the card past the viewport. */}
       <div className="min-w-0">
-        <p className="font-sans text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-white/40">
+        {/* ⚠️ /70, not /50. The card is `bg-white/[0.07]`, so the ground these
+            10px labels sit on is *lighter* than the section behind it — /50
+            measures 3.6:1 there, /70 is 6.1:1. */}
+        <p className="font-sans text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-white/70">
           {label}
         </p>
         <p
-          className={`mt-1 break-words font-sans text-base font-semibold text-white ${
+          className={`mt-1 break-words font-sans text-base font-semibold text-white sm:text-lg ${
             mono ? "tabular-nums tracking-wide" : ""
           }`}
         >
@@ -94,13 +99,19 @@ export function CopyField({
         </p>
       </div>
 
+      {/* 44px — the minimum comfortable touch target, and these are tapped
+          mid-transfer on a phone more than anything else on the page. */}
       <button
         type="button"
         onClick={copy}
         aria-label={copied ? `${label} copied` : `Copy ${label}`}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-blue-sky hover:text-blue-sky"
+        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-colors ${
+          copied
+            ? "border-bday-orange bg-bday-orange/15 text-bday-orange-light"
+            : "border-white/25 text-white/80 hover:border-bday-orange hover:text-bday-orange-light"
+        }`}
       >
-        {copied ? <Check size={16} /> : <Copy size={16} />}
+        {copied ? <Check size={18} /> : <Copy size={18} />}
       </button>
 
       {/* Announced to screen readers; the icon swap carries it visually. */}
@@ -145,7 +156,7 @@ export function SharePage() {
     try {
       await navigator.share({
         title: "Celebrating Pastor Ayodele Oladapo Awe 🎉",
-        text: "Join us in celebrating Pastor Ayodele's birthday — share a testimony and sow a seed of honour.",
+        text: "Join us in celebrating Pastor Ayodele's birthday — share a testimony and honour God's servant.",
         url,
       });
     } catch {
@@ -155,13 +166,20 @@ export function SharePage() {
     }
   }
 
+  /**
+   * ⚠️ Both controls carry `window.location.href` and nothing else, so what
+   * travels is this page — never the site root. That matters more than usual
+   * right now: the main site has not launched, and /birthday is the only URL
+   * anyone should be arriving at.
+   */
   return (
-    <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+    <div className="mx-auto flex w-full max-w-md flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:items-center">
       <Button
         onClick={canShare ? share : copy}
-        variant="wine"
+        variant="birthday"
         size="lg"
         disabled={!url}
+        className="w-full sm:w-auto"
       >
         {copied ? <Check size={18} /> : <Copy size={18} />}
         {copied ? "Link copied!" : canShare ? "Share this page" : "Copy link to this page"}
@@ -174,7 +192,7 @@ export function SharePage() {
           )}`}
           variant="outline"
           size="lg"
-          className="text-white"
+          className="w-full text-bday-blue hover:bg-bday-blue/5 sm:w-auto"
           external
         >
           Share on WhatsApp

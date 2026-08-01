@@ -9,7 +9,12 @@ import { ReactNode } from "react";
  * Labels render exactly as authored — there is no `uppercase` here any more, so
  * write them in sentence or title case at the call site.
  */
-export type ButtonVariant = "primary" | "secondary" | "outline" | "wine";
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "wine"
+  | "birthday";
 export type ButtonSize = "default" | "lg";
 
 type ButtonProps = {
@@ -44,6 +49,14 @@ const VARIANTS: Record<ButtonVariant, string> = {
   outline: "border border-current hover:bg-white/10",
   // Wine / accent sections
   wine: "bg-white text-wine hover:bg-cream",
+  /**
+   * /birthday only — the orange CTA, on light and dark sections alike.
+   *
+   * ⚠️ The fill is `bday-orange-deep`, not the brand `bday-orange`: white on
+   * #EB6434 is 3.3:1, which fails AA for a 16px label. #C74E23 is 4.6:1 and
+   * reads as the same orange. Keep the brighter tone for glows and numerals.
+   */
+  birthday: "bg-bday-orange-deep text-white hover:bg-bday-orange-dark",
 };
 
 export default function Button({
