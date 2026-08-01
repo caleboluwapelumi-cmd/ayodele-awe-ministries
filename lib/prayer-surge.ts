@@ -10,7 +10,9 @@
  * evaluated once when the module loads and would survive every revalidation.
  */
 
-const TIME_ZONE = "Europe/London";
+import { LONDON, londonInstant, londonOffsetMs } from "./london-time";
+
+const TIME_ZONE = LONDON;
 
 export const PRAYER_SURGE = {
   title: "Norwich Prayer Surge",
@@ -26,49 +28,6 @@ export const PRAYER_SURGE = {
     text: "Until the Spirit is poured upon us from on high, and the wilderness becomes a fruitful field, and the fruitful field is counted as a forest.",
   },
 } as const;
-
-/** How far ahead of UTC Europe/London runs at a given instant, in ms. */
-function londonOffsetMs(utcMs: number): number {
-  const parts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: TIME_ZONE,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  }).formatToParts(new Date(utcMs));
-
-  const at = (type: string) =>
-    Number(parts.find((part) => part.type === type)?.value ?? 0);
-
-  // en-GB with hour12:false renders midnight as "24" — fold it back to 0.
-  const wallClock = Date.UTC(
-    at("year"),
-    at("month") - 1,
-    at("day"),
-    at("hour") % 24,
-    at("minute"),
-    at("second")
-  );
-  return wallClock - utcMs;
-}
-
-/**
- * The UTC instant of a Europe/London wall-clock time. A single offset
- * correction is enough here: 10:00 sits nowhere near the 01:00/02:00 DST
- * transitions, so the offset at the guess and at the true instant agree.
- */
-function londonInstant(
-  year: number,
-  monthIndex: number,
-  day: number,
-  hour: number
-): number {
-  const guess = Date.UTC(year, monthIndex, day, hour);
-  return guess - londonOffsetMs(guess);
-}
 
 /** Day-of-month of the last Saturday in the given month. */
 function lastSaturdayOfMonth(year: number, monthIndex: number): number {

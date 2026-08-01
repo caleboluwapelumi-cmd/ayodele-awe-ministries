@@ -26,7 +26,20 @@ const clashDisplay = localFont({
   ],
 });
 
+/**
+ * `metadataBase` resolves relative `openGraph.images` paths to absolute URLs —
+ * WhatsApp, Facebook and X will not fetch a relative one. Set
+ * NEXT_PUBLIC_SITE_URL to the custom domain once it is pointed at Vercel;
+ * VERCEL_URL covers preview and production deploys in the meantime, and the
+ * localhost fallback keeps `next build` quiet.
+ */
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ??
+  "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Ayodele Oladapo Awe Ministries",
   description:
     "Raising Voices, Building Houses, Transforming Nations — The official ministry of Ayodele Oladapo Awe, serving communities across the United Kingdom and Nigeria.",

@@ -21,7 +21,9 @@ Don't "fix" those.
 - **Animation:** Framer Motion, via the `AnimateIn` wrapper (see Components)
 - **Images:** Next.js `<Image>` — Unsplash placeholders until real assets arrive
 - **Icons:** Custom SVG components in `components/icons/` (Spotify, Telegram, YouTube, Instagram, Facebook) + `lucide-react`
-- **Forms:** Plain React `useState` (no React Hook Form) — API routes at `/api/newsletter`, `/api/contact`, `/api/partner`
+- **Forms:** Plain React `useState` (no React Hook Form) — API routes at `/api/newsletter`, `/api/contact`, `/api/partner`, `/api/birthday-testimony`
+- **Storage:** `@vercel/kv` — **only** `/api/birthday-testimony` uses it. Nothing else on the site has a datastore
+- **Email:** `resend` — **only** `/api/birthday-testimony` uses it. ⚠️ `/api/contact`, `/api/newsletter` and `/api/partner` are still `console.log` stubs; installing Resend did **not** wire them up
 - **Hosting:** Vercel (auto-deploys on push to main)
 - **Repo:** https://github.com/caleboluwapelumi-cmd/ayodele-awe-ministries
 
@@ -178,10 +180,20 @@ app/
   itinerary/page.tsx
   partners/page.tsx
   contact/page.tsx
+  birthday/
+    page.tsx              ← One-off birthday page, 3 August 2026. NOT in the
+                            Navbar — shared by direct link only. See below
+    admin/page.tsx        ← Password-gated testimony reader. Utility page,
+                            no hero, no reveals, not linked from anywhere
   api/
     newsletter/route.ts
     contact/route.ts
     partner/route.ts
+    birthday-testimony/route.ts  ← POST stores to KV + emails via Resend;
+                                   GET lists all. ⚠️ GET is unauthenticated
+    birthday-admin/route.ts      ← POST { password } → { ok }. Exists because a
+                                   client component cannot read a non-
+                                   NEXT_PUBLIC env var
 
 components/
   AnimateIn.tsx           ← 'use client' — Framer Motion scroll reveal. Props: direction 'up'|'left'|'right'|'fade', delay, className
@@ -209,6 +221,20 @@ components/
                             index keeps SSR and first client render identical —
                             never seed the index from Date.now()/random.
   CountdownTimer.tsx      ← 'use client', renders a 'pending' placeholder first so SSR/client hydration match
+  BirthdayCountdown.tsx   ← 'use client' — the /birthday centrepiece. Same 'pending'
+                            hydration contract as CountdownTimer, but resolves the
+                            before/during/after phase too and swaps the clock for a
+                            celebration message. Larger type, sharp bordered tiles
+  BirthdayConfetti.tsx    ← 'use client' — decorative drifting dots for the /birthday
+                            hero. ⚠️ Positions are a hard-coded table, NEVER
+                            Math.random() (hydration). Honours prefers-reduced-motion
+                            by rendering the dots still, not by removing them
+  BirthdayTestimonyForm.tsx ← 'use client' — posts to /api/birthday-testimony
+  CopyToClipboard.tsx     ← 'use client' — exports `CopyField` (labelled account row
+                            + copy icon button) and `SharePage` (native share sheet
+                            where supported, else copy, plus a WhatsApp link).
+                            `navigator.clipboard` needs a secure context, so there
+                            is an execCommand fallback for in-app browsers
   NewsletterForm.tsx
   EventCard.tsx
   ChurchCard.tsx        ← Two image modes. `logoUrl` (what both callers use) →
@@ -252,6 +278,14 @@ lib/
                             time range, Isaiah 32:15) + nextPrayerSurge(),
                             which derives the next last-Saturday-of-month
                             10:00 Europe/London occurrence. See below
+  london-time.ts          ← londonOffsetMs() / londonInstant(), the Europe/London
+                            wall-clock → UTC helpers. Extracted from
+                            prayer-surge.ts when /birthday needed the same maths;
+                            prayer-surge.ts now imports them rather than
+                            defining its own. Behaviour is unchanged
+  birthday.ts             ← The 3 August 2026 birthday: BIRTHDAY_STARTS_AT /
+                            BIRTHDAY_ENDS_AT (ISO), birthdayPhase(), and the
+                            shared `Testimony` shape. See below
 ```
 
 ---
@@ -658,6 +692,100 @@ them, alongside `/media/teachings`.
 - `EventCard` takes an optional `ctaLabel` (default `"Register"`) for events
   with no registration to complete.
 
+## The birthday page (`/birthday`)
+A one-off page for Pastor Awe's birthday, **Monday 3 August 2026**, built 1
+August 2026 to be shared by direct link that evening. Five sections: hero →
+countdown → testimony form → giving/account details → closing + share.
+
+**It is deliberately NOT in the Navbar or the Footer.** It is a time-limited
+shareable, not site navigation — the only way in is the link the Pastor sends.
+Don't "fix" its absence from the nav.
+
+- **It is the one page allowed to be more dramatic than the rest of the site.**
+  Full-viewport hero on `from-wine-deep via-blue-navy to-blue-deep`, layered
+  radial glows, drifting confetti dots, and the site's only animated type (the
+  `.shimmer-text` sweep in `globals.css`). Section rhythm is dark → dark →
+  light → mid → wine.
+- ⚠️ **The hero portrait is a circle**, `rounded-full` with a glow ring. Every
+  other image container on the site is sharp-cornered — this is a deliberate
+  one-page exception for a celebratory medallion, not a slip.
+- ⚠️ **`.shimmer-text` lives in `globals.css`, not Framer Motion**, so the `h1`
+  stays in the server-rendered markup where link-preview crawlers read it.
+  Under `prefers-reduced-motion` the sweep stops and the text returns to solid
+  white.
+- **British English** ("honour"), matching the ministry's UK base.
+- Scripture: Proverbs 3:9 closes the giving section, Hebrews 13:7 the page.
+  Both are quoted scripture, not written-to-brief copy.
+
+### The countdown
+`lib/birthday.ts` resolves midnight 3 August 2026 **Europe/London** to a UTC
+instant via `london-time.ts`, the same way the Prayer Surge resolves its 10:00.
+Verified: `BIRTHDAY_STARTS_AT` is `2026-08-02T23:00:00.000Z` — BST is UTC+1, so
+the clock hits zero at midnight in Norwich, not midnight UTC.
+
+⚠️ **The phase is resolved on the client, in an effect — never on the server.**
+`/birthday` is statically prerendered (the build output shows it as `○`, with no
+`revalidate`), so a server-side phase check would bake in whichever side of
+midnight the build ran on and never move. This is the opposite of the Prayer
+Surge pages, which *do* set `revalidate = 3600` because their date is computed
+server-side. Three phases, all handled, so the page never needs a code change to
+move past the day:
+
+- `before` → the countdown
+- `during` (the whole of 3 August, London) → "Today We Celebrate Him! 🎉"
+- `after` → "We Celebrated Him! 🎉" plus a thanksgiving line; the testimony form
+  stays open
+
+### Testimonies
+`POST /api/birthday-testimony` validates (name + message required, all fields
+trimmed and length-capped), `LPUSH`es JSON to the KV key `birthday-testimonies`,
+then emails the ministry via Resend. `GET` returns the list, newest first —
+`LPUSH` + `LRANGE 0 -1` gives that ordering with no sorting.
+
+- **KV is the record; the email is a convenience.** A Resend failure is logged
+  and swallowed, never surfaced as a failed submission. A KV failure *is*
+  surfaced — the form says so rather than pretending to have saved.
+- ⚠️ **The KV credentials use a custom `AYODELE_` prefix** that `@vercel/kv`
+  cannot auto-detect. See the Environment variables section — this is the
+  likeliest thing to break.
+- ⚠️ **The KV client is created per-request inside the handler, never at module
+  scope.** `createClient` throws when the credentials are absent, and at module
+  scope that would take the whole route down at import time, during the build.
+  Same reason `resend` is imported dynamically. A top-level
+  `const kv = createClient(...)` is the obvious-looking refactor and it breaks
+  `next build` on any machine without the credentials.
+- Upstash deserialises JSON on some clients and not others, so the GET maps over
+  both parsed objects and raw strings. Don't "simplify" that to a bare
+  `JSON.parse`.
+- Verified end-to-end against a mock Upstash REST server: round-trip, newest-
+  first ordering, newlines preserved, empty optional fields. With no env vars
+  set every endpoint degrades honestly (503 + a readable message), which is the
+  state a fresh clone is in.
+
+### ⚠️ Admin page security — read this before extending it
+`/birthday/admin` is a **utility page, not linked from anywhere**, and its gate
+is **obscurity, not security**. Accepted deliberately for a page with a ~48-hour
+useful life. Specifically:
+
+- **`GET /api/birthday-testimony` is unauthenticated.** Anyone who knows or
+  guesses that URL reads every testimony, including submitters' email
+  addresses, without ever seeing the password screen. This is the real exposure
+  — the password screen is not what protects the data.
+- The password itself is checked **server-side**, by `POST /api/birthday-admin`.
+  ⚠️ This is not gold-plating: a client component **cannot** read
+  `BIRTHDAY_ADMIN_PASSWORD`. Next only inlines `NEXT_PUBLIC_`-prefixed vars into
+  the browser bundle, and anything inlined — or passed down from a server
+  component, which lands in the RSC payload — is readable by every visitor. A
+  literal client-side comparison would have meant publishing the password. The
+  env var keeps the name, the gate behaves identically, the secret stays server-
+  side.
+- Unlock state lives in `sessionStorage` under `birthday-admin-ok`, so a refresh
+  does not re-prompt. It is a UI convenience with no bearing on the above.
+
+**If this page outlives the birthday**, the fix is one change: require the
+password on the GET handler too (send it as a header from the admin page). Until
+then, treat the URL as the secret and don't publish it.
+
 ## On-site players
 - **Spotify** — `SPOTIFY_ARTIST_ID` / `SPOTIFY_PODCAST_ID` feed `SpotifyEmbed` on
   `/media` and `/media/music`. ⚠️ Visitors not logged into Spotify get **30-second
@@ -720,6 +848,70 @@ on `PageHero`, under the standard navy + wine scrim).
 
 ---
 
+## Environment variables
+`.env*` is gitignored **except `.env.local.example`**, which is committed via a
+negation in `.gitignore` and holds placeholders only. That file is the canonical
+list; this table is the summary. Everything here is consumed by `/birthday`
+alone — the rest of the site needs no configuration at all.
+
+| Variable | Needed for | If missing |
+|---|---|---|
+| `AYODELE_KV_REST_API_URL` | Storing + reading testimonies | POST returns 503, GET 500, both with a readable message |
+| `AYODELE_KV_REST_API_TOKEN` | ditto (read/write) | ditto |
+| `AYODELE_KV_REST_API_READ_ONLY_TOKEN` | Used by GET only | Falls back to the read/write token |
+| `BIRTHDAY_ADMIN_PASSWORD` | The `/birthday/admin` gate | Admin returns 503, "not configured" — nobody can get in |
+| `RESEND_API_KEY` | Emailing each testimony on arrival | Silently skipped; the testimony is still stored |
+| `BIRTHDAY_NOTIFY_EMAIL` | Where those emails go | Defaults to `contact@ayodeleaweministries.org` |
+| `BIRTHDAY_EMAIL_FROM` | The verified sender | Defaults to `AOA Ministries <onboarding@resend.dev>` |
+| `NEXT_PUBLIC_SITE_URL` | `metadataBase` → absolute `og:image` URLs | Falls back to `VERCEL_URL`, then localhost |
+
+### ⚠️ The KV variables carry a custom `AYODELE_` prefix
+This is the single most breakable thing about the setup, so it is worth being
+precise about:
+
+- `@vercel/kv` **auto-detects only the unprefixed** `KV_REST_API_URL` /
+  `KV_REST_API_TOKEN`. This project's store is provisioned with an `AYODELE_`
+  prefix, so **auto-detection finds nothing**. `getKv()` in
+  `app/api/birthday-testimony/route.ts` therefore passes `url` and `token` to
+  `createClient` explicitly. Do not "simplify" that back to the bare `kv`
+  singleton — it will silently fail to connect.
+- **There is deliberately no fallback to the unprefixed names.** A silent
+  fallback turns a misconfigured deploy into a mystery; the clean 503 says
+  exactly what is wrong in the server log.
+- Vercel also exposes `AYODELE_KV_URL` and `AYODELE_REDIS_URL`. Both are
+  `redis://` connection strings for a **TCP** client, and `@vercel/kv` speaks
+  the **REST** protocol — so neither is used. They are documented as unused in
+  `.env.local.example` so nobody loses time wondering why.
+- The GET handler passes `readOnly = true`, which picks
+  `AYODELE_KV_REST_API_READ_ONLY_TOKEN` so a read cannot mutate the list.
+  Verified against a mock REST server: `LPUSH` carries the read/write token,
+  `LRANGE` the read-only one.
+- ⚠️ **A wrong read-only token is worse than no read-only token.** The fallback
+  to the read/write token is `?? `, which only fires when the variable is
+  **unset**. A placeholder value is "set", so it wins, and every read fails with
+  `WRONGPASS invalid or missing auth token` — a 500 on GET and an empty admin
+  page, while POST keeps working perfectly. This bit during setup and is
+  genuinely confusing, because writes look healthy. `.env.local.example` now
+  ships the line **commented out** for exactly this reason: leave it commented
+  unless you are pasting the real token.
+- **Verified against the live store** (1 August 2026): write → read-back →
+  delete all succeeded, and the admin gate accepted the configured password.
+- Pull the real values locally with `vercel env pull .env.local` (it overwrites
+  the placeholders). ⚠️ With the placeholders left in place the route resolves a
+  host that does not exist — POST 503, GET 500, page still renders 200. That is
+  expected, not a bug.
+- ⚠️ **Resend only sends from a domain you have verified.** Until
+  `ayodeleaweministries.org` is verified in Resend, the sole usable sender is
+  `onboarding@resend.dev`, and in that mode Resend delivers **only** to the
+  address that owns the Resend account. Either verify the domain, or point
+  `BIRTHDAY_NOTIFY_EMAIL` at the account owner.
+- ⚠️ `contact@ayodeleaweministries.org` is the address `/contact` advertises,
+  but the custom domain is not pointed at Vercel yet, so that mailbox may not
+  exist. Confirm it receives mail before relying on the default.
+- `metadataBase` was added to `app/layout.tsx` for the birthday page's
+  `og:image`, but it benefits every page — WhatsApp and Facebook will not fetch
+  a relative image path. Set `NEXT_PUBLIC_SITE_URL` once the domain is live.
+
 ## What Still Needs Building
 - [ ] Newsletter API wired to Brevo or Mailchimp
 - [ ] Contact form wired to Resend (emails to minister). The subject → church-inbox
@@ -727,7 +919,13 @@ on `PageHero`, under the standard navy + wine scrim).
       maps "Church Information (BHCC)" → `Info.buildinghousecc@gmail.com` and
       "(BLCN)" → `blcnglobal@gmail.com`) and passed through as `cc`; nothing is
       sent yet, so wiring Resend is a one-line change at that call site.
-- [ ] SEO metadata per page (title, description, og:image)
+- [ ] Real UK/Nigeria account details pasted into the `GIVING` array in
+      `app/birthday/page.tsx`. It currently ships `"[Bank Name]"`-style
+      placeholders, which render live — clear any row the ministry does not
+      want shown rather than leaving bracket text on the page
+- [ ] SEO metadata per page (title, description, og:image). `metadataBase` is
+      now set in `layout.tsx`; `/birthday` is the first page with full
+      `openGraph` + `twitter` blocks and is the pattern to copy
 - [ ] Custom 404 page
 - [x] Favicon — `app/icon.png` + `app/apple-icon.png`, the ministry mark on navy
 - [ ] Page transition animations (Framer Motion)
