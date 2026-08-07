@@ -32,90 +32,127 @@ Don't "fix" those.
 ---
 
 ## Color System (`app/globals.css` → `@theme inline`)
-```
---color-white: #FFFFFF
---color-cream: #F8F9FC
---color-blue-sky:  #4A90D9   ← labels, accent rules, links
---color-blue:      #1B4F8A   ← primary buttons on light bg
---color-blue-deep: #0F2D5A   ← mid sections
---color-blue-navy: #0A1628   ← dark sections, navbar, footer
---color-wine-light: #8B2346
---color-wine:       #6B1530  ← CTAs on light bg, accent banners
---color-wine-deep:  #4A0D20  ← hero overlays, dark accent sections
---color-muted:      #6B7A99
-```
 
-### ⚠️ `/birthday` has its own palette — these tokens are additive
-The birthday page is a standalone shareable and runs on white / deep blue /
-orange, not the site's blue/wine. Its tokens live in the same `@theme inline`
-block, prefixed `bday-`, and **nothing above changed** — the main site is
-untouched for launch.
+⚠️ **The blue/wine gradient system was fully retired on 7 August 2026.** The
+tokens `blue-sky`, `blue`, `blue-deep`, `blue-navy`, `wine-light`, `wine` and
+`wine-deep` **no longer exist** — a stray `bg-wine` or `text-blue-sky` now
+silently produces no styles rather than falling back to anything. The site runs
+on one palette, white / blue / orange, on every route including `/birthday`.
 
 ```
---color-bday-navy:         #011E3C  ← gradient dark end
---color-bday-blue:         #013161  ← secondary; headings on white
---color-bday-blue-mid:     #024A8F  ← gradient light end, glows, confetti
---color-bday-orange:       #EB6434  ← THE brand accent
---color-bday-orange-deep:  #BC4820  ← solid CTA fill; accent text on light
---color-bday-orange-dark:  #9C3A18  ← CTA hover
---color-bday-orange-light: #FF9A70  ← accent text on dark
---color-bday-ink:          #45566B  ← body copy on the light sections
+--color-white:              #FFFFFF
+--color-brand-navy:         #011E3C  ← the dark end of every dark gradient
+--color-brand-blue:         #013161  ← dark section grounds; headings on light
+--color-brand-blue-mid:     #024A8F  ← glows, drifting dots, a light-section accent
+--color-brand-orange:       #EB6434  ← THE brand accent
+--color-brand-orange-deep:  #BC4820  ← solid CTA fill; accent text on light
+--color-brand-orange-dark:  #9C3A18  ← CTA hover
+--color-brand-orange-light: #FF9A70  ← accent text on dark
+--color-brand-tint:         #F1F5FA  ← the pale end of every light gradient
+--color-cream:              #F8F9FC  ← blockquote / callout plates on light
+--color-muted:              #45566B  ← body copy on light sections
 ```
 
-⚠️ **The three oranges are not interchangeable, and picking by eye will fail
-contrast.** #EB6434 is 3.3:1 on white and 4.0:1 on the deep blue — that clears
-AA *large* (3:1) so it is right for a 60px countdown numeral, a glow, a rule or
-a border, and wrong for every piece of small text on the page. Each figure
-below is measured against the ground the tone actually renders on:
+**These are not new values.** They are `/birthday`'s `bday-*` tokens renamed:
+that page was the palette's proving ground, every contrast figure below was
+measured there, and nothing was re-derived in the migration. `/birthday` now
+reads the same tokens as everything else — there is no second palette left.
+
+⚠️ **`--color-muted` changed value**, and that was a bug fix, not taste. The old
+#6B7A99 is **4.3:1 on white — below AA for normal text**, so every paragraph on
+every light section on the site was failing. #45566B (which was `bday-ink`) is
+7.5:1 on white and 6.9:1 on the tint. Don't put the old value back.
+
+⚠️ **Two blues, not four.** `brand-blue-mid` is a glow/dot colour and a
+light-section accent; it is **not** a section ground. A band that light drags
+every accent-on-dark figure below AA — `brand-orange-light` on it is 4.25:1 and
+`white/60` 4.22:1, both short of what a 12px label needs.
+
+### ⚠️ The three oranges are not interchangeable
+Picking by eye will fail contrast. #EB6434 is 3.3:1 on white and 4.0:1 on
+`brand-blue` — that clears AA *large* (3:1), so it is right for a 60px countdown
+numeral, a glow, a rule or a border, and wrong for every piece of small text.
+Each figure is measured against the ground the tone actually renders on:
 
 | Tone | Use | Measured |
 |---|---|---|
-| `bday-orange-deep` | CTA fill (white label); 12px accent text on light | 5.1:1 under white, 4.7:1 on the `#F1F5FA` tint |
-| `bday-orange-dark` | CTA hover | 6.9:1 under white |
-| `bday-orange-light` | 12px accent text on **dark only** | 4.8:1 at the brightest point of the hero glow; **2.2:1 on white** |
+| `brand-orange` | glows, rules, borders, **display text at 24px+ only** | 4.0:1 on `brand-blue`; **3.26:1** on a `bg-white/[0.07]` card |
+| `brand-orange-deep` | CTA fill (white label); accent text on light | 5.1:1 under white, 4.7:1 on the tint |
+| `brand-orange-dark` | CTA hover | 6.9:1 under white |
+| `brand-orange-light` | accent text on **dark only** | 6.3:1 on flat `brand-blue`, 4.8:1 at the brightest point of a hero glow; **2.2:1 on white** |
 
-⚠️ **Measure against the card, not the section.** The countdown tiles and the
-giving cards are `bg-white/[0.07]`, which lifts their ground appreciably. White
-text at `/50` is 4.4:1 on the flat deep blue but only **3.6:1** on the card — the
-label opacities in `CopyField` (`/70`) and `BirthdayCountdown` (`/65`) are set
-from the card figure and are not free to be dialled back down.
+⚠️ **The 24px floor on `brand-orange` as text is real.** Below it, dark-section
+text takes `brand-orange-light`. The three places that qualify are the
+`CountdownTimer` numerals, the `/about` stat figures and the BHCC/BLCN hero
+acronyms — all 24px+ bold. `SectionLabel`, card headings at `text-xl` and every
+caption take the light tone.
+
+⚠️ **Measure against the card, not the section.** Countdown tiles, giving cards,
+`/about` stats, the `/partners` tiers and every dark-section card are
+`bg-white/[0.07]`, which lifts their ground appreciably — it is why the orange
+figure drops from 4.0:1 to 3.26:1. White text at `/50` is 4.4:1 on the flat blue
+but only **3.6:1** on the card; the label opacities in `CopyField` (`/70`) and
+the countdowns (`/65`) are set from the card figure and are not free to be
+dialled back down.
 
 ### ⚠️ Class naming (Tailwind v4)
-There is **no `-DEFAULT` suffix** in Tailwind v4. Use `bg-blue` / `text-wine`, **never** `bg-blue-DEFAULT` / `bg-wine-DEFAULT` — those silently produce no styles.
+There is **no `-DEFAULT` suffix** in Tailwind v4. Every token above is spelled
+out in full (`bg-brand-blue`, `text-brand-orange-deep`); there is no bare
+`bg-brand` and nothing produces a fallback.
 
-### Background Gradient Rules
-- **Dark hero/feature:** `bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep`
-- **Mid sections:** `bg-gradient-to-r from-blue-deep to-blue-DEFAULT`
-- **Light sections:** `bg-gradient-to-br from-white to-[#EEF3FA]`
-- **Accent/CTA:** `bg-gradient-to-br from-wine-deep via-wine-DEFAULT to-wine-light`
-- **Footer/Newsletter:** `bg-gradient-to-b from-blue-navy to-blue-deep`
+### Background Rules
+Gradients stayed. They are `/birthday`'s treatment, which is the one the whole
+site now runs — a flat fill loses the lit quality the `HeroAtmosphere` glows are
+composed against.
+
+- **Dark hero/feature/section:** `bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy`
+- **Mid sections:** `bg-gradient-to-r from-brand-blue to-brand-navy`
+- **Light sections:** `bg-gradient-to-br from-white to-brand-tint`
+- **Accent/CTA band:** `border-t-2 border-brand-orange` + `bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue`
+- **Footer/Newsletter:** `bg-gradient-to-b from-brand-navy to-brand-blue`
 - **Never use flat solid backgrounds — always gradients**
+
+⚠️ **The orange top rule on accent bands is load-bearing, not decoration.**
+Those were the wine bands, and wine gave them a hard edge against the dark blue
+section that usually preceded them. Inverted blue against blue has almost no
+seam, so two dark sections would read as one long block. The rule is the seam —
+the same device the giving modal panel and every countdown tile use. Don't drop
+it when adding a CTA band.
+
+⚠️ **Orange is never a large background fill.** It is the accent: CTA fills,
+numerals, rules, borders, glows. An orange *section* is not in the system.
 
 ### Button Rules
 **Never write inline button styles.** Use `components/Button.tsx` and pick the variant for the section background:
 | Section background | `variant` | Renders |
 |---|---|---|
-| Light (white/cream) | `primary` | `bg-blue text-white hover:bg-blue-deep` |
-| Dark blue (navy/deep) | `secondary` | `bg-white text-blue-navy hover:bg-cream` |
-| Wine / accent | `wine` | `bg-white text-wine hover:bg-cream` |
+| Any — this is THE call to action | `primary` | `bg-brand-orange-deep text-white hover:bg-brand-orange-dark` |
+| Dark, for the quieter of two CTAs | `secondary` | `bg-white text-brand-blue hover:bg-cream` |
 | Any (secondary action) | `outline` | `border border-current hover:bg-white/10` — pass `className="text-white"` on dark |
-| **`/birthday` only** | `birthday` | `bg-bday-orange-deep text-white hover:bg-bday-orange-dark` |
 
-⚠️ The `birthday` fill is `bday-orange-deep` (#BC4820), **not** the brand
-`bday-orange` (#EB6434) — white on the brand orange is 3.3:1 and fails AA for a
+⚠️ **`primary` works on light and dark alike** — a solid fill carries its own
+ground, so unlike the accent *text* tones it needs no light/dark split. That is
+why `/birthday`'s CTA needed no special treatment in the migration: the variant
+it used to have (`birthday`) simply became `primary`.
+
+⚠️ The `primary` fill is `brand-orange-deep` (#BC4820), **not** the brand
+`brand-orange` (#EB6434) — white on the brand orange is 3.3:1 and fails AA for a
 16px label. It reads as the same orange. Don't "correct" it to the brand token.
+
+⚠️ **`wine` and `birthday` were deleted, not renamed.** Old `wine` call sites
+(white pill on a wine band) became `secondary`; old `birthday` ones became
+`primary`. Two variants, not five.
 
 - Sizes: `size="default"` (`px-8 py-3.5 text-sm`) or `size="lg"` (`px-10 py-4 text-base`).
 - All buttons are **pills** (`rounded-full`), **sentence case**, no letter-spacing.
   There is no `uppercase` in `Button.tsx` any more, so labels render exactly as
   authored — write them properly at the call site.
-- Wine is NEVER used as button bg on dark blue backgrounds.
 
 ### No text-link CTAs
 **Every call to action is a `Button`.** There are no bare text links with a
 trailing arrow (`&rarr;`) anywhere — "Learn more →", "Open →", "Listen →" and
 friends were all converted. Inside cards, use `variant="outline"` with a colour
-passed via `className` (`text-white` on dark, `text-blue`/`text-wine` on light)
+passed via `className` (`text-white` on dark, `text-brand-orange-deep` on light)
 so the CTA reads as a button without the weight of a solid fill.
 
 Exception: **Navbar and Footer navigation lists are not CTAs** — they stay plain
@@ -144,7 +181,7 @@ hover effects still fire.
 - All headings: `font-serif` (→ Clash Display), `leading-tight`
 - `h1`: `font-serif font-bold tracking-tight` — 700 is the heaviest weight the font ships
 - `h2`/`h3`: `font-serif font-bold` — **never** `font-medium` or lighter on a heading
-- Section labels above headings: use `components/SectionLabel.tsx` (`font-sans text-xs font-semibold uppercase tracking-[0.2em]`), `tone="light"` on light sections, `tone="dark"` on dark, `tone="onAccent"` on wine. `/birthday` adds `tone="bdayDark"` / `tone="bdayLight"` — see the birthday palette above for why each takes a different orange
+- Section labels above headings: use `components/SectionLabel.tsx` (`font-sans text-xs font-semibold uppercase tracking-[0.2em]`), `tone="light"` on light sections, `tone="dark"` on dark. Two tones, not five — `onAccent` went with the wine bands and the `bdayDark`/`bdayLight` pair merged into the standard split. See the three-oranges table above for why each tone takes a different orange
 - Body copy: `font-sans text-base sm:text-lg leading-relaxed`
 - Body text on dark: `text-white/70` · on light: `text-muted`
 - Heading size scale — h1 (page hero): `text-4xl sm:text-6xl`; h1 (full-screen hero): `text-5xl sm:text-7xl md:text-8xl`; h2: `text-3xl sm:text-4xl md:text-5xl`
@@ -157,8 +194,8 @@ hover effects still fire.
 - Centred/single-column blocks: `mx-auto max-w-3xl text-center`
 - Vertical rhythm inside a block: label `mb-3` → heading `mb-6` → body `mb-8`
 - Full-screen heroes: `relative flex min-h-screen items-center overflow-hidden`
-- Inner page heroes: use `components/PageHero.tsx` (`py-36 sm:py-48` + the `w-16 h-0.5 bg-blue-sky` rule)
-- Decorative rule under centred headings: `mx-auto h-0.5 w-16 bg-blue-sky`
+- Inner page heroes: use `components/PageHero.tsx` (`py-36 sm:py-48` + the `w-16 h-0.5 bg-brand-orange` rule)
+- Decorative rule under centred headings: `mx-auto h-0.5 w-16 bg-brand-orange`
 
 ---
 
@@ -207,16 +244,22 @@ main site. Three components carry it, and **nothing is copy-pasted**: if you
 find a hand-written `radial-gradient` glow on a hero, it predates this and
 should be moved onto `HeroAtmosphere`.
 
-### ⚠️ The main site is still blue/wine — the tone is a switch, not a colour
-The glows and dots are **tone-configurable**, and every main-site hero currently
-runs the `site` tone (wine-light + blue), not `/birthday`'s orange. That is not
-a half-finished migration: no main-site page uses a `bday-*` token, so orange
-glows would sit over wine-gradient sections and read as a bug.
+### ⚠️ The tone switch has been thrown — there is one tone now
+`SITE_ATMOSPHERE_TONE` in `components/HeroAtmosphere.tsx` used to select between
+a `site` tone (wine-light + blue) and `/birthday`'s orange, and existed purely to
+stage the palette migration. **That migration landed on 7 August 2026**: every
+hero, glow and dot on all fourteen routes now runs the orange/blue values, which
+are `/birthday`'s originals verbatim.
 
-`SITE_ATMOSPHERE_TONE` in `components/HeroAtmosphere.tsx` is the entire switch.
-If the palette migration ever lands, flip that one constant and every hero,
-glow and dot on the site follows. Don't hardcode `tone="birthday"` at call
-sites — `/birthday` is the only place that passes a tone explicitly.
+The second tone was **deleted, not repointed** — in `HeroAtmosphere`'s `GLOW`
+table and in `DriftingParticles`' `PALETTE` alike. A `Record` with two identical
+rows is not a switch, it is duplication waiting to drift. `AtmosphereTone` is a
+one-member union today.
+
+`SITE_ATMOSPHERE_TONE` is kept because it is still the single place a future
+tone change would be made. Nothing passes `tone` explicitly any more — including
+`/birthday`, whose `BirthdayConfetti` dropped its `tone="birthday"` prop when
+the default became the same thing.
 
 ### What each page gets, and why
 | Treatment | Pages | Reasoning |
@@ -231,9 +274,15 @@ because it does not appear everywhere. Adding a fourth page is a design
 decision, not a default.
 
 ### The shimmer
-`.hero-shimmer` (white text, dark heroes) and `.hero-shimmer-light` (navy text,
-the light `PageHero` variant) in `globals.css`. `/birthday` keeps its own
-`.shimmer-text`.
+`.hero-shimmer` (white text, dark heroes) and `.hero-shimmer-light`
+(`brand-blue` text, the light `PageHero` variant) in `globals.css`. `/birthday`
+keeps its own `.shimmer-text`, which differs from `.hero-shimmer` only in timing
+now — the accent band is the same `brand-orange-light` in both.
+
+⚠️ **`.hero-shimmer-light`'s accent stop is `orange-deep`, not `orange-light`.**
+The light tone is 2.2:1 on white, so mid-sweep a light-section heading would all
+but vanish. The two variants take different oranges for the same reason every
+other pairing on the site does.
 
 - ⚠️ **It runs ONCE, not on a loop.** The birthday page is one screenful of
   celebration and can carry a repeating sweep; an inner page is a wall of
@@ -265,28 +314,34 @@ with the same classes.
 per hue.** Every dot animates through identical opacity keyframes, so the only
 thing giving the field depth is that each dot's *colour* carries a different
 alpha. Flattened to four fixed values it reads as a regular grid of identical
-dots, which is what it then is. (This was broken and fixed once already.) The
-`site` alphas are not copies of the birthday ones: wine-light is much darker
-than `bday-orange` on navy and needs ~10 more points, blue-sky much brighter
-than `bday-blue-mid` and needs ~20 fewer.
+dots, which is what it then is. (This was broken and fixed once already.)
+
+⚠️ There used to be a second alpha table here, a blue/wine transposition with
+its own figures for the main site. It went with the `site` tone on 7 August
+2026. The surviving numbers are `/birthday`'s originals, dot for dot, and they
+are now what every hero on the site renders.
 
 ### The countdown numerals
-`CountdownTimer` now carries `BirthdayCountdown`'s treatment in blue — the same
-2×2 → 4-across grid, sharp accent-topped `bg-white/[0.07]` tiles, display
-numerals over small uppercase tracked labels. Labels went back to full words
-("Minutes", not "Min"), which the 2-column mobile grid has room for.
+`CountdownTimer` carries `BirthdayCountdown`'s treatment — the same 2×2 →
+4-across grid, sharp accent-topped `bg-white/[0.07]` tiles, display numerals
+over small uppercase tracked labels. Since the palette migration it is the same
+*colour* too: the two countdowns are now one component in all but the clock they
+read from. Labels are full words ("Minutes", not "Min"), which the 2-column
+mobile grid has room for.
 
-⚠️ **`blue-sky` numerals are 3.10:1 against the tile** (over the band's
-`via-blue-deep` stop, the darkest ground and therefore the governing figure).
-That clears AA **large** (3:1) and nothing more, so it is legitimate at 60px+
-and at no smaller size — the same trade `BirthdayCountdown` makes with its
-orange at 4.0:1, but with less headroom. It is the tightest accent-on-dark
-pairing on the site. The unit labels stay white for exactly this reason.
-Re-measure if that band is ever lightened.
+⚠️ **`brand-orange` numerals are 3.26:1 against the tile** — the tile's
+`bg-white/[0.07]` over the band's `via-brand-blue` stop, the lightest ground the
+numerals sit on and therefore the governing figure. On the flat section it is
+4.0:1; the 7% white lift costs the difference, so measuring against the band
+rather than the tile overstates it. 3.26:1 clears AA **large** (3:1) and nothing
+more, so it is legitimate at 60px+ and at no smaller size. The unit labels stay
+white for exactly this reason. Re-measure if that band is ever lightened —
+`from-brand-navy` is the forgiving stop, `via-brand-blue` the one to check.
 
-The `/about` stat figures moved from white to `blue-sky` to match (3.17:1 at
-24px bold, AA-large — **that size is the floor**). `/churches/blcn`'s network
-stats already did this; the two grids were the site's only disagreement on it.
+The `/about` stat figures use the same tone at 24px bold, **which is the floor**
+for orange as text. `/churches/blcn`'s network stats and the BHCC/BLCN hero
+acronyms are the only other places orange runs as type; everything smaller on a
+dark ground takes `brand-orange-light`.
 
 ### ⚠️ Layer order: the glow sits ABOVE the scrims
 On any hero with a photo or a flat wash (`HeroSection`, `/churches/blcn`,
@@ -359,12 +414,13 @@ app/
 
 components/
   AnimateIn.tsx           ← 'use client' — Framer Motion scroll reveal. Props: direction 'up'|'left'|'right'|'fade', delay, className
-  Button.tsx              ← THE button. Variants: primary | secondary | outline | wine. Sizes: default | lg
-  SectionLabel.tsx        ← The small-caps eyebrow above every heading. tone: dark | light | onAccent
+  Button.tsx              ← THE button. Variants: primary | secondary | outline.
+                            Sizes: default | lg
+  SectionLabel.tsx        ← The small-caps eyebrow above every heading. tone: dark | light
   PageHero.tsx            ← Shared hero for all inner pages. variant: dark | light.
                             Optional `backgroundImage` (+ `imageAlt`,
                             `imagePosition`) puts a photo behind the copy under
-                            the standard navy/wine scrim; it forces the dark
+                            the standard navy scrim; it forces the dark
                             treatment, so `variant` is ignored when set. Omit
                             `imageAlt` for a purely decorative backdrop (the
                             image is then `aria-hidden`); pass it when the photo
@@ -374,14 +430,15 @@ components/
                             `particles` prop — see "The atmosphere layer"
   HeroAtmosphere.tsx      ← The layered radial glow behind every hero. Server
                             component, zero JS — two radial-gradients in one
-                            background-image. tone: site | birthday, surface:
-                            dark | light. Exports SITE_ATMOSPHERE_TONE, the one
-                            constant that switches the whole site's tone
+                            background-image. surface: dark | light. Exports
+                            SITE_ATMOSPHERE_TONE; `AtmosphereTone` is a
+                            one-member union since the palette migration —
+                            see "The atmosphere layer"
   DriftingParticles.tsx   ← 'use client' — the drifting dot field, generalised
-                            out of BirthdayConfetti. tone + density
-                            ('full' 16 dots | 'sparse' 8). ⚠️ Positions are a
-                            hard-coded table, NEVER Math.random() (hydration),
-                            and the per-dot alpha variation is load-bearing —
+                            out of BirthdayConfetti. density ('full' 16 dots |
+                            'sparse' 8). ⚠️ Positions are a hard-coded table,
+                            NEVER Math.random() (hydration), and the per-dot
+                            alpha variation is load-bearing —
                             see "The atmosphere layer"
   Navbar.tsx              ← Transparent on desktop hero, solid on scroll; always solid
                             on mobile. Its local `Brand` component is used by both the
@@ -491,8 +548,8 @@ lib/
 ---
 
 ## Navbar Behaviour
-- **Desktop (lg+):** transparent over hero, `bg-blue-navy/95 backdrop-blur-md` on scroll
-- **Mobile (<lg):** always `bg-blue-navy` — no transparency
+- **Desktop (lg+):** transparent over hero, `bg-brand-navy/95 backdrop-blur-md` on scroll
+- **Mobile (<lg):** always `bg-brand-navy` — no transparency
 - **Active links:** `usePathname()` from `next/navigation`
 - **Expressions dropdown** (replaces "Churches"):
   - Ministry → `/ministry`  ← the overview the rest of the list outworks
@@ -520,7 +577,7 @@ lib/
   ("until the Spirit is poured upon us from on high…"), quoted on `/events`. There
   is no fixed date to hard-code — see `lib/prayer-surge.ts`
 - **Media:** Spotify music + the "Babylonian Legends" podcast ("Everything Faith and Family") + Telegram teachings — all live, see Assets Status
-- **Books:** "Walking with the Holy Spirit: Insights for Supernatural Living" — on sale via Selar and Amazon. Title and subtitle are separate fields on `/books` so the heading stays readable; subtitle uses the small-caps `blue-sky` treatment.
+- **Books:** "Walking with the Holy Spirit: Insights for Supernatural Living" — on sale via Selar and Amazon. Title and subtitle are separate fields on `/books` so the heading stays readable; subtitle uses the small-caps `brand-orange-deep` treatment.
 - **Tagline:** "Raising Voices, Building Houses, Transforming Nations"
 
 ⚠️ **"Building Houses" is plural only in the tagline and the matching mandate
@@ -616,7 +673,7 @@ exist to prevent. So:
   section ("Interested in any of these?" → `/contact`).
 - **Never render these through `EventCard`.** That component's shape — image,
   date badge, location, Register button — is the visual grammar of a scheduled
-  event. The tiles use `border-t-2 border-blue-sky`, the same idiom `/ministry`
+  event. The tiles use `border-t-2 border-brand-orange`, the same idiom `/ministry`
   uses for its expression cards and `/itinerary` for `ENGAGEMENT_TYPES`, i.e.
   the site's established "this describes what we do" treatment.
 - The subtitle ends "join us as dates are announced" — the one place the absence
@@ -627,9 +684,9 @@ exist to prevent. So:
   documented exception to the `delay={index * 0.1}` grid rule; it applies to any
   grid long enough for the accumulated delay to outrun the scroll.
 - Adding the section took the light slot before "What God Has Done", so that
-  empty state moved to the mid-blue treatment (`from-blue-deep to-blue`,
-  `tone="dark"`, `border-l-4 border-blue-sky bg-white/5` panel). `/events` now
-  alternates light → mid → light → mid → navy → wine. Two identical light
+  empty state moved to the mid-blue treatment (`from-brand-blue to-brand-navy`,
+  `tone="dark"`, `border-l-4 border-brand-orange bg-white/5` panel). `/events` now
+  alternates light → mid → light → mid → navy → accent. Two identical light
   gradients stacked have no visible seam, which is why it was restyled rather
   than left alone.
 
@@ -672,7 +729,7 @@ Real assets received (all in `public/images/`, all JPEG):
   of its height, and centring lands on the keys. Verified by simulating the
   `object-cover` maths at 1280×644 — at 22% the crop runs source rows 132–494,
   face centred with headroom. It is only 720px wide, so it upscales ~2× at
-  desktop; that is acceptable **because** it sits under the full navy + wine
+  desktop; that is acceptable **because** it sits under the full navy
   scrim and reads as texture (same reasoning as the BLCN blurred-logo hero).
   Don't reuse it anywhere it would render unscrimmed at width.
 
@@ -794,7 +851,7 @@ for imagery the scrim had already all but erased. They are now pure CSS:
 
 | Where | Was | Now |
 |---|---|---|
-| `/` partnership band | `photo-1529156069898…` | `from-wine-deep via-blue-navy to-blue-navy` + a cross gradient |
+| `/` partnership band | `photo-1529156069898…` | the standard dark gradient + a cross gradient |
 | `/partners` hero | `photo-1529156069898…` (`priority`) | standard dark hero + navy wash |
 | `/churches/bhcc` hero | `photo-1438232992991…` (`priority`) | standard dark hero + navy wash |
 | `/about` mandate | `photo-1500530855697…` | standard dark hero + navy wash |
@@ -839,7 +896,7 @@ photograph of strangers. Cleared on 28 July 2026:
   the body line beside the location.
 - The "About BHCC" / "About BLCN" sections on the two church pages use the same
   idea at panel scale: `aspect-square` white mat, `shadow-xl ring-1
-  ring-blue-navy/10`, `object-contain`. The mat is the idiom already used by the
+  ring-brand-blue/10`, `object-contain`. The mat is the idiom already used by the
   `blcn-church-order.jpg` card further up `/churches/blcn`.
 - ⚠️ **The BHCC "About" panel is the one place `bhcc-logo.jpg` renders
   directly.** At `max-w-lg` the lockup lands ~380px across and the "CHRISTIAN
@@ -1034,12 +1091,14 @@ which cannot see the request host.
   `LOCKED_DOMAINS` or they will serve the whole unlaunched site.
 
 ### Palette and treatment
-It runs on its own **white / deep blue / orange** palette — see the `bday-*`
-tokens in the Color System section, and read the three-oranges warning there
-before touching any orange on this page.
+It runs on **white / deep blue / orange** — which, since 7 August 2026, is
+simply the site palette. Its `bday-*` tokens **became** the global `brand-*`
+tokens; see the Color System section, and read the three-oranges warning there
+before touching any orange on this page. The page is no longer a palette
+exception, only a layout and chrome one.
 
 - **It is the one page allowed to be more dramatic than the rest of the site.**
-  Full-viewport hero on `from-bday-navy via-bday-blue to-bday-navy`, layered
+  Full-viewport hero on `from-brand-navy via-brand-blue to-brand-navy`, layered
   radial glows (orange behind the copy, blue behind the portrait), drifting
   confetti dots, and the site's only animated type (the `.shimmer-text` sweep
   in `globals.css`, now an orange sweep).
@@ -1103,7 +1162,7 @@ with the client, not a refactor.
   containing block for its `fixed` descendants. A modal mounted in there sizes
   itself against that card. Exactly the trap the mobile menu panel hit.
 - The panel reuses the old section's treatment verbatim —
-  `from-bday-blue via-bday-navy to-bday-blue`, `border-t-2 border-bday-orange`,
+  `from-brand-blue via-brand-navy to-brand-blue`, `border-t-2 border-brand-orange`,
   `bg-white/[0.07]` cards, `CopyField` — so every contrast figure in the palette
   notes still holds. Sharp corners, like every other panel on the site.
 - Escape closes it, so does the backdrop, so does either close control; `<body>`
@@ -1339,7 +1398,7 @@ is ever replaced with tighter margins, switch the container to
 `aspect-[800/1135]` (or the new image's ratio) to show it uncropped.
 
 The cover is also the `/books` `PageHero` background image (`backgroundImage`
-on `PageHero`, under the standard navy + wine scrim).
+on `PageHero`, under the standard navy scrim).
 
 ---
 
@@ -1556,7 +1615,8 @@ precise about:
 - Add `images.unsplash.com` to `next.config.ts` remotePatterns if adding new Unsplash images
 - British English for ALL BHCC-related content (centre, honour, organise, programme, etc.)
 - No flat solid backgrounds — always use gradient pairs
-- No gold — that was the old design system. Current system is blue/wine/white
+- No gold, and no blue/wine — both are retired design systems. The current one
+  is white/blue/orange; see the Color System section
 - Responsive grid rule: always `grid-cols-1` base, scale up with `sm:` and `lg:`
 - **Corners are mixed by design.** Buttons are pills (`rounded-full`); single-line form fields are pills, the contact textarea is `rounded-3xl`; embedded players are `rounded-2xl`. Cards, panels and image containers stay **sharp** (`rounded-none`) — that structural contrast is deliberate, don't round them. Social icon circles and hero dots remain round as before.
 - Wrap every card, heading block and column in `AnimateIn`. Grid children get a staggered `delay={index * 0.1}` and `className="h-full"` so the wrapper inherits the grid cell height.

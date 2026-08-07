@@ -40,11 +40,11 @@ export default function MediaPage() {
       />
 
       {/* ── 2. Teachings Section ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SectionLabel tone="light">Teachings</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Word of God on Telegram
             </h2>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -75,11 +75,11 @@ export default function MediaPage() {
             {/* Light-section gradient, not a photo. The decorative Unsplash
                 texture that was here sat under a bg-white/85 wash, so it was
                 barely perceptible — and still cost a cross-origin fetch. */}
-            <div className="overflow-hidden border-t-2 border-blue-sky bg-gradient-to-br from-white to-[#EEF3FA] p-12 text-center">
+            <div className="overflow-hidden border-t-2 border-brand-orange bg-gradient-to-br from-white to-brand-tint p-12 text-center">
               <div className="mx-auto mb-6 flex justify-center">
                 <TelegramIcon size={64} />
               </div>
-              <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-blue-navy">
+              <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-brand-blue">
                 Telegram Teachings
               </h3>
               <p className="mb-6 font-sans text-sm text-muted">
@@ -94,7 +94,7 @@ export default function MediaPage() {
       </section>
 
       {/* ── 3. Music Section ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SpotifyEmbed
@@ -137,14 +137,14 @@ export default function MediaPage() {
       </section>
 
       {/* ── 4. Quick Access ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="light">Quick Access</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Everything in One Place
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -160,14 +160,14 @@ export default function MediaPage() {
                   <div className="mb-4 flex items-center justify-center">
                     <card.Icon size={48} />
                   </div>
-                  <h3 className="mt-2 font-serif text-lg font-bold leading-tight text-blue-navy transition-colors group-hover:text-blue">
+                  <h3 className="mt-2 font-serif text-lg font-bold leading-tight text-brand-blue transition-colors group-hover:text-brand-orange-deep">
                     {card.title}
                   </h3>
                   <p className="mt-2 font-sans text-sm leading-relaxed text-muted">
                     {card.desc}
                   </p>
                   {card.href === "#" ? (
-                    <span className="mt-6 inline-flex items-center border border-blue-navy/20 px-3 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-widest text-muted">
+                    <span className="mt-6 inline-flex items-center border border-brand-blue/20 px-3 py-1.5 font-sans text-[10px] font-semibold uppercase tracking-widest text-muted">
                       Coming Soon
                     </span>
                   ) : (
@@ -175,7 +175,7 @@ export default function MediaPage() {
                       href={card.href}
                       variant="outline"
                       external
-                      className="mt-6 text-blue"
+                      className="mt-6 text-brand-orange-deep"
                     >
                       {card.link}
                     </Button>
@@ -188,7 +188,7 @@ export default function MediaPage() {
       </section>
 
       {/* ── 5. Newsletter CTA ── */}
-      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Stay Updated</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
@@ -202,7 +202,7 @@ export default function MediaPage() {
       </section>
 
       {/* ── 6. CTA Banner ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Invite Pastor Awe to Minister
@@ -211,7 +211,7 @@ export default function MediaPage() {
             Book Pastor Ayodele Oladapo Awe for your church, conference, or
             event.
           </p>
-          <Button href="/contact" variant="wine" size="lg">
+          <Button href="/contact" variant="secondary" size="lg">
             Book Now
           </Button>
         </AnimateIn>

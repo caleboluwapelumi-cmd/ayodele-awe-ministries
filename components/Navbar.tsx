@@ -15,7 +15,7 @@ function Indicator({ active }: { active: boolean }) {
   return (
     <span
       aria-hidden
-      className={`mt-1.5 block h-0.5 w-4 bg-blue-sky transition-opacity duration-200 ${
+      className={`mt-1.5 block h-0.5 w-4 bg-brand-orange transition-opacity duration-200 ${
         active ? "opacity-100" : "opacity-0"
       }`}
     />
@@ -106,9 +106,9 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-blue-navy/95 backdrop-blur-md shadow-lg transition-all duration-300 lg:shadow-none ${
+      className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-brand-navy/95 backdrop-blur-md shadow-lg transition-all duration-300 lg:shadow-none ${
         solid
-          ? "lg:border-white/10 lg:bg-blue-navy/95 lg:shadow-lg lg:backdrop-blur-md"
+          ? "lg:border-white/10 lg:bg-brand-navy/95 lg:shadow-lg lg:backdrop-blur-md"
           : "lg:border-transparent lg:bg-transparent lg:backdrop-blur-none"
       }`}
     >
@@ -147,7 +147,7 @@ export default function Navbar() {
                       : "pointer-events-none -translate-y-1 opacity-0"
                   }`}
                 >
-                  <div className="max-h-[70vh] w-[280px] min-w-[220px] overflow-y-auto border border-white/10 bg-blue-navy/95 py-2 shadow-xl backdrop-blur-md">
+                  <div className="max-h-[70vh] w-[280px] min-w-[220px] overflow-y-auto border border-white/10 bg-brand-navy/95 py-2 shadow-xl backdrop-blur-md">
                     {link.children?.map((item) =>
                       item.label.startsWith("—") ? (
                         <p
@@ -210,7 +210,7 @@ export default function Navbar() {
            Expressions accordion open the list is ~476px tall and does not fit a
            phone in landscape. overscroll-contain stops scroll chaining to the
            page behind. */
-        className={`fixed inset-x-0 top-0 z-40 h-dvh overflow-y-auto overscroll-contain bg-blue-navy/98 backdrop-blur-md transition-all duration-300 lg:hidden ${
+        className={`fixed inset-x-0 top-0 z-40 h-dvh overflow-y-auto overscroll-contain bg-brand-navy/98 backdrop-blur-md transition-all duration-300 lg:hidden ${
           mobileOpen
             ? "pointer-events-auto translate-y-0 opacity-100"
             : "pointer-events-none -translate-y-4 opacity-0"

@@ -100,7 +100,7 @@ export default function BLCNPage() {
           />
         </div>
         <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-navy/90 via-transparent to-blue-navy/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-transparent to-brand-navy/40" />
         {/* The shared hero glow, over the two scrims so it tints rather than
             being washed out by them. No particles — the dot field is kept to
             the homepage, /events and /ministry. */}
@@ -113,7 +113,7 @@ export default function BLCNPage() {
                   separation from the dark hero behind it */}
               <div
                 aria-hidden
-                className="absolute -inset-10 bg-[radial-gradient(circle,rgba(74,144,217,0.4),transparent_70%)] blur-2xl"
+                className="absolute -inset-10 bg-[radial-gradient(circle,rgba(235,100,52,0.40),transparent_70%)] blur-2xl"
               />
               <div className="relative h-full w-full overflow-hidden shadow-2xl ring-1 ring-white/15">
                 <Image
@@ -132,10 +132,10 @@ export default function BLCNPage() {
                 Bethel Livingstone Christian Network
               </span>
             </h1>
-            <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-blue-sky sm:text-3xl">
+            <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-brand-orange sm:text-3xl">
               BLCN
             </p>
-            <div className="mx-auto mt-6 h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto mt-6 h-0.5 w-16 bg-brand-orange" />
             <p className="mx-auto mb-10 mt-8 max-w-lg font-sans text-lg leading-relaxed text-white/60 sm:text-xl">
               Raising Believers, Transforming Nigeria
             </p>
@@ -145,11 +145,11 @@ export default function BLCNPage() {
           </AnimateIn>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-brand-navy to-transparent" />
       </section>
 
       {/* ── 2. Church Order — vision, mission & values ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-5 lg:gap-16">
           {/* White mat separates the graphic's own dark-blue top from the mid-blue
               section. Width stays well under the 432px native width of the source
@@ -173,12 +173,12 @@ export default function BLCNPage() {
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Vision, Mission &amp; Values
             </h2>
-            <div className="mb-10 h-0.5 w-16 bg-blue-sky" />
+            <div className="mb-10 h-0.5 w-16 bg-brand-orange" />
 
             <div className="space-y-8">
               {FOUNDATION.map((item) => (
                 <div key={item.title}>
-                  <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-blue-sky">
+                  <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-brand-orange-light">
                     {item.title}
                   </h3>
                   <p className="font-sans text-base leading-relaxed text-white/70 sm:text-lg">
@@ -188,14 +188,14 @@ export default function BLCNPage() {
               ))}
 
               <div>
-                <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-blue-sky">
+                <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-brand-orange-light">
                   Values
                 </h3>
                 <ul className="flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-base text-white/70 sm:text-lg">
                   {VALUES.map((value, i) => (
                     <li key={value} className="flex items-center gap-x-3">
                       {i > 0 && (
-                        <span aria-hidden className="text-blue-sky">
+                        <span aria-hidden className="text-brand-orange-light">
                           &middot;
                         </span>
                       )}
@@ -210,7 +210,7 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 3. About ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
           {/* The church's own emblem, not a stock photograph — a generic photo
               captioned "BLCN church gathering" reads as a photo of BLCN. The
@@ -218,7 +218,7 @@ export default function BLCNPage() {
               emblem's near-black ground has an edge against the light section.
               Swap in a real photo of the congregation when one arrives. */}
           <AnimateIn direction="left">
-            <div className="mx-auto aspect-square w-full max-w-lg bg-gradient-to-br from-white to-[#EEF3FA] p-6 shadow-xl ring-1 ring-blue-navy/10 sm:p-10">
+            <div className="mx-auto aspect-square w-full max-w-lg bg-gradient-to-br from-white to-brand-tint p-6 shadow-xl ring-1 ring-brand-blue/10 sm:p-10">
               <div className="relative h-full w-full">
                 <Image
                   src="/images/blcn-logo.jpg"
@@ -233,7 +233,7 @@ export default function BLCNPage() {
 
           <AnimateIn direction="right">
             <SectionLabel tone="light">About BLCN</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               A Network Ablaze
             </h2>
             <div className="space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -258,20 +258,20 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 4. Beliefs ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Our Beliefs</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               What We Stand For
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {BELIEFS.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
-                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-sky">
+                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-orange-light">
                   {card.title}
                 </h3>
                 <p className="font-sans text-base leading-relaxed text-white/70">
@@ -284,24 +284,24 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 5. Services ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="light">Join Us</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Service Times
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mx-auto mt-16 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
             {SERVICES.map((svc, i) => (
               <AnimateIn key={svc.title} delay={i * 0.1} className="h-full">
-                <div className="h-full border-t-2 border-blue-sky bg-cream p-8 text-center">
-                  <h3 className="mb-2 font-serif text-lg font-bold leading-tight text-blue-navy">
+                <div className="h-full border-t-2 border-brand-orange bg-cream p-8 text-center">
+                  <h3 className="mb-2 font-serif text-lg font-bold leading-tight text-brand-blue">
                     {svc.title}
                   </h3>
-                  <p className="mb-4 font-sans text-xs uppercase tracking-widest text-wine">
+                  <p className="mb-4 font-sans text-xs uppercase tracking-widest text-brand-orange-deep">
                     {svc.time}
                   </p>
                   <p className="font-sans text-base leading-relaxed text-muted">
@@ -313,14 +313,14 @@ export default function BLCNPage() {
           </div>
 
           <AnimateIn direction="up" className="mx-auto mt-12 max-w-4xl">
-            <div className="border-l-4 border-blue-sky bg-cream p-8 text-left">
-              <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-navy">
+            <div className="border-l-4 border-brand-orange bg-cream p-8 text-left">
+              <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-blue">
                 Visit Us
               </h3>
               <div className="flex items-start gap-3">
                 <MapPin
                   aria-hidden
-                  className="mt-1 h-5 w-5 shrink-0 text-blue-sky"
+                  className="mt-1 h-5 w-5 shrink-0 text-brand-orange-deep"
                 />
                 <p className="font-sans text-base leading-relaxed text-muted">
                   {BLCN?.address}
@@ -338,7 +338,7 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 6. Follow BLCN ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Connect</SectionLabel>
@@ -349,7 +349,7 @@ export default function BLCNPage() {
               Catch services, testimonies, and updates from the network on our
               own channels.
             </p>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-4">
@@ -363,10 +363,10 @@ export default function BLCNPage() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex h-full flex-col items-center justify-center border border-white/10 bg-blue-deep/50 p-8 text-center transition-colors hover:border-white/30"
+                  className="group flex h-full flex-col items-center justify-center border border-white/10 bg-white/[0.07] p-8 text-center transition-colors hover:border-white/30"
                 >
                   <social.Icon size={28} />
-                  <span className="mt-4 font-serif text-base font-bold leading-tight text-white transition-colors group-hover:text-blue-sky">
+                  <span className="mt-4 font-serif text-base font-bold leading-tight text-white transition-colors group-hover:text-brand-orange-light">
                     {social.name}
                   </span>
                   <span className="mt-1 font-sans text-xs uppercase tracking-[0.15em] text-white/50">
@@ -380,7 +380,7 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 7. Network Vision ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up">
             <SectionLabel tone="dark">The Network</SectionLabel>
@@ -397,8 +397,8 @@ export default function BLCNPage() {
           <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
             {NETWORK_STATS.map((item, i) => (
               <AnimateIn key={item.stat} delay={i * 0.1} className="h-full">
-                <div className="h-full border-t-2 border-blue-sky bg-blue-deep/50 px-8 py-8 text-center">
-                  <p className="font-serif text-xl font-bold leading-tight text-blue-sky">
+                <div className="h-full border-t-2 border-brand-orange bg-white/[0.07] px-8 py-8 text-center">
+                  <p className="font-serif text-xl font-bold leading-tight text-brand-orange-light">
                     {item.stat}
                   </p>
                   <p className="mt-2 font-sans text-xs uppercase tracking-[0.2em] text-white/50">
@@ -412,7 +412,7 @@ export default function BLCNPage() {
       </section>
 
       {/* ── 8. CTA ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Be Part of the Family
@@ -421,7 +421,7 @@ export default function BLCNPage() {
             BLCN is a family in Ado Ekiti. Come as you are — there is a place
             here for you.
           </p>
-          <Button href="/contact" variant="wine" size="lg">
+          <Button href="/contact" variant="secondary" size="lg">
             Contact Us
           </Button>
         </AnimateIn>

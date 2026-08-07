@@ -57,17 +57,17 @@ export default async function TeachingsPage() {
       />
 
       {/* ── 2. About the Channel ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
-            <div className="flex items-center justify-center bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep p-16 shadow-xl">
+            <div className="flex items-center justify-center bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy p-16 shadow-xl">
               <TelegramIcon size={120} />
             </div>
           </AnimateIn>
 
           <AnimateIn direction="right">
             <SectionLabel tone="light">About the Channel</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               A Library of the Word
             </h2>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -97,7 +97,7 @@ export default async function TeachingsPage() {
       </section>
 
       {/* ── 3. Latest Sermons — live from the Telegram channel ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
             <SectionLabel tone="dark">Listen Now</SectionLabel>
@@ -107,7 +107,7 @@ export default async function TeachingsPage() {
             <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
               Our 5 most recent teachings — updated automatically
             </p>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           {sermons.length > 0 ? (
@@ -173,18 +173,18 @@ export default async function TeachingsPage() {
       </section>
 
       {/* ── 4. Watch — YouTube ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
             <SectionLabel tone="light">Watch</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Services on YouTube
             </h2>
             <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg">
               Full services, live sessions, and video messages from Pastor
               Awe.
             </p>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <AnimateIn direction="up" className="mt-16">
@@ -194,7 +194,7 @@ export default async function TeachingsPage() {
                 title="Ayodele Awe Ministries on YouTube"
               />
             ) : (
-              <div className="border-t-2 border-blue-sky bg-cream p-12 text-center">
+              <div className="border-t-2 border-brand-orange bg-cream p-12 text-center">
                 <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
                   Watch every service and message on the ministry&apos;s YouTube
                   channel.
@@ -209,20 +209,20 @@ export default async function TeachingsPage() {
       </section>
 
       {/* ── 5. What to Expect ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">What to Expect</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Content on the Channel
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {CONTENT_TYPES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
-                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-sky">
+                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-orange-light">
                   {card.title}
                 </h3>
                 <p className="font-sans text-base leading-relaxed text-white/70">
@@ -235,7 +235,7 @@ export default async function TeachingsPage() {
       </section>
 
       {/* ── 6. CTA Banner ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Start Today
@@ -243,7 +243,7 @@ export default async function TeachingsPage() {
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             Join the channel today and let the Word transform your life.
           </p>
-          <Button href={SOCIALS.telegram} variant="wine" size="lg" external>
+          <Button href={SOCIALS.telegram} variant="secondary" size="lg" external>
             Join Telegram Channel
           </Button>
         </AnimateIn>

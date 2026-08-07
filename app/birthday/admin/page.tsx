@@ -33,7 +33,7 @@ import type { Testimony } from "@/lib/birthday";
 const SESSION_KEY = "birthday-admin-key";
 
 const FIELD =
-  "w-full rounded-full border border-white/20 bg-white/5 px-6 py-3.5 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-blue-sky";
+  "w-full rounded-full border border-white/20 bg-white/5 px-6 py-3.5 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-brand-orange";
 
 type View = "active" | "archived";
 
@@ -171,12 +171,12 @@ export default function BirthdayAdminPage() {
   }
 
   if (secret === undefined) {
-    return <div className="min-h-screen bg-blue-navy" />;
+    return <div className="min-h-screen bg-brand-navy" />;
   }
 
   if (!secret) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-navy to-blue-deep px-4 py-24">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-navy to-brand-blue px-4 py-24">
         <form onSubmit={handleUnlock} className="w-full max-w-sm">
           <h1 className="mb-2 font-serif text-2xl font-bold leading-tight text-white">
             Birthday Testimonies
@@ -220,7 +220,7 @@ export default function BirthdayAdminPage() {
   const archivedView = view === "archived";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-16 sm:px-6 lg:px-16">
+    <div className="min-h-screen bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-16 sm:px-6 lg:px-16">
       <div className="mx-auto max-w-3xl">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -259,7 +259,7 @@ export default function BirthdayAdminPage() {
               onClick={() => setView(option)}
               className={`font-sans text-xs font-semibold uppercase tracking-[0.2em] transition-colors ${
                 view === option
-                  ? "text-blue-sky"
+                  ? "text-brand-orange-light"
                   : "text-white/40 hover:text-white/70"
               }`}
             >
@@ -281,7 +281,7 @@ export default function BirthdayAdminPage() {
         )}
 
         {testimonies !== null && testimonies.length === 0 && !loadError && (
-          <p className="border-l-4 border-blue-sky bg-white/5 p-6 font-sans text-sm text-white/60">
+          <p className="border-l-4 border-brand-orange bg-white/5 p-6 font-sans text-sm text-white/60">
             {archivedView
               ? "Nothing has been archived."
               : "No testimonies have been submitted yet."}
@@ -292,7 +292,7 @@ export default function BirthdayAdminPage() {
           {testimonies?.map((t, i) => (
             <article
               key={t.id ?? `${t.submittedAt}-${i}`}
-              className="border-t-2 border-blue-sky bg-white/5 p-6 sm:p-8"
+              className="border-t-2 border-brand-orange bg-white/5 p-6 sm:p-8"
             >
               <div className="mb-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h2 className="font-serif text-lg font-bold leading-tight text-white">
@@ -310,7 +310,7 @@ export default function BirthdayAdminPage() {
                   {t.email && (
                     <a
                       href={`mailto:${t.email}`}
-                      className="underline-offset-4 transition-colors hover:text-blue-sky hover:underline"
+                      className="underline-offset-4 transition-colors hover:text-brand-orange-light hover:underline"
                     >
                       {t.email}
                     </a>
@@ -328,7 +328,7 @@ export default function BirthdayAdminPage() {
                   variant="outline"
                   disabled={busyId === t.id}
                   className={
-                    archivedView ? "text-blue-sky" : "text-red-300 hover:bg-red-400/10"
+                    archivedView ? "text-brand-orange-light" : "text-red-300 hover:bg-red-400/10"
                   }
                 >
                   {busyId === t.id
@@ -342,7 +342,7 @@ export default function BirthdayAdminPage() {
           ))}
         </div>
 
-        <p className="mt-10 border-l-4 border-blue-sky bg-white/5 p-6 font-sans text-sm leading-relaxed text-white/60">
+        <p className="mt-10 border-l-4 border-brand-orange bg-white/5 p-6 font-sans text-sm leading-relaxed text-white/60">
           Deleting archives a testimony rather than destroying it — it is kept in
           storage, out of this list, and can be brought back from the Archived
           view. Nothing shared here is ever lost.

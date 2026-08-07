@@ -34,7 +34,7 @@ export default function ChurchCard({
   return (
     // The card is a plain container, not a link — the CTA below is the single
     // interactive target, so the Button can be a real anchor without nesting.
-    <div className="group flex h-full flex-col border border-white/5 bg-blue-deep/50 transition-colors hover:border-white/20">
+    <div className="group flex h-full flex-col border border-white/5 bg-white/[0.07] transition-colors hover:border-white/20">
       <div className="relative aspect-video w-full overflow-hidden">
         {logoUrl ? (
           // Light plate: both emblems carry their own ground (BHCC navy/orange
@@ -42,7 +42,7 @@ export default function ChurchCard({
           // and reads as a brand plate rather than a cropped photo. No scrim
           // and no acronym overlay here — nothing is set over the artwork, so
           // the acronym moves into the body below.
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-white to-[#EEF3FA] p-8">
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-white to-brand-tint p-8">
             <div className="relative h-full w-full">
               <Image
                 src={logoUrl}
@@ -72,7 +72,7 @@ export default function ChurchCard({
             </span>
           </>
         ) : (
-          <div className="h-full w-full bg-blue-navy" />
+          <div className="h-full w-full bg-brand-navy" />
         )}
       </div>
 
@@ -81,7 +81,7 @@ export default function ChurchCard({
           {name}
         </h3>
 
-        <p className="mt-2 font-sans text-xs uppercase tracking-widest text-blue-sky">
+        <p className="mt-2 font-sans text-xs uppercase tracking-widest text-brand-orange-light">
           {logoUrl && (
             <span className="mr-2 font-semibold text-white">{acronym}</span>
           )}

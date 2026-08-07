@@ -124,7 +124,7 @@ export default function BirthdayPage() {
       {/* `min-h-[100svh]`, not `min-h-screen`: `vh` on mobile Safari is the
           viewport *without* browser chrome, so a full-height hero is clipped
           top and bottom until the address bar collapses. */}
-      <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-gradient-to-br from-bday-navy via-bday-blue to-bday-navy px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-10 lg:px-16">
+      <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-10 lg:px-16">
         {/* Soft radial glows — orange behind the copy, blue behind the
             portrait — so the gradient does not read as a flat wash. */}
         <div
@@ -171,7 +171,7 @@ export default function BirthdayPage() {
                   aria-hidden
                   className="absolute -inset-6 rounded-full bg-[radial-gradient(circle,rgba(235,100,52,0.40),transparent_70%)] blur-2xl sm:-inset-8"
                 />
-                <div className="relative h-56 w-56 overflow-hidden rounded-full ring-4 ring-bday-orange/40 ring-offset-4 ring-offset-transparent sm:h-72 sm:w-72 lg:h-80 lg:w-80 xl:h-96 xl:w-96">
+                <div className="relative h-56 w-56 overflow-hidden rounded-full ring-4 ring-brand-orange/40 ring-offset-4 ring-offset-transparent sm:h-72 sm:w-72 lg:h-80 lg:w-80 xl:h-96 xl:w-96">
                   <Image
                     src="/images/apostle-portrait.jpg"
                     alt={`Pastor ${MINISTER_NAME}`}
@@ -185,14 +185,14 @@ export default function BirthdayPage() {
             </AnimateIn>
 
             <AnimateIn direction="left" className="text-center lg:text-left">
-              <SectionLabel tone="bdayDark">{BIRTHDAY.fullDate}</SectionLabel>
+              <SectionLabel tone="dark">{BIRTHDAY.fullDate}</SectionLabel>
               {/* The name runs to 26 characters, so the base step is 40px, not
                   48px — at 48px "Celebrating" alone fills a 375px line. */}
               <h1 className="mb-6 text-balance font-serif text-[2.5rem] font-bold leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl">
                 Celebrating{" "}
                 <span className="shimmer-text">Pastor {MINISTER_NAME}</span>
               </h1>
-              <div className="mx-auto mb-8 h-0.5 w-16 bg-bday-orange lg:mx-0" />
+              <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange lg:mx-0" />
               <p className="mx-auto mb-10 max-w-xl text-balance font-sans text-lg leading-relaxed text-white/75 sm:text-xl lg:mx-0">
                 A Life of Revival, Discipleship, and Pointing Others to Christ
               </p>
@@ -205,7 +205,7 @@ export default function BirthdayPage() {
               <div className="mx-auto flex max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center lg:mx-0 lg:justify-start">
                 <Button
                   href="#testimony"
-                  variant="birthday"
+                  variant="primary"
                   size="lg"
                   className="w-full sm:w-auto"
                 >
@@ -218,7 +218,7 @@ export default function BirthdayPage() {
       </section>
 
       {/* ── 2. Countdown ──────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-bday-navy via-bday-blue to-bday-navy px-4 py-20 sm:px-6 sm:py-28 lg:px-16">
+      <section className="relative overflow-hidden bg-gradient-to-b from-brand-navy via-brand-blue to-brand-navy px-4 py-20 sm:px-6 sm:py-28 lg:px-16">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(235,100,52,0.28),transparent_62%)]"
@@ -226,11 +226,11 @@ export default function BirthdayPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl">
           <AnimateIn direction="up" className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
-            <SectionLabel tone="bdayDark">{BIRTHDAY_DATE_SHORT}</SectionLabel>
+            <SectionLabel tone="dark">{BIRTHDAY_DATE_SHORT}</SectionLabel>
             <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Counting Down to His Special Day
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-bday-orange" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <AnimateIn direction="fade">
@@ -242,19 +242,19 @@ export default function BirthdayPage() {
       {/* ── 3. Testimonies ────────────────────────────────────────────────── */}
       <section
         id="testimony"
-        className="bg-gradient-to-b from-white to-[#F1F5FA] px-4 py-20 sm:px-6 sm:py-28 lg:px-16"
+        className="bg-gradient-to-b from-white to-brand-tint px-4 py-20 sm:px-6 sm:py-28 lg:px-16"
       >
         <div className="mx-auto max-w-3xl">
           <AnimateIn direction="up" className="mb-10 text-center sm:mb-12">
-            <SectionLabel tone="bdayLight">Testimonies</SectionLabel>
-            <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-bday-blue sm:text-4xl md:text-5xl">
+            <SectionLabel tone="light">Testimonies</SectionLabel>
+            <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Share How He&rsquo;s Blessed Your Life
             </h2>
-            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-bday-ink sm:text-lg">
+            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg">
               Your words are a gift — share a testimony, a memory, or a word of
               appreciation for Pastor Ayodele&rsquo;s life and ministry.
             </p>
-            <div className="mx-auto h-0.5 w-16 bg-bday-orange" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <AnimateIn direction="up" delay={0.1}>
@@ -264,32 +264,32 @@ export default function BirthdayPage() {
       </section>
 
       {/* ── 4. Closing ────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#F1F5FA] to-white px-4 py-20 sm:px-6 sm:py-28 lg:px-16">
+      <section className="relative overflow-hidden bg-gradient-to-b from-brand-tint to-white px-4 py-20 sm:px-6 sm:py-28 lg:px-16">
         <span
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 select-none font-serif text-[140px] leading-none text-bday-blue/[0.06] sm:text-[200px]"
+          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 select-none font-serif text-[140px] leading-none text-brand-blue/[0.06] sm:text-[200px]"
         >
           &ldquo;
         </span>
 
         <AnimateIn direction="fade" className="relative z-10 mx-auto max-w-3xl text-center">
-          <SectionLabel tone="bdayLight">With Thanksgiving</SectionLabel>
-          <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-bday-blue sm:text-4xl md:text-5xl">
+          <SectionLabel tone="light">With Thanksgiving</SectionLabel>
+          <h2 className="mb-6 text-balance font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
             Happy Birthday, Pastor Ayodele
           </h2>
-          <p className="mx-auto mb-10 max-w-2xl font-sans text-base leading-relaxed text-bday-ink sm:text-lg">
+          <p className="mx-auto mb-10 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg">
             From Norwich to Ado Ekiti and far beyond, we thank God for a life
             given to revival, to discipleship, and to pointing people to Christ.
             May the years ahead be fuller still.
           </p>
 
-          <div className="mx-auto mb-12 max-w-2xl border-t-2 border-bday-orange bg-white p-6 shadow-sm sm:p-8">
-            <p className="text-balance font-serif text-lg font-bold italic leading-relaxed text-bday-blue sm:text-xl">
+          <div className="mx-auto mb-12 max-w-2xl border-t-2 border-brand-orange bg-white p-6 shadow-sm sm:p-8">
+            <p className="text-balance font-serif text-lg font-bold italic leading-relaxed text-brand-blue sm:text-xl">
               &ldquo;Remember those who rule over you, who have spoken the word
               of God to you, whose faith follow, considering the outcome of
               their conduct.&rdquo;
             </p>
-            <p className="mt-4 font-sans text-xs uppercase tracking-[0.2em] text-bday-orange-deep">
+            <p className="mt-4 font-sans text-xs uppercase tracking-[0.2em] text-brand-orange-deep">
               Hebrews 13:7
             </p>
           </div>
@@ -298,22 +298,22 @@ export default function BirthdayPage() {
               wants to give without writing a testimony first. Deliberately an
               `outline` button and one size down from the share CTA below it:
               the page's ask is the testimony, this is an aside.
-              ⚠️ `bday-orange-deep` (5.1:1 on white), never the brand
-              `bday-orange` — that is 3.3:1 and fails AA at this size. */}
+              ⚠️ `brand-orange-deep` (5.1:1 on white), never the brand
+              `brand-orange` — that is 3.3:1 and fails AA at this size. */}
           <div className="mx-auto mb-14 max-w-md">
-            <p className="mb-5 font-sans text-base leading-relaxed text-bday-ink">
+            <p className="mb-5 font-sans text-base leading-relaxed text-muted">
               You may also honour him with a birthday gift of appreciation.
             </p>
             <GiveButton
               variant="outline"
               size="default"
-              className="w-full text-bday-orange-deep hover:bg-bday-orange-deep/5 sm:w-auto"
+              className="w-full text-brand-orange-deep hover:bg-brand-orange-deep/5 sm:w-auto"
             >
               Give to Pastor Ayodele
             </GiveButton>
           </div>
 
-          <p className="mb-6 font-sans text-base font-semibold text-bday-blue">
+          <p className="mb-6 font-sans text-base font-semibold text-brand-blue">
             Know someone who should celebrate with us?
           </p>
           <SharePage />

@@ -20,7 +20,7 @@ export default function EventCard({
   ctaLabel = "Register",
 }: EventCardProps) {
   return (
-    <div className="group flex h-full flex-col bg-gradient-to-br from-white to-[#EEF3FA] shadow-lg transition-shadow duration-300 hover:shadow-xl">
+    <div className="group flex h-full flex-col bg-gradient-to-br from-white to-brand-tint shadow-lg transition-shadow duration-300 hover:shadow-xl">
       {/* Image + date badge */}
       <div className="relative aspect-video w-full overflow-hidden">
         {imageUrl ? (
@@ -36,7 +36,7 @@ export default function EventCard({
              under an event's name reads as a photo *of that event* — the same
              failure the Content Integrity Notes describe. The ministry mark on
              the standard dark-hero gradient claims nothing. */
-          <div className="flex h-full items-center justify-center bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+          <div className="flex h-full items-center justify-center bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
             <Image
               src="/images/awe-min-mark.png"
               alt=""
@@ -49,14 +49,14 @@ export default function EventCard({
           </div>
         )}
 
-        <span className="absolute left-4 top-4 bg-wine px-3 py-1 font-sans text-xs font-semibold uppercase tracking-widest text-white">
+        <span className="absolute left-4 top-4 bg-brand-orange-deep px-3 py-1 font-sans text-xs font-semibold uppercase tracking-widest text-white">
           {date}
         </span>
       </div>
 
       {/* Content */}
       <div className="flex flex-1 flex-col p-6 sm:p-8">
-        <h3 className="mt-4 font-serif text-xl font-bold leading-tight text-blue-navy transition-colors group-hover:text-blue">
+        <h3 className="mt-4 font-serif text-xl font-bold leading-tight text-brand-blue transition-colors group-hover:text-brand-orange-deep">
           {title}
         </h3>
         <p className="mb-8 mt-2 flex-1 font-sans text-xs uppercase tracking-widest text-muted">

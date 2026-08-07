@@ -1,50 +1,65 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Color system — Blue / Wine / Neutral */
-  --color-white: #FFFFFF;
-  --color-cream: #F8F9FC;
-  --color-blue-sky: #4A90D9;
-  --color-blue: #1B4F8A;
-  --color-blue-deep: #0F2D5A;
-  --color-blue-navy: #0A1628;
-  --color-wine-light: #8B2346;
-  --color-wine: #6B1530;
-  --color-wine-deep: #4A0D20;
-  --color-muted: #6B7A99;
+  /* ── Colour system — White / Blue / Orange ──────────────────────────────
+     The site-wide palette, as of 7 August 2026. The old blue/wine gradient
+     system (blue-sky, blue, blue-deep, blue-navy, wine-light, wine,
+     wine-deep) is **fully retired** — those tokens no longer exist, so a
+     stray `bg-wine` or `text-blue-sky` now silently produces no styles.
 
-  /* ── /birthday only ────────────────────────────────────────────────────
-     The birthday page is a standalone shareable with its own palette:
-     white primary, deep blue secondary, orange accent. These are additive —
-     nothing above changes, so the main site is untouched when it launches.
+     These are not new values. They are /birthday's `bday-*` tokens, renamed:
+     that page was the palette's proving ground and every contrast figure
+     below was measured there. Nothing was re-derived in the migration, and
+     nothing is duplicated — /birthday now reads the same tokens as the rest
+     of the site.
 
      ⚠️ There are three oranges and they are NOT interchangeable. #EB6434 is
      only 3.3:1 on white and 4.0:1 on the deep blue — fine for a 60px numeral
      (AA large is 3:1), nowhere near enough for a 12px label. Each measured
      figure below is against the ground that tone actually renders on, which
      is why the light one is not simply the brand colour lightened:
-       --color-bday-orange       #EB6434  the brand accent. Glows, rules,
-                                          borders, display-size numerals only.
-       --color-bday-orange-deep  #BC4820  5.1:1 under white — the solid CTA
-                                          fill; also small accent text on the
-                                          light sections, where it is 4.7:1
-                                          even on the #F1F5FA tint (the
-                                          brighter #C74E23 was 4.2:1 there).
-       --color-bday-orange-dark  #9C3A18  the CTA hover, 6.9:1 under white.
-       --color-bday-orange-light #FF9A70  small accent text on DARK only —
-                                          4.8:1 at the brightest point of the
-                                          hero's orange glow, 6.3:1 on flat
-                                          deep blue. It is 2.2:1 on white, so
-                                          it must never touch a light section.
-     --color-bday-ink is body copy on the light sections, 6.9:1 at worst. */
-  --color-bday-navy: #011E3C;
-  --color-bday-blue: #013161;
-  --color-bday-blue-mid: #024A8F;
-  --color-bday-orange: #EB6434;
-  --color-bday-orange-deep: #BC4820;
-  --color-bday-orange-dark: #9C3A18;
-  --color-bday-orange-light: #FF9A70;
-  --color-bday-ink: #45566B;
+       --color-brand-orange       #EB6434  the brand accent. Glows, rules,
+                                           borders, display-size numerals only.
+       --color-brand-orange-deep  #BC4820  5.1:1 under white — the solid CTA
+                                           fill; also small accent text on the
+                                           light sections, where it is 4.7:1
+                                           even on the tint (the brighter
+                                           #C74E23 was 4.2:1 there).
+       --color-brand-orange-dark  #9C3A18  the CTA hover, 6.9:1 under white.
+       --color-brand-orange-light #FF9A70  small accent text on DARK only —
+                                           4.8:1 at the brightest point of a
+                                           hero's orange glow, 6.3:1 on flat
+                                           brand-blue. It is 2.2:1 on white, so
+                                           it must never touch a light section.
+
+     Two blues, not four. `brand-blue` is the workhorse — dark section grounds
+     and every heading on a light section. `brand-navy` is the darker stop the
+     dark gradients run out to. `brand-blue-mid` is a glow/dot colour and a
+     light-section accent; it is NOT a section ground (see CLAUDE.md — a band
+     that light pulls the accent-on-dark figures below AA). */
+  --color-white: #FFFFFF;
+  --color-brand-navy: #011E3C;
+  --color-brand-blue: #013161;
+  --color-brand-blue-mid: #024A8F;
+  --color-brand-orange: #EB6434;
+  --color-brand-orange-deep: #BC4820;
+  --color-brand-orange-dark: #9C3A18;
+  --color-brand-orange-light: #FF9A70;
+
+  /* The pale end of every light section's gradient. Was the bare hex
+     `#EEF3FA` on the main site and `#F1F5FA` on /birthday; the two are now
+     one token at /birthday's value, which is what the light-section contrast
+     figures above were measured against. */
+  --color-brand-tint: #F1F5FA;
+  --color-cream: #F8F9FC;
+
+  /* Body copy on light sections. This is /birthday's `bday-ink`, adopted
+     under the existing `muted` name so no page had to change which utility it
+     uses. ⚠️ The VALUE changed: the old #6B7A99 was **4.3:1 on white and
+     therefore below AA for normal text** — every paragraph on every light
+     section on the site was failing. #45566B is 7.5:1 on white and 6.9:1 on
+     the tint. Don't put the old value back. */
+  --color-muted: #45566B;
 
   /* Typography — Clash Display everywhere.
      `--font-serif` is kept as an alias so the ~15 pages using the `font-serif`
@@ -54,7 +69,7 @@
 }
 
 body {
-  background: var(--color-blue-navy);
+  background: var(--color-brand-navy);
   color: #ffffff;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -66,7 +81,7 @@ html {
 }
 
 ::selection {
-  background: var(--color-wine);
+  background: var(--color-brand-orange-deep);
   color: #ffffff;
 }
 
@@ -86,9 +101,11 @@ section[id] {
   scroll-margin-top: 5rem;
 }
 
-/* Visible, on-brand keyboard focus */
+/* Visible, on-brand keyboard focus. The brand orange is the one tone with
+   enough separation from both grounds to read on a white section and a
+   brand-blue one alike — the retired blue-sky was near-invisible on navy. */
 :focus-visible {
-  outline: 2px solid var(--color-blue-sky);
+  outline: 2px solid var(--color-brand-orange);
   outline-offset: 2px;
 }
 
@@ -110,7 +127,7 @@ section[id] {
   background-image: linear-gradient(
     100deg,
     #ffffff 35%,
-    var(--color-bday-orange-light) 48%,
+    var(--color-brand-orange-light) 48%,
     #ffffff 62%
   );
   background-size: 200% 100%;
@@ -153,21 +170,28 @@ section[id] {
   animation: shimmer-sweep 2.6s ease-out 0.9s 1 both;
 }
 
+/* Identical to `.shimmer-text`'s gradient — same accent band, same end stops.
+   The two rules differ only in timing (one pass here, a loop there), which is
+   the whole reason they are separate classes rather than one. */
 .hero-shimmer {
   background-image: linear-gradient(
     100deg,
     #ffffff 35%,
-    var(--color-blue-sky) 48%,
+    var(--color-brand-orange-light) 48%,
     #ffffff 62%
   );
 }
 
+/* ⚠️ The accent stop here is `orange-deep`, not `orange-light`. The light
+   tone is 2.2:1 on white — mid-sweep the heading would all but vanish on a
+   light section. The end stops are `brand-blue`, matching the h1 colour the
+   sweep settles back to. */
 .hero-shimmer-light {
   background-image: linear-gradient(
     100deg,
-    var(--color-blue-navy) 35%,
-    var(--color-blue-sky) 48%,
-    var(--color-blue-navy) 62%
+    var(--color-brand-blue) 35%,
+    var(--color-brand-orange-deep) 48%,
+    var(--color-brand-blue) 62%
   );
 }
 
@@ -182,6 +206,6 @@ section[id] {
   .hero-shimmer-light {
     animation: none;
     background-image: none;
-    color: var(--color-blue-navy);
+    color: var(--color-brand-blue);
   }
 }

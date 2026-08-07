@@ -87,7 +87,7 @@ export default function AboutPage() {
       />
 
       {/* ── 2. Bio Section ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <div className="relative aspect-square overflow-hidden">
@@ -103,17 +103,17 @@ export default function AboutPage() {
 
           <AnimateIn direction="right">
             <SectionLabel tone="light">My Story</SectionLabel>
-            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Ayodele Oladapo Awe <span className="text-muted">(RDP)</span>
             </h2>
-            <p className="mb-8 font-sans text-xs uppercase tracking-[0.2em] text-wine">
+            <p className="mb-8 font-sans text-xs uppercase tracking-[0.2em] text-brand-orange-deep">
               Pastor &middot; Founder &amp; President
             </p>
 
             {/* The tagline the initials stand for — sits directly under the
                 name so "RDP" reads as its acronym without needing a gloss. */}
-            <blockquote className="mb-8 border-l-4 border-blue-sky pl-6">
-              <p className="font-serif text-2xl font-bold italic leading-tight text-blue-navy sm:text-3xl">
+            <blockquote className="mb-8 border-l-4 border-brand-orange pl-6">
+              <p className="font-serif text-2xl font-bold italic leading-tight text-brand-blue sm:text-3xl">
                 Revivalist. Discipler. Pointer.
               </p>
             </blockquote>
@@ -129,12 +129,12 @@ export default function AboutPage() {
 
       {/* ── 3. Mandate — the umbrella vision the expressions below serve ── */}
       {/* Gradient backdrop, not a photo — the former Unsplash texture sat under
-          a blue-navy/85 wash plus a second gradient, so the section already read
+          a brand-navy/85 wash plus a second gradient, so the section already read
           as this gradient. It just cost a network request to get here. */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="relative overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-blue-navy/60 via-transparent to-blue-navy/30"
+          className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-brand-navy/30"
         />
 
         <div className="relative z-10 mx-auto max-w-7xl text-center">
@@ -143,13 +143,13 @@ export default function AboutPage() {
             <h2 className="mx-auto mb-6 max-w-3xl font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Raising Voices, Building Houses, Transforming Nations
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {MANDATE.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
-                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-sky">
+                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-orange-light">
                   {card.title}
                 </h3>
                 <p className="font-sans text-base leading-relaxed text-white/70">
@@ -162,13 +162,13 @@ export default function AboutPage() {
       </section>
 
       {/* ── 4. Ministry teaser — the detail lives at /ministry ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="light">In Practice</SectionLabel>
-          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
             How I Live This Out
           </h2>
-          <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+          <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
           <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
             {EXPRESSIONS_TEASER}
           </p>
@@ -179,7 +179,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 5. Life & Family ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SectionLabel tone="dark">Life &amp; Family</SectionLabel>
@@ -197,18 +197,19 @@ export default function AboutPage() {
           <div className="space-y-4">
             {STATS.map((item, i) => (
               <AnimateIn key={item.stat} direction="right" delay={i * 0.1}>
-                <div className="border-t-2 border-blue-sky bg-blue-deep/50 px-8 py-8 text-center">
+                <div className="border-t-2 border-brand-orange bg-white/[0.07] px-8 py-8 text-center">
                   {/* The figure is the accent, the label stays white — the
-                      split `BirthdayCountdown` makes with its numerals, and
-                      what BLCN's "Network" stats already did. These two grids
-                      were the site's only disagreement on the point.
+                      split `CountdownTimer` and `BirthdayCountdown` both make
+                      with their numerals, and what BLCN's "Network" stats
+                      already did.
 
-                      ⚠️ 3.17:1 against the card (`bg-blue-deep/50` over this
-                      section's `to-blue` stop, the lightest ground it sits on).
-                      That clears AA **large** only, which 24px bold qualifies
-                      for — so this size is the floor. Anything smaller in this
-                      tile has to go back to white. */}
-                  <p className="font-serif text-2xl font-bold leading-tight text-blue-sky sm:text-3xl">
+                      ⚠️ `brand-orange` here is 3.26:1 against the card
+                      (`bg-white/[0.07]` over this section's `from-brand-blue`
+                      stop, the lightest ground it sits on). That clears AA
+                      **large** only, which 24px bold qualifies for — so this
+                      size is the floor. Anything smaller in this tile takes
+                      `brand-orange-light` or goes back to white. */}
+                  <p className="font-serif text-2xl font-bold leading-tight text-brand-orange sm:text-3xl">
                     {item.stat}
                   </p>
                   <p className="mt-2 font-sans text-xs uppercase tracking-[0.2em] text-white/50">
@@ -222,7 +223,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 6. Churches Teaser ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
             <SectionLabel tone="dark">Our Churches</SectionLabel>
@@ -252,7 +253,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 7. CTA Banner ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Join the Movement
@@ -262,7 +263,7 @@ export default function AboutPage() {
             this ministry. I would love to welcome you.
           </p>
           <div className="flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center">
-            <Button href="/churches" variant="wine" size="lg">
+            <Button href="/churches" variant="secondary" size="lg">
               Find a Church
             </Button>
             <Button href="/contact" variant="outline" size="lg" className="text-white">

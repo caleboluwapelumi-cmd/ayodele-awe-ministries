@@ -16,12 +16,13 @@ interface TimeLeft {
 /**
  * The Prayer Surge countdown, on `/` and `/events`.
  *
- * The treatment is `BirthdayCountdown`'s, ported to the site's blue palette so
- * the two countdowns on this project read as one component rather than two: the
- * same sharp accent-topped tiles, the same 2×2 → 4-across grid, the same
- * display numerals over small uppercase tracked labels.
+ * The treatment is `BirthdayCountdown`'s: the same sharp accent-topped tiles,
+ * the same 2×2 → 4-across grid, the same display numerals over small uppercase
+ * tracked labels. Since the palette migration it is also the same *colour* —
+ * the two countdowns on this project are now one component in all but the
+ * clock they read from.
  *
- * ⚠️ The labels are full words now ("Minutes", not "Min"). They were abbreviated
+ * ⚠️ The labels are full words ("Minutes", not "Min"). They were abbreviated
  * because the old `flex-wrap` row had no room; the 2-column mobile grid gives
  * each tile ~165px, which fits the word.
  */
@@ -29,20 +30,21 @@ interface TimeLeft {
 const SEGMENTS = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
 /**
- * ⚠️ `blue-sky` (#4A90D9) is 3.10:1 against the tile — the tile's
- * `bg-white/[0.07]` over the band's `via-blue-deep` stop, which is the darkest
- * this gets and therefore the figure that governs. That clears AA **large**
- * (3:1) and nothing more, so it is legitimate at 60px+ and at no smaller size.
- * This is the tightest accent-on-dark pairing on the site — measured, not
- * eyeballed. The unit labels below stay white for exactly that reason, the same
- * split `BirthdayCountdown` makes with its orange.
+ * ⚠️ `brand-orange` is **3.26:1** against the tile — the tile's
+ * `bg-white/[0.07]` over the band's `via-brand-blue` stop, which is the
+ * lightest ground the numerals sit on and therefore the figure that governs.
+ * (On the flat section it is 4.0:1; the 7% white lift is what costs the
+ * difference, so measuring against the band rather than the tile overstates it.)
  *
- * Measure again if the band's gradient is ever lightened; `to-wine-deep` and
- * `from-blue-navy` are both more forgiving (3.83:1 and better), so the middle
- * stop is the one to check.
+ * 3.26:1 clears AA **large** (3:1) and nothing more, so it is legitimate at
+ * 60px+ and at no smaller size. The unit labels below stay white for exactly
+ * that reason — the same split `BirthdayCountdown` makes.
+ *
+ * Re-measure if the band is ever lightened. `from-brand-navy` is the more
+ * forgiving stop, so `via-brand-blue` is the one to check.
  */
 const NUMBER_CLASS =
-  "font-serif font-bold leading-none tabular-nums text-blue-sky text-6xl sm:text-6xl md:text-7xl lg:text-8xl";
+  "font-serif font-bold leading-none tabular-nums text-brand-orange text-6xl sm:text-6xl md:text-7xl lg:text-8xl";
 /** ⚠️ /65 measured against the tile's `bg-white/[0.07]`, not the band — 5.5:1. */
 const UNIT_LABEL_CLASS =
   "mt-3 font-sans text-[0.625rem] font-semibold uppercase tracking-[0.25em] text-white/65 sm:text-xs";
@@ -59,7 +61,7 @@ const UNIT_LABEL_CLASS =
 const GRID_CLASS =
   "mx-auto grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:gap-6";
 const TILE_CLASS =
-  "flex flex-col items-center border-t-2 border-blue-sky bg-white/[0.07] px-2 py-7 backdrop-blur-sm sm:px-6 sm:py-10";
+  "flex flex-col items-center border-t-2 border-brand-orange bg-white/[0.07] px-2 py-7 backdrop-blur-sm sm:px-6 sm:py-10";
 
 function calculateTimeLeft(target: Date): TimeLeft | null {
   const diff = target.getTime() - Date.now();
@@ -102,8 +104,12 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
   }, [targetDate]);
 
   if (state.status === "expired") {
+    // ⚠️ `orange-light`, not the `brand-orange` the numerals use. This is 20px
+    // — under the 24px the AA-large exemption needs for non-bold text, and only
+    // just over the 18.66px bold threshold. The light tone is 6.3:1 here and
+    // needs no exemption at all.
     return (
-      <p className="text-center font-serif text-xl font-bold text-blue-sky">
+      <p className="text-center font-serif text-xl font-bold text-brand-orange-light">
         This event has started!
       </p>
     );

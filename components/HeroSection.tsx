@@ -101,7 +101,7 @@ export default function HeroSection() {
 
       {/* Overlays — flat dark for legibility, then a navy wash into the next section */}
       <div className="absolute inset-0 bg-black/60" />
-      <div className="absolute inset-0 bg-gradient-to-t from-blue-navy/90 via-transparent to-blue-navy/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-transparent to-brand-navy/40" />
 
       {/* The atmosphere layer, shared with every `PageHero`. It sits ABOVE the
           two scrims above: under them the glow would be flattened back out by
@@ -127,7 +127,7 @@ export default function HeroSection() {
             <span className="hero-shimmer">{MINISTER_NAME}</span>
           </h1>
 
-          <div className="mb-8 h-0.5 w-16 bg-blue-sky" />
+          <div className="mb-8 h-0.5 w-16 bg-brand-orange" />
 
           <p className="mb-10 max-w-lg font-sans text-lg leading-relaxed text-white/60 sm:text-xl">
             {TAGLINE}
@@ -175,7 +175,7 @@ export default function HeroSection() {
       </div>
 
       {/* Fade into the following section */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-brand-navy to-transparent" />
     </section>
   );
 }

@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 import Button from "./Button";
 
 const INPUT_CLASS =
-  "w-full rounded-full border border-white/20 bg-white/5 px-6 py-3.5 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/40 focus:border-blue-sky";
+  "w-full rounded-full border border-white/20 bg-white/5 px-6 py-3.5 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/40 focus:border-brand-orange";
 
 export default function NewsletterForm() {
   const [firstName, setFirstName] = useState("");
@@ -67,7 +67,7 @@ export default function NewsletterForm() {
       </Button>
 
       {status === "success" && (
-        <p className="font-sans text-sm text-blue-sky">
+        <p className="font-sans text-sm text-brand-orange-light">
           Thank you for subscribing.
         </p>
       )}

@@ -49,7 +49,7 @@ const IMPACT = [
 const FIELD_LABEL =
   "mb-2 block font-sans text-xs font-semibold uppercase tracking-[0.2em] text-white/50";
 const FIELD_INPUT =
-  "w-full rounded-none border-b-2 border-white/20 bg-transparent px-0 py-3 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-blue-sky";
+  "w-full rounded-none border-b-2 border-white/20 bg-transparent px-0 py-3 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-brand-orange";
 
 export default function PartnersPage() {
   const [form, setForm] = useState({
@@ -89,10 +89,10 @@ export default function PartnersPage() {
       {/* Gradient hero, not a photo — see the note on the homepage partnership
           band. This one was `priority`, so it was blocking LCP for an image the
           scrim rendered all but invisible. */}
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+      <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-blue-navy via-transparent to-blue-navy/60"
+          className="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-brand-navy/60"
         />
         {/* The shared hero glow — this hero predates `PageHero` and builds its
             own gradient, so it opts in by hand. No particles: /partners is a
@@ -106,7 +106,7 @@ export default function PartnersPage() {
             <h1 className="mb-6 font-serif text-5xl font-bold leading-none tracking-tight text-white sm:text-6xl md:text-7xl">
               <span className="hero-shimmer">Partner With Us</span>
             </h1>
-            <div className="mb-8 h-0.5 w-16 bg-blue-sky" />
+            <div className="mb-8 h-0.5 w-16 bg-brand-orange" />
             <p className="mb-10 max-w-lg font-sans text-lg leading-relaxed text-white/60 sm:text-xl">
               Join a community of believers fuelling the gospel across the UK
               and Nigeria
@@ -122,18 +122,18 @@ export default function PartnersPage() {
           </AnimateIn>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-brand-navy to-transparent" />
       </section>
 
       {/* ── 2. Why Partner ── */}
       <section
         id="why-partner"
-        className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16"
+        className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16"
       >
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="light">Why Partner</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Your Giving Fuels the Gospel
             </h2>
             <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -143,13 +143,13 @@ export default function PartnersPage() {
               the harvest, sharing in every soul saved, every believer built up,
               and every nation touched.
             </p>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {WHY_PARTNER.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
-                <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-wine">
+                <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-brand-orange-deep">
                   {card.title}
                 </h3>
                 <p className="font-sans text-base leading-relaxed text-muted">
@@ -162,7 +162,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 3. Tiers ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Partnership Levels</SectionLabel>
@@ -181,13 +181,13 @@ export default function PartnersPage() {
                 <div
                   className={`flex h-full flex-col p-8 text-center ${
                     tier.featured
-                      ? "relative z-10 bg-blue-deep shadow-2xl ring-2 ring-blue-sky md:scale-105"
-                      : "border border-white/5 bg-blue-deep/50"
+                      ? "relative z-10 bg-white/[0.12] shadow-2xl ring-2 ring-brand-orange md:scale-105"
+                      : "border border-white/5 bg-white/[0.07]"
                   }`}
                 >
                   <p
                     className={`mb-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] ${
-                      tier.featured ? "text-blue-sky" : "text-white/40"
+                      tier.featured ? "text-brand-orange-light" : "text-white/40"
                     }`}
                   >
                     {tier.badge}
@@ -204,7 +204,7 @@ export default function PartnersPage() {
                         key={b}
                         className="flex items-start gap-3 font-sans text-sm text-white/70"
                       >
-                        <span className="mt-0.5 text-blue-sky" aria-hidden>
+                        <span className="mt-0.5 text-brand-orange-light" aria-hidden>
                           ✓
                         </span>
                         {b}
@@ -226,21 +226,21 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 4. Impact ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="light">Impact</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Where Your Seeds Go
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {IMPACT.map((item, i) => (
               <AnimateIn key={item.title} delay={i * 0.1} className="h-full">
-                <div className="h-full border-t-2 border-blue-sky bg-cream p-8 text-center">
-                  <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-wine">
+                <div className="h-full border-t-2 border-brand-orange bg-cream p-8 text-center">
+                  <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-brand-orange-deep">
                     {item.title}
                   </h3>
                   <p className="font-sans text-base leading-relaxed text-muted">
@@ -256,7 +256,7 @@ export default function PartnersPage() {
       {/* ── 5. Form ── */}
       <section
         id="partner-form"
-        className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16"
+        className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16"
       >
         <div className="mx-auto max-w-2xl text-center">
           <AnimateIn direction="up">
@@ -270,8 +270,8 @@ export default function PartnersPage() {
           </AnimateIn>
 
           {status === "success" ? (
-            <div className="border-t-2 border-blue-sky bg-blue-deep/50 p-10 text-center">
-              <p className="mb-2 font-serif text-xl font-bold text-blue-sky">
+            <div className="border-t-2 border-brand-orange bg-white/[0.07] p-10 text-center">
+              <p className="mb-2 font-serif text-xl font-bold text-brand-orange-light">
                 Thank you!
               </p>
               <p className="font-sans text-base leading-relaxed text-white/70">
@@ -300,9 +300,9 @@ export default function PartnersPage() {
               <div>
                 <label htmlFor="p-level" className={FIELD_LABEL}>Partnership Level</label>
                 <select id="p-level" value={form.level} onChange={(e) => update("level", e.target.value)} className={FIELD_INPUT}>
-                  <option value="Supporter" className="bg-blue-navy text-white">Supporter</option>
-                  <option value="Partner" className="bg-blue-navy text-white">Partner</option>
-                  <option value="Covenant Partner" className="bg-blue-navy text-white">Covenant Partner</option>
+                  <option value="Supporter" className="bg-brand-navy text-white">Supporter</option>
+                  <option value="Partner" className="bg-brand-navy text-white">Partner</option>
+                  <option value="Covenant Partner" className="bg-brand-navy text-white">Covenant Partner</option>
                 </select>
               </div>
               <div>
@@ -310,7 +310,7 @@ export default function PartnersPage() {
                 <textarea id="p-message" rows={4} value={form.message} onChange={(e) => update("message", e.target.value)} className={`${FIELD_INPUT} resize-none`} placeholder="Tell us anything you'd like us to know" />
               </div>
               <label className="flex cursor-pointer items-center gap-3">
-                <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-5 w-5 shrink-0 rounded-none border-white/30 bg-transparent text-wine focus:ring-wine" />
+                <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-5 w-5 shrink-0 rounded-none border-white/30 bg-transparent text-brand-orange-deep focus:ring-brand-orange" />
                 <span className="font-sans text-sm text-white/60">I would like to receive the ministry newsletter</span>
               </label>
 
@@ -329,16 +329,16 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 6. Scripture ── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="relative overflow-hidden bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <span
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 font-serif text-[200px] leading-none text-blue-navy/5 select-none"
+          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 font-serif text-[200px] leading-none text-brand-blue/5 select-none"
         >
           &ldquo;
         </span>
 
         <AnimateIn direction="fade" className="relative z-10 mx-auto max-w-3xl text-center">
-          <p className="mb-6 font-serif text-xl font-bold italic leading-relaxed text-blue-navy/80 md:text-2xl">
+          <p className="mb-6 font-serif text-xl font-bold italic leading-relaxed text-brand-blue/80 md:text-2xl">
             Now he who supplies seed to the sower and bread for food will also
             supply and increase your store of seed and will enlarge the harvest
             of your righteousness.
@@ -350,7 +350,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── 7. CTA ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Questions About Partnership?
@@ -358,7 +358,7 @@ export default function PartnersPage() {
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             We would love to hear from you and walk you through the process.
           </p>
-          <Button href="/contact" variant="wine" size="lg">
+          <Button href="/contact" variant="secondary" size="lg">
             Contact Us
           </Button>
         </AnimateIn>

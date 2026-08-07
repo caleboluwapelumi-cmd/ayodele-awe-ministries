@@ -3,18 +3,18 @@ import { ReactNode } from "react";
 
 /**
  * Global button standard. Pill shape, sentence-case label, no letter-spacing.
- * Variant picks the treatment that suits the section background — see CLAUDE.md
- * button rules (wine is never a button background on dark blue sections).
+ * Variant picks the treatment that suits the section background — see CLAUDE.md.
  *
  * Labels render exactly as authored — there is no `uppercase` here any more, so
  * write them in sentence or title case at the call site.
+ *
+ * ⚠️ Two variants were removed in the palette migration (7 August 2026):
+ * `wine`, which had no palette left to sit on, and `birthday`, which was the
+ * orange CTA back when orange was one page's private colour. `primary` IS that
+ * button now, so /birthday's CTA needed no new treatment — just the standard
+ * variant name. Old call sites became `secondary` and `primary` respectively.
  */
-export type ButtonVariant =
-  | "primary"
-  | "secondary"
-  | "outline"
-  | "wine"
-  | "birthday";
+export type ButtonVariant = "primary" | "secondary" | "outline";
 export type ButtonSize = "default" | "lg";
 
 type ButtonProps = {
@@ -41,22 +41,21 @@ const SIZES: Record<ButtonSize, string> = {
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  // Light sections
-  primary: "bg-blue text-white hover:bg-blue-deep",
-  // Dark blue sections
-  secondary: "bg-white text-blue-navy hover:bg-cream",
-  // Any section — inherits the surrounding text colour
-  outline: "border border-current hover:bg-white/10",
-  // Wine / accent sections
-  wine: "bg-white text-wine hover:bg-cream",
   /**
-   * /birthday only — the orange CTA, on light and dark sections alike.
+   * The orange CTA — the site's primary action, on light and dark sections
+   * alike. A solid fill carries its own ground, so unlike the accent *text*
+   * tones this one needs no light/dark split.
    *
-   * ⚠️ The fill is `bday-orange-deep`, not the brand `bday-orange`: white on
-   * #EB6434 is 3.3:1, which fails AA for a 16px label. #C74E23 is 4.6:1 and
+   * ⚠️ The fill is `brand-orange-deep`, NOT the brand `brand-orange`: white on
+   * #EB6434 is 3.3:1, which fails AA for a 16px label. #BC4820 is 5.1:1 and
    * reads as the same orange. Keep the brighter tone for glows and numerals.
    */
-  birthday: "bg-bday-orange-deep text-white hover:bg-bday-orange-dark",
+  primary: "bg-brand-orange-deep text-white hover:bg-brand-orange-dark",
+  // Dark sections — the quieter of the two solid fills, so a section can carry
+  // a white pill beside an orange one without two CTAs competing.
+  secondary: "bg-white text-brand-blue hover:bg-cream",
+  // Any section — inherits the surrounding text colour
+  outline: "border border-current hover:bg-white/10",
 };
 
 export default function Button({

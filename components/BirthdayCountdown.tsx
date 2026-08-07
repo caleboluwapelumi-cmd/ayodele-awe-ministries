@@ -35,13 +35,13 @@ type State =
 const SEGMENTS = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
 /**
- * ⚠️ The numerals are `bday-orange` (#EB6434), which is 4.0:1 on the deep blue
+ * ⚠️ The numerals are `brand-orange` (#EB6434), which is 4.0:1 on the deep blue
  * — below AA for body copy but comfortably past the 3:1 large-text threshold
  * at 60px+. Nothing smaller on this page may use that tone; the unit labels
  * below stay white for exactly that reason.
  */
 const NUMBER_CLASS =
-  "font-serif font-bold leading-none tabular-nums text-bday-orange text-6xl sm:text-6xl md:text-7xl lg:text-8xl";
+  "font-serif font-bold leading-none tabular-nums text-brand-orange text-6xl sm:text-6xl md:text-7xl lg:text-8xl";
 /** ⚠️ /65 measured against the tile's `bg-white/[0.07]`, not the section — 5.5:1. */
 const UNIT_LABEL_CLASS =
   "mt-3 font-sans text-[0.625rem] font-semibold uppercase tracking-[0.25em] text-white/65 sm:text-xs";
@@ -58,7 +58,7 @@ const UNIT_LABEL_CLASS =
 const GRID_CLASS =
   "mx-auto grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 md:gap-6";
 const TILE_CLASS =
-  "flex flex-col items-center border-t-2 border-bday-orange bg-white/[0.07] px-2 py-7 backdrop-blur-sm sm:px-6 sm:py-10";
+  "flex flex-col items-center border-t-2 border-brand-orange bg-white/[0.07] px-2 py-7 backdrop-blur-sm sm:px-6 sm:py-10";
 
 function phaseFor(now: number): Exclude<BirthdayPhase, "before"> | "before" {
   if (now < Date.parse(BIRTHDAY_STARTS_AT)) return "before";
@@ -104,7 +104,7 @@ function Celebration({ status }: { status: "during" | "after" }) {
       <div className="mt-10">
         <Button
           href="#testimony"
-          variant="birthday"
+          variant="primary"
           size="lg"
           className="w-full sm:w-auto"
         >

@@ -63,8 +63,8 @@ export default function PageHero({
         backgroundImage
           ? ""
           : dark
-            ? "bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep"
-            : "bg-gradient-to-br from-[#EEF3FA] to-white"
+            ? "bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy"
+            : "bg-gradient-to-br from-brand-tint to-white"
       }`}
     >
       {backgroundImage && (
@@ -78,8 +78,8 @@ export default function PageHero({
             sizes="100vw"
             className={`object-cover ${imagePosition}`}
           />
-          <div className="absolute inset-0 bg-blue-navy/75" />
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-navy/85 via-blue-deep/55 to-wine-deep/85" />
+          <div className="absolute inset-0 bg-brand-navy/75" />
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-navy/85 via-brand-blue/55 to-brand-navy/85" />
         </>
       )}
 
@@ -92,7 +92,7 @@ export default function PageHero({
         )}
         <h1
           className={`font-serif text-4xl font-bold leading-tight tracking-tight sm:text-6xl ${
-            dark ? "text-white" : "text-blue-navy"
+            dark ? "text-white" : "text-brand-blue"
           }`}
         >
           {/* ⚠️ The sweep goes on an inline span, never on the h1 itself — the
@@ -109,7 +109,7 @@ export default function PageHero({
             {title}
           </span>
         </h1>
-        <div className="mx-auto mt-6 h-0.5 w-16 bg-blue-sky" />
+        <div className="mx-auto mt-6 h-0.5 w-16 bg-brand-orange" />
         {subtitle && (
           <p
             className={`mx-auto mt-8 max-w-2xl font-sans text-base leading-relaxed sm:text-lg ${

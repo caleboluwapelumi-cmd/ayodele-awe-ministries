@@ -50,10 +50,10 @@ export default function BHCCPage() {
           photo behind a heading that names BHCC is read as a photo *of* BHCC,
           which "No stock imagery stands for a church" rules out. A gradient
           claims nothing. Swap in the real photo when the client supplies it. */}
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+      <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-blue-navy via-transparent to-blue-navy/50"
+          className="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-brand-navy/50"
         />
         {/* The shared hero glow. This hero builds its own gradient rather than
             using `PageHero`, so it opts in by hand. No particles — the dot
@@ -73,7 +73,7 @@ export default function BHCCPage() {
                   reading as a pair. */}
               <div
                 aria-hidden
-                className="absolute -inset-10 bg-[radial-gradient(circle,rgba(74,144,217,0.4),transparent_70%)] blur-2xl"
+                className="absolute -inset-10 bg-[radial-gradient(circle,rgba(235,100,52,0.40),transparent_70%)] blur-2xl"
               />
               <div className="relative h-full w-full overflow-hidden shadow-2xl ring-1 ring-white/15">
                 <Image
@@ -92,10 +92,10 @@ export default function BHCCPage() {
                 Building House Christian Centre
               </span>
             </h1>
-            <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-blue-sky sm:text-3xl">
+            <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-brand-orange sm:text-3xl">
               BHCC
             </p>
-            <div className="mx-auto mt-6 h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto mt-6 h-0.5 w-16 bg-brand-orange" />
             <p className="mx-auto mb-10 mt-8 max-w-lg font-sans text-lg leading-relaxed text-white/60 sm:text-xl">
               Building the House of God in the United Kingdom
             </p>
@@ -105,26 +105,26 @@ export default function BHCCPage() {
           </AnimateIn>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-blue-navy to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-brand-navy to-transparent" />
       </section>
 
       {/* ── 2. Vision & Mission ──
           BLCN carries the same block as a two-column layout beside its printed
           church-order card. BHCC has no such graphic, so this is text-only. */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Our Foundation</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Vision &amp; Mission
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 text-left sm:grid-cols-2">
             {FOUNDATION.map((item, i) => (
               <AnimateIn key={item.title} delay={i * 0.1} className="h-full">
-                <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-blue-sky">
+                <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-brand-orange-light">
                   {item.title}
                 </h3>
                 <p className="font-sans text-base leading-relaxed text-white/70 sm:text-lg">
@@ -137,7 +137,7 @@ export default function BHCCPage() {
       </section>
 
       {/* ── 3. About ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
           {/* The church's own lockup, not a stock photograph — a generic photo
               captioned "BHCC church gathering" reads as a photo of BHCC. This
@@ -149,7 +149,7 @@ export default function BHCCPage() {
               section. Swap in a real photo of the congregation when one
               arrives. */}
           <AnimateIn direction="left">
-            <div className="mx-auto aspect-square w-full max-w-lg bg-gradient-to-br from-white to-[#EEF3FA] p-6 shadow-xl ring-1 ring-blue-navy/10 sm:p-10">
+            <div className="mx-auto aspect-square w-full max-w-lg bg-gradient-to-br from-white to-brand-tint p-6 shadow-xl ring-1 ring-brand-blue/10 sm:p-10">
               <div className="relative h-full w-full">
                 <Image
                   src="/images/bhcc-logo.jpg"
@@ -164,7 +164,7 @@ export default function BHCCPage() {
 
           <AnimateIn direction="right">
             <SectionLabel tone="light">About BHCC</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               A House Being Built
             </h2>
             <div className="space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -190,13 +190,13 @@ export default function BHCCPage() {
       </section>
 
       {/* ── 4. Our Story ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Our Story</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             How It Began
           </h2>
-          <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+          <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
           <div className="space-y-4 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             <p>
               At an end-of-year retreat in 2023, Pastor Ayodele Oladapo Awe was
@@ -213,20 +213,20 @@ export default function BHCCPage() {
       </section>
 
       {/* ── 5. Leadership ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="light">Leadership</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Meet the Team
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mx-auto mt-16 grid max-w-3xl grid-cols-1 gap-10 sm:grid-cols-2">
             {BHCC?.leadership?.map((leader, i) => (
               <AnimateIn key={leader.name} delay={i * 0.1} className="h-full">
-                <div className="group flex h-full flex-col border-t-2 border-blue-sky bg-cream">
+                <div className="group flex h-full flex-col border-t-2 border-brand-orange bg-cream">
                   <div className="relative aspect-[3/4] w-full overflow-hidden">
                     {leader.image ? (
                       <Image
@@ -239,7 +239,7 @@ export default function BHCCPage() {
                     ) : (
                       /* Photo pending from the client — initials stand in so the
                          grid keeps its rhythm without a stock-photo stranger. */
-                      <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+                      <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
                         <span
                           aria-hidden
                           className="font-serif text-5xl font-bold leading-none tracking-tight text-white/90"
@@ -254,10 +254,10 @@ export default function BHCCPage() {
                   </div>
 
                   <div className="p-8">
-                    <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">
+                    <h3 className="font-serif text-lg font-bold leading-tight text-brand-blue">
                       {leader.name}
                     </h3>
-                    <p className="mt-2 font-sans text-xs uppercase tracking-widest text-wine">
+                    <p className="mt-2 font-sans text-xs uppercase tracking-widest text-brand-orange-deep">
                       {leader.role}
                     </p>
                   </div>
@@ -269,20 +269,20 @@ export default function BHCCPage() {
       </section>
 
       {/* ── 6. Beliefs ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Our Beliefs</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               What We Stand For
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {BELIEFS.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
-                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-sky">
+                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-orange-light">
                   {card.title}
                 </h3>
                 <p className="font-sans text-base leading-relaxed text-white/70">
@@ -295,24 +295,24 @@ export default function BHCCPage() {
       </section>
 
       {/* ── 7. Services ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="light">Join Us</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Service Times
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mx-auto mt-16 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
             {SERVICES.map((svc, i) => (
               <AnimateIn key={svc.title} delay={i * 0.1} className="h-full">
-                <div className="h-full border-t-2 border-blue-sky bg-cream p-8 text-center">
-                  <h3 className="mb-2 font-serif text-lg font-bold leading-tight text-blue-navy">
+                <div className="h-full border-t-2 border-brand-orange bg-cream p-8 text-center">
+                  <h3 className="mb-2 font-serif text-lg font-bold leading-tight text-brand-blue">
                     {svc.title}
                   </h3>
-                  <p className="mb-4 font-sans text-xs uppercase tracking-widest text-wine">
+                  <p className="mb-4 font-sans text-xs uppercase tracking-widest text-brand-orange-deep">
                     {svc.time}
                   </p>
                   <p className="font-sans text-base leading-relaxed text-muted">
@@ -324,14 +324,14 @@ export default function BHCCPage() {
           </div>
 
           <AnimateIn direction="up" className="mx-auto mt-12 max-w-4xl">
-            <div className="border-l-4 border-blue-sky bg-cream p-8 text-left">
-              <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-navy">
+            <div className="border-l-4 border-brand-orange bg-cream p-8 text-left">
+              <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-blue">
                 Visit Us
               </h3>
               <div className="flex items-start gap-3">
                 <MapPin
                   aria-hidden
-                  className="mt-1 h-5 w-5 shrink-0 text-blue-sky"
+                  className="mt-1 h-5 w-5 shrink-0 text-brand-orange-deep"
                 />
                 <p className="font-sans text-base leading-relaxed text-muted">
                   {BHCC?.address}
@@ -340,7 +340,7 @@ export default function BHCCPage() {
               {BHCC?.email && (
                 <a
                   href={`mailto:${BHCC.email}`}
-                  className="mt-4 inline-block font-sans text-sm text-wine underline-offset-4 transition-colors hover:text-wine-light hover:underline"
+                  className="mt-4 inline-block font-sans text-sm text-brand-orange-deep underline-offset-4 transition-colors hover:text-brand-orange-dark hover:underline"
                 >
                   {BHCC.email}
                 </a>
@@ -362,7 +362,7 @@ export default function BHCCPage() {
       </section>
 
       {/* ── 8. CTA ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             You Are Welcome Here
@@ -370,7 +370,7 @@ export default function BHCCPage() {
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             BHCC is a family. Come as you are and encounter the living God.
           </p>
-          <Button href="/contact" variant="wine" size="lg">
+          <Button href="/contact" variant="secondary" size="lg">
             Contact Us
           </Button>
         </AnimateIn>

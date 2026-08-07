@@ -56,7 +56,7 @@ const FIELD_LABEL =
 // Shared field styling. Single-line fields are pills; the textarea gets a
 // softened rectangle instead, since a full pill reads badly over several lines.
 const FIELD_BASE =
-  "w-full border border-blue-navy/20 bg-white px-6 py-3.5 font-sans text-sm text-blue-navy outline-none transition-colors placeholder:text-blue-navy/40 focus:border-blue-sky";
+  "w-full border border-brand-blue/20 bg-white px-6 py-3.5 font-sans text-sm text-brand-blue outline-none transition-colors placeholder:text-brand-blue/40 focus:border-brand-orange";
 const FIELD_INPUT = `${FIELD_BASE} rounded-full`;
 const FIELD_TEXTAREA = `${FIELD_BASE} resize-none rounded-3xl`;
 
@@ -108,19 +108,19 @@ export default function ContactPage() {
       {/* ── 2. Contact Grid ── */}
       <section
         id="contact-form"
-        className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16"
+        className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16"
       >
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 lg:grid-cols-5">
           {/* Form (3/5) */}
           <AnimateIn direction="left" className="lg:col-span-3">
             <SectionLabel tone="light">Send a Message</SectionLabel>
-            <h2 className="mb-10 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-10 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Reach Out to Us
             </h2>
 
             {status === "success" ? (
-              <div className="border-t-2 border-blue-sky bg-cream p-10 text-center">
-                <p className="mb-2 font-serif text-xl font-bold text-wine">
+              <div className="border-t-2 border-brand-orange bg-cream p-10 text-center">
+                <p className="mb-2 font-serif text-xl font-bold text-brand-orange-deep">
                   Message Received
                 </p>
                 <p className="font-sans text-base leading-relaxed text-muted">
@@ -155,7 +155,7 @@ export default function ContactPage() {
                   <textarea id="c-message" rows={5} required value={form.message} onChange={(e) => update("message", e.target.value)} className={FIELD_TEXTAREA} placeholder="Your message..." />
                 </div>
                 <label className="flex cursor-pointer items-center gap-3">
-                  <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-5 w-5 shrink-0 rounded border-blue-navy/30 bg-transparent text-wine focus:ring-wine" />
+                  <input type="checkbox" checked={form.newsletter} onChange={(e) => update("newsletter", e.target.checked)} className="h-5 w-5 shrink-0 rounded border-brand-blue/30 bg-transparent text-brand-orange-deep focus:ring-brand-orange" />
                   <span className="font-sans text-sm text-muted">Subscribe me to the ministry newsletter</span>
                 </label>
 
@@ -175,51 +175,51 @@ export default function ContactPage() {
           {/* Info (2/5) */}
           <AnimateIn direction="right" className="lg:col-span-2">
             <SectionLabel tone="light">Contact Information</SectionLabel>
-            <h2 className="mb-10 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-10 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               We Are Here
             </h2>
 
             <div className="space-y-6">
-              <div className="border-l-4 border-blue-sky pl-6">
-                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Email</h3>
+              <div className="border-l-4 border-brand-orange pl-6">
+                <h3 className="font-serif text-lg font-bold leading-tight text-brand-blue">Email</h3>
                 <p className="mt-1 font-sans text-sm text-muted">Get in touch via email</p>
-                <a href="mailto:contact@ayodeleaweministries.org" className="mt-2 inline-block font-sans text-sm text-wine underline-offset-4 transition-colors hover:text-wine-light hover:underline">
+                <a href="mailto:contact@ayodeleaweministries.org" className="mt-2 inline-block font-sans text-sm text-brand-orange-deep underline-offset-4 transition-colors hover:text-brand-orange-dark hover:underline">
                   contact@ayodeleaweministries.org
                 </a>
               </div>
 
-              <div className="border-l-4 border-blue-sky pl-6">
-                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Ministry Base</h3>
+              <div className="border-l-4 border-brand-orange pl-6">
+                <h3 className="font-serif text-lg font-bold leading-tight text-brand-blue">Ministry Base</h3>
                 <p className="mt-1 font-sans text-sm text-muted">Our primary locations</p>
-                <p className="mt-2 font-sans text-sm text-blue-navy/80">United Kingdom &amp; Nigeria</p>
+                <p className="mt-2 font-sans text-sm text-brand-blue/80">United Kingdom &amp; Nigeria</p>
               </div>
 
-              <div className="border-l-4 border-blue-sky pl-6">
-                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Booking Pastor Awe</h3>
+              <div className="border-l-4 border-brand-orange pl-6">
+                <h3 className="font-serif text-lg font-bold leading-tight text-brand-blue">Booking Pastor Awe</h3>
                 <p className="mt-1 font-sans text-sm text-muted">For speaking engagements, church visits, conferences</p>
                 <Button
                   onClick={() => setSubjectAndScroll("Book Pastor Awe")}
                   variant="outline"
-                  className="mt-4 text-blue"
+                  className="mt-4 text-brand-orange-deep"
                 >
                   Submit a booking request
                 </Button>
               </div>
 
-              <div className="border-l-4 border-blue-sky pl-6">
-                <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">Prayer Requests</h3>
+              <div className="border-l-4 border-brand-orange pl-6">
+                <h3 className="font-serif text-lg font-bold leading-tight text-brand-blue">Prayer Requests</h3>
                 <p className="mt-1 font-sans text-sm text-muted">We pray over every request submitted</p>
                 <Button
                   onClick={() => setSubjectAndScroll("Prayer Request")}
                   variant="outline"
-                  className="mt-4 text-blue"
+                  className="mt-4 text-brand-orange-deep"
                 >
                   Submit a prayer request
                 </Button>
               </div>
             </div>
 
-            <div className="my-8 border-t border-blue-navy/10" />
+            <div className="my-8 border-t border-brand-blue/10" />
 
             <div className="flex flex-wrap items-center gap-3">
               {SOCIAL_ICONS.map(({ name, href, Icon }) => (
@@ -229,7 +229,7 @@ export default function ContactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={name}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-blue-navy/20 text-blue-navy transition-colors hover:border-blue-sky"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brand-blue/20 text-brand-blue transition-colors hover:border-brand-orange"
                 >
                   <Icon size={16} />
                 </a>
@@ -239,7 +239,7 @@ export default function ContactPage() {
                 href={SOCIALS.linktree}
                 variant="outline"
                 external
-                className="text-blue"
+                className="text-brand-orange-deep"
               >
                 All links
               </Button>
@@ -249,14 +249,14 @@ export default function ContactPage() {
       </section>
 
       {/* ── 3. Churches Contact ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Find a Church</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Connect With Our Churches
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 text-left sm:grid-cols-2">
@@ -287,7 +287,7 @@ export default function ContactPage() {
               },
             ].map((church, i) => (
               <AnimateIn key={church.name} delay={i * 0.1} className="h-full">
-                <div className="flex h-full flex-col border-t-2 border-blue-sky bg-blue-deep/50 p-8">
+                <div className="flex h-full flex-col border-t-2 border-brand-orange bg-white/[0.07] p-8">
                   <SectionLabel tone="dark" className="mb-4">
                     {church.region}
                   </SectionLabel>
@@ -311,7 +311,7 @@ export default function ContactPage() {
                         <span className="font-semibold text-white">Email:</span>{" "}
                         <a
                           href={`mailto:${church.email}`}
-                          className="underline-offset-4 transition-colors hover:text-blue-sky hover:underline"
+                          className="underline-offset-4 transition-colors hover:text-brand-orange-light hover:underline"
                         >
                           {church.email}
                         </a>
@@ -332,7 +332,7 @@ export default function ContactPage() {
                           rel="noopener noreferrer"
                           aria-label={name}
                           title={name}
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-blue-sky hover:text-blue-sky"
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-brand-orange hover:text-brand-orange-light"
                         >
                           <Icon size={18} />
                         </a>
@@ -356,11 +356,11 @@ export default function ContactPage() {
       </section>
 
       {/* ── 4. Booking ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-3xl text-center">
           <AnimateIn direction="up">
             <SectionLabel tone="light">Speaking Engagements</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Book Pastor Ayodele Oladapo Awe
             </h2>
             <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -370,13 +370,13 @@ export default function ContactPage() {
               form above and select &ldquo;Book Pastor Awe&rdquo; as the
               subject.
             </p>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mb-12 mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {BOOKING_TYPES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
-                <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-wine">
+                <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-brand-orange-deep">
                   {card.title}
                 </h3>
                 <p className="font-sans text-base leading-relaxed text-muted">
@@ -393,7 +393,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── 5. Newsletter ── */}
-      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Stay Connected</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
@@ -408,16 +408,16 @@ export default function ContactPage() {
       </section>
 
       {/* ── 6. Scripture ── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="relative overflow-hidden bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <span
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 select-none font-serif text-[200px] leading-none text-blue-navy/5"
+          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 select-none font-serif text-[200px] leading-none text-brand-blue/5"
         >
           &ldquo;
         </span>
 
         <AnimateIn direction="fade" className="relative z-10 mx-auto max-w-3xl text-center">
-          <p className="mb-6 font-serif text-xl font-bold italic leading-relaxed text-blue-navy/80 md:text-2xl">
+          <p className="mb-6 font-serif text-xl font-bold italic leading-relaxed text-brand-blue/80 md:text-2xl">
             How beautiful are the feet of those who bring good news!
           </p>
           <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted">

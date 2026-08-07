@@ -38,7 +38,7 @@ export default function EventsPage() {
       />
 
       {/* ── 2. Featured Event ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             {/* ⚠️ STILL PENDING a real banner/photo of the Prayer Surge.
@@ -46,7 +46,7 @@ export default function EventsPage() {
                 replaced carried `alt="Norwich Prayer Surge"`, i.e. it presented
                 strangers as a photograph of this gathering. The mark is the
                 ministry's own and claims nothing about who was in the room. */}
-            <div className="relative flex aspect-video items-center justify-center overflow-hidden bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep">
+            <div className="relative flex aspect-video items-center justify-center overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
               <Image
                 src="/images/awe-min-mark.png"
                 alt=""
@@ -61,10 +61,10 @@ export default function EventsPage() {
 
           <AnimateIn direction="right">
             <SectionLabel tone="light">Featured Event</SectionLabel>
-            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Norwich Prayer Surge
             </h2>
-            <p className="mb-6 font-sans text-xs uppercase tracking-[0.2em] text-wine">
+            <p className="mb-6 font-sans text-xs uppercase tracking-[0.2em] text-brand-orange-deep">
               United Kingdom
             </p>
             <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -77,17 +77,17 @@ export default function EventsPage() {
 
             <dl className="mb-8 space-y-3 font-sans text-base text-muted">
               <div className="flex gap-2">
-                <dt className="font-semibold text-blue-navy">Date:</dt>
+                <dt className="font-semibold text-brand-blue">Date:</dt>
                 <dd>
                   {PRAYER_SURGE.schedule} &mdash; next on {surge.fullDate}
                 </dd>
               </div>
               <div className="flex gap-2">
-                <dt className="font-semibold text-blue-navy">Time:</dt>
+                <dt className="font-semibold text-brand-blue">Time:</dt>
                 <dd>{PRAYER_SURGE.timeRange} (seven hours)</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="font-semibold text-blue-navy">Location:</dt>
+                <dt className="font-semibold text-brand-blue">Location:</dt>
                 <dd>{PRAYER_SURGE.location}</dd>
               </div>
             </dl>
@@ -102,20 +102,20 @@ export default function EventsPage() {
         <AnimateIn direction="up" className="mx-auto mt-24 max-w-3xl">
           <div className="text-center">
             <SectionLabel tone="light">The Vision</SectionLabel>
-            <h3 className="mb-6 font-serif text-2xl font-bold leading-tight text-blue-navy sm:text-3xl md:text-4xl">
+            <h3 className="mb-6 font-serif text-2xl font-bold leading-tight text-brand-blue sm:text-3xl md:text-4xl">
               Until the wilderness becomes a fruitful field
             </h3>
-            <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
             <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
               This vision was birthed from {PRAYER_SURGE.scripture.reference}:
             </p>
           </div>
 
-          <blockquote className="border-l-4 border-wine bg-cream p-8">
-            <p className="font-serif text-xl font-medium italic leading-relaxed text-blue-navy sm:text-2xl">
+          <blockquote className="border-l-4 border-brand-orange bg-cream p-8">
+            <p className="font-serif text-xl font-medium italic leading-relaxed text-brand-blue sm:text-2xl">
               &ldquo;{PRAYER_SURGE.scripture.text}&rdquo;
             </p>
-            <cite className="mt-4 block font-sans text-xs uppercase not-italic tracking-[0.2em] text-wine">
+            <cite className="mt-4 block font-sans text-xs uppercase not-italic tracking-[0.2em] text-brand-orange-deep">
               {PRAYER_SURGE.scripture.reference}
             </cite>
           </blockquote>
@@ -145,7 +145,7 @@ export default function EventsPage() {
 
         {/* Full-width band so the countdown numerals have room to breathe */}
         <AnimateIn direction="up" className="mx-auto mt-24 w-full max-w-7xl">
-          <div className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-6 py-12 text-center sm:px-12 sm:py-16">
+          <div className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-6 py-12 text-center sm:px-12 sm:py-16">
             <SectionLabel tone="dark">Next Gathering</SectionLabel>
             <p className="mt-3 font-serif text-2xl font-bold leading-tight text-white sm:text-3xl">
               {surge.fullDate}
@@ -169,13 +169,13 @@ export default function EventsPage() {
         just repeat it. This band keeps the dark beat in the page rhythm and
         says plainly that there is nothing else to list yet.
       */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">All Events</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Upcoming Gatherings
           </h2>
-          <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+          <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
           <p className="mb-8 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             The Norwich Prayer Surge is our regular monthly gathering. More
             events across the UK and Nigeria will be announced as they are
@@ -193,19 +193,19 @@ export default function EventsPage() {
         attached — real, but not scheduled. The treatment here is deliberately
         NOT an event listing: no date field, no image, no per-item register
         CTA, one CTA for the whole section. Nothing a visitor could read as a
-        calendar entry. The `border-t-2 border-blue-sky` tile is the same idiom
+        calendar entry. The `border-t-2 border-brand-orange` tile is the same idiom
         `/ministry` and `/itinerary` use for "this describes what we do", which
         is the opposite signal to an `EventCard`.
         See Content Integrity Notes in CLAUDE.md before changing any of that.
       */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
             <SectionLabel tone="light">Ongoing Programmes</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Recurring Ministry Expressions
             </h2>
-            <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
             <p className="font-sans text-base leading-relaxed text-muted sm:text-lg">
               Beyond single gatherings, these programmes carry the mandate
               forward &mdash; join us as dates are announced
@@ -224,18 +224,18 @@ export default function EventsPage() {
                 delay={(i % 3) * 0.1}
                 className="h-full"
               >
-                <div className="flex h-full flex-col border-t-2 border-blue-sky bg-white p-6 sm:p-8">
+                <div className="flex h-full flex-col border-t-2 border-brand-orange bg-white p-6 sm:p-8">
                   <div className="flex flex-1 flex-wrap items-start gap-x-3 gap-y-2">
-                    <h3 className="font-serif text-lg font-bold leading-tight text-blue-navy">
+                    <h3 className="font-serif text-lg font-bold leading-tight text-brand-blue">
                       {programme.name}
                     </h3>
                     {programme.acronym && (
-                      <span className="shrink-0 bg-blue-sky/10 px-2 py-1 font-sans text-xs font-semibold uppercase tracking-widest text-blue">
+                      <span className="shrink-0 bg-brand-orange/10 px-2 py-1 font-sans text-xs font-semibold uppercase tracking-widest text-brand-orange-deep">
                         {programme.acronym}
                       </span>
                     )}
                   </div>
-                  <p className="mt-6 border-t border-blue-sky/20 pt-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-wine">
+                  <p className="mt-6 border-t border-brand-orange/20 pt-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-deep">
                     {programme.category}
                   </p>
                 </div>
@@ -262,17 +262,17 @@ export default function EventsPage() {
         slot, and two identical light gradients stacked would erase the seam
         between them. The page now alternates light → mid → light → mid → navy.
       */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Past Events</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             What God Has Done
           </h2>
-          <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+          <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
           <p className="mb-8 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             A testimony of His faithfulness
           </p>
-          <div className="border-l-4 border-blue-sky bg-white/5 p-8 text-left">
+          <div className="border-l-4 border-brand-orange bg-white/5 p-8 text-left">
             <p className="font-sans text-base leading-relaxed text-white/70 sm:text-lg">
               Photos and testimonies from past gatherings will be shared here
               soon.
@@ -282,7 +282,7 @@ export default function EventsPage() {
       </section>
 
       {/* ── 6. Newsletter CTA ── */}
-      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Never Miss an Event</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
@@ -297,7 +297,7 @@ export default function EventsPage() {
       </section>
 
       {/* ── 7. CTA Banner ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Want to Host an Event?
@@ -306,7 +306,7 @@ export default function EventsPage() {
             Invite Pastor Ayodele Oladapo Awe to minister at your church,
             conference, or gathering.
           </p>
-          <Button href="/contact" variant="wine" size="lg">
+          <Button href="/contact" variant="secondary" size="lg">
             Get in Touch
           </Button>
         </AnimateIn>

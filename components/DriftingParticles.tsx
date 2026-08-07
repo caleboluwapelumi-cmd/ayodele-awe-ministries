@@ -9,9 +9,9 @@ import {
 /**
  * The drifting dot field, generalised out of `BirthdayConfetti` so the homepage
  * hero can use the same technique without importing something birthday-branded.
- * `BirthdayConfetti` is now a one-line preset of this component, and the
- * `birthday` colour row below is its original table verbatim — that page's
- * output is unchanged, dot for dot.
+ * `BirthdayConfetti` is now a one-line preset of this component, and the colour
+ * table below is its original verbatim — that page's output is unchanged, dot
+ * for dot, and since the palette migration it is every hero's output too.
  *
  * ⚠️ The positions are a hard-coded table, never `Math.random()`. A random
  * layout is generated afresh on the client and will not match the server
@@ -66,49 +66,29 @@ const DOTS: Dot[] = [
  * ⚠️ Full class strings, never interpolated. Tailwind scans source text, so a
  * built-up `bg-${hue}/${alpha}` produces no CSS at all.
  *
- * The `site` row is the `birthday` row transposed into blue/wine, and the
- * alphas are NOT copied across: wine-light is far darker than bday-orange
- * against a navy hero and needs about ten more points to register, while
- * blue-sky is much brighter than bday-blue-mid and needs roughly twenty fewer.
- * The relative variation within each hue is preserved, which is what carries
- * the effect.
+ * ⚠️ There used to be a second row here — a blue/wine transposition with its
+ * own alphas, for the main site before the palette migration. It went with the
+ * `site` tone on 7 August 2026. These figures are /birthday's originals, dot
+ * for dot, and they are now what every hero on the site renders.
  */
 const PALETTE: Record<AtmosphereTone, string[]> = {
-  site: [
-    "bg-wine-light/70",
+  brand: [
+    "bg-brand-orange/60",
     "bg-white/40",
-    "bg-blue-sky/45",
-    "bg-wine-light/55",
+    "bg-brand-blue-mid/70",
+    "bg-brand-orange/45",
     "bg-white/30",
-    "bg-wine-light/45",
-    "bg-blue-sky/40",
+    "bg-brand-orange-light/50",
+    "bg-brand-blue-mid/60",
     "bg-white/35",
-    "bg-wine-light/65",
-    "bg-blue-sky/30",
+    "bg-brand-orange/55",
+    "bg-brand-blue-mid/50",
     "bg-white/40",
-    "bg-wine-light/40",
-    "bg-wine-light/70",
+    "bg-brand-orange-light/45",
+    "bg-brand-orange/60",
     "bg-white/30",
-    "bg-wine-light/35",
-    "bg-blue-sky/40",
-  ],
-  birthday: [
-    "bg-bday-orange/60",
-    "bg-white/40",
-    "bg-bday-blue-mid/70",
-    "bg-bday-orange/45",
-    "bg-white/30",
-    "bg-bday-orange-light/50",
-    "bg-bday-blue-mid/60",
-    "bg-white/35",
-    "bg-bday-orange/55",
-    "bg-bday-blue-mid/50",
-    "bg-white/40",
-    "bg-bday-orange-light/45",
-    "bg-bday-orange/60",
-    "bg-white/30",
-    "bg-bday-orange-light/40",
-    "bg-bday-blue-mid/60",
+    "bg-brand-orange-light/40",
+    "bg-brand-blue-mid/60",
   ],
 };
 

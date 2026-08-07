@@ -43,14 +43,14 @@ export default function ItineraryPage() {
         supplies them — never placeholder rows with a "TBA" date, which read
         as a real schedule.
       */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="light">Upcoming</SectionLabel>
-          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
             Upcoming Engagements
           </h2>
-          <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
-          <div className="border-l-4 border-l-blue bg-cream p-8 text-left">
+          <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
+          <div className="border-l-4 border-l-brand-blue bg-cream p-8 text-left">
             <p className="font-sans text-base leading-relaxed text-muted sm:text-lg">
               Pastor Awe&apos;s schedule is updated as engagements are
               confirmed. Check back soon, or reach out to discuss an
@@ -66,7 +66,7 @@ export default function ItineraryPage() {
       </section>
 
       {/* ── 3. Booking ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SectionLabel tone="dark">Book Pastor Awe</SectionLabel>
@@ -83,9 +83,9 @@ export default function ItineraryPage() {
               {ENGAGEMENT_TYPES.map((type) => (
                 <div
                   key={type.title}
-                  className="border-t-2 border-blue-sky bg-blue-deep/50 p-6"
+                  className="border-t-2 border-brand-orange bg-white/[0.07] p-6"
                 >
-                  <h3 className="mb-2 font-serif text-base font-bold leading-tight text-blue-sky">
+                  <h3 className="mb-2 font-serif text-base font-bold leading-tight text-brand-orange-light">
                     {type.title}
                   </h3>
                   <p className="font-sans text-sm leading-relaxed text-white/50">
@@ -109,14 +109,14 @@ export default function ItineraryPage() {
                 sizes="50vw"
                 className="object-cover transition-transform duration-700 hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-blue-navy/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-transparent to-transparent" />
             </div>
           </AnimateIn>
         </div>
       </section>
 
       {/* ── 4. Newsletter ── */}
-      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Stay Updated</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

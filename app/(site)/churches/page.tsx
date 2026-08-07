@@ -171,16 +171,34 @@ function ExpressionIcon({ type }: { type: Expression["icon"] }) {
   }
 }
 
+/**
+ * ⚠️ The one place the palette migration could not be a straight substitution.
+ *
+ * These three keys existed to give the expression cards some variation across a
+ * long grid, and they named three tones of the retired system (blue / wine /
+ * sky). The new palette has one accent family, so mapping all three onto orange
+ * would have collapsed the variation and left a dead three-valued union behind.
+ *
+ * Instead each key keeps a *distinct* tone, drawn from what the new palette
+ * actually has: the accent orange and the two blues. The `accent` field on each
+ * EXPRESSION is unchanged, so no data moved — only what the keys resolve to.
+ *
+ * ⚠️ The category label is 12px on white and so needs the full 4.5:1, which is
+ * why the text row is not simply the border row. Measured on white:
+ * orange-deep 5.1:1, brand-blue 13.0:1, blue-mid 8.8:1. The brand orange
+ * (#EB6434, 3.3:1) is deliberately absent from the text row — it is the border
+ * tone only, where nothing has to be read.
+ */
 const ACCENT_BORDER: Record<Expression["accent"], string> = {
-  blue: "border-l-blue",
-  wine: "border-l-wine",
-  sky: "border-l-blue-sky",
+  blue: "border-l-brand-blue",
+  wine: "border-l-brand-orange",
+  sky: "border-l-brand-blue-mid",
 };
 
 const ACCENT_CATEGORY: Record<Expression["accent"], string> = {
-  blue: "text-blue",
-  wine: "text-wine",
-  sky: "text-blue-sky",
+  blue: "text-brand-blue",
+  wine: "text-brand-orange-deep",
+  sky: "text-brand-blue-mid",
 };
 
 /* ─── Page ─── */
@@ -195,7 +213,7 @@ export default function ExpressionsPage() {
       />
 
       {/* ── 2. Expressions Grid ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {EXPRESSIONS.map((expr, i) => {
@@ -213,7 +231,7 @@ export default function ExpressionsPage() {
                       {expr.category}
                     </span>
 
-                    <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-blue-navy">
+                    <h3 className="mb-2 font-serif text-xl font-bold leading-tight text-brand-blue">
                       {expr.title}
                     </h3>
 
@@ -234,7 +252,7 @@ export default function ExpressionsPage() {
                         )}
                         <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-sans text-xs uppercase tracking-widest text-muted">
                           {expr.acronym && (
-                            <span className="font-semibold text-wine">
+                            <span className="font-semibold text-brand-orange-deep">
                               {expr.acronym}
                             </span>
                           )}
@@ -263,7 +281,7 @@ export default function ExpressionsPage() {
                       <Button
                         href={expr.href}
                         variant="outline"
-                        className="self-start text-wine"
+                        className="self-start text-brand-orange-deep"
                       >
                         {expr.cta}
                       </Button>
@@ -277,20 +295,20 @@ export default function ExpressionsPage() {
       </section>
 
       {/* ── 3. Shared Vision ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">One Vision</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               What Unites Every Expression
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
             {UNITING_VALUES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
-                <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-blue-sky">
+                <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-brand-orange-light">
                   {card.title}
                 </h3>
                 <p className="font-sans text-base leading-relaxed text-white/70">
@@ -303,7 +321,7 @@ export default function ExpressionsPage() {
       </section>
 
       {/* ── 4. More Expressions Coming + Newsletter ── */}
-      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Stay Updated</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

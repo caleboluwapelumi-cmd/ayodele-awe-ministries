@@ -45,18 +45,18 @@ export default function BooksPage() {
       />
 
       {/* ── 2. The Books ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
             <SectionLabel tone="light">Available Now</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Books &amp; Publications
             </h2>
             <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
               Written resources from Pastor Ayodele Oladapo Awe — order your
               copy on Selar or Amazon and let the Word take root.
             </p>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 space-y-16">
@@ -79,10 +79,10 @@ export default function BooksPage() {
                 </AnimateIn>
 
                 <AnimateIn direction="right">
-                  <h3 className="mb-3 font-serif text-2xl font-bold leading-tight text-blue-navy sm:text-3xl">
+                  <h3 className="mb-3 font-serif text-2xl font-bold leading-tight text-brand-blue sm:text-3xl">
                     {book.title}
                   </h3>
-                  <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-blue-sky">
+                  <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-deep">
                     {book.subtitle}
                   </p>
                   <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -108,7 +108,7 @@ export default function BooksPage() {
                     <Button
                       href={book.amazon}
                       variant="outline"
-                      className="text-blue-navy"
+                      className="text-brand-blue"
                       external
                     >
                       <AmazonIcon size={20} />
@@ -123,7 +123,7 @@ export default function BooksPage() {
       </section>
 
       {/* ── 3. Newsletter ── */}
-      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">New Releases</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
@@ -137,7 +137,7 @@ export default function BooksPage() {
       </section>
 
       {/* ── 4. CTA Banner ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Go Deeper in the Word
@@ -145,7 +145,7 @@ export default function BooksPage() {
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             Access teachings, sermons, and messages on our Telegram channel.
           </p>
-          <Button href={SOCIALS.telegram} variant="wine" size="lg" external>
+          <Button href={SOCIALS.telegram} variant="secondary" size="lg" external>
             Join Telegram
           </Button>
         </AnimateIn>

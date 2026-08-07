@@ -3,26 +3,21 @@ import { ReactNode } from "react";
 /**
  * The small caps eyebrow that sits above every section heading.
  * `tone` picks the accent colour for the section background it sits on.
+ *
+ * ⚠️ Two tones down from five. The `bdayDark`/`bdayLight` pair was /birthday's
+ * private copy of exactly this dark/light split and merged into it in the
+ * palette migration; `onAccent` (white/60) existed for the wine bands, which no
+ * longer exist — those sections are dark now and take `dark` like every other.
+ *
+ * The label is 12px, so each tone takes the orange that clears 4.5:1 on its own
+ * ground. The brand #EB6434 fails on both grounds at this size and is reserved
+ * for glows, rules and display-size numerals — don't reach for it here.
  */
-export type LabelTone =
-  | "dark"
-  | "light"
-  | "onAccent"
-  | "bdayDark"
-  | "bdayLight";
+export type LabelTone = "dark" | "light";
 
 const TONES: Record<LabelTone, string> = {
-  dark: "text-blue-sky", // on navy / deep blue sections
-  light: "text-wine", // on white / cream sections
-  onAccent: "text-white/60", // on wine sections
-  /**
-   * /birthday only. The label is 12px, so each tone takes the orange that
-   * clears 4.5:1 on its own ground — the light tint on deep blue (5.6:1), the
-   * deep tint on white (4.6:1). The brand #EB6434 fails both and is reserved
-   * for glows, rules and display-size numerals.
-   */
-  bdayDark: "text-bday-orange-light", // on the birthday deep-blue sections
-  bdayLight: "text-bday-orange-deep", // on the birthday white sections
+  dark: "text-brand-orange-light", // on brand-navy / brand-blue sections — 6.3:1
+  light: "text-brand-orange-deep", // on white / tint sections — 5.1:1 / 4.7:1
 };
 
 export default function SectionLabel({

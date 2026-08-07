@@ -75,7 +75,7 @@ export default function MusicPage() {
       />
 
       {/* ── 2. About ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SpotifyEmbed
@@ -88,7 +88,7 @@ export default function MusicPage() {
 
           <AnimateIn direction="right">
             <SectionLabel tone="light">Stream on Spotify</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Worship That Transforms
             </h2>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -118,21 +118,21 @@ export default function MusicPage() {
       </section>
 
       {/* ── 3. Genres ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="light">Genres</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Music for Every Season
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
             {GENRES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
-                <div className="h-full border-t-2 border-blue-sky bg-cream p-8 text-center">
-                  <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-blue-navy">
+                <div className="h-full border-t-2 border-brand-orange bg-cream p-8 text-center">
+                  <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-brand-blue">
                     {card.title}
                   </h3>
                   <p className="font-sans text-base leading-relaxed text-muted">
@@ -146,14 +146,14 @@ export default function MusicPage() {
       </section>
 
       {/* ── 4. Platforms ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Platforms</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Available Everywhere
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-blue-sky" />
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -162,7 +162,7 @@ export default function MusicPage() {
               return (
                 <AnimateIn key={p.name} delay={i * 0.1} className="h-full">
                   <div
-                    className={`group flex h-full min-h-[200px] flex-col items-center justify-center border border-white/5 bg-blue-deep/50 p-8 text-center transition-colors ${
+                    className={`group flex h-full min-h-[200px] flex-col items-center justify-center border border-white/5 bg-white/[0.07] p-8 text-center transition-colors ${
                       pending ? "opacity-60" : "hover:border-white/20"
                     }`}
                   >
@@ -195,7 +195,7 @@ export default function MusicPage() {
       </section>
 
       {/* ── 5. Podcast ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SpotifyEmbed
@@ -208,10 +208,10 @@ export default function MusicPage() {
 
           <AnimateIn direction="right">
             <SectionLabel tone="light">Also On</SectionLabel>
-            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               {SPOTIFY_PODCAST_NAME}
             </h2>
-            <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-blue-sky">
+            <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-deep">
               {SPOTIFY_PODCAST_TAGLINE}
             </p>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -238,7 +238,7 @@ export default function MusicPage() {
       </section>
 
       {/* ── 6. CTA Banner ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Let the Worship Minister to You
@@ -246,7 +246,7 @@ export default function MusicPage() {
           <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             Press play and let God meet you where you are.
           </p>
-          <Button href={SOCIALS.spotify} variant="wine" size="lg" external>
+          <Button href={SOCIALS.spotify} variant="secondary" size="lg" external>
             Stream Now
           </Button>
         </AnimateIn>

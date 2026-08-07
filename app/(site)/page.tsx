@@ -42,7 +42,7 @@ export default function HomePage() {
       <HeroSection />
 
       {/* ── 2. About Snippet ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <div className="relative aspect-square overflow-hidden">
@@ -58,7 +58,7 @@ export default function HomePage() {
 
           <AnimateIn direction="right">
             <SectionLabel tone="light">About the Pastor</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               A Voice Sent with Purpose
             </h2>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -85,7 +85,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 3. Ministry Expressions ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up">
             <SectionLabel tone="dark">Our Ministry Expressions</SectionLabel>
@@ -115,11 +115,11 @@ export default function HomePage() {
       </section>
 
       {/* ── 4. Upcoming Events ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up">
             <SectionLabel tone="light">Upcoming Events</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-blue-navy sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Join us at our next gathering
             </h2>
             <p className="mb-8 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg">
@@ -139,7 +139,7 @@ export default function HomePage() {
 
           {/* Full-width band so the countdown numerals have room to breathe */}
           <AnimateIn direction="up" className="mt-16">
-            <div className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-6 py-12 text-center sm:px-12 sm:py-16">
+            <div className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-6 py-12 text-center sm:px-12 sm:py-16">
               <SectionLabel tone="dark">Next Gathering</SectionLabel>
               <p className="mt-3 font-serif text-2xl font-bold leading-tight text-white sm:text-3xl">
                 {surge.fullDate}
@@ -158,7 +158,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 5. Teachings & Music ── */}
-      <section className="bg-gradient-to-br from-blue-navy via-blue-deep to-wine-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up">
             <SectionLabel tone="dark">Teachings &amp; Music</SectionLabel>
@@ -181,14 +181,14 @@ export default function HomePage() {
           Unsplash image (aria-hidden) sitting under a black/70 scrim, so almost
           none of it survived to the eye — but every visitor still paid for a
           cross-origin fetch through the image optimiser. Same look, no request. */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-wine-deep via-blue-navy to-blue-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="relative overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-tr from-wine/25 via-transparent to-blue-deep/40"
+          className="absolute inset-0 bg-gradient-to-tr from-brand-orange/12 via-transparent to-brand-blue-mid/35"
         />
 
         <AnimateIn direction="up" className="relative z-10 mx-auto max-w-3xl text-center">
-          <SectionLabel tone="onAccent">Partnership</SectionLabel>
+          <SectionLabel tone="dark">Partnership</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Partner With Us
           </h2>
@@ -196,14 +196,14 @@ export default function HomePage() {
             Your partnership fuels the gospel across the UK and Nigeria. Join a
             community of believers sowing into revival.
           </p>
-          <Button href="/partners" variant="wine" size="lg">
+          <Button href="/partners" variant="secondary" size="lg">
             Become a Partner
           </Button>
         </AnimateIn>
       </section>
 
       {/* ── 7. Newsletter ── */}
-      <section className="bg-gradient-to-b from-blue-navy to-blue-deep px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Stay Connected</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

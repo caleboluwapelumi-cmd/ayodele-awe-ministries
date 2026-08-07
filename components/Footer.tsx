@@ -34,7 +34,7 @@ const SOCIAL_ICONS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-gradient-to-b from-blue-navy to-blue-deep">
+    <footer className="border-t border-white/10 bg-gradient-to-b from-brand-navy to-brand-blue">
       <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-16">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-3">
           {/* Brand */}
@@ -63,7 +63,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={name}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-blue-sky hover:text-blue-sky"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-brand-orange hover:text-brand-orange-light"
                 >
                   <Icon size={16} />
                 </a>

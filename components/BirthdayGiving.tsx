@@ -162,7 +162,7 @@ export function GivingProvider({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: reduced ? 0.1 : 0.25, ease: "easeOut" }}
-              className="absolute inset-0 bg-bday-navy/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-brand-navy/80 backdrop-blur-sm"
             />
 
             {/* The scroll container, not the panel — a tall panel on a short
@@ -178,7 +178,7 @@ export function GivingProvider({
                 animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
                 exit={reduced ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.98 }}
                 transition={{ duration: reduced ? 0.1 : 0.28, ease: "easeOut" }}
-                className="relative w-full max-w-2xl overflow-hidden border-t-2 border-bday-orange bg-gradient-to-br from-bday-blue via-bday-navy to-bday-blue shadow-2xl outline-none"
+                className="relative w-full max-w-2xl overflow-hidden border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue shadow-2xl outline-none"
               >
                 <div
                   aria-hidden
@@ -191,13 +191,13 @@ export function GivingProvider({
                     type="button"
                     onClick={hide}
                     aria-label="Close giving details"
-                    className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white/80 transition-colors hover:border-bday-orange hover:text-bday-orange-light sm:right-6 sm:top-6"
+                    className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white/80 transition-colors hover:border-brand-orange hover:text-brand-orange-light sm:right-6 sm:top-6"
                   >
                     <X size={20} />
                   </button>
 
                   <div className="mb-8 max-w-md pr-12 text-left sm:mb-10">
-                    <SectionLabel tone="bdayDark">Giving</SectionLabel>
+                    <SectionLabel tone="dark">Giving</SectionLabel>
                     <h2
                       id="giving-modal-title"
                       className="mb-4 text-balance font-serif text-2xl font-bold leading-tight text-white sm:text-3xl"
@@ -208,7 +208,7 @@ export function GivingProvider({
                       As we celebrate his life, you may also honour him with a
                       birthday gift of appreciation.
                     </p>
-                    <div className="mt-6 h-0.5 w-16 bg-bday-orange" />
+                    <div className="mt-6 h-0.5 w-16 bg-brand-orange" />
                   </div>
 
                   {/* One column on a phone: two account cards side by side at
@@ -217,7 +217,7 @@ export function GivingProvider({
                     {accounts.map((account) => (
                       <div
                         key={account.region}
-                        className="flex h-full flex-col border-t-2 border-bday-orange bg-white/[0.07] p-5 backdrop-blur-sm sm:p-6"
+                        className="flex h-full flex-col border-t-2 border-brand-orange bg-white/[0.07] p-5 backdrop-blur-sm sm:p-6"
                       >
                         <div className="mb-3 flex items-center gap-3 sm:mb-4">
                           {/* 2:1, the ratio both flags are drawn at. */}
@@ -252,7 +252,7 @@ export function GivingProvider({
                       double honour, especially those who labour in the word and
                       doctrine.&rdquo;
                     </p>
-                    <p className="mt-3 font-sans text-xs uppercase tracking-[0.2em] text-bday-orange-light">
+                    <p className="mt-3 font-sans text-xs uppercase tracking-[0.2em] text-brand-orange-light">
                       1 Timothy 5:17
                     </p>
                   </div>
@@ -281,7 +281,7 @@ export function GivingProvider({
  */
 export function GiveButton({
   children,
-  variant = "birthday",
+  variant = "primary",
   size = "lg",
   className = "",
 }: {

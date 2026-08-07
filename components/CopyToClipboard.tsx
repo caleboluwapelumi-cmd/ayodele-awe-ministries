@@ -107,8 +107,8 @@ export function CopyField({
         aria-label={copied ? `${label} copied` : `Copy ${label}`}
         className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-colors ${
           copied
-            ? "border-bday-orange bg-bday-orange/15 text-bday-orange-light"
-            : "border-white/25 text-white/80 hover:border-bday-orange hover:text-bday-orange-light"
+            ? "border-brand-orange bg-brand-orange/15 text-brand-orange-light"
+            : "border-white/25 text-white/80 hover:border-brand-orange hover:text-brand-orange-light"
         }`}
       >
         {copied ? <Check size={18} /> : <Copy size={18} />}
@@ -176,7 +176,7 @@ export function SharePage() {
     <div className="mx-auto flex w-full max-w-md flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:items-center">
       <Button
         onClick={canShare ? share : copy}
-        variant="birthday"
+        variant="primary"
         size="lg"
         disabled={!url}
         className="w-full sm:w-auto"
@@ -192,7 +192,7 @@ export function SharePage() {
           )}`}
           variant="outline"
           size="lg"
-          className="w-full text-bday-blue hover:bg-bday-blue/5 sm:w-auto"
+          className="w-full text-brand-blue hover:bg-brand-blue/5 sm:w-auto"
           external
         >
           Share on WhatsApp

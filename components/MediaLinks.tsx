@@ -36,7 +36,7 @@ const MEDIA_CARDS = [
 ] as const;
 
 const CARD_BASE =
-  "group flex h-full min-h-[200px] flex-col items-center justify-center border border-white/5 bg-blue-deep/50 p-8 text-center transition-colors";
+  "group flex h-full min-h-[200px] flex-col items-center justify-center border border-white/5 bg-white/[0.07] p-8 text-center transition-colors";
 
 export default function MediaLinks() {
   return (
@@ -49,7 +49,7 @@ export default function MediaLinks() {
               <card.Icon size={64} className="hidden lg:block" />
             </div>
 
-            <h3 className="mt-2 font-serif text-xl font-bold leading-tight text-white transition-colors group-hover:text-blue-sky">
+            <h3 className="mt-2 font-serif text-xl font-bold leading-tight text-white transition-colors group-hover:text-brand-orange-light">
               {card.title}
             </h3>
 

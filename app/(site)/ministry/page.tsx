@@ -59,7 +59,7 @@ export default function MinistryPage() {
       />
 
       {/* ── 2. The Three Expressions ── */}
-      <section className="bg-gradient-to-br from-white to-[#EEF3FA] px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             {EXPRESSIONS.map((card, i) => {
@@ -69,11 +69,11 @@ export default function MinistryPage() {
 
               return (
                 <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
-                  <div className="flex h-full flex-col border-t-2 border-blue-sky bg-white p-8">
-                    <span className="mb-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-wine">
+                  <div className="flex h-full flex-col border-t-2 border-brand-orange bg-white p-8">
+                    <span className="mb-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-deep">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <h2 className="mb-4 font-serif text-xl font-bold leading-tight text-blue-navy sm:text-2xl">
+                    <h2 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-blue sm:text-2xl">
                       {card.title}
                     </h2>
                     <p className="font-sans text-base leading-relaxed text-muted">
@@ -81,11 +81,11 @@ export default function MinistryPage() {
                     </p>
 
                     {/* Scannable index of the named programmes behind the prose */}
-                    <ul className="mt-8 flex flex-wrap gap-2 border-t border-blue-sky/20 pt-6">
+                    <ul className="mt-8 flex flex-wrap gap-2 border-t border-brand-orange/20 pt-6">
                       {programmes.map((p) => (
                         <li
                           key={p.name}
-                          className="border border-blue-sky/40 px-3 py-1 font-sans text-xs text-muted"
+                          className="border border-brand-orange/40 px-3 py-1 font-sans text-xs text-muted"
                         >
                           {p.acronym ? `${p.name} (${p.acronym})` : p.name}
                         </li>
@@ -100,13 +100,13 @@ export default function MinistryPage() {
       </section>
 
       {/* ── 3. The Vision Behind It ── */}
-      <section className="bg-gradient-to-r from-blue-deep to-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">The Vision</SectionLabel>
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             One Burden, Three Expressions
           </h2>
-          <div className="mx-auto mb-8 h-0.5 w-16 bg-blue-sky" />
+          <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
           <p className="font-sans text-base leading-relaxed text-white/70 sm:text-lg">
             {EXPRESSIONS_CLOSING}
           </p>
@@ -114,7 +114,7 @@ export default function MinistryPage() {
       </section>
 
       {/* ── 4. CTA Banner ── */}
-      <section className="bg-gradient-to-br from-wine-deep via-wine to-wine-light px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Invite Pastor Awe
@@ -124,7 +124,7 @@ export default function MinistryPage() {
             outreach in your city.
           </p>
           <div className="flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center">
-            <Button href="/contact" variant="wine" size="lg">
+            <Button href="/contact" variant="secondary" size="lg">
               Request an Invitation
             </Button>
             <Button
