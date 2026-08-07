@@ -31,6 +31,10 @@ export default function EventsPage() {
         label="Events"
         title="Gather. Encounter. Be Transformed."
         subtitle="Join us at our upcoming gatherings across the UK and Nigeria"
+        /* One of only two inner pages with the drifting dot field — a page
+           about gatherings is where a little movement earns its place. See the
+           warning in PageHero before adding a third. */
+        particles
       />
 
       {/* ── 2. Featured Event ── */}

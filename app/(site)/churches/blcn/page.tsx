@@ -4,6 +4,7 @@ import { MapPin } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import HeroAtmosphere from "@/components/HeroAtmosphere";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
@@ -100,6 +101,10 @@ export default function BLCNPage() {
         </div>
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-blue-navy/90 via-transparent to-blue-navy/40" />
+        {/* The shared hero glow, over the two scrims so it tints rather than
+            being washed out by them. No particles — the dot field is kept to
+            the homepage, /events and /ministry. */}
+        <HeroAtmosphere />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
@@ -123,7 +128,9 @@ export default function BLCNPage() {
             </div>
             <SectionLabel tone="dark">Nigeria</SectionLabel>
             <h1 className="font-serif text-4xl font-bold leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
-              Bethel Livingstone Christian Network
+              <span className="hero-shimmer">
+                Bethel Livingstone Christian Network
+              </span>
             </h1>
             <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-blue-sky sm:text-3xl">
               BLCN

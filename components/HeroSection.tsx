@@ -5,6 +5,8 @@ import Image from "next/image";
 import AnimateIn from "./AnimateIn";
 import Button from "./Button";
 import SectionLabel from "./SectionLabel";
+import HeroAtmosphere from "./HeroAtmosphere";
+import DriftingParticles from "./DriftingParticles";
 import { MINISTER_NAME, TAGLINE } from "@/lib/constants";
 
 const SLIDE_DURATION_MS = 6000;
@@ -101,6 +103,14 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-black/60" />
       <div className="absolute inset-0 bg-gradient-to-t from-blue-navy/90 via-transparent to-blue-navy/40" />
 
+      {/* The atmosphere layer, shared with every `PageHero`. It sits ABOVE the
+          two scrims above: under them the glow would be flattened back out by
+          the very wash it is meant to tint. Both layers are `aria-hidden` and
+          carry no JS beyond the dots' framer-motion loop, which is already in
+          the shared chunk on every route. */}
+      <HeroAtmosphere />
+      <DriftingParticles density="sparse" />
+
       {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
         <AnimateIn direction="up" className="max-w-3xl">
@@ -108,8 +118,13 @@ export default function HeroSection() {
             Pastor &mdash; UK &amp; Nigeria
           </SectionLabel>
 
+          {/* The sweep is on the span, not the h1 — at `leading-none` the h1's
+              background box is shorter than the glyphs, so `background-clip:
+              text` would drop the tails of the "y" and "p" in "Ayodele
+              Oladapo". An inline box is sized from the font metrics instead.
+              See PageHero for the full note. */}
           <h1 className="mb-6 font-serif text-5xl font-bold leading-none tracking-tight text-white sm:text-7xl md:text-8xl">
-            {MINISTER_NAME}
+            <span className="hero-shimmer">{MINISTER_NAME}</span>
           </h1>
 
           <div className="mb-8 h-0.5 w-16 bg-blue-sky" />

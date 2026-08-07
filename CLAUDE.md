@@ -200,6 +200,111 @@ back clean. The findings that produced these rules:
 
 ---
 
+## The atmosphere layer (heroes, glow, shimmer, drift)
+The `/birthday` hero's treatment — layered radial glows, a shimmer sweep on the
+heading, drifting dots — was extracted into shared pieces and applied across the
+main site. Three components carry it, and **nothing is copy-pasted**: if you
+find a hand-written `radial-gradient` glow on a hero, it predates this and
+should be moved onto `HeroAtmosphere`.
+
+### ⚠️ The main site is still blue/wine — the tone is a switch, not a colour
+The glows and dots are **tone-configurable**, and every main-site hero currently
+runs the `site` tone (wine-light + blue), not `/birthday`'s orange. That is not
+a half-finished migration: no main-site page uses a `bday-*` token, so orange
+glows would sit over wine-gradient sections and read as a bug.
+
+`SITE_ATMOSPHERE_TONE` in `components/HeroAtmosphere.tsx` is the entire switch.
+If the palette migration ever lands, flip that one constant and every hero,
+glow and dot on the site follows. Don't hardcode `tone="birthday"` at call
+sites — `/birthday` is the only place that passes a tone explicitly.
+
+### What each page gets, and why
+| Treatment | Pages | Reasoning |
+|---|---|---|
+| Glow + shimmer + **drift** | `/`, `/events`, `/ministry` | The homepage is the front door; `/events` is about gatherings; `/ministry` is the overview the Expressions menu hangs off. Three of fourteen |
+| Glow + shimmer | the other 11 routes | |
+| Scroll-reveal only | — | every page already had full `AnimateIn` coverage |
+
+⚠️ **`particles` is opt-in and meant to stay rare.** Dots on all ten `PageHero`
+routes would stop being atmosphere and become a tic — the technique works
+because it does not appear everywhere. Adding a fourth page is a design
+decision, not a default.
+
+### The shimmer
+`.hero-shimmer` (white text, dark heroes) and `.hero-shimmer-light` (navy text,
+the light `PageHero` variant) in `globals.css`. `/birthday` keeps its own
+`.shimmer-text`.
+
+- ⚠️ **It runs ONCE, not on a loop.** The birthday page is one screenful of
+  celebration and can carry a repeating sweep; an inner page is a wall of
+  reading with its h1 pinned at the top, and a heading that re-lights itself
+  every seven seconds all visit is a distraction. One pass at 0.9s — which
+  clears `AnimateIn`'s 0.6s reveal — then it settles.
+- ⚠️ **The settled state is legible because of where the keyframes end**, not
+  because anything resets the colour: at `background-position: -200%` the accent
+  band has travelled clear of the text. That is why `both` fill-mode is not
+  optional — without it the text sits at 0% before the delay, with the accent
+  band parked across the middle of it.
+- ⚠️ **The sweep goes on an inline `<span>`, never on the `h1`.**
+  `background-clip: text` paints the element's own background box, and a block
+  h1's box is its line-height — at `leading-none` the tails of the "y" and "p"
+  in "Ayodele Oladapo" fall outside it and render transparent. An inline box is
+  sized from the font metrics. `/birthday` already did it this way; follow it.
+- ⚠️ **The variant must match the heading colour.** The sweep settles on its
+  gradient's end stop, so `.hero-shimmer` under navy text leaves the h1 white.
+  `hero-shimmer-light` has no call site today (no page passes
+  `variant="light"`); it exists so the light variant is correct when one does.
+- `prefers-reduced-motion` drops both to solid text.
+
+### The dots
+`DriftingParticles`, with `BirthdayConfetti` now a one-line preset of it.
+Verified after the refactor that `/birthday` renders the same 16 dots, in order,
+with the same classes.
+
+⚠️ **The per-dot alpha variation is the effect — never collapse it to one class
+per hue.** Every dot animates through identical opacity keyframes, so the only
+thing giving the field depth is that each dot's *colour* carries a different
+alpha. Flattened to four fixed values it reads as a regular grid of identical
+dots, which is what it then is. (This was broken and fixed once already.) The
+`site` alphas are not copies of the birthday ones: wine-light is much darker
+than `bday-orange` on navy and needs ~10 more points, blue-sky much brighter
+than `bday-blue-mid` and needs ~20 fewer.
+
+### The countdown numerals
+`CountdownTimer` now carries `BirthdayCountdown`'s treatment in blue — the same
+2×2 → 4-across grid, sharp accent-topped `bg-white/[0.07]` tiles, display
+numerals over small uppercase tracked labels. Labels went back to full words
+("Minutes", not "Min"), which the 2-column mobile grid has room for.
+
+⚠️ **`blue-sky` numerals are 3.10:1 against the tile** (over the band's
+`via-blue-deep` stop, the darkest ground and therefore the governing figure).
+That clears AA **large** (3:1) and nothing more, so it is legitimate at 60px+
+and at no smaller size — the same trade `BirthdayCountdown` makes with its
+orange at 4.0:1, but with less headroom. It is the tightest accent-on-dark
+pairing on the site. The unit labels stay white for exactly this reason.
+Re-measure if that band is ever lightened.
+
+The `/about` stat figures moved from white to `blue-sky` to match (3.17:1 at
+24px bold, AA-large — **that size is the floor**). `/churches/blcn`'s network
+stats already did this; the two grids were the site's only disagreement on it.
+
+### ⚠️ Layer order: the glow sits ABOVE the scrims
+On any hero with a photo or a flat wash (`HeroSection`, `/churches/blcn`,
+`PageHero` with `backgroundImage`) `HeroAtmosphere` renders **after** the scrim
+divs. Under them the glow is flattened back out by the very wash it is meant to
+tint. Content stays at `z-10` above both.
+
+### Performance
+No new dependency, and no new framer-motion importer — `BirthdayConfetti` gave
+up its import as `DriftingParticles` took it, so the count is unchanged.
+`HeroAtmosphere` is a **server** component with no imports at all; the whole
+glow is two `radial-gradient()`s. Measured cost of the entire layer: **+13.1 KB
+JS, +318 B CSS** uncompressed, which is `DriftingParticles` newly landing on the
+`/`, `/events` and `/ministry` chunks. ⚠️ Don't add a particle or confetti
+library — the standing rule is that this layer must not grow the bundle further.
+
+---
+
 ## Project Structure
 ⚠️ **The tree has two chrome branches.** `app/layout.tsx` carries `<html>`,
 `<body>`, the font and `metadataBase` — and no chrome at all. The Navbar and
@@ -263,7 +368,21 @@ components/
                             treatment, so `variant` is ignored when set. Omit
                             `imageAlt` for a purely decorative backdrop (the
                             image is then `aria-hidden`); pass it when the photo
-                            is part of the page's subject, as on `/about`
+                            is part of the page's subject, as on `/about`.
+                            Carries `HeroAtmosphere` + the h1 shimmer always,
+                            and `DriftingParticles` behind an opt-in
+                            `particles` prop — see "The atmosphere layer"
+  HeroAtmosphere.tsx      ← The layered radial glow behind every hero. Server
+                            component, zero JS — two radial-gradients in one
+                            background-image. tone: site | birthday, surface:
+                            dark | light. Exports SITE_ATMOSPHERE_TONE, the one
+                            constant that switches the whole site's tone
+  DriftingParticles.tsx   ← 'use client' — the drifting dot field, generalised
+                            out of BirthdayConfetti. tone + density
+                            ('full' 16 dots | 'sparse' 8). ⚠️ Positions are a
+                            hard-coded table, NEVER Math.random() (hydration),
+                            and the per-dot alpha variation is load-bearing —
+                            see "The atmosphere layer"
   Navbar.tsx              ← Transparent on desktop hero, solid on scroll; always solid
                             on mobile. Its local `Brand` component is used by both the
                             desktop bar and the mobile menu header: `awe-min-mark.png`
@@ -281,15 +400,19 @@ components/
                             2.5s after hydration — see "The hero slideshow
                             defers slide 2" below. Don't collapse that back to
                             a plain `.map()`.
-  CountdownTimer.tsx      ← 'use client', renders a 'pending' placeholder first so SSR/client hydration match
+  CountdownTimer.tsx      ← 'use client', renders a 'pending' placeholder first so
+                            SSR/client hydration match. Carries BirthdayCountdown's
+                            tile treatment in blue: 2×2 → 4-across grid, accent
+                            numerals, small uppercase labels. The old flex-wrap row
+                            with ":" separators is gone
   BirthdayCountdown.tsx   ← 'use client' — the /birthday centrepiece. Same 'pending'
                             hydration contract as CountdownTimer, but resolves the
                             before/during/after phase too and swaps the clock for a
                             celebration message. Larger type, sharp bordered tiles
-  BirthdayConfetti.tsx    ← 'use client' — decorative drifting dots for the /birthday
-                            hero. ⚠️ Positions are a hard-coded table, NEVER
-                            Math.random() (hydration). Honours prefers-reduced-motion
-                            by rendering the dots still, not by removing them
+  BirthdayConfetti.tsx    ← 'use client' — a one-line preset of DriftingParticles
+                            (tone="birthday", density="full"). The implementation
+                            moved there when the homepage needed the same technique;
+                            /birthday's output is unchanged, verified dot for dot
   BirthdayTestimonyForm.tsx ← 'use client' — posts to /api/birthday-testimony.
                             ⚠️ Fields are `text-base` (16px) and that is not a
                             style choice: iOS Safari zooms the viewport on focus

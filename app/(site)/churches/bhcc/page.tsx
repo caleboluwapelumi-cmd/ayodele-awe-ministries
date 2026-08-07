@@ -4,6 +4,7 @@ import { MapPin } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import HeroAtmosphere from "@/components/HeroAtmosphere";
 import { CHURCHES } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -54,6 +55,10 @@ export default function BHCCPage() {
           aria-hidden
           className="absolute inset-0 bg-gradient-to-t from-blue-navy via-transparent to-blue-navy/50"
         />
+        {/* The shared hero glow. This hero builds its own gradient rather than
+            using `PageHero`, so it opts in by hand. No particles — the dot
+            field is kept to the homepage, /events and /ministry. */}
+        <HeroAtmosphere />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
@@ -83,7 +88,9 @@ export default function BHCCPage() {
             </div>
             <SectionLabel tone="dark">United Kingdom</SectionLabel>
             <h1 className="font-serif text-4xl font-bold leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
-              Building House Christian Centre
+              <span className="hero-shimmer">
+                Building House Christian Centre
+              </span>
             </h1>
             <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-blue-sky sm:text-3xl">
               BHCC

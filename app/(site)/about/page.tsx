@@ -198,7 +198,17 @@ export default function AboutPage() {
             {STATS.map((item, i) => (
               <AnimateIn key={item.stat} direction="right" delay={i * 0.1}>
                 <div className="border-t-2 border-blue-sky bg-blue-deep/50 px-8 py-8 text-center">
-                  <p className="font-serif text-2xl font-bold leading-tight text-white sm:text-3xl">
+                  {/* The figure is the accent, the label stays white — the
+                      split `BirthdayCountdown` makes with its numerals, and
+                      what BLCN's "Network" stats already did. These two grids
+                      were the site's only disagreement on the point.
+
+                      ⚠️ 3.17:1 against the card (`bg-blue-deep/50` over this
+                      section's `to-blue` stop, the lightest ground it sits on).
+                      That clears AA **large** only, which 24px bold qualifies
+                      for — so this size is the floor. Anything smaller in this
+                      tile has to go back to white. */}
+                  <p className="font-serif text-2xl font-bold leading-tight text-blue-sky sm:text-3xl">
                     {item.stat}
                   </p>
                   <p className="mt-2 font-sans text-xs uppercase tracking-[0.2em] text-white/50">

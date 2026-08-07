@@ -52,6 +52,10 @@ export default function MinistryPage() {
         label="Ministry"
         title="Three Expressions of Ministry"
         subtitle="How the mandate is carried out — in the prophetic, the pastoral, and the evangelistic"
+        /* The second and last inner page with the dot field. /ministry is the
+           overview the rest of the Expressions menu hangs off, so it carries
+           the fuller treatment. See the warning in PageHero. */
+        particles
       />
 
       {/* ── 2. The Three Expressions ── */}

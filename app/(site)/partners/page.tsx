@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import HeroAtmosphere from "@/components/HeroAtmosphere";
 
 const TIERS = [
   {
@@ -93,12 +94,17 @@ export default function PartnersPage() {
           aria-hidden
           className="absolute inset-0 bg-gradient-to-t from-blue-navy via-transparent to-blue-navy/60"
         />
+        {/* The shared hero glow — this hero predates `PageHero` and builds its
+            own gradient, so it opts in by hand. No particles: /partners is a
+            long read, and the dot field is kept to the homepage, /events and
+            /ministry. */}
+        <HeroAtmosphere />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
           <AnimateIn direction="up" className="max-w-3xl">
             <SectionLabel tone="dark">Partnership</SectionLabel>
             <h1 className="mb-6 font-serif text-5xl font-bold leading-none tracking-tight text-white sm:text-6xl md:text-7xl">
-              Partner With Us
+              <span className="hero-shimmer">Partner With Us</span>
             </h1>
             <div className="mb-8 h-0.5 w-16 bg-blue-sky" />
             <p className="mb-10 max-w-lg font-sans text-lg leading-relaxed text-white/60 sm:text-xl">
