@@ -1011,10 +1011,20 @@ sat between the testimony form and the close until 3 August 2026; it is now a
 modal. See "Giving is a modal" below before adding anything to this page that
 asks for money.
 
-### ⚠️ It is a standalone site, not a page of this one
-**The main site has not launched.** `/birthday` is the only URL being shared,
-so the page is isolated from the rest of the tree and offers **no route out of
-itself**. Isolated on 1 August 2026:
+### ⚠️ It is a standalone page, not a page of this site
+`/birthday` is isolated from the rest of the tree and offers **no route out of
+itself** — no Navbar, no Footer, and no anchor that leaves the page. Isolated on
+1 August 2026.
+
+⚠️ **The premise for that has expired, and the isolation has not been revisited.**
+It was built this way because the main site had not launched and `/birthday` was
+the only URL being shared. The site launched on the custom domain on 7 August
+2026, so the page is now a dead end inside a live site: a visitor who lands on it
+from a shared WhatsApp link has no way to reach the ministry. **Whether it gains
+chrome, a single "Explore the ministry" link, or stays exactly as it is, is a
+client decision, not a refactor** — it is a dated one-off page and there is a
+reasonable case for leaving it frozen. Until that call is made, the rules below
+still hold as written.
 
 - `app/layout.tsx` was stripped to `<html>`/`<body>` + font + `metadataBase`.
   The Navbar and Footer moved into **`app/(site)/layout.tsx`**, and every main
@@ -1027,14 +1037,15 @@ itself**. Isolated on 1 August 2026:
 - **The ministry lockup at the top of the hero links to `/birthday` — itself.**
   `awe-min-logo.png` at `h-11 sm:h-14` inside a `<Link href="/birthday">`
   (`aria-label="Back to top"`), added 2 August 2026 as a back-to-top affordance.
-  ⚠️ **It must never become `<Link href="/">`.** The isolation rule is unchanged:
-  no anchor on this page may leave it while the main site is unlaunched.
-  ⚠️ Known cosmetic side effect: on the custom domain `/` is *rewritten* to
-  `/birthday`, so a visitor sitting on the bare domain who clicks the lockup has
-  the address bar change from `ayodeleaweministries.com` to
-  `…/birthday`. Same page, same content — only the URL cosmetics. If that ever
-  matters more than the affordance, swap the `Link` for a small client component
-  calling `window.scrollTo`, which changes no URL at all.
+  ⚠️ **It is still `href="/birthday"`, i.e. back-to-top, not home.** Pointing it
+  at `/` would now work — the site is live and `/` is the real homepage — but
+  that is exactly the isolation decision flagged above, and it should be made
+  deliberately rather than by editing this one link. Note the lockup is the most
+  natural place for it if the call goes that way.
+  ⚠️ The old cosmetic caveat here (that `/` was *rewritten* to `/birthday` on the
+  custom domain, so clicking the lockup changed the address bar) is **obsolete** —
+  the rewrite went with `middleware.ts` on 7 August 2026. `/` is the homepage on
+  every host now.
 - The only hrefs the page emits are `/birthday` and `#testimony`. Verified
   against the built HTML. (`#give` went with the giving section — giving is a
   button that opens a modal now, not an anchor.) `SharePage` shares
@@ -1045,50 +1056,47 @@ itself**. Isolated on 1 August 2026:
 - **Don't "fix" its absence from the nav.** It was never in the Navbar or
   Footer; now it cannot reach them either.
 
-### ⚠️ The custom domain serves `/birthday` only (`middleware.ts`)
-**ayodeleaweministries.com currently only serves `/birthday` via middleware
-redirect. Full site remains on the `.vercel.app` URL until ready to launch
-properly. Remove this middleware when the full site is ready to go live on the
-custom domain.**
+### The custom domain serves the full site (launched 7 August 2026)
+**ayodeleaweministries.com now serves the full site as of 7 August 2026 — the
+temporary `/birthday`-only middleware redirect has been removed. `/birthday`
+remains accessible as a normal route, not the domain root.**
 
-`middleware.ts` at the project root does a host check and nothing else. On
-`ayodeleaweministries.com` / `www.ayodeleaweministries.com`:
+`middleware.ts` is **deleted**. It did a host check and nothing else: on the two
+custom-domain hosts it rewrote `/` to `/birthday` and 307'd every other path
+there, leaving `/birthday*` and `/api/*` alone. Every other host — the
+`.vercel.app` URL, previews, localhost — already fell through to the full site,
+so removing the file makes the custom domain behave the way those already did.
 
-| Path | Behaviour |
-|---|---|
-| `/` | **Rewritten** to `/birthday` — the address bar keeps the bare domain |
-| anything else (`/about`, `/partners`, `/churches/bhcc`, …) | **307** redirect to `/birthday` |
-| `/birthday`, `/birthday/admin` | untouched |
-| `/api/*` | untouched — the testimony form depends on `/api/birthday-testimony` |
+There is now **no middleware or proxy in this project**, and the build output has
+no `ƒ Proxy (Middleware)` row. If one is ever added back, note that Next 16
+deprecates the `middleware.ts` filename in favour of `proxy.ts` — the old name
+still works but warns on every build.
 
-Every other host — the `.vercel.app` deployment URL, previews, localhost —
-falls through untouched and gets the full site. That host check is the whole
-reason this is middleware and not a `redirects()` entry in `next.config.ts`,
-which cannot see the request host.
+Two things that were load-bearing while the lock existed and are worth keeping in
+mind if anything like it returns:
 
-- ⚠️ **The matcher excludes any path with a file extension**, and that is
-  load-bearing rather than tidiness. `/birthday`'s `og:image` resolves through
-  `metadataBase` to `https://ayodeleaweministries.com/images/apostle-portrait.jpg`,
-  which the WhatsApp and Facebook crawlers fetch **directly** — redirect it and
-  every shared link loses its preview image. The same exclusion covers
-  `/icon.png` and `/apple-icon.png`. `_next/*` (JS, CSS, the Clash Display
-  woff2 files) is excluded alongside it.
-- ⚠️ **The redirect is 307, never 301/308.** A permanent redirect is cached by
-  the browser indefinitely, so every visitor who touched the domain pre-launch
-  would keep landing on `/birthday` after the file is deleted — with no way to
-  clear it from our side. `NextResponse.redirect` defaults to 307; leave it.
-- ⚠️ **The host list is an exact-match `Set`, not `host.includes(...)`.** A
-  `Host` header is attacker-controlled, and a substring test also matches
-  `ayodeleaweministries.com.example.org`.
-- ⚠️ **Next 16 deprecates the `middleware.ts` filename in favour of `proxy.ts`**
-  (`next build` warns: "The `middleware` file convention is deprecated"). It
-  still works — Next renames `proxy.js` → `middleware.js` in the build output
-  for compatibility. Silencing the warning is a pure file rename, no code
-  change. Kept as `middleware.ts` because the file is temporary.
-- ⚠️ **The domain here is `.com`; the ministry's email addresses in this file
-  are `.org`** (`contact@ayodeleaweministries.org`). That is as supplied — if
-  both TLDs are pointed at this project, add the `.org` hosts to
-  `LOCKED_DOMAINS` or they will serve the whole unlaunched site.
+- **A host-based lock has to be middleware, not `redirects()` in
+  `next.config.ts`** — that config cannot see the request host, so it would have
+  taken the `.vercel.app` URL down with the custom domain.
+- **Any such matcher must exclude paths with a file extension.** `/birthday`'s
+  `og:image` resolves through `metadataBase` to
+  `https://www.ayodeleaweministries.com/images/apostle-portrait.jpg`, which the
+  WhatsApp and Facebook crawlers fetch **directly** — redirect it and every
+  shared link loses its preview image. `/icon.png`, `/apple-icon.png` and
+  `/favicon.ico` are in the same position.
+
+⚠️ **The redirect was deliberately 307, never 301/308**, precisely so this
+removal would take effect. A permanent redirect is cached by the browser
+indefinitely, and every visitor who touched the domain pre-launch would still be
+landing on `/birthday` now with no way for us to clear it. Because it was
+temporary, they will not — but a visitor who loaded the domain in the last few
+days may still hold a *short-lived* 307 in cache, so a stale `/birthday` on a
+first check after deploy is not evidence the removal failed.
+
+⚠️ **The ministry's email addresses are `.org`** (`contact@ayodeleaweministries.org`)
+while the site's domain is `.com`. That is as supplied. It no longer risks
+anything — there is no host list to keep in sync — but it is still the reason
+those two TLDs appear side by side in this file.
 
 ### Palette and treatment
 It runs on **white / deep blue / orange** — which, since 7 August 2026, is
@@ -1421,8 +1429,10 @@ resolved against `metadataBase`. Only `openGraph`/`twitter` image paths are.
 
 ⚠️ **The middleware matcher was already correct.** `/icon.png`, `/apple-icon.png`
 and `/favicon.ico` all contain a `.`, so the `(?!_next/|.*\.)` lookahead
-excludes them. Verified live: `/icon.png` returns the actual PNG on the custom
-domain, not a redirect to `/birthday`.
+excludes them. Verified live: `/icon.png` returned the actual PNG on the custom
+domain, not a redirect to `/birthday`. (`middleware.ts` has since been deleted
+at launch, so there is no matcher at all now — this is kept because it records
+what was *ruled out*, and ruling middleware out is why the real cause was found.)
 
 The three real contributors, in order:
 
@@ -1562,8 +1572,11 @@ precise about:
   address that owns the Resend account. Either verify the domain, or point
   `BIRTHDAY_NOTIFY_EMAIL` at the account owner.
 - ⚠️ `contact@ayodeleaweministries.org` is the address `/contact` advertises,
-  but the custom domain is not pointed at Vercel yet, so that mailbox may not
-  exist. Confirm it receives mail before relying on the default.
+  and whether that mailbox actually receives mail is **still unconfirmed**.
+  Note this is not settled by the 7 August 2026 launch: the site domain is
+  `.com` and the mailbox is on `.org`, a different domain whose MX records have
+  nothing to do with Vercel hosting. Confirm it receives mail before relying on
+  the default.
 - `metadataBase` was added to `app/layout.tsx` for the birthday page's
   `og:image`, but it benefits every page — WhatsApp and Facebook will not fetch
   a relative image path.
@@ -1600,10 +1613,10 @@ precise about:
       looked broken on the custom domain"
 - [ ] Page transition animations (Framer Motion)
 - [ ] Real assets swapped in when client provides them
-- [ ] Custom domain pointed to Vercel — in progress. `ayodeleaweministries.com`
-      is being connected, but `middleware.ts` locks it to `/birthday` only
-      while the main site is unlaunched. **Delete `middleware.ts` at launch.**
-      See "The custom domain serves `/birthday` only"
+- [x] Custom domain pointed to Vercel — **launched 7 August 2026**.
+      `ayodeleaweministries.com` serves the full site; the temporary
+      `middleware.ts` that locked it to `/birthday` is deleted. See "The custom
+      domain serves the full site"
 - [ ] Google Analytics
 
 ---
