@@ -9,12 +9,30 @@ import DriftingParticles from "./DriftingParticles";
  * Shared hero for every inner page. Keeps rhythm, type scale and the
  * decorative rule identical site-wide.
  *
- * `backgroundImage` puts a photo behind the copy under the standard navy +
- * wine scrim. It always renders the dark treatment — light text on a scrimmed
+ * `backgroundImage` puts a photo behind the copy under the standard navy
+ * scrim. It always renders the dark treatment — light text on a scrimmed
  * photo — so `variant` is ignored when an image is passed. `imageAlt` is
  * optional: leave it off for a purely decorative backdrop (it is then
  * `aria-hidden`), pass it when the photo is actually part of the page's
  * subject, as on /about.
+ *
+ * ── imageScrim ──────────────────────────────────────────────────────────────
+ * `"default"` is the flat navy wash every existing image hero uses: ~96%
+ * opaque at the corners, which is right when the photo is pure texture and
+ * nothing in it is meant to be looked at (/about, /books).
+ *
+ * `"soft"` is for a backdrop that is itself part of the message and has to be
+ * legible — /media/teachings, whose hero is a screenshot of the actual
+ * Telegram channel. It is a **centre-weighted** scrim, not simply a thinner
+ * one: ~92% navy behind the copy column falling to ~51% at the edges, so the
+ * image reads around a text block that stays on near-solid navy. A uniformly
+ * lighter wash cannot do both — it either erases the image or puts the h1 over
+ * whatever the image happens to contain.
+ *
+ * ⚠️ Only use `"soft"` over an already-dark source. Measured against the worst
+ * case (copy landing directly on a white pixel of the screenshot): the h1 holds
+ * 11.8:1 and the white/70 subtitle 5.7:1. A light photo under the same scrim
+ * would put both under AA.
  *
  * ── The atmosphere layer ────────────────────────────────────────────────────
  * Every hero carries `HeroAtmosphere` (the /birthday hero's layered radial
@@ -41,6 +59,7 @@ export default function PageHero({
   backgroundImage,
   imageAlt,
   imagePosition = "object-center",
+  imageScrim = "default",
   particles = false,
   children,
 }: {
@@ -51,6 +70,8 @@ export default function PageHero({
   backgroundImage?: string;
   imageAlt?: string;
   imagePosition?: string;
+  /** How hard to knock the photo back. See the note above before using "soft". */
+  imageScrim?: "default" | "soft";
   /** Adds the drifting dot field. See the warning above before turning it on. */
   particles?: boolean;
   children?: ReactNode;
@@ -78,8 +99,22 @@ export default function PageHero({
             sizes="100vw"
             className={`object-cover ${imagePosition}`}
           />
-          <div className="absolute inset-0 bg-brand-navy/75" />
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-navy/85 via-brand-blue/55 to-brand-navy/85" />
+          {imageScrim === "soft" ? (
+            <>
+              {/* A light brand tint over the whole frame — enough to pull a
+                  foreign palette (Telegram's near-black + violet wallpaper)
+                  into the site's blue without hiding it. */}
+              <div className="absolute inset-0 bg-brand-navy/30" />
+              {/* Then the centre weighting: near-solid navy behind the copy,
+                  thinning towards the edges where the image does its work. */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_65%_at_50%_50%,rgba(1,30,60,0.94)_0%,rgba(1,30,60,0.86)_40%,rgba(1,30,60,0.62)_70%,rgba(1,30,60,0.22)_100%)]" />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-brand-navy/75" />
+              <div className="absolute inset-0 bg-gradient-to-br from-brand-navy/85 via-brand-blue/55 to-brand-navy/85" />
+            </>
+          )}
         </>
       )}
 

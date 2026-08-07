@@ -5,6 +5,8 @@ import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
 import HeroAtmosphere from "@/components/HeroAtmosphere";
+import HeroSlideshow, { type HeroSlide } from "@/components/HeroSlideshow";
+import ImageGallery, { type GalleryImage } from "@/components/ImageGallery";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
@@ -79,31 +81,99 @@ const NETWORK_STATS = [
   { stat: "Thousands Reached", label: "And Growing" },
 ];
 
+/**
+ * Hero backdrop — real photographs of the congregation, supplied by the client.
+ *
+ * ⚠️ These replaced the blurred `blcn-logo.jpg` backdrop that stood here while
+ * there was no photography of BLCN at all. That treatment existed *because* the
+ * alternative would have been a stock photo of strangers under a heading naming
+ * the church; with real pictures in hand it has no reason to stay, and a real
+ * congregation is a better hero than an abstraction of its emblem. The crisp
+ * emblem badge in the hero body stays — that is the identity mark, and it was
+ * never the thing the blurred layer was doing.
+ *
+ * These four are the only professionally-shot frames in the set (4928x3264
+ * originals, capped at 2560 per the asset rules); the phone photographs carry
+ * the gallery further down. `position` keeps each subject's face inside the
+ * crop — a full-bleed hero on a phone shows barely a third of a 1.51 frame's
+ * width, so `object-center` is not a safe default here.
+ *
+ * ⚠️ Unlike the homepage's slides these carry real `alt` text and are exposed
+ * to screen readers: the homepage photographs are decoration behind a heading
+ * that already names the Pastor, whereas these ARE what this page is about.
+ * `HeroSlideshow` announces only whichever one is on screen.
+ */
+const HERO_SLIDES: HeroSlide[] = [
+  {
+    src: "/images/blcn/blcn-hero-1.jpg",
+    position: "object-[48%_32%]",
+    alt: "A minister preaching from the lectern at a BLCN gathering, the network's nations backdrop behind him",
+  },
+  {
+    src: "/images/blcn/blcn-hero-2.jpg",
+    position: "object-[60%_32%]",
+    alt: "Preaching from the stage during a BLCN service",
+  },
+  {
+    src: "/images/blcn/blcn-hero-3.jpg",
+    position: "object-[50%_35%]",
+    alt: "Preaching to the congregation at an evening BLCN service",
+  },
+  {
+    src: "/images/blcn/blcn-hero-4.jpg",
+    position: "object-[48%_38%]",
+    alt: "A woman singing in worship at a BLCN gathering",
+  },
+];
+
+/**
+ * The rest of the client's photographs.
+ *
+ * ⚠️ Alt text describes what is visible and nothing more. Nobody in these
+ * frames has been identified to us, so none of them names a person, and none
+ * attaches a date or an event — the Content Integrity Notes rule out inventing
+ * either, and a caption is exactly where that would slip in. If the client
+ * later tells us who or what these are, the captions can say so.
+ *
+ * `width`/`height` are the real encoded sizes, so the lightbox lays each one
+ * out without guessing at its orientation.
+ */
+const GALLERY: GalleryImage[] = [
+  { src: "/images/blcn/blcn-gallery-01.jpg", width: 1800, height: 1192, alt: "A minister praying over a member of the congregation at a BLCN gathering" },
+  { src: "/images/blcn/blcn-gallery-02.jpg", width: 1800, height: 1355, alt: "Ministering to a young member of the congregation on stage at BLCN" },
+  { src: "/images/blcn/blcn-gallery-03.jpg", width: 1800, height: 1355, alt: "A moment of ministry on stage at BLCN, the nations backdrop behind" },
+  { src: "/images/blcn/blcn-gallery-04.jpg", width: 1355, height: 1800, alt: "Hands raised in worship as the congregation faces the stage at BLCN" },
+  { src: "/images/blcn/blcn-gallery-05.jpg", width: 1800, height: 1355, alt: "The congregation at prayer, seen from the back of the hall at BLCN" },
+  { src: "/images/blcn/blcn-gallery-06.jpg", width: 1355, height: 1800, alt: "Praying with a member of the church at a BLCN service" },
+  { src: "/images/blcn/blcn-gallery-07.jpg", width: 1800, height: 1355, alt: "Members of the BLCN family gathered at the front of the church" },
+  { src: "/images/blcn/blcn-gallery-08.jpg", width: 1800, height: 1355, alt: "Preaching with the nations backdrop behind, at a BLCN service" },
+  { src: "/images/blcn/blcn-gallery-09.jpg", width: 1800, height: 1355, alt: "Families of the BLCN congregation gathered for a photograph after service" },
+  { src: "/images/blcn/blcn-gallery-10.jpg", width: 1800, height: 1355, alt: "The BLCN church family, young and old, photographed together after a service" },
+  { src: "/images/blcn/blcn-gallery-11.jpg", width: 1800, height: 1355, alt: "Ministering the Word at a BLCN gathering" },
+  { src: "/images/blcn/blcn-gallery-12.jpg", width: 1800, height: 1355, alt: "Teaching from the lectern at a BLCN service" },
+  { src: "/images/blcn/blcn-gallery-13.jpg", width: 1800, height: 1355, alt: "A member of the congregation holding his Bible during a BLCN service" },
+  { src: "/images/blcn/blcn-gallery-14.jpg", width: 1355, height: 1800, alt: "Preaching to the congregation at an evening BLCN service" },
+  { src: "/images/blcn/blcn-gallery-15.jpg", width: 1355, height: 1800, alt: "The congregation listening as the Word is preached at BLCN" },
+  { src: "/images/blcn/blcn-gallery-16.jpg", width: 1355, height: 1800, alt: "Teaching from a whiteboard during a BLCN session" },
+  { src: "/images/blcn/blcn-gallery-17.jpg", width: 1355, height: 1800, alt: "Teaching the Word at a BLCN gathering" },
+  { src: "/images/blcn/blcn-gallery-18.jpg", width: 1800, height: 1355, alt: "The BLCN family photographed together outside after a service" },
+  { src: "/images/blcn/blcn-gallery-19.jpg", width: 1355, height: 1800, alt: "Members of the BLCN family after a Sunday service" },
+];
+
 export default function BLCNPage() {
   return (
     <>
       {/* ── 1. Hero ── */}
       <section className="relative flex min-h-screen items-center overflow-hidden">
-        {/* The emblem is the hero image — no stock photography here. At 828×647
-            it is far too small to hold a full-bleed crop sharply, so it is blown
-            up and blurred to read as texture; the crisp badge below carries the
-            actual mark. The overflow-hidden wrapper keeps the blur's soft edge
-            from bleeding past the section. */}
-        <div aria-hidden className="absolute inset-0 overflow-hidden">
-          <Image
-            src="/images/blcn-logo.jpg"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="scale-125 object-cover blur-2xl"
-          />
-        </div>
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-transparent to-brand-navy/40" />
-        {/* The shared hero glow, over the two scrims so it tints rather than
-            being washed out by them. No particles — the dot field is kept to
-            the homepage, /events and /ministry. */}
+        {/* Real photographs of the congregation, crossfading — the same
+            component the homepage hero uses, so the deferred mount of slides
+            2-4 and the 44px dot targets come with it. Both scrims are the
+            slideshow's own. See HERO_SLIDES for why the blurred emblem this
+            replaced is gone. */}
+        <HeroSlideshow slides={HERO_SLIDES} />
+        {/* The shared hero glow, over the slideshow's scrims so it tints rather
+            than being washed out by them. No particles — the dot field is kept
+            to the homepage, /events and /ministry. */}
         <HeroAtmosphere />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
@@ -379,7 +449,33 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 7. Network Vision ── */}
+      {/* ── 7. Gallery ──
+          Placed here rather than up against "About BLCN" for rhythm: the page
+          runs mid → light → mid → light → mid, and a gallery section directly
+          after About would have put two light bands together with no seam
+          between them. This slot sits between the mid-blue "Follow BLCN" and
+          the dark "Network Vision", so it keeps the alternation intact and
+          lands the pictures just before the closing pair. */}
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+            <SectionLabel tone="light">Gallery</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
+              BLCN in Pictures
+            </h2>
+            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg">
+              Moments from the Bethel Livingstone Christian Network family.
+            </p>
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
+          </AnimateIn>
+
+          <div className="mt-16">
+            <ImageGallery images={GALLERY} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── 8. Network Vision ── */}
       <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up">
@@ -411,7 +507,7 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 8. CTA ── */}
+      {/* ── 9. CTA ── */}
       <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

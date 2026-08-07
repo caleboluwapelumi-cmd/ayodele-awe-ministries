@@ -383,10 +383,12 @@ app/
     churches/
       page.tsx            ← "All Expressions" overview page
       bhcc/page.tsx       ← Building House Christian Centre (UK) — British English
-      blcn/page.tsx       ← Bethel Livingstone Christian Network (Nigeria)
+      blcn/page.tsx       ← Bethel Livingstone Christian Network (Nigeria).
+                            Photo-slideshow hero + the "BLCN in Pictures"
+                            gallery — see `public/images/blcn/`
     events/page.tsx
-    media/
-      page.tsx
+    media/                ← all three carry `MediaTabs` under their hero
+      page.tsx            ← the hub, and the sub-nav's "Overview" tab
       teachings/page.tsx  ← Telegram teachings page
       music/page.tsx      ← Spotify music page
     books/page.tsx        ← Book showcase + Selar/Amazon buy buttons
@@ -419,9 +421,16 @@ components/
   SectionLabel.tsx        ← The small-caps eyebrow above every heading. tone: dark | light
   PageHero.tsx            ← Shared hero for all inner pages. variant: dark | light.
                             Optional `backgroundImage` (+ `imageAlt`,
-                            `imagePosition`) puts a photo behind the copy under
-                            the standard navy scrim; it forces the dark
-                            treatment, so `variant` is ignored when set. Omit
+                            `imagePosition`, `imageScrim`) puts a photo behind
+                            the copy under the standard navy scrim; it forces
+                            the dark treatment, so `variant` is ignored when
+                            set. `imageScrim` is 'default' (the flat ~96% wash,
+                            for a photo that is pure texture) or 'soft' (a
+                            centre-weighted scrim, ~92% navy behind the copy
+                            falling to ~45% at the edges, for a backdrop that
+                            is itself part of the message). Only
+                            /media/teachings uses 'soft' — see the
+                            `telegram-hero.jpg` entry in Assets Status. Omit
                             `imageAlt` for a purely decorative backdrop (the
                             image is then `aria-hidden`); pass it when the photo
                             is part of the page's subject, as on `/about`.
@@ -447,16 +456,47 @@ components/
                             is NOT used here — its two-line wordmark falls under 6px at
                             header scale. Mark in the header, lockup in the footer.
   Footer.tsx              ← Brand column carries the full `awe-min-logo.png` at `w-48`
-  HeroSection.tsx         ← 'use client' — homepage full-screen hero (left-aligned,
-                            editorial). Crossfading background slideshow: slides
-                            stacked absolutely, 6s interval, opacity-only
-                            transition, clickable dots. `useState(0)` initial
-                            index keeps SSR and first client render identical —
-                            never seed the index from Date.now()/random.
+  HeroSection.tsx         ← homepage full-screen hero (left-aligned, editorial).
+                            Now a **server** component: the slideshow moved out
+                            and nothing stateful was left. It owns the SLIDES
+                            table, the copy and the CTAs, nothing else
+  HeroSlideshow.tsx       ← 'use client' — the crossfading hero backdrop, shared
+                            by `HeroSection` and `/churches/blcn`. Slides stacked
+                            absolutely, 6s interval, opacity-only transition,
+                            clickable dots, **and both scrims** (`bg-black/60` +
+                            the navy wash) — a hero photo is never shown
+                            unscrimmed on this site, so the caller cannot forget
+                            one. `useState(0)` initial index keeps SSR and first
+                            client render identical — never seed it from
+                            Date.now()/random.
                             ⚠️ Slides after the first are NOT rendered until
                             2.5s after hydration — see "The hero slideshow
                             defers slide 2" below. Don't collapse that back to
                             a plain `.map()`.
+                            ⚠️ `HeroSlide.alt` is optional and that is the a11y
+                            switch: omit it and the whole layer is `aria-hidden`
+                            (the homepage, whose h1 already names the Pastor);
+                            pass it and only the slide currently on screen is
+                            exposed (`/churches/blcn`, where the photographs are
+                            the subject). All slides are in the DOM at once, so
+                            without that per-slide gate a screen reader reads
+                            every caption in the set
+  ImageGallery.tsx        ← 'use client' — thumbnail grid + lightbox, used by
+                            the `/churches/blcn` gallery. Hand-rolled, no
+                            lightbox library: it is a grid, a `fixed` panel and
+                            a keydown handler, and framer-motion is already in
+                            the shared chunk. Modal mechanics copy
+                            `BirthdayGiving` (escape, backdrop, body-scroll
+                            freeze, tab trap, focus return, `useReducedMotion`)
+                            plus arrow-key paging.
+                            ⚠️ The dialog root — and the close/prev/next
+                            controls — sit on the untransformed `fixed` box, NOT
+                            on the animated figure inside it. See the
+                            containing-block trap noted on `BirthdayGiving`
+  MediaTabs.tsx           ← 'use client' — the Overview / Teachings / Music
+                            sub-nav under every /media page hero. See "Media
+                            section navigation" below. Must be mounted on all
+                            three media routes
   CountdownTimer.tsx      ← 'use client', renders a 'pending' placeholder first so
                             SSR/client hydration match. Carries BirthdayCountdown's
                             tile treatment in blue: 2×2 → 4-across grid, accent
@@ -554,12 +594,25 @@ lib/
 - **Expressions dropdown** (replaces "Churches"):
   - Ministry → `/ministry`  ← the overview the rest of the list outworks
   - All Expressions → `/churches`
+  - *— Churches —*
   - BHCC → `/churches/bhcc`
   - BLCN → `/churches/blcn`
-  - Teachings → `/media/teachings`
-  - Music → `/media/music`
+  - *— More —*
+  - Media → `/media`
   - Books → `/books`
   - Itinerary → `/itinerary`
+
+⚠️ **One media entry, not three.** A "— Media —" group header with **Teachings**
+(`/media/teachings`) and **Music** (`/media/music`) under it sat in this list
+until 7 August 2026. Three media destinations in a menu that is otherwise about
+the ministry's *expressions* made the media section read as three unrelated
+pages, and it was the longest group in a dropdown that also has to hold the
+churches. They moved to `MediaTabs` — see "Media section navigation" below.
+**Anything new in the media section belongs in `MediaTabs`, not here.**
+
+`Media` is also still a top-level nav item, and that is not a duplicate to
+clean up: the dropdown entry is what replaced the three removed links, and
+`/media` is now the only door into the section from the chrome.
 
 ---
 
@@ -730,8 +783,10 @@ Real assets received (all in `public/images/`, all JPEG):
   `object-cover` maths at 1280×644 — at 22% the crop runs source rows 132–494,
   face centred with headroom. It is only 720px wide, so it upscales ~2× at
   desktop; that is acceptable **because** it sits under the full navy
-  scrim and reads as texture (same reasoning as the BLCN blurred-logo hero).
-  Don't reuse it anywhere it would render unscrimmed at width.
+  scrim and reads as texture. (This used to cite the BLCN blurred-logo hero as
+  the precedent for the same trade; that hero is gone, but the reasoning stands
+  on its own — an upscale is affordable only where the scrim has already taken
+  the detail out.) Don't reuse it anywhere it would render unscrimmed at width.
 
 ⚠️ Two lessons from how these arrived, both worth repeating for future assets:
 
@@ -757,6 +812,42 @@ Real assets received (all in `public/images/`, all JPEG):
   `.jpeg` extension; every other image in the folder is `.jpg`. Used on
   `/books`, twice: as the `PageHero` background image and, crisp, in the book
   block below it.
+- `telegram-hero.jpg` — 1435×898 **screenshot of the live Telegram channel**
+  (channel header, a pinned audio post, the "Scent Of Water (Pt 1)" card).
+  The `/media/teachings` `PageHero` background. Needs
+  `imagePosition="object-[50%_18%]"` — a ~2:1 hero crop of this 1.60 source
+  shows only ~71% of its height and centring cuts the channel header off the
+  top, which is the one part of the shot worth showing.
+  ⚠️ **It takes `imageScrim="soft"`, and it is the only image on the site that
+  does.** Every other hero photo is texture under a near-opaque wash; this one
+  is evidence that the channel is real and has to stay readable. See the
+  `imageScrim` note on `PageHero`.
+- `telegram-about.jpg` — 441×822 screenshot of the channel's **Channel Info**
+  panel (the Pastor's avatar, subscriber count, the t.me link). Rendered in the
+  "About the Channel" section, contained at `max-w-[280px]` on a **dark** mat —
+  the church-About-panel idiom, but dark rather than the usual white plate
+  because the screenshot is itself near-black and a white mat rings it with a
+  hard edge. The container is `aspect-[441/822]`, i.e. the source ratio exactly,
+  so `object-cover` crops nothing.
+  ⚠️ **This capture is glitched and wants re-shooting.** It was taken mid-
+  transition, so the channel title renders out of order — "0 Awe Teachings"
+  with a stranded "Pastor" to its right instead of "Pastor Ayodele O Awe
+  Teachings". Legible enough to look like a bug rather than a style. Replacing
+  the file at the same path needs no page edit.
+
+⚠️ **Both Telegram shots arrived as PNG (816 KB / 91 KB) and were re-encoded to
+JPEG q92 4:4:4** — 272 KB and 37 KB, following the "downscale before
+committing" rule below. `4:4:4` chroma is not optional for a **UI screenshot**:
+the default `4:2:0` subsamples colour at half resolution and smears coloured
+small text, which is most of what these images are. Dimensions were already
+under the 2560px cap, so only the encode changed. The PNG masters were not kept
+in the repo.
+
+⚠️ **`telegram-hero.jpg` contains a third party's name.** A commenter
+("Daniel Omotoye") is visible in the source at ~13:39. Under the hero scrim it
+is not legible, but the **unscrimmed file is served publicly** at
+`/images/telegram-hero.jpg` and through the image optimiser. Nobody has been
+asked. If that matters, crop or blur that row rather than dropping the image.
 - `selar-logo.png` — 188×148 **transparent** Selar wordmark, deep plum
   (~#601050) script. ⚠️ **Nothing renders this file** — the artwork is a 138×73
   horizontal wordmark floating in a 188×148 canvas (35px of clear space above,
@@ -778,11 +869,55 @@ Real assets received (all in `public/images/`, all JPEG):
   untouched. The alpha carries the glyph shape *and* its antialiased edges, so
   a colour-key or threshold approach leaves a plum fringe on the curves.
 - `blcn-logo.jpg` — 828×647, shofar emblem on a dark charcoal background (**not**
-  transparent). Used three ways on `/churches/blcn`: the crisp badge in the hero,
-  the **hero background image itself** (`scale-125 object-cover blur-2xl` inside an
-  `overflow-hidden` wrapper, under a `bg-black/40` scrim — 828px cannot hold a
-  full-bleed crop sharply, so it reads as texture, not as a photo), and the BLCN
-  card on `/churches`. There is no stock photo in that hero any more.
+  transparent). Used **twice** on `/churches/blcn` — the crisp badge in the hero
+  and the About panel — plus the BLCN card on `/churches`.
+  ⚠️ **It was three uses.** The third was the hero *background*, blown up and
+  blurred (`scale-125 object-cover blur-2xl` under a `bg-black/40` scrim). That
+  went on 7 August 2026 when the client's real photography arrived — see
+  `public/images/blcn/` below. The badge is unaffected and is the reason the
+  file is still `priority` on that page.
+
+### `public/images/blcn/` — the BLCN photography (arrived 7 August 2026)
+23 real photographs of the congregation, client-supplied. **This is the first
+real congregation photography on the site**, and it retires the last stand-in on
+`/churches/blcn`.
+
+- **4 hero slides** (`blcn-hero-1.jpg` … `-4.jpg`, 2560×1696, q82) — the only
+  professionally-shot frames in the set (Nikon, 4928×3264 originals). They feed
+  `HeroSlideshow` on `/churches/blcn`.
+- **19 gallery images** (`blcn-gallery-01.jpg` … `-19.jpg`, 1800px long edge,
+  q80; 12 landscape 1800×1355, 7 portrait 1355×1800) — phone photographs, which
+  is why they are capped lower: they are never shown larger than a lightbox.
+  `blcn-gallery-01` is 1800×1192, the one Nikon frame that went to the gallery.
+
+⚠️ **`object-position` is set per hero slide and is not optional.** A full-bleed
+hero on a phone shows barely a third of a 1.51 frame's width, so `object-center`
+drops the subject out of frame on three of the four. The values (`48%_32%`,
+`60%_32%`, `50%_35%`, `48%_38%`) are each read off the subject's face.
+
+⚠️ **The alt text names no one and dates nothing.** Nobody in these frames has
+been identified to us. Captions are the easiest place for an invented event or a
+misattributed name to enter a ministry site — exactly what the Content Integrity
+Notes exist to stop — so every caption describes only what is visible ("A
+minister praying over a member of the congregation at a BLCN gathering"). If the
+client tells us who or what these are, the captions can say so; don't guess.
+
+⚠️ **They arrived as 74 MB of camera originals and were processed before
+committing**, per the standing rule. Specifics worth keeping:
+- **The folder was `public/images/BLCN/`, uppercase.** Renamed to lowercase —
+  Vercel's filesystem is case-sensitive and Windows is not, so the uppercase
+  path would have built locally and 404'd in production. ⚠️ The rename was done
+  by writing derivatives to a **temp directory first**, then removing the
+  original folder: `BLCN/` and `blcn/` are the same directory on Windows, and
+  processing in place is how the ministry logo master was destroyed once
+  already.
+- **Two files carried a `.PORTRAIT.jpg` double extension** (Pixel portrait
+  *mode*, not orientation — and one of the two was in fact landscape). Gone with
+  the rename to `blcn-gallery-NN.jpg`.
+- 74 MB → **5.3 MB** total. The originals are **not in the repo**; ask the
+  client to re-supply if a larger rendition is ever needed.
+- `sharp` was given `.rotate()` before resizing. Every file reported EXIF
+  orientation 1 so it was a no-op, but never assume that of camera output.
 - `awe-min-logo.png` — 1200×662 **transparent** ministry lockup: cross + arc +
   mountains beside a two-line "Ayodele Awe Ministries" wordmark, all white. Trimmed
   flush to the artwork, so all padding is the caller's job. Used in the Footer at
@@ -832,6 +967,26 @@ Real assets received (all in `public/images/`, all JPEG):
   the padding too and yields 718×717. Pad in one pass, resize in the next. Palette
   PNG (`palette: true`) — flat two-colour art, 85 KB against 409 KB truecolour.
 
+### The `/churches/blcn` gallery ("BLCN in Pictures")
+Added 7 August 2026 with the photography. It sits **between "Follow BLCN" and
+"Network Vision"**, and that slot is a rhythm decision, not an arbitrary one:
+the page alternates mid → light → mid → light → mid → dark → accent, and the
+obvious-looking home for a gallery — straight after "About BLCN" — would have
+put two light bands together with no seam. The chosen slot keeps the
+alternation and lands the pictures just before the closing pair.
+
+- Grid is `grid-cols-2 sm:grid-cols-3 lg:grid-cols-4`, `aspect-[4/5]`
+  thumbnails, `object-cover`, the standard `group-hover:scale-105`. Sharp
+  corners, like every other image container.
+- ⚠️ **The stagger is `(i % 4) * 0.1`, not `i * 0.1`.** Nineteen tiles on a flat
+  index stagger would leave the last one invisible for nearly two seconds after
+  it had already scrolled into view. Four is the widest the grid gets, so this
+  staggers one row and repeats. Second documented instance of the exception the
+  `/events` programme grid records — it applies to **any** grid long enough for
+  the accumulated delay to outrun the scroll.
+- The thumbnails are `loading="lazy"` and below the fold, so unlike the hero
+  case that is genuine deferral and nothing extra is needed.
+
 ### ⚠️ There are no Unsplash images left on the site (2 August 2026)
 **Nothing on any page fetches a remote image.** Every `<Image>` now points at a
 file in `public/images/`. The seven Unsplash placeholders were replaced with CSS
@@ -839,9 +994,13 @@ gradients — see "Gradient placeholders" below for the list and the reasoning.
 
 Still pending real photography from the client — now on **gradient
 placeholders**, not stock photos:
-- The `/churches/bhcc` hero background (see below for why the logo can't stand
-  in for it).
+- The `/churches/bhcc` hero background (see below for why neither the logo nor
+  BLCN's photography can stand in for it).
 - The Norwich Prayer Surge banner, on `/events` and in the `/` event card.
+
+⚠️ **`/churches/blcn` is no longer on this list** — its 23 real congregation
+photographs arrived 7 August 2026 and carry both the hero and a new gallery
+section. See `public/images/blcn/` below.
 
 ### Gradient placeholders (replaced Unsplash, 2 August 2026)
 All seven were `aria-hidden` decorative backdrops under heavy scrims, or — worse
@@ -917,23 +1076,32 @@ photograph of strangers. Cleared on 28 July 2026:
 - ⚠️ **A church's own page is the exception and still names files directly.**
   `/churches/bhcc` renders `bhcc-mark.png` in the hero badge but
   `bhcc-logo.jpg` in the About panel, and `/churches/blcn` renders
-  `blcn-logo.jpg` three ways (blurred backdrop, crisp badge, About panel).
-  These are page-specific renditions of different assets, so one `logo` field
-  cannot express them — don't try to route them through constants.ts.
+  `blcn-logo.jpg` two ways (crisp hero badge, About panel) alongside its own
+  photography from `public/images/blcn/`. These are page-specific renditions of
+  different assets, so one `logo` field cannot express them — don't try to route
+  them through constants.ts. (BLCN was three ways until 7 August 2026; the
+  blurred hero backdrop went when the real photographs arrived.)
 - **Not affected at the time:** the decorative Unsplash textures behind the
   `/about` mandate, the `/` and `/partners` partnership bands and the `/media`
   Telegram card. Those were `aria-hidden` backdrops under a heavy scrim,
   labelled as nothing — they carried no claim about a church. They were removed
   later anyway, on performance grounds — see "Gradient placeholders" above.
 
-⚠️ **BLCN's blurred-logo hero background has no BHCC equivalent, on purpose.**
-`/churches/blcn` uses `blcn-logo.jpg` as its own hero backdrop (`scale-125
-blur-2xl` under a `bg-black/40` scrim) because that emblem sits on near-black and
-blurs into usable dark texture. BHCC's mark is on white: blurred full-bleed it
-washes to a flat grey field under the same scrim, losing both the artwork and the
-imagery. Don't "finish the mirror" by porting it — the BHCC hero is on a
-gradient placeholder awaiting a real congregation photo (see "Gradient
-placeholders"), and a washed-out blurred mark is not an improvement on that.
+⚠️ **The BHCC hero is still awaiting a real congregation photograph** — it is on
+a gradient placeholder (see "Gradient placeholders"), and BLCN getting real
+photography on 7 August 2026 did nothing for it. **Do not port BLCN's treatment
+across in either of its forms:**
+
+- **Its photographs are of BLCN.** A BLCN frame behind a heading reading BHCC is
+  the same failure as a stock photo there — see "No stock imagery stands for a
+  church".
+- **The blurred-emblem backdrop BLCN used to have was never portable either**,
+  and this is the original note kept because the reasoning still applies if
+  anyone reaches for it: `blcn-logo.jpg` blurred into usable dark texture
+  because that emblem sits on near-black. BHCC's mark is on white — blurred
+  full-bleed it washes to a flat grey field under the same scrim, losing both
+  the artwork and the imagery. A washed-out blurred mark is not an improvement
+  on the gradient.
 
 ⚠️ **The ministry logo master is lost.** Only the 1200×662 derivative survives (see
 the filename warning above). Ask the client to re-supply the original if a larger
@@ -1392,6 +1560,73 @@ treat the URL as the secret and don't publish it.
   @handle. To switch the player on: take the channel ID (`UC…`), swap the leading
   `UC` for `UU` (that is the auto-generated all-uploads playlist), paste it in.
 
+### Media section navigation (restructured 7 August 2026)
+The media section is now reached as **one** destination and navigates itself.
+The full route a visitor takes to a sermon is:
+
+**Expressions dropdown → "Media" → `/media` → the sub-nav → Teachings / Music.**
+
+- `components/MediaTabs.tsx` is that sub-nav: an Overview / Teachings / Music
+  pill row directly beneath the page hero, active state from `usePathname()`.
+- **`/media` did not move and did not lose anything.** It is still the hub — the
+  Telegram section, the Spotify section, the quick-access grid, the newsletter
+  and the CTA banner are all exactly where they were. It is simply the
+  "Overview" tab as well now. No new route was created; the alternative
+  (relocating the hub content to `/media/overview` and making `/media` a
+  chooser) buys nothing and costs a redirect plus every existing link to
+  `/media`.
+- ⚠️ **`MediaTabs` must be mounted on all three media routes.** It is the only
+  path between them now that the dropdown lists neither sub-page; drop it from
+  one and that page becomes a dead end inside its own section. It sits between
+  the `PageHero` and the first content section on `/media`, `/media/teachings`
+  and `/media/music` alike.
+- ⚠️ **The orange rule is on `border-t`, not `border-b`.** The bar always
+  follows a dark hero and blue-against-blue has no seam — the same case every
+  accent band on the site uses the rule for. Below it all three pages open on a
+  light section, which separates itself.
+- ⚠️ **Not `Button`s.** This is a navigation list and takes the same exemption
+  from "every call to action is a Button" that the Navbar and Footer lists do.
+  The active pill is `brand-orange-deep` (white on it is 5.1:1; the brand orange
+  would be 3.3:1 and fail AA at this label size); the inactive ones are
+  `white/75` in a `white/25` outline.
+- The **Footer** needed no change — its nav already carried a single "Media"
+  link and never listed the sub-pages.
+
+### Platform-branded sections on `/media/teachings`
+"Latest Sermons" and "Services on YouTube" each carry a hint of their platform's
+own colour, so the two read as a pair of destinations rather than two identical
+dark bands. The technique is the same in both and stays inside the palette:
+**the ground never changes** — it is the standard
+`from-brand-navy via-brand-blue to-brand-navy` — and the branding is only a
+low-alpha radial wash in one corner plus the platform mark, oversized and
+bleeding off the opposite corner at `opacity-[0.07]`/`[0.08]`.
+
+- ⚠️ **Neither wash uses the platform's actual brand colour, and that is the
+  point.** Telegram's #229ED9 is far too light to be a section ground (see the
+  "two blues" note) — the wash is `brand-blue-mid` at 0.30, which composites to
+  ~#013971, i.e. within a hair of `brand-blue`, so every documented contrast
+  figure still holds. YouTube's #FF0000 is not a palette colour at all — the
+  wash is `brand-orange-dark` at 0.28, which reads red against navy and
+  composites *darker* than the ground, so nothing loses contrast. The literal
+  brand colours appear only inside the two watermark SVGs, which is where a
+  hardcoded fill is harmless.
+- ⚠️ **The YouTube section carries `border-t-2 border-brand-orange` and must
+  keep it.** It is the second dark section in a row, and blue against blue has
+  no seam of its own — exactly the case the orange rule exists for.
+- Its inner link-out card is `border-l-4 border-brand-orange bg-white/5`
+  (the `/events` dark-panel idiom), **not** the `border-t-2` it used on the old
+  light ground: the section already has a top rule and stacking two reads as a
+  mistake.
+- ⚠️ **"What to Expect" was flipped from mid-blue to light to pay for this.**
+  Giving both platform sections a dark treatment would otherwise have put three
+  dark bands in front of the dark CTA. The page now runs dark hero → light →
+  dark → dark (seamed) → light → accent. Its card headings moved
+  `brand-orange-light` → `brand-orange-deep` with it — the light tone is 2.2:1
+  on white.
+- `/media` was checked and has **no** dedicated YouTube section — YouTube is one
+  tile in its quick-access grid there. Nothing on that page needed this
+  treatment.
+
 Anything still on `#` is rendered dimmed + `pointer-events-none`, with a
 "Coming Soon" badge where the card has room. Never give a `#` href
 `target="_blank"` — it opens an empty tab.
@@ -1478,11 +1713,9 @@ therefore downloaded together — 586 KB, with `apostle-2.jpg` (417 KB, the
 largest file in the repo) competing against the LCP image for bandwidth while
 being invisible for the first six seconds.
 
-`HeroSection` now returns `null` for slide index > 0 until a 2.5s timer fires
+`HeroSlideshow` returns `null` for slide index > 0 until a 2.5s timer fires
 after hydration. **An `<img>` that is not in the document is never fetched** —
 that is the whole mechanism, and hinting at the loader cannot substitute for it.
-Verified against the built HTML: `apostle-2` appears nowhere in the server
-markup for `/`.
 
 - The flag starts `false` on both server and first client render, so hydration
   still matches — the same contract `AnimateIn` keeps for its media queries.
@@ -1491,6 +1724,19 @@ markup for `/`.
   select a slide that is not mounted and leave the hero blank.
 - `priority` and `loading` are passed as a spread, never both at once — Next
   throws if it sees both on one `<Image>`.
+
+⚠️ **This lives in `HeroSlideshow` now, not `HeroSection`** — it moved there on
+7 August 2026 when `/churches/blcn` took real photography and needed the same
+crossfade. That page has **four** slides, so the saving is larger there than on
+the homepage. Verified against the built HTML for both routes: the only hero
+`<img>`/preload emitted is slide 1 (`apostle-1.jpg`, `blcn-hero-1.jpg`).
+
+⚠️ **The deferred slides' paths now appear once each in the server HTML, and
+that is not a regression.** `HeroSection` used to be `'use client'` and held its
+slide table in the client bundle; both pages now pass `slides` as a prop from a
+server component, so the array is serialised into the RSC payload. That is a
+string inside a script tag — no `<img>`, no `<link rel=preload>`, no fetch. Grep
+for `<img` before concluding the deferral has broken.
 
 ### Image format and cache TTL (`next.config.ts`)
 - `formats: ["image/avif", "image/webp"]` — AVIF is ~20–30% smaller. The cost

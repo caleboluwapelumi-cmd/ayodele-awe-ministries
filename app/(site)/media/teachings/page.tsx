@@ -1,6 +1,9 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import TelegramIcon from "@/components/icons/TelegramIcon";
+import YouTubeIcon from "@/components/icons/YouTubeIcon";
 import PageHero from "@/components/PageHero";
+import MediaTabs from "@/components/MediaTabs";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
@@ -22,7 +25,7 @@ function formatDate(iso: string): string {
 }
 
 export const metadata: Metadata = {
-  title: "Telegram Teachings — Ayodele Oladapo Awe Ministries",
+  title: "Teachings by Pastor Ayodele Awe — Ayodele Oladapo Awe Ministries",
   description:
     "Access sermons, Bible studies, and prophetic messages from Pastor Awe via Telegram.",
 };
@@ -49,19 +52,46 @@ export default async function TeachingsPage() {
 
   return (
     <>
-      {/* ── 1. Hero ── */}
+      {/* ── 1. Hero ──
+          The backdrop is a screenshot of the real channel, so unlike every
+          other image hero on the site it is meant to be looked at rather than
+          read as texture — hence `imageScrim="soft"`, and hence a real
+          `imageAlt` rather than aria-hidden. `object-[50%_18%]`: a ~2:1 hero
+          crop of this 1.60 source shows only ~71% of its height, and centring
+          cuts the channel header off the top. */}
       <PageHero
         label="Teachings"
-        title="Telegram Teachings"
+        title="Teachings by Pastor Ayodele Awe"
         subtitle="The Word of God — accessible anywhere, anytime"
+        backgroundImage="/images/telegram-hero.jpg"
+        imageAlt="The Pastor Ayodele O Awe Teachings channel on Telegram, showing recent audio messages"
+        imagePosition="object-[50%_18%]"
+        imageScrim="soft"
       />
 
-      {/* ── 2. About the Channel ── */}
+      {/* ── 2. Section sub-nav ── */}
+      <MediaTabs />
+
+      {/* ── 3. About the Channel ── */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
-            <div className="flex items-center justify-center bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy p-16 shadow-xl">
-              <TelegramIcon size={120} />
+            {/* The channel's own info panel, contained on a dark mat — the same
+                idiom the church About panels use for an emblem. Contained, not
+                cropped: it is a 441×822 phone-shaped screenshot and any
+                object-cover crop cuts the panel apart. The mat is dark rather
+                than the usual white plate because the screenshot is itself
+                near-black, and a white mat would ring it with a hard edge. */}
+            <div className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy p-8 shadow-xl sm:p-12">
+              <div className="relative mx-auto aspect-[441/822] w-full max-w-[280px] overflow-hidden ring-1 ring-white/10">
+                <Image
+                  src="/images/telegram-about.jpg"
+                  alt="The Telegram channel info panel for Pastor Ayodele O Awe Teachings"
+                  fill
+                  sizes="280px"
+                  className="object-cover"
+                />
+              </div>
             </div>
           </AnimateIn>
 
@@ -83,10 +113,15 @@ export default async function TeachingsPage() {
                 shared on this channel are designed to bring the Word of God to
                 life in your everyday walk.
               </p>
+              {/* ⚠️ This read "Join thousands of believers" until the channel
+                  screenshots went in. The hero now shows the real subscriber
+                  count on the channel header, so the claim was contradicted by
+                  the image directly above it. Don't put a number back here —
+                  the screenshot is the number. */}
               <p>
-                Join thousands of believers across the UK, Nigeria, and beyond
-                who are being transformed by the consistent ministry of the Word
-                through this platform.
+                Join believers across the UK, Nigeria, and beyond who are being
+                transformed by the consistent ministry of the Word through this
+                platform.
               </p>
             </div>
             <Button href={SOCIALS.telegram} variant="primary" size="lg" external>
@@ -96,9 +131,28 @@ export default async function TeachingsPage() {
         </div>
       </section>
 
-      {/* ── 3. Latest Sermons — live from the Telegram channel ── */}
-      <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <div className="mx-auto max-w-7xl">
+      {/* ── 4. Latest Sermons — live from the Telegram channel ──
+          Platform-branded, but only by tint and watermark: the ground stays the
+          standard dark gradient. Telegram's own #229ED9 is far too light to be
+          a section ground (see the "two blues" note in CLAUDE.md), so the brand
+          reference is a low-alpha `brand-blue-mid` wash — measured at 0.30 over
+          the gradient it lands on ~#013971, which keeps every accent figure in
+          this section at or above where it sits on flat `brand-blue`. */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_12%_0%,rgba(2,74,143,0.30),transparent_65%)]"
+        />
+        {/* The mark itself, oversized and nearly invisible — texture, not a logo
+            placement. Bleeds off the corner so it never reads as a stray icon. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-20 -top-20 opacity-[0.07] sm:-right-24 sm:-top-16"
+        >
+          <TelegramIcon size={340} />
+        </div>
+
+        <div className="relative mx-auto max-w-7xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
             <SectionLabel tone="dark">Listen Now</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
@@ -172,15 +226,37 @@ export default async function TeachingsPage() {
         </div>
       </section>
 
-      {/* ── 4. Watch — YouTube ── */}
-      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <div className="mx-auto max-w-5xl">
+      {/* ── 5. Watch — YouTube ──
+          The Telegram section's counterpart, and deliberately the second dark
+          section in a row: the two platforms read as a pair. ⚠️ That is exactly
+          the case the `border-t-2 border-brand-orange` seam exists for — blue
+          against blue has no edge of its own, and without the rule these two
+          would collapse into one long block. Don't drop it.
+
+          The warm wash is `brand-orange-dark`, not YouTube's #FF0000. It reads
+          red against navy at this alpha while staying a palette token, and it
+          composites *darker* than the ground rather than lighter, so nothing in
+          the section loses contrast. The literal red lives only in the
+          watermark. */}
+      <section className="relative overflow-hidden border-t-2 border-brand-orange bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_88%_0%,rgba(156,58,24,0.28),transparent_65%)]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-20 -left-20 opacity-[0.08] sm:-bottom-16 sm:-left-24"
+        >
+          <YouTubeIcon size={340} />
+        </div>
+
+        <div className="relative mx-auto max-w-5xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
-            <SectionLabel tone="light">Watch</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
+            <SectionLabel tone="dark">Watch</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Services on YouTube
             </h2>
-            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg">
+            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
               Full services, live sessions, and video messages from Pastor
               Awe.
             </p>
@@ -194,8 +270,10 @@ export default async function TeachingsPage() {
                 title="Ayodele Awe Ministries on YouTube"
               />
             ) : (
-              <div className="border-t-2 border-brand-orange bg-cream p-12 text-center">
-                <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
+              /* The left rule, not a second top rule — the section already
+                 carries one, and stacking the two reads as a mistake. */
+              <div className="border-l-4 border-brand-orange bg-white/5 p-12 text-center">
+                <p className="mb-8 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
                   Watch every service and message on the ministry&apos;s YouTube
                   channel.
                 </p>
@@ -208,12 +286,17 @@ export default async function TeachingsPage() {
         </div>
       </section>
 
-      {/* ── 5. What to Expect ── */}
-      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      {/* ── 6. What to Expect ──
+          Light, where it used to be mid-blue. Giving the two platform sections
+          above their own dark treatments put three dark bands in a row ahead of
+          the dark CTA; this is the slot that had to give way to keep the page
+          alternating. ⚠️ The card headings move `brand-orange-light` →
+          `brand-orange-deep` with it — the light tone is 2.2:1 on white. */}
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
-            <SectionLabel tone="dark">What to Expect</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+            <SectionLabel tone="light">What to Expect</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Content on the Channel
             </h2>
             <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
@@ -222,10 +305,10 @@ export default async function TeachingsPage() {
           <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
             {CONTENT_TYPES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1}>
-                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-orange-light">
+                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-orange-deep">
                   {card.title}
                 </h3>
-                <p className="font-sans text-base leading-relaxed text-white/70">
+                <p className="font-sans text-base leading-relaxed text-muted">
                   {card.desc}
                 </p>
               </AnimateIn>
@@ -234,7 +317,7 @@ export default async function TeachingsPage() {
         </div>
       </section>
 
-      {/* ── 6. CTA Banner ── */}
+      {/* ── 7. CTA Banner ── */}
       <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

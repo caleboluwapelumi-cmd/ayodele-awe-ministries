@@ -206,10 +206,14 @@ export const NAV_LINKS: NavLink[] = [
       { label: "\u2014 Churches \u2014", href: "/churches", desc: "" },
       { label: "BHCC \u2014 Building House Christian Centre", href: "/churches/bhcc" },
       { label: "BLCN \u2014 Bethel Livingstone Christian Network", href: "/churches/blcn" },
-      { label: "\u2014 Media \u2014", href: "/media", desc: "" },
-      { label: "Teachings", href: "/media/teachings" },
-      { label: "Music", href: "/media/music" },
       { label: "\u2014 More \u2014", href: "/churches", desc: "" },
+      // \u26a0\ufe0f ONE media entry, not three. Teachings and Music used to sit here
+      // under a "\u2014 Media \u2014" group header; they now live behind `MediaTabs`, the
+      // sub-nav under every /media page hero. The dropdown is about the
+      // ministry's expressions, and three media destinations in it made the
+      // media section look like three unrelated pages rather than one.
+      // Anything added to the media section belongs in MediaTabs, not here.
+      { label: "Media", href: "/media" },
       { label: "Books", href: "/books" },
       { label: "Itinerary", href: "/itinerary" },
     ],

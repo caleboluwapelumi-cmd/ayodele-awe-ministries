@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import NewsletterForm from "@/components/NewsletterForm";
 import PageHero from "@/components/PageHero";
+import MediaTabs from "@/components/MediaTabs";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
@@ -39,7 +40,13 @@ export default function MediaPage() {
         subtitle="Access teachings, music, and messages from Pastor Ayodele Oladapo Awe anywhere in the world"
       />
 
-      {/* ── 2. Teachings Section ── */}
+      {/* ── 2. Section sub-nav ──
+          /media is the Overview tab. Teachings and Music are reached from here
+          rather than from the Expressions dropdown, which now carries a single
+          "Media" entry. */}
+      <MediaTabs />
+
+      {/* ── 3. Teachings Section ── */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
@@ -93,7 +100,7 @@ export default function MediaPage() {
         </div>
       </section>
 
-      {/* ── 3. Music Section ── */}
+      {/* ── 4. Music Section ── */}
       <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
@@ -136,7 +143,7 @@ export default function MediaPage() {
         </div>
       </section>
 
-      {/* ── 4. Quick Access ── */}
+      {/* ── 5. Quick Access ── */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
@@ -187,7 +194,7 @@ export default function MediaPage() {
         </div>
       </section>
 
-      {/* ── 5. Newsletter CTA ── */}
+      {/* ── 6. Newsletter CTA ── */}
       <section className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Stay Updated</SectionLabel>
@@ -201,7 +208,7 @@ export default function MediaPage() {
         </AnimateIn>
       </section>
 
-      {/* ── 6. CTA Banner ── */}
+      {/* ── 7. CTA Banner ── */}
       <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
