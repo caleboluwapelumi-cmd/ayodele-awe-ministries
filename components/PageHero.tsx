@@ -34,6 +34,24 @@ import DriftingParticles from "./DriftingParticles";
  * 11.8:1 and the white/70 subtitle 5.7:1. A light photo under the same scrim
  * would put both under AA.
  *
+ * `"brand"` is that same idea for a **bright** screenshot whose palette is not
+ * ours — /media/music, whose hero is the Spotify artist page and therefore a
+ * wall of Spotify green. It does two jobs `"soft"` cannot:
+ *
+ *   1. Legibility. `"soft"` over this source measures **2.91:1 on the h1** and
+ *      2.20:1 on the subtitle — both well under AA, exactly the failure the
+ *      warning above predicts. `"brand"` restores 9.3:1 and 5.5:1, measured the
+ *      same way (worst/brightest composite pixel under the copy column, at
+ *      1280x644, 1024x600 and 390x620 alike — the worst pixel is the white
+ *      artist name burned into the screenshot itself).
+ *   2. Palette. A near-full-frame green band is off-system on a white/blue/
+ *      orange site, so the base wash is heavier and carries a `brand-blue` tint
+ *      over it. The green survives as a hue in the corners, not as the ground —
+ *      the same restraint the platform-branded sections on /media/teachings use.
+ *
+ * ⚠️ Re-measure if you point `"brand"` at a different image. The figures above
+ * are properties of this screenshot, not of the recipe.
+ *
  * ── The atmosphere layer ────────────────────────────────────────────────────
  * Every hero carries `HeroAtmosphere` (the /birthday hero's layered radial
  * glows) and a one-pass shimmer sweep on the h1. Both are shared with
@@ -70,8 +88,11 @@ export default function PageHero({
   backgroundImage?: string;
   imageAlt?: string;
   imagePosition?: string;
-  /** How hard to knock the photo back. See the note above before using "soft". */
-  imageScrim?: "default" | "soft";
+  /**
+   * How hard to knock the photo back. See the note above before using "soft"
+   * (dark sources only) or "brand" (a bright, foreign-palette screenshot).
+   */
+  imageScrim?: "default" | "soft" | "brand";
   /** Adds the drifting dot field. See the warning above before turning it on. */
   particles?: boolean;
   children?: ReactNode;
@@ -108,6 +129,17 @@ export default function PageHero({
               {/* Then the centre weighting: near-solid navy behind the copy,
                   thinning towards the edges where the image does its work. */}
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_65%_at_50%_50%,rgba(1,30,60,0.94)_0%,rgba(1,30,60,0.86)_40%,rgba(1,30,60,0.62)_70%,rgba(1,30,60,0.22)_100%)]" />
+            </>
+          ) : imageScrim === "brand" ? (
+            <>
+              {/* Heavier than "soft"'s 30% because the source is bright, and
+                  tinted with brand-blue on top so what survives reads as our
+                  palette rather than as Spotify green. */}
+              <div className="absolute inset-0 bg-brand-navy/70" />
+              <div className="absolute inset-0 bg-brand-blue/20" />
+              {/* Same centre weighting as "soft", a touch stronger at the rim:
+                  the corners of this source are the brightest part of the frame. */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_65%_at_50%_50%,rgba(1,30,60,0.92)_0%,rgba(1,30,60,0.84)_40%,rgba(1,30,60,0.58)_70%,rgba(1,30,60,0.26)_100%)]" />
             </>
           ) : (
             <>

@@ -68,34 +68,101 @@ function PlatformIcon({ type, size = 32 }: { type: string; size?: number }) {
 export default function MusicPage() {
   return (
     <>
-      {/* ── 1. Hero ── */}
+      {/* ── 1. Hero ──
+          The backdrop is a screenshot of the real Spotify artist page, so like
+          /media/teachings it is meant to be looked at rather than read as
+          texture — hence a real `imageAlt` rather than aria-hidden.
+
+          ⚠️ `imageScrim="brand"`, NOT "soft". This source is a wall of Spotify
+          green, and "soft" over it measures 2.91:1 on the h1 — under AA, exactly
+          the failure PageHero's own note warns about for a bright source.
+          "brand" restores 9.3:1 and also pulls the green back to our blue. See
+          the imageScrim block in PageHero.tsx.
+
+          `object-[4%_50%]`: the crop is the banner alone and so is 4.36:1 —
+          far wider than any hero box — which means the height always fills
+          exactly and only a slice of the WIDTH is ever shown (46% at desktop,
+          ~15% on a phone). The vertical half of the value is therefore inert;
+          the horizontal half is what matters, and biasing hard left is what
+          keeps the single artwork and the start of the name in frame instead
+          of the empty green field that fills the middle of the banner. */}
       <PageHero
         label="Music"
         title={<>Music &amp; Worship</>}
         subtitle="Songs that carry the presence of God"
+        backgroundImage="/images/spotify-hero.jpg"
+        imageAlt="The Ayodele Awe artist page on Spotify, showing the Sound of Restoration single"
+        imagePosition="object-[4%_50%]"
+        imageScrim="brand"
       />
 
       {/* ── 2. Section sub-nav ── */}
       <MediaTabs />
 
-      {/* ── 3. About ── */}
+      {/* ── 3. Podcast ──
+          Moved directly under the hero: it is the one part of this page with
+          new material arriving regularly, so it no longer sits at the foot of
+          the page behind three evergreen sections. Light, because MediaTabs is
+          a mid-blue bar and every media page opens light beneath it. */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SpotifyEmbed
-              kind="artist"
-              id={SPOTIFY_ARTIST_ID}
-              title="Ayodele Oladapo Awe on Spotify"
+              kind="show"
+              id={SPOTIFY_PODCAST_ID}
+              title={`${SPOTIFY_PODCAST_NAME} podcast on Spotify`}
               className="shadow-xl"
             />
           </AnimateIn>
 
           <AnimateIn direction="right">
-            <SectionLabel tone="light">Stream on Spotify</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
-              Worship That Transforms
+            <SectionLabel tone="light">The Podcast</SectionLabel>
+            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
+              {SPOTIFY_PODCAST_NAME}
             </h2>
+            <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-deep">
+              {SPOTIFY_PODCAST_TAGLINE}
+            </p>
             <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
+              <p>
+                Beyond the music, Pastor Ayodele Oladapo Awe shares
+                conversations, reflections, and teaching in podcast form —
+                available to stream free on Spotify.
+              </p>
+              <p>
+                Follow the show to get every new episode as soon as it drops,
+                wherever you listen.
+              </p>
+            </div>
+            <Button
+              href={SPOTIFY_PODCAST_URL}
+              variant="primary"
+              size="lg"
+              external
+            >
+              Listen on Spotify
+            </Button>
+          </AnimateIn>
+        </div>
+      </section>
+
+      {/* ── 4. Genres ──
+          Mid-blue, not light: the podcast section above it is light, and two
+          light gradients stacked have no seam between them.
+
+          This section also absorbed the prose from the old "Stream on Spotify"
+          block, which was removed — its heading, its label and its "Open
+          Spotify" CTA all said what the hero now says with the real artist
+          page behind it. The writing about the music itself was the one thing
+          in there that was not duplicated, so it leads here instead. */}
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl text-center">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl">
+            <SectionLabel tone="dark">The Music</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              Music for Every Season
+            </h2>
+            <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
               <p>
                 Music has always been central to the ministry of Ayodele
                 Oladapo Awe. From intimate worship recordings to powerful gospel
@@ -103,43 +170,22 @@ export default function MusicPage() {
                 encounter with God.
               </p>
               <p>
-                Spanning worship, gospel, and prophetic genres, the music of
-                Pastor Awe carries the weight of God&apos;s presence — birthed
-                from the place of prayer and designed to minister to the heart
-                of every listener.
-              </p>
-              <p>
                 Whether you&apos;re in your quiet time, driving to work, or
                 gathered with fellow believers, let these songs usher you into
                 the presence of the Most High.
               </p>
             </div>
-            <Button href={SOCIALS.spotify} variant="primary" size="lg" external>
-              Open Spotify
-            </Button>
-          </AnimateIn>
-        </div>
-      </section>
-
-      {/* ── 4. Genres ── */}
-      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <div className="mx-auto max-w-7xl text-center">
-          <AnimateIn direction="up" className="mx-auto max-w-3xl">
-            <SectionLabel tone="light">Genres</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
-              Music for Every Season
-            </h2>
             <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
             {GENRES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
-                <div className="h-full border-t-2 border-brand-orange bg-cream p-8 text-center">
-                  <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-brand-blue">
+                <div className="h-full border-t-2 border-brand-orange bg-white/[0.07] p-8 text-center">
+                  <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-white">
                     {card.title}
                   </h3>
-                  <p className="font-sans text-base leading-relaxed text-muted">
+                  <p className="font-sans text-base leading-relaxed text-white/70">
                     {card.desc}
                   </p>
                 </div>
@@ -149,8 +195,17 @@ export default function MusicPage() {
         </div>
       </section>
 
-      {/* ── 5. Platforms ── */}
-      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      {/* ── 5. Platforms ──
+          ⚠️ `border-t-2 border-brand-orange`: this is the second dark section in
+          a row and blue against blue has no seam of its own — the standard case
+          the rule exists for.
+
+          The artist player leads the section. It is the page's only on-site
+          playback and came from the removed "Stream on Spotify" block; it is a
+          live player, not the decorative anchor the hero replaced, so it was
+          kept rather than dropped. It sits here because this is the section
+          about where to listen. */}
+      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Platforms</SectionLabel>
@@ -158,6 +213,15 @@ export default function MusicPage() {
               Available Everywhere
             </h2>
             <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
+          </AnimateIn>
+
+          <AnimateIn direction="up" className="mx-auto mt-16 max-w-2xl">
+            <SpotifyEmbed
+              kind="artist"
+              id={SPOTIFY_ARTIST_ID}
+              title="Ayodele Oladapo Awe on Spotify"
+              className="shadow-xl"
+            />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -198,50 +262,7 @@ export default function MusicPage() {
         </div>
       </section>
 
-      {/* ── 6. Podcast ── */}
-      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
-          <AnimateIn direction="left">
-            <SpotifyEmbed
-              kind="show"
-              id={SPOTIFY_PODCAST_ID}
-              title={`${SPOTIFY_PODCAST_NAME} podcast on Spotify`}
-              className="shadow-xl"
-            />
-          </AnimateIn>
-
-          <AnimateIn direction="right">
-            <SectionLabel tone="light">Also On</SectionLabel>
-            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
-              {SPOTIFY_PODCAST_NAME}
-            </h2>
-            <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-deep">
-              {SPOTIFY_PODCAST_TAGLINE}
-            </p>
-            <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
-              <p>
-                Beyond the music, Pastor Ayodele Oladapo Awe shares
-                conversations, reflections, and teaching in podcast form —
-                available to stream free on Spotify.
-              </p>
-              <p>
-                Follow the show to get every new episode as soon as it drops,
-                wherever you listen.
-              </p>
-            </div>
-            <Button
-              href={SPOTIFY_PODCAST_URL}
-              variant="primary"
-              size="lg"
-              external
-            >
-              Listen on Spotify
-            </Button>
-          </AnimateIn>
-        </div>
-      </section>
-
-      {/* ── 7. CTA Banner ── */}
+      {/* ── 6. CTA Banner ── */}
       <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

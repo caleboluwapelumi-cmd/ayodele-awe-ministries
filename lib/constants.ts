@@ -41,8 +41,21 @@ export const YOUTUBE_UPLOADS_PLAYLIST_ID: string | null = null;
  * Sermons no longer need adding by hand; posting to Telegram is enough.
  */
 
-export const SELAR_BOOK_URL = "https://tr.ee/VJOapqf39_";
-export const AMAZON_BOOK_URL = "https://tr.ee/uiJj6WRE9Q";
+/*
+ * ⚠️ These must be the retailers' own URLs, never a `tr.ee/…` link.
+ * `tr.ee` is Linktree's shortener, not a redirector: both book links were
+ * `tr.ee` shortlinks and each one rendered the full Linktree profile
+ * (linktr.ee/official_ayodeleawe), so "Buy on Selar" and "Buy on Amazon"
+ * landed on the same link-hub page instead of the book. Resolved 7 August 2026
+ * by reading the destinations out of that Linktree's own link list.
+ *
+ * selar.co/f12uu6 302s to selar.com; the canonical host is used directly.
+ * The Amazon link is the clean /dp/ URL — the shortlink carried a
+ * `cm_sw_r_mwn_dp_…` share-tracking query string. ASIN B0DMLXN64T is the
+ * Kindle edition of "Walking with the Holy Spirit" on Amazon.co.uk.
+ */
+export const SELAR_BOOK_URL = "https://selar.com/f12uu6";
+export const AMAZON_BOOK_URL = "https://www.amazon.co.uk/dp/B0DMLXN64T";
 
 export interface ServiceTime {
   day: string;

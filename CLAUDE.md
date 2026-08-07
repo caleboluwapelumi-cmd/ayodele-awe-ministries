@@ -390,7 +390,9 @@ app/
     media/                ← all three carry `MediaTabs` under their hero
       page.tsx            ← the hub, and the sub-nav's "Overview" tab
       teachings/page.tsx  ← Telegram teachings page
-      music/page.tsx      ← Spotify music page
+      music/page.tsx      ← Spotify music page. Hero (spotify-hero.jpg) →
+                            MediaTabs → Podcast → Genres → Platforms → CTA.
+                            See "The /media/music section order" below
     books/page.tsx        ← Book showcase + Selar/Amazon buy buttons
     itinerary/page.tsx
     partners/page.tsx
@@ -425,12 +427,18 @@ components/
                             the copy under the standard navy scrim; it forces
                             the dark treatment, so `variant` is ignored when
                             set. `imageScrim` is 'default' (the flat ~96% wash,
-                            for a photo that is pure texture) or 'soft' (a
+                            for a photo that is pure texture), 'soft' (a
                             centre-weighted scrim, ~92% navy behind the copy
-                            falling to ~45% at the edges, for a backdrop that
-                            is itself part of the message). Only
-                            /media/teachings uses 'soft' — see the
-                            `telegram-hero.jpg` entry in Assets Status. Omit
+                            falling to ~45% at the edges, for a **dark**
+                            backdrop that is itself part of the message) or
+                            'brand' (the same centre weighting over a much
+                            heavier navy+blue base, for a **bright** screenshot
+                            in a foreign palette). Only /media/teachings uses
+                            'soft' and only /media/music uses 'brand' — see the
+                            `telegram-hero.jpg` and `spotify-hero.jpg` entries
+                            in Assets Status. ⚠️ The two are not
+                            interchangeable: 'soft' over the Spotify shot
+                            measures 2.91:1 on the h1, 'brand' 9.34:1. Omit
                             `imageAlt` for a purely decorative backdrop (the
                             image is then `aria-hidden`); pass it when the photo
                             is part of the page's subject, as on `/about`.
@@ -848,6 +856,60 @@ in the repo.
 is not legible, but the **unscrimmed file is served publicly** at
 `/images/telegram-hero.jpg` and through the image optimiser. Nobody has been
 asked. If that matters, crop or blur that row rather than dropping the image.
+- `spotify-hero.jpg` — 1980×454 **screenshot of the live Spotify artist page**,
+  cropped to the green artist banner alone: the "Sound of Restoration" artwork
+  and the artist name, and nothing else. The `/media/music` `PageHero`
+  background, added 7 August 2026.
+  ⚠️ **It takes `imageScrim="brand"`, and it is the only image on the site that
+  does.** This is the counterpart to `telegram-hero.jpg`'s `soft`, not a copy of
+  it: the Telegram shot is near-black, this one is a wall of Spotify green.
+  `soft` over it measures **2.91:1 on the h1 and 2.20:1 on the subtitle** — both
+  under AA, exactly the failure `PageHero`'s own note predicts for a bright
+  source. `brand` restores **9.34:1 and 5.54:1**. It also pulls the green back
+  to the site's blue, so a foreign brand colour is not the ground of one of our
+  heroes.
+  ⚠️ **Those figures are position- and viewport-independent, and that is not
+  luck.** The worst-case pixel is pure white — the artist name burned into the
+  screenshot — and some of it is in frame at every size. Re-measured after the
+  banner re-crop at 1280×644, 1920×644, 1024×600, 390×620 and 320×600, and at
+  both object-positions: 9.34:1 / 5.54:1 every time. So a re-crop of *this*
+  screenshot cannot quietly break the scrim; a different screenshot can, and
+  must be re-measured.
+  ⚠️ **The crop is the banner and stops above the stats line.** The first
+  version ran down through Popular/Discography and included "1 monthly
+  listener", which was a faint but real ghost under the scrim — and the
+  unscrimmed file is served publicly at `/images/spotify-hero.jpg`, the same
+  exposure noted for `telegram-hero.jpg`. The boundary was measured, not
+  eyeballed: a white-pixel row scan puts the artist name's descenders at source
+  row 558 and the listener line at rows 608–634, so the crop ends at **row 582**,
+  in the gap between them. It also excludes the logged-out Spotify chrome (the
+  "Log in"/"Sign up" nav, the "Create your first playlist" sidebar).
+  ⚠️ **If more needs removing, re-crop or re-shoot — never paint it out.** A
+  doctored screenshot presented as the live page is precisely what the Content
+  Integrity Notes exist to prevent.
+  ⚠️ **The banner crop is 4.36:1, which changes how the hero frames it.** It is
+  wider than any hero box, so the **height always fills exactly** and only a
+  slice of the width is ever shown — ~46% at desktop, ~15% on a phone. That makes
+  the vertical half of `imagePosition` inert; only the horizontal half does
+  anything. It is `object-[4%_50%]`, biased hard left, because the middle of the
+  banner is empty green — centring gives a blank hero. ⚠️ **Replacing this file
+  with a different aspect ratio means re-tuning that value**, which is the one
+  page edit a same-path swap can still require.
+  ⚠️ The 454px-tall band upscales roughly 3× vertically at desktop. That is
+  affordable here for the reason `apostle-key.jpg` records — the scrim has
+  already taken the detail out — and it is invisible in the render, but do not
+  reuse this file anywhere it would show unscrimmed.
+  ⚠️ Captured headless at 1600×950 DPR 2 and encoded **JPEG q92 4:4:4**, the
+  same rule as the Telegram shots — `4:2:0` smears coloured small text, which is
+  most of a UI screenshot. 112 KB. Artwork on that page is lazy-loaded behind an
+  IntersectionObserver, so a naive capture returns grey placeholder squares; the
+  scroll nudge that fixes it is why the first attempt looked broken. Spotify also
+  serves a blank page to repeated headless hits — a re-capture may need retrying.
+  ⚠️ **Swapping this file in place does not show up locally until you clear
+  `.next/cache/images`.** The optimiser keys its cache on the URL, not the file's
+  contents, and `minimumCacheTTL` is 31 days — so `next build` alone kept serving
+  the previous crop and the page looked unchanged. On Vercel a deploy busts it
+  (the key includes the build ID); locally you must delete that directory.
 - `selar-logo.png` — 188×148 **transparent** Selar wordmark, deep plum
   (~#601050) script. ⚠️ **Nothing renders this file** — the artwork is a 138×73
   horizontal wordmark floating in a 188×148 canvas (35px of clear space above,
@@ -1126,7 +1188,18 @@ Live links (in `lib/constants.ts`):
 - `SPOTIFY_PODCAST_NAME` / `SPOTIFY_PODCAST_TAGLINE` — podcast title + "Everything Faith and Family"
 - `SOCIALS.youtube` — YouTube channel (@ayodeleawelive)
 - `SOCIALS.facebook` — the minister's Facebook (`web.facebook.com/awe.ayo`)
-- `SELAR_BOOK_URL` / `AMAZON_BOOK_URL` — book purchase links
+- `SELAR_BOOK_URL` / `AMAZON_BOOK_URL` — book purchase links.
+  ⚠️ **Never a `tr.ee/…` URL.** Both constants held one until 7 August 2026, and
+  `tr.ee` is **Linktree's own shortener, not a redirector** — each resolved to
+  the full `linktr.ee/official_ayodeleawe` profile, so "Buy on Selar" and "Buy
+  on Amazon" both landed on the link hub instead of the book. Nothing was wrong
+  in `/books`; the buttons had always read these constants. The real
+  destinations were recovered from that Linktree's own link list and verified:
+  `selar.com/f12uu6` (the `.co` host 302s here) and
+  `amazon.co.uk/dp/B0DMLXN64T`, the Kindle edition. The Amazon shortlink also
+  carried a `cm_sw_r_mwn_dp_…` share-tracking query string, dropped here.
+  If a link is ever "fixed" by pasting something from the Linktree dashboard,
+  check it is the retailer's URL and not a `tr.ee` wrapper
 - `ANCHOR_FM_URL` — Anchor.fm podcast host, in the `/media/music` platform grid
 
 `BLCN_SOCIALS` (also hung off the BLCN entry in `CHURCHES` as `socials`) holds
@@ -1591,6 +1664,34 @@ The full route a visitor takes to a sermon is:
   `white/75` in a `white/25` outline.
 - The **Footer** needed no change — its nav already carried a single "Media"
   link and never listed the sub-pages.
+
+### The `/media/music` section order (restructured 7 August 2026)
+The page now runs **hero → `MediaTabs` → Podcast → Genres → Platforms → CTA**.
+What moved and why:
+
+- **The podcast came up from sixth to second.** It is the only part of this page
+  with new material arriving regularly; everything else is evergreen. It sat
+  behind three static sections.
+- **The old "Stream on Spotify" / "Worship That Transforms" section is gone.**
+  Its label, heading and "Open Spotify" CTA all said what the hero now says with
+  the real artist page behind it. Two things in it were *not* duplicated and
+  were kept rather than deleted:
+  - its prose about the music, which now opens the **Genres** section (the one
+    section actually about the music itself);
+  - the artist `SpotifyEmbed`, which now leads the **Platforms** section. ⚠️
+    **That embed is a live player, not the decorative anchor the hero
+    replaced** — it is the page's only on-site playback, so removing it would
+    have cost real function. Platforms is where it belongs: that section is
+    about where to listen.
+- ⚠️ **Genres moved to the mid treatment and its cards to the dark idiom**
+  (`border-t-2 border-brand-orange bg-white/[0.07]`, white heading, `white/70`
+  body, `SectionLabel tone="dark"`). It has to: the podcast section above it is
+  light, and two light gradients stacked have no seam. This also fixed a
+  pre-existing seam — the old About and Genres sections were *both* light.
+- ⚠️ **Platforms took the dark gradient plus `border-t-2 border-brand-orange`.**
+  It follows the mid-blue Genres band, and blue against blue has no seam of its
+  own. Its tiles were not restyled — they were already the dark idiom.
+- `MediaTabs` stays directly under the hero, as on all three media routes.
 
 ### Platform-branded sections on `/media/teachings`
 "Latest Sermons" and "Services on YouTube" each carry a hint of their platform's
