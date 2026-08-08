@@ -1665,33 +1665,52 @@ The full route a visitor takes to a sermon is:
 - The **Footer** needed no change — its nav already carried a single "Media"
   link and never listed the sub-pages.
 
-### The `/media/music` section order (restructured 7 August 2026)
-The page now runs **hero → `MediaTabs` → Podcast → Genres → Platforms → CTA**.
-What moved and why:
+### The `/media/music` section order (settled 8 August 2026)
+The page runs **hero → `MediaTabs` → Spotify player → Podcast → Genres →
+Platforms → CTA**.
 
-- **The podcast came up from sixth to second.** It is the only part of this page
-  with new material arriving regularly; everything else is evergreen. It sat
-  behind three static sections.
-- **The old "Stream on Spotify" / "Worship That Transforms" section is gone.**
-  Its label, heading and "Open Spotify" CTA all said what the hero now says with
-  the real artist page behind it. Two things in it were *not* duplicated and
-  were kept rather than deleted:
-  - its prose about the music, which now opens the **Genres** section (the one
-    section actually about the music itself);
-  - the artist `SpotifyEmbed`, which now leads the **Platforms** section. ⚠️
-    **That embed is a live player, not the decorative anchor the hero
-    replaced** — it is the page's only on-site playback, so removing it would
-    have cost real function. Platforms is where it belongs: that section is
-    about where to listen.
-- ⚠️ **Genres moved to the mid treatment and its cards to the dark idiom**
-  (`border-t-2 border-brand-orange bg-white/[0.07]`, white heading, `white/70`
-  body, `SectionLabel tone="dark"`). It has to: the podcast section above it is
-  light, and two light gradients stacked have no seam. This also fixed a
-  pre-existing seam — the old About and Genres sections were *both* light.
-- ⚠️ **Platforms took the dark gradient plus `border-t-2 border-brand-orange`.**
-  It follows the mid-blue Genres band, and blue against blue has no seam of its
-  own. Its tiles were not restyled — they were already the dark idiom.
-- `MediaTabs` stays directly under the hero, as on all three media routes.
+⚠️ **This order was changed twice in two days and the second change was a
+partial revert — read this before "restoring" anything.** The 7 August
+restructure deleted the "Stream on Spotify" / "Worship That Transforms" section,
+scattering its parts (prose → Genres, artist embed → Platforms) and pulling the
+podcast up to second. On 8 August that section was put back whole, at position
+2, at the client's request. The reasoning below is the *current* state; the
+7 August reasoning is recorded only where it still explains a treatment.
+
+- **The Spotify player section leads the page again**, label "Stream on
+  Spotify", heading "Worship That Transforms", three paragraphs, "Open Spotify"
+  CTA, artist `SpotifyEmbed` on the left. Light
+  (`from-white to-brand-tint`) — `MediaTabs` is a mid-blue bar and every media
+  page opens light beneath it.
+  ⚠️ **Its prose came back with it, and Genres gave that prose up.** While the
+  embed led Platforms those paragraphs were parked in Genres; leaving them there
+  as well would print the same two paragraphs twice on one page. Genres is
+  heading + rule + three cards, as it was originally.
+  ⚠️ The artist embed is **the page's only on-site playback** — that is why the
+  7 August restructure kept it rather than deleting it with the section, and it
+  is why it must not be dropped now that the section is whole again.
+- **The podcast is third**, and it is the one part of this page with new
+  material arriving regularly, so it stays high — the 7 August reasoning for
+  lifting it off the foot of the page still holds; only the Spotify section now
+  sits above it.
+  ⚠️ **It takes the mid treatment** (`from-brand-blue to-brand-navy`) and the
+  full dark idiom: `SectionLabel tone="dark"`, white heading, `white/70` body,
+  and the tagline on **`brand-orange-light`**. It follows a light section, and
+  two light gradients stacked have no seam. The tagline tone is not a free
+  choice — that line is a 12px uppercase label, far under the 24px floor
+  `brand-orange` needs as text, and `brand-orange-deep` is a light-section tone.
+- **Genres is light again** (`from-white to-brand-tint`, `bg-cream` cards,
+  `brand-blue` headings, `text-muted` body, `SectionLabel tone="light"`),
+  because the podcast band above it is now mid-blue. It carried the dark idiom
+  only for the day the podcast sat above it in light.
+- ⚠️ **Platforms has no `border-t-2 border-brand-orange` and must not be given
+  one back.** It had the rule while it followed the mid-blue Genres band —
+  blue against blue has no seam of its own. Genres above it is light now, which
+  separates itself; a rule there would read as decoration. The **CTA below
+  still needs its rule**, being dark-on-dark.
+- Platforms is the grid alone. `MediaTabs` stays directly under the hero, as on
+  all three media routes.
+- Resulting rhythm: dark hero → mid bar → light → mid → light → dark → accent.
 
 ### Platform-branded sections on `/media/teachings`
 "Latest Sermons" and "Services on YouTube" each carry a hint of their platform's

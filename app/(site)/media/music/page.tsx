@@ -96,15 +96,70 @@ export default function MusicPage() {
         imageScrim="brand"
       />
 
-      {/* ── 2. Section sub-nav ── */}
+      {/* ── Section sub-nav ── */}
       <MediaTabs />
 
-      {/* ── 3. Podcast ──
-          Moved directly under the hero: it is the one part of this page with
-          new material arriving regularly, so it no longer sits at the foot of
-          the page behind three evergreen sections. Light, because MediaTabs is
-          a mid-blue bar and every media page opens light beneath it. */}
+      {/* ── 2. Spotify player ──
+          Restored to the position it held before the media restructure: the
+          live artist player is the page's only on-site playback, so it leads
+          the page rather than sitting three sections down. Its prose came back
+          with it — while it led Platforms, these paragraphs were parked in
+          Genres, and leaving them there as well would print them twice on one
+          page.
+
+          Light, because MediaTabs is a mid-blue bar and every media page opens
+          light beneath it. */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
+          <AnimateIn direction="left">
+            <SpotifyEmbed
+              kind="artist"
+              id={SPOTIFY_ARTIST_ID}
+              title="Ayodele Oladapo Awe on Spotify"
+              className="shadow-xl"
+            />
+          </AnimateIn>
+
+          <AnimateIn direction="right">
+            <SectionLabel tone="light">Stream on Spotify</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
+              Worship That Transforms
+            </h2>
+            <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
+              <p>
+                Music has always been central to the ministry of Ayodele
+                Oladapo Awe. From intimate worship recordings to powerful gospel
+                anthems, every song is crafted to draw listeners into a genuine
+                encounter with God.
+              </p>
+              <p>
+                Spanning worship, gospel, and prophetic genres, the music of
+                Pastor Awe carries the weight of God&apos;s presence — birthed
+                from the place of prayer and designed to minister to the heart
+                of every listener.
+              </p>
+              <p>
+                Whether you&apos;re in your quiet time, driving to work, or
+                gathered with fellow believers, let these songs usher you into
+                the presence of the Most High.
+              </p>
+            </div>
+            <Button href={SOCIALS.spotify} variant="primary" size="lg" external>
+              Open Spotify
+            </Button>
+          </AnimateIn>
+        </div>
+      </section>
+
+      {/* ── 3. Podcast ──
+          ⚠️ Mid-blue, not light. It follows the light Spotify section above,
+          and two light gradients stacked have no seam between them. Everything
+          in here takes the dark idiom for that reason — `SectionLabel
+          tone="dark"`, white heading, `white/70` body, and the tagline on
+          `brand-orange-light`: that line is a 12px uppercase label, well under
+          the 24px floor `brand-orange` needs as text, and `brand-orange-deep`
+          is a light-section tone. */}
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SpotifyEmbed
@@ -116,14 +171,14 @@ export default function MusicPage() {
           </AnimateIn>
 
           <AnimateIn direction="right">
-            <SectionLabel tone="light">The Podcast</SectionLabel>
-            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
+            <SectionLabel tone="dark">The Podcast</SectionLabel>
+            <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               {SPOTIFY_PODCAST_NAME}
             </h2>
-            <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-deep">
+            <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-light">
               {SPOTIFY_PODCAST_TAGLINE}
             </p>
-            <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-muted sm:text-lg">
+            <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
               <p>
                 Beyond the music, Pastor Ayodele Oladapo Awe shares
                 conversations, reflections, and teaching in podcast form —
@@ -147,45 +202,28 @@ export default function MusicPage() {
       </section>
 
       {/* ── 4. Genres ──
-          Mid-blue, not light: the podcast section above it is light, and two
-          light gradients stacked have no seam between them.
-
-          This section also absorbed the prose from the old "Stream on Spotify"
-          block, which was removed — its heading, its label and its "Open
-          Spotify" CTA all said what the hero now says with the real artist
-          page behind it. The writing about the music itself was the one thing
-          in there that was not duplicated, so it leads here instead. */}
-      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+          Back to light, and back to heading + rule only. The prose it was
+          carrying belongs to the Spotify section and went home with it; this
+          section is the three cards, which is what it was before. Light works
+          here because the podcast band above is mid-blue. */}
+      <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
-            <SectionLabel tone="dark">The Music</SectionLabel>
-            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+            <SectionLabel tone="light">Genres</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Music for Every Season
             </h2>
-            <div className="mb-8 space-y-4 font-sans text-base leading-relaxed text-white/70 sm:text-lg">
-              <p>
-                Music has always been central to the ministry of Ayodele
-                Oladapo Awe. From intimate worship recordings to powerful gospel
-                anthems, every song is crafted to draw listeners into a genuine
-                encounter with God.
-              </p>
-              <p>
-                Whether you&apos;re in your quiet time, driving to work, or
-                gathered with fellow believers, let these songs usher you into
-                the presence of the Most High.
-              </p>
-            </div>
             <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
             {GENRES.map((card, i) => (
               <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
-                <div className="h-full border-t-2 border-brand-orange bg-white/[0.07] p-8 text-center">
-                  <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-white">
+                <div className="h-full border-t-2 border-brand-orange bg-cream p-8 text-center">
+                  <h3 className="mb-3 font-serif text-lg font-bold leading-tight text-brand-blue">
                     {card.title}
                   </h3>
-                  <p className="font-sans text-base leading-relaxed text-white/70">
+                  <p className="font-sans text-base leading-relaxed text-muted">
                     {card.desc}
                   </p>
                 </div>
@@ -196,16 +234,13 @@ export default function MusicPage() {
       </section>
 
       {/* ── 5. Platforms ──
-          ⚠️ `border-t-2 border-brand-orange`: this is the second dark section in
-          a row and blue against blue has no seam of its own — the standard case
-          the rule exists for.
+          The grid alone — the artist player that used to lead this section is
+          back at position 2.
 
-          The artist player leads the section. It is the page's only on-site
-          playback and came from the removed "Stream on Spotify" block; it is a
-          live player, not the decorative anchor the hero replaced, so it was
-          kept rather than dropped. It sits here because this is the section
-          about where to listen. */}
-      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+          ⚠️ No `border-t-2 border-brand-orange` here, deliberately: the seam
+          rule is for a dark section following another dark one, and Genres
+          above is light, which separates itself. The CTA below does need it. */}
+      <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Platforms</SectionLabel>
@@ -213,15 +248,6 @@ export default function MusicPage() {
               Available Everywhere
             </h2>
             <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
-          </AnimateIn>
-
-          <AnimateIn direction="up" className="mx-auto mt-16 max-w-2xl">
-            <SpotifyEmbed
-              kind="artist"
-              id={SPOTIFY_ARTIST_ID}
-              title="Ayodele Oladapo Awe on Spotify"
-              className="shadow-xl"
-            />
           </AnimateIn>
 
           <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
