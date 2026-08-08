@@ -470,8 +470,8 @@ components/
                             table, the copy and the CTAs, nothing else
   HeroSlideshow.tsx       ← 'use client' — the crossfading hero backdrop, shared
                             by `HeroSection` and `/churches/blcn`. Slides stacked
-                            absolutely, 6s interval, opacity-only transition,
-                            clickable dots, **and both scrims** (`bg-black/60` +
+                            absolutely, opacity-only transition, clickable dots,
+                            **and both scrims** (`bg-black/60` +
                             the navy wash) — a hero photo is never shown
                             unscrimmed on this site, so the caller cannot forget
                             one. `useState(0)` initial index keeps SSR and first
@@ -480,7 +480,13 @@ components/
                             ⚠️ Slides after the first are NOT rendered until
                             2.5s after hydration — see "The hero slideshow
                             defers slide 2" below. Don't collapse that back to
-                            a plain `.map()`.
+                            a plain `.map()`. The rotation timer waits on that
+                            same flag.
+                            Pace is `intervalMs` (default 6000) + `fadeMs`
+                            (default 1000). ⚠️ They must move together — a fast
+                            interval under a slow fade never settles on one
+                            image. /churches/blcn runs 980/420; the homepage
+                            takes the defaults. See "Slideshow pace" below
                             ⚠️ `HeroSlide.alt` is optional and that is the a11y
                             switch: omit it and the whole layer is `aria-hidden`
                             (the homepage, whose h1 already names the Pastor);
@@ -945,17 +951,31 @@ real congregation photography on the site**, and it retires the last stand-in on
 `/churches/blcn`.
 
 - **4 hero slides** (`blcn-hero-1.jpg` … `-4.jpg`, 2560×1696, q82) — the only
-  professionally-shot frames in the set (Nikon, 4928×3264 originals). They feed
-  `HeroSlideshow` on `/churches/blcn`.
+  professionally-shot frames in the set (Nikon, 4928×3264 originals).
+  ⚠️ **The names are single-digit, `-1` … `-4`, and only the gallery is
+  zero-padded.** There is no `blcn-hero-04`, `-07` or `-10` and there never was;
+  a request naming one is a request for a `blcn-gallery-NN` file.
 - **19 gallery images** (`blcn-gallery-01.jpg` … `-19.jpg`, 1800px long edge,
   q80; 12 landscape 1800×1355, 7 portrait 1355×1800) — phone photographs, which
   is why they are capped lower: they are never shown larger than a lightbox.
   `blcn-gallery-01` is 1800×1192, the one Nikon frame that went to the gallery.
 
+⚠️ **The hero no longer runs the four Nikon frames — the client picked its own
+set on 8 August 2026.** `HeroSlideshow` on `/churches/blcn` now shows, in order,
+`blcn-gallery-08` → `blcn-hero-4` → `blcn-gallery-07` → `blcn-gallery-10`. Three
+of the four are therefore **1800px gallery sources on a full-bleed hero**, so
+they upscale ~1.4× at desktop. That is affordable for the one reason
+`apostle-key.jpg` records and no other — the slideshow's two scrims have taken
+the fine detail out before anyone sees it. **Don't reuse those three anywhere
+they would render unscrimmed at width.** `blcn-hero-1`, `-2` and `-3` are now
+unused by any page; they are kept on disk as the professionally-shot set.
+
 ⚠️ **`object-position` is set per hero slide and is not optional.** A full-bleed
-hero on a phone shows barely a third of a 1.51 frame's width, so `object-center`
-drops the subject out of frame on three of the four. The values (`48%_32%`,
-`60%_32%`, `50%_35%`, `48%_38%`) are each read off the subject's face.
+hero on a phone shows barely a third of a 1.33 frame's width, so `object-center`
+drops the subject out of frame. The current values (`46%_30%`, `48%_38%`,
+`40%_34%`, `50%_36%`) are each read off the subject's face in that frame, so a
+change to the slide list means re-reading them — they do not travel with a file.
+The retired Nikon set used `48%_32%`, `60%_32%`, `50%_35%`, `48%_38%`.
 
 ⚠️ **The alt text names no one and dates nothing.** Nobody in these frames has
 been identified to us. Captions are the easiest place for an invented event or a
@@ -1048,6 +1068,27 @@ alternation and lands the pictures just before the closing pair.
   the accumulated delay to outrun the scroll.
 - The thumbnails are `loading="lazy"` and below the fold, so unlike the hero
   case that is genuine deferral and nothing extra is needed.
+- **The lightbox is wired and was re-verified in a real browser on 8 August
+  2026** — headless Chrome against the production build, not by reading the
+  code. All 19 tiles open; `document.elementFromPoint` at a thumbnail's centre
+  lands *inside* the button, so nothing overlays it (the hover wash is a `span`
+  **inside** the button, which is why it does not eat the click); Escape,
+  backdrop click, both chevrons and ←/→ all work, ←/→ wrap at both ends, body
+  scroll freezes and restores, and focus returns to the tile that opened it.
+  Nothing needed fixing.
+- ⚠️ **`sizes` on the thumbnails is a fixed `280px` at `lg`, not `25vw`, and
+  that is a real byte saving rather than a tidy-up.** The grid caps at
+  `max-w-7xl` less `lg:px-16`, so four columns and three 24px gaps leave
+  **270px** each however wide the viewport gets — measured, not estimated.
+  `25vw` claimed 480px on a 1920 screen, and the browser duly picked a
+  candidate near three times the pixel count of the box. Below `lg` the columns
+  really are proportional, so those stay in `vw` less the padding and gaps
+  (`31vw` at `sm`, `48vw` under it). Verified: Chrome now fetches the `w=384`
+  rendition for every tile.
+- ⚠️ **Thumbnails are `quality={65}`; the lightbox is left at the 75 default.**
+  A 1800px phone photograph drawn into a 270px box has detail to spare, and the
+  lightbox is where these are actually looked at. 65 had to be added to
+  `qualities` in `next.config.ts` — Next 16 **400s** any quality not listed.
 
 ### ⚠️ There are no Unsplash images left on the site (2 August 2026)
 **Nothing on any page fetches a remote image.** Every `<Image>` now points at a
@@ -1842,6 +1883,14 @@ that is the whole mechanism, and hinting at the loader cannot substitute for it.
 - 2.5s clears first paint and still leaves 3.5s before the 6s crossfade.
 - ⚠️ **The dots set the flag too.** A tap inside the first 2.5s would otherwise
   select a slide that is not mounted and leave the hero blank.
+- ⚠️ **So does the rotation timer — it does not start until the flag is set.**
+  Added 8 August 2026 with BLCN's 980ms interval. At the 6s default the two
+  timers never met, but **any interval shorter than 2.5s** would otherwise
+  advance `active` onto a slide that is still `null` and leave the hero blank —
+  bare scrims, no photograph — until the mount timer caught up. Slide 0 now
+  holds for exactly as long as it is the only one in the DOM, which is what the
+  deferral always assumed. Don't remove `deferredMounted` from that effect's
+  dependencies.
 - `priority` and `loading` are passed as a spread, never both at once — Next
   throws if it sees both on one `<Image>`.
 
@@ -1849,7 +1898,27 @@ that is the whole mechanism, and hinting at the loader cannot substitute for it.
 7 August 2026 when `/churches/blcn` took real photography and needed the same
 crossfade. That page has **four** slides, so the saving is larger there than on
 the homepage. Verified against the built HTML for both routes: the only hero
-`<img>`/preload emitted is slide 1 (`apostle-1.jpg`, `blcn-hero-1.jpg`).
+`<img>`/preload emitted is slide 1 (`apostle-1.jpg`, `blcn-gallery-08.jpg`).
+
+### ⚠️ Slideshow pace: `intervalMs` and `fadeMs` are one setting, not two
+`HeroSlideshow` takes both, defaulting to **6000ms / 1000ms**. The homepage
+passes neither. `/churches/blcn` passes **`intervalMs={980}` `fadeMs={420}`**,
+at the client's request on 8 August 2026 — a per-call-site override precisely so
+the shared default, and therefore the homepage, is untouched.
+
+- ⚠️ **They are independent timers and a fast interval alone is a bug.** The
+  interval decides *when* the next slide is selected; the transition decides how
+  long the swap takes to paint. The crossfade used to be a hard-coded
+  `duration-1000` class, so `intervalMs={980}` on its own would have started
+  each fade-in before the previous fade-out had finished — the stack never
+  settles on one image and the hero reads as a permanent smear. `fadeMs` exists
+  for that reason; keep it comfortably under the interval. 420/980 holds each
+  frame clear for ~560ms and then moves.
+- ⚠️ **`fadeMs` is applied as an inline `transitionDuration`, not a
+  `duration-*` class.** Tailwind can only emit classes it can see in the source,
+  and this value arrives as a prop.
+- Verified in headless Chrome against the production build: four slides mounted
+  after the deferral, all four at `fade=0.42s`, cycling through 0→1→2→3.
 
 ⚠️ **The deferred slides' paths now appear once each in the server HTML, and
 that is not a regression.** `HeroSection` used to be `'use client'` and held its
@@ -1861,6 +1930,11 @@ for `<img` before concluding the deferral has broken.
 ### Image format and cache TTL (`next.config.ts`)
 - `formats: ["image/avif", "image/webp"]` — AVIF is ~20–30% smaller. The cost
   is slower encoding on a cache **miss**, paid once per (image, width).
+- ⚠️ **`qualities: [65, 75, 100]` is an allow-list, not a hint.** Next 16 serves
+  q=75 by default and **400s any quality not in this array**, so a `quality`
+  prop added at a call site without a matching entry here breaks that image in
+  production while building perfectly. 65 is the BLCN gallery thumbnails, 100
+  the low-res BLCN church-order graphic, 75 everything else.
 - `minimumCacheTTL: 2678400` (31 days, up from Next's 4-hour default). Every
   optimised image is now a build-time asset, so nothing can change behind a URL
   without a redeploy — and a deploy busts the cache anyway, since the cache key

@@ -144,12 +144,28 @@ export default function ImageGallery({ images }: { images: GalleryImage[] }) {
               aria-label={`Open larger: ${image.alt}`}
               className="group relative block aspect-[4/5] w-full overflow-hidden bg-brand-blue/5 ring-1 ring-brand-blue/10 transition-shadow duration-300 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
             >
+              {/* ⚠️ `sizes` is the real rendered width, not the column
+                  fraction, and the difference is most of what these tiles
+                  cost. The grid caps at max-w-7xl (1280) less lg:px-16, so
+                  four columns and three 24px gaps leave 270px each however
+                  wide the viewport gets — the old `25vw` claimed 480px on a
+                  1920 screen and the browser dutifully picked a candidate
+                  nearly three times the pixel count of the box it was about
+                  to be drawn into. Below lg the columns really are
+                  proportional, so those two stay in vw, less the padding and
+                  gaps: (100vw-96)/3 at sm, (100vw-48)/2 below it.
+
+                  `quality` is the second half of it. A 1800px phone
+                  photograph rendered at 270px has detail to spare, so 65
+                  costs nothing visible here — the lightbox below is where
+                  these are actually looked at, and it stays at the default. */}
               <Image
                 src={image.src}
                 alt={image.alt}
                 fill
                 loading="lazy"
-                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                quality={65}
+                sizes="(min-width: 1024px) 280px, (min-width: 640px) 31vw, 48vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
               {/* Enough of a wash on hover to signal the tile is a control. */}

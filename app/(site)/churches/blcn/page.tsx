@@ -92,37 +92,51 @@ const NETWORK_STATS = [
  * emblem badge in the hero body stays — that is the identity mark, and it was
  * never the thing the blurred layer was doing.
  *
- * These four are the only professionally-shot frames in the set (4928x3264
- * originals, capped at 2560 per the asset rules); the phone photographs carry
- * the gallery further down. `position` keeps each subject's face inside the
- * crop — a full-bleed hero on a phone shows barely a third of a 1.51 frame's
- * width, so `object-center` is not a safe default here.
+ * ⚠️ This set is client-chosen, and only one of the four (`blcn-hero-4.jpg`) is
+ * from the professionally-shot Nikon frames. The other three are phone
+ * photographs from the gallery set, capped at 1800px on the long edge rather
+ * than 2560 — so they upscale roughly 1.4x at a desktop full-bleed width. That
+ * is affordable here for the same reason `apostle-key.jpg` records in
+ * CLAUDE.md and for no other: the slideshow's own two scrims (`bg-black/60`
+ * plus the navy wash) have already taken the fine detail out before anyone
+ * sees it. Don't reuse these three anywhere they would render unscrimmed.
+ *
+ * The request named `blcn-hero-07.jpg` and `blcn-hero-10.jpg`; neither exists.
+ * The hero files on disk are `blcn-hero-1` … `-4` (single digit, four of them)
+ * and only the gallery is zero-padded to two, so 07 and 10 can only have meant
+ * `blcn-gallery-07` / `-10`, which is what they resolve to here.
+ *
+ * `position` keeps each subject's face inside the crop — a full-bleed hero on
+ * a phone shows barely a third of a 1.33 frame's width, so `object-center` is
+ * not a safe default here. Each value is read off the subject in the frame.
  *
  * ⚠️ Unlike the homepage's slides these carry real `alt` text and are exposed
  * to screen readers: the homepage photographs are decoration behind a heading
  * that already names the Pastor, whereas these ARE what this page is about.
- * `HeroSlideshow` announces only whichever one is on screen.
+ * `HeroSlideshow` announces only whichever one is on screen. As everywhere
+ * else in this folder, the captions name nobody and date nothing — see the
+ * note on GALLERY below.
  */
 const HERO_SLIDES: HeroSlide[] = [
   {
-    src: "/images/blcn/blcn-hero-1.jpg",
-    position: "object-[48%_32%]",
-    alt: "A minister preaching from the lectern at a BLCN gathering, the network's nations backdrop behind him",
-  },
-  {
-    src: "/images/blcn/blcn-hero-2.jpg",
-    position: "object-[60%_32%]",
-    alt: "Preaching from the stage during a BLCN service",
-  },
-  {
-    src: "/images/blcn/blcn-hero-3.jpg",
-    position: "object-[50%_35%]",
-    alt: "Preaching to the congregation at an evening BLCN service",
+    src: "/images/blcn/blcn-gallery-08.jpg",
+    position: "object-[46%_30%]",
+    alt: "Preaching with the nations backdrop behind, at a BLCN service",
   },
   {
     src: "/images/blcn/blcn-hero-4.jpg",
     position: "object-[48%_38%]",
     alt: "A woman singing in worship at a BLCN gathering",
+  },
+  {
+    src: "/images/blcn/blcn-gallery-07.jpg",
+    position: "object-[40%_34%]",
+    alt: "Members of the BLCN congregation standing together during a service",
+  },
+  {
+    src: "/images/blcn/blcn-gallery-10.jpg",
+    position: "object-[50%_36%]",
+    alt: "The BLCN church family, young and old, photographed together after a service",
   },
 ];
 
@@ -169,8 +183,19 @@ export default function BLCNPage() {
             component the homepage hero uses, so the deferred mount of slides
             2-4 and the 44px dot targets come with it. Both scrims are the
             slideshow's own. See HERO_SLIDES for why the blurred emblem this
-            replaced is gone. */}
-        <HeroSlideshow slides={HERO_SLIDES} />
+            replaced is gone.
+
+            ⚠️ The fast pace is THIS page only, which is why it is passed here
+            rather than changed in the component: `HeroSlideshow` is shared
+            with the homepage, whose hero is left at the 6s default.
+
+            ⚠️ `fadeMs` is not free to leave at its 1000ms default alongside a
+            980ms interval — the fade would outlast the slide it belongs to and
+            every image would start appearing before the last had gone, so the
+            stack would never settle on one photograph. 420ms holds each frame
+            clear for ~560ms and then moves, which reads as quick rather than
+            as a blur. */}
+        <HeroSlideshow slides={HERO_SLIDES} intervalMs={980} fadeMs={420} />
         {/* The shared hero glow, over the slideshow's scrims so it tints rather
             than being washed out by them. No particles — the dot field is kept
             to the homepage, /events and /ministry. */}

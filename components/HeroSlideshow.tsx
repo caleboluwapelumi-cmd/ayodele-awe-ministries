@@ -51,12 +51,32 @@ const DEFERRED_SLIDE_DELAY_MS = 2500;
 
 const DEFAULT_INTERVAL_MS = 6000;
 
+/**
+ * How long the opacity crossfade itself takes.
+ *
+ * ⚠️ This must stay comfortably shorter than `intervalMs`, and that is the
+ * whole reason it is a prop rather than the `duration-1000` class it used to
+ * be. The two are independent timers: the interval decides when the next slide
+ * is selected, the transition decides how long the swap takes to paint. Set a
+ * fade as long as (or longer than) the interval and every slide begins fading
+ * in before the previous one has finished fading out — the stack never settles
+ * on a single image and the hero reads as a permanent smear rather than a
+ * sequence of photographs.
+ *
+ * The default pairs 1s against the 6s interval: ~5s held, 1s moving. A page
+ * running a much faster interval must scale this down with it.
+ */
+const DEFAULT_FADE_MS = 1000;
+
 export default function HeroSlideshow({
   slides,
   intervalMs = DEFAULT_INTERVAL_MS,
+  fadeMs = DEFAULT_FADE_MS,
 }: {
   slides: HeroSlide[];
   intervalMs?: number;
+  /** Crossfade duration. Keep it well under `intervalMs` — see DEFAULT_FADE_MS. */
+  fadeMs?: number;
 }) {
   const [active, setActive] = useState(0);
   /**
@@ -74,14 +94,23 @@ export default function HeroSlideshow({
     return () => clearTimeout(id);
   }, []);
 
+  /**
+   * ⚠️ The rotation does not start until the deferred slides are actually in
+   * the DOM. With the 6s default the two timers never met, but any interval
+   * shorter than DEFERRED_SLIDE_DELAY_MS would otherwise advance `active` to a
+   * slide that is still `null` — the hero would go blank (bare scrims, no
+   * photograph) until the mount timer caught up. Gating here keeps slide 0 on
+   * screen for exactly as long as it is the only one available, which is the
+   * behaviour the deferral was always assuming.
+   */
   useEffect(() => {
-    if (slides.length < 2) return;
+    if (slides.length < 2 || !deferredMounted) return;
     const id = setInterval(
       () => setActive((i) => (i + 1) % slides.length),
       intervalMs,
     );
     return () => clearInterval(id);
-  }, [slides.length, intervalMs]);
+  }, [slides.length, intervalMs, deferredMounted]);
 
   /** Any slide carrying alt text opts the whole layer into the a11y tree. */
   const described = slides.some((slide) => slide.alt);
@@ -112,7 +141,10 @@ export default function HeroSlideshow({
               // together.
               {...(i === 0 ? { priority: true } : { loading: "lazy" as const })}
               sizes="100vw"
-              className={`object-cover transition-opacity duration-1000 ease-in-out ${
+              // Inline rather than a `duration-*` class: the value is a prop,
+              // and Tailwind can only emit classes it can see in the source.
+              style={{ transitionDuration: `${fadeMs}ms` }}
+              className={`object-cover transition-opacity ease-in-out ${
                 slide.position ?? "object-center"
               } ${i === active ? "opacity-100" : "opacity-0"}`}
             />
