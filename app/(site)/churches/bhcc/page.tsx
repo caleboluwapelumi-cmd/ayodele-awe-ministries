@@ -5,6 +5,7 @@ import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
 import HeroAtmosphere from "@/components/HeroAtmosphere";
+import ImageGallery, { type GalleryImage } from "@/components/ImageGallery";
 import { CHURCHES } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -19,6 +20,34 @@ const BELIEFS = [
 ];
 
 const BHCC = CHURCHES.find((church) => church.acronym === "BHCC");
+
+/**
+ * BHCC's own congregation photography, from two services in August 2026.
+ *
+ * ⚠️ Alt text describes what is visible and nothing more. Nobody in these
+ * frames has been identified to us, so none of them names a person and none
+ * attaches a date or an event — the same rule the BLCN gallery runs under,
+ * and for the same reason: a caption is exactly where an invented event or a
+ * misattributed name slips onto a ministry site. If the client tells us who
+ * or what these are, the captions can say so.
+ *
+ * ⚠️ Ten are portrait and one (`-05`) is landscape. `width`/`height` are the
+ * real encoded sizes so the lightbox lays each out without guessing.
+ */
+const GALLERY: GalleryImage[] = [
+  { src: "/images/bhcc/bhcc-gallery-01.jpg", width: 1012, height: 1800, alt: "A member of the congregation reading her Bible before a service at BHCC" },
+  { src: "/images/bhcc/bhcc-gallery-02.jpg", width: 1012, height: 1800, alt: "A mother holding her child during a gathering at BHCC" },
+  { src: "/images/bhcc/bhcc-gallery-03.jpg", width: 1012, height: 1800, alt: "Speaking from the lectern at a BHCC service" },
+  { src: "/images/bhcc/bhcc-gallery-04.jpg", width: 1012, height: 1800, alt: "Addressing the congregation at BHCC, the welcome banner behind" },
+  { src: "/images/bhcc/bhcc-gallery-05.jpg", width: 1800, height: 1012, alt: "The BHCC family photographed together outside the centre after a service" },
+  { src: "/images/bhcc/bhcc-gallery-06.jpg", width: 1012, height: 1800, alt: "Members of the BHCC family outside after a Sunday service" },
+  { src: "/images/bhcc/bhcc-gallery-07.jpg", width: 1012, height: 1800, alt: "Members of the BHCC family, young and old, gathered outside after a service" },
+  { src: "/images/bhcc/bhcc-gallery-08.jpg", width: 1012, height: 1800, alt: "Two members of the BHCC congregation outside the centre" },
+  { src: "/images/bhcc/bhcc-gallery-09.jpg", width: 1012, height: 1800, alt: "A moment of worship during a BHCC gathering" },
+  { src: "/images/bhcc/bhcc-gallery-10.jpg", width: 1012, height: 1800, alt: "Sharing with the congregation at a BHCC gathering" },
+  { src: "/images/bhcc/bhcc-gallery-11.jpg", width: 1012, height: 1800, alt: "Hands raised in worship at a BHCC service" },
+];
+
 
 const FOUNDATION = [
   { title: "Vision", desc: BHCC?.vision },
@@ -361,7 +390,42 @@ export default function BHCCPage() {
         </div>
       </section>
 
-      {/* ── 8. CTA ── */}
+      {/* ── 8. Gallery ──
+          ⚠️ Mid-blue, where the BLCN gallery is light, and the slot is why.
+          This page alternates mid → light → dark → light → mid → light all
+          the way to the CTA, so the only place a section can be added without
+          restyling a neighbour is here, between the light "Services" and the
+          CTA — and it has to be blue, because a light band would stack against
+          Services with no seam. The CTA below already carries its own orange
+          rule, so nothing else needed changing.
+
+          ⚠️ It does NOT get a `border-t-2 border-brand-orange`: the section
+          above it is light, which separates itself. The rule is for blue
+          against blue only.
+
+          Thumbnails, `sizes`, quality and the lightbox all live in
+          `ImageGallery` — see the BLCN gallery notes in CLAUDE.md for why the
+          `lg` size is a fixed 280px rather than a `vw` figure. */}
+      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+            <SectionLabel tone="dark">Gallery</SectionLabel>
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+              BHCC in Pictures
+            </h2>
+            <p className="mx-auto mb-8 max-w-2xl font-sans text-base leading-relaxed text-white/70 sm:text-lg">
+              Moments from the Building House Christian Centre family in Norwich.
+            </p>
+            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
+          </AnimateIn>
+
+          <div className="mt-16">
+            <ImageGallery images={GALLERY} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── 9. CTA ── */}
       <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

@@ -26,12 +26,31 @@ const BELIEFS = [
 const BLCN = CHURCHES.find((church) => church.acronym === "BLCN");
 
 /**
- * BLCN names one leader, so this is a credit line inside the About section
- * rather than a Leadership section of its own — a full card grid built for a
- * single person reads as a section waiting to be filled. See the note on
- * `leadership` in lib/constants.ts for why Pastor Awe is not listed here too.
+ * BLCN's one named leader, rendered as a dedicated Leadership section matching
+ * BHCC's (section 4 below).
+ *
+ * ⚠️ This was a small credit line inside "About BLCN" until 12 September 2026,
+ * on the reasoning that a card built for a single person reads as a section
+ * waiting to be filled. The client asked for the dedicated section instead, so
+ * that reasoning is superseded — don't reinstate the credit line. See the note
+ * on `leadership` in lib/constants.ts for why Pastor Awe is not listed here too.
  */
 const BLCN_LEAD = BLCN?.leadership?.[0];
+/**
+ * "Toluwalope Fash" → "TF". Only reached if a leader has no portrait; BLCN's
+ * does, so this is the same defensive fallback the BHCC grid uses rather than
+ * something this page renders today. Duplicated from /churches/bhcc rather
+ * than shared: two call sites, eight lines, and no lib module exists for it.
+ */
+function initialsOf(name: string) {
+  return name
+    .split(/[s-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
 
 const FOUNDATION = [
   {
@@ -100,23 +119,32 @@ const NETWORK_STATS = [
  * emblem badge in the hero body stays — that is the identity mark, and it was
  * never the thing the blurred layer was doing.
  *
- * ⚠️ This set is client-chosen, and only one of the four (`blcn-hero-4.jpg`) is
- * from the professionally-shot Nikon frames. The other three are phone
- * photographs from the gallery set, capped at 1800px on the long edge rather
- * than 2560 — so they upscale roughly 1.4x at a desktop full-bleed width. That
- * is affordable here for the same reason `apostle-key.jpg` records in
- * CLAUDE.md and for no other: the slideshow's own two scrims (`bg-black/60`
- * plus the navy wash) have already taken the fine detail out before anyone
- * sees it. Don't reuse these three anywhere they would render unscrimmed.
+ * ⚠️ This set is client-chosen and was cut from four slides to three on
+ * 12 September 2026, when the client removed seven gallery frames and
+ * `blcn-hero-2.jpg` from the folder. All three are phone photographs from the
+ * gallery set, capped at 1800px on the long edge rather than 2560 — so they
+ * upscale roughly 1.4x at a desktop full-bleed width. That is affordable here
+ * for the same reason `apostle-key.jpg` records in CLAUDE.md and for no other:
+ * the slideshow's own two scrims (`bg-black/60` plus the navy wash) have
+ * already taken the fine detail out before anyone sees it. Don't reuse these
+ * anywhere they would render unscrimmed.
  *
- * The request named `blcn-hero-07.jpg` and `blcn-hero-10.jpg`; neither exists.
- * The hero files on disk are `blcn-hero-1` … `-4` (single digit, four of them)
- * and only the gallery is zero-padded to two, so 07 and 10 can only have meant
- * `blcn-gallery-07` / `-10`, which is what they resolve to here.
+ * ⚠️ No professionally-shot frame is in the hero any more. `blcn-hero-1`, `-3`
+ * and `-4` survive on disk as the Nikon set but nothing renders them now that
+ * `-4` has left this array. They are the first place to look if a sharper hero
+ * is ever wanted.
+ *
+ * ⚠️ All three slides are group photographs, where the previous set opened on
+ * a preaching frame. A congregation lined up for the camera reads differently
+ * from a service in progress — that is the client's call, noted here only so
+ * it is not "corrected" back later.
  *
  * `position` keeps each subject's face inside the crop — a full-bleed hero on
  * a phone shows barely a third of a 1.33 frame's width, so `object-center` is
- * not a safe default here. Each value is read off the subject in the frame.
+ * not a safe default here. ⚠️ These values do NOT travel with a file: `-09`
+ * and `-18` are new to the hero and were measured by simulating the
+ * `object-cover` crop at both 1280x800 and 390x844 before being set. `-07`
+ * keeps the value it was already measured at for this same hero.
  *
  * ⚠️ Unlike the homepage's slides these carry real `alt` text and are exposed
  * to screen readers: the homepage photographs are decoration behind a heading
@@ -127,29 +155,32 @@ const NETWORK_STATS = [
  */
 const HERO_SLIDES: HeroSlide[] = [
   {
-    src: "/images/blcn/blcn-gallery-08.jpg",
-    position: "object-[46%_30%]",
-    alt: "Preaching with the nations backdrop behind, at a BLCN service",
-  },
-  {
-    src: "/images/blcn/blcn-hero-4.jpg",
-    position: "object-[48%_38%]",
-    alt: "A woman singing in worship at a BLCN gathering",
-  },
-  {
     src: "/images/blcn/blcn-gallery-07.jpg",
     position: "object-[40%_34%]",
     alt: "Members of the BLCN congregation standing together during a service",
   },
   {
-    src: "/images/blcn/blcn-gallery-10.jpg",
+    src: "/images/blcn/blcn-gallery-09.jpg",
     position: "object-[50%_36%]",
-    alt: "The BLCN church family, young and old, photographed together after a service",
+    alt: "Families of the BLCN congregation gathered for a photograph after service",
+  },
+  {
+    src: "/images/blcn/blcn-gallery-18.jpg",
+    position: "object-[45%_32%]",
+    alt: "The BLCN family photographed together outside after a service",
   },
 ];
 
 /**
  * The rest of the client's photographs.
+ *
+ * ⚠️ The numbering has GAPS (05, 07-11, 14-19) and they are deliberate. The
+ * client removed seven frames on 12 September 2026; the survivors keep the
+ * filenames they were given rather than being renumbered to close up, because
+ * those numbers are how the client refers to individual pictures ("rework the
+ * hero to 07, 09, 18"). Renumbering would silently repoint every one of those
+ * references at a different photograph. A missing number here means a deleted
+ * file, not a bug.
  *
  * ⚠️ Alt text describes what is visible and nothing more. Nobody in these
  * frames has been identified to us, so none of them names a person, and none
@@ -161,19 +192,12 @@ const HERO_SLIDES: HeroSlide[] = [
  * out without guessing at its orientation.
  */
 const GALLERY: GalleryImage[] = [
-  { src: "/images/blcn/blcn-gallery-01.jpg", width: 1800, height: 1192, alt: "A minister praying over a member of the congregation at a BLCN gathering" },
-  { src: "/images/blcn/blcn-gallery-02.jpg", width: 1800, height: 1355, alt: "Ministering to a young member of the congregation on stage at BLCN" },
-  { src: "/images/blcn/blcn-gallery-03.jpg", width: 1800, height: 1355, alt: "A moment of ministry on stage at BLCN, the nations backdrop behind" },
-  { src: "/images/blcn/blcn-gallery-04.jpg", width: 1355, height: 1800, alt: "Hands raised in worship as the congregation faces the stage at BLCN" },
   { src: "/images/blcn/blcn-gallery-05.jpg", width: 1800, height: 1355, alt: "The congregation at prayer, seen from the back of the hall at BLCN" },
-  { src: "/images/blcn/blcn-gallery-06.jpg", width: 1355, height: 1800, alt: "Praying with a member of the church at a BLCN service" },
   { src: "/images/blcn/blcn-gallery-07.jpg", width: 1800, height: 1355, alt: "Members of the BLCN family gathered at the front of the church" },
   { src: "/images/blcn/blcn-gallery-08.jpg", width: 1800, height: 1355, alt: "Preaching with the nations backdrop behind, at a BLCN service" },
   { src: "/images/blcn/blcn-gallery-09.jpg", width: 1800, height: 1355, alt: "Families of the BLCN congregation gathered for a photograph after service" },
   { src: "/images/blcn/blcn-gallery-10.jpg", width: 1800, height: 1355, alt: "The BLCN church family, young and old, photographed together after a service" },
   { src: "/images/blcn/blcn-gallery-11.jpg", width: 1800, height: 1355, alt: "Ministering the Word at a BLCN gathering" },
-  { src: "/images/blcn/blcn-gallery-12.jpg", width: 1800, height: 1355, alt: "Teaching from the lectern at a BLCN service" },
-  { src: "/images/blcn/blcn-gallery-13.jpg", width: 1800, height: 1355, alt: "A member of the congregation holding his Bible during a BLCN service" },
   { src: "/images/blcn/blcn-gallery-14.jpg", width: 1355, height: 1800, alt: "Preaching to the congregation at an evening BLCN service" },
   { src: "/images/blcn/blcn-gallery-15.jpg", width: 1355, height: 1800, alt: "The congregation listening as the Word is preached at BLCN" },
   { src: "/images/blcn/blcn-gallery-16.jpg", width: 1355, height: 1800, alt: "Teaching from a whiteboard during a BLCN session" },
@@ -357,33 +381,93 @@ export default function BLCNPage() {
               </p>
             </div>
 
-            {BLCN_LEAD?.image && (
-              <div className="mt-10 flex items-center gap-5 border-t border-brand-blue/10 pt-8">
-                <div className="relative h-20 w-20 shrink-0 overflow-hidden ring-1 ring-brand-blue/10">
-                  <Image
-                    src={BLCN_LEAD.image}
-                    alt={`${BLCN_LEAD.name}, ${BLCN_LEAD.role} of Bethel Livingstone Christian Network`}
-                    fill
-                    sizes="80px"
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <p className="font-serif text-lg font-bold leading-tight text-brand-blue">
-                    {BLCN_LEAD.name}
-                  </p>
-                  <p className="mt-1 font-sans text-xs uppercase tracking-widest text-brand-orange-deep">
-                    {BLCN_LEAD.role}
-                  </p>
-                </div>
-              </div>
-            )}
           </AnimateIn>
         </div>
       </section>
 
-      {/* ── 4. Beliefs ── */}
-      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      {/* ── 4. Leadership ──
+          A dedicated section, matching BHCC's, rather than the credit line
+          this used to be inside "About BLCN".
+
+          ⚠️ It is DARK where BHCC's Leadership is light, and that is forced by
+          the page, not a preference. This page alternates mid → light → mid →
+          light the whole way down, so any section inserted between the light
+          "About" and the mid "Beliefs" must take a third treatment or it
+          stacks against one of its neighbours with no seam. Dark is that third
+          treatment; the card idiom below is the site's standard dark-section
+          card (`bg-white/[0.07]` + an orange top rule), not a recolour of
+          BHCC's cream one. ⚠️ Beliefs directly below gained
+          `border-t-2 border-brand-orange` to seam dark-against-mid — don't
+          remove it while this section sits above it.
+
+          ⚠️ The role sits on `brand-orange-light`, where BHCC's is
+          `brand-orange-deep`. That is the light/dark accent split, not an
+          inconsistency: the deep tone is a light-section colour and the brand
+          orange is 3.3:1 on white, far under AA for a 12px uppercase label.
+
+          One leader, so the card is a single centred column rather than a
+          grid — see the note on `leadership` in lib/constants.ts for why
+          Pastor Awe is not listed beside him. ⚠️ If a second leader is ever
+          added, this needs to become a grid; `max-w-sm` on one card is what
+          keeps a lone portrait from running the full width. */}
+      {BLCN_LEAD && (
+        <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+          <div className="mx-auto max-w-7xl text-center">
+            <AnimateIn direction="up" className="mx-auto max-w-3xl">
+              <SectionLabel tone="dark">Leadership</SectionLabel>
+              <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+                Meet the Pastor
+              </h2>
+              <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
+            </AnimateIn>
+
+            <AnimateIn direction="up" delay={0.1} className="mx-auto mt-16 max-w-sm">
+              <div className="group flex h-full flex-col border-t-2 border-brand-orange bg-white/[0.07]">
+                <div className="relative aspect-[3/4] w-full overflow-hidden">
+                  {BLCN_LEAD.image ? (
+                    <Image
+                      src={BLCN_LEAD.image}
+                      alt={BLCN_LEAD.name}
+                      fill
+                      sizes="(min-width: 640px) 384px, 100vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    /* Same contract as BHCC's grid: initials stand in rather
+                       than a stock-photo stranger. */
+                    <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
+                      <span
+                        aria-hidden
+                        className="font-serif text-5xl font-bold leading-none tracking-tight text-white/90"
+                      >
+                        {initialsOf(BLCN_LEAD.name)}
+                      </span>
+                      <span className="mt-4 font-sans text-[0.65rem] uppercase tracking-[0.2em] text-white/40">
+                        Photo coming soon
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-8">
+                  <h3 className="font-serif text-lg font-bold leading-tight text-white">
+                    {BLCN_LEAD.name}
+                  </h3>
+                  <p className="mt-2 font-sans text-xs uppercase tracking-widest text-brand-orange-light">
+                    {BLCN_LEAD.role}
+                  </p>
+                </div>
+              </div>
+            </AnimateIn>
+          </div>
+        </section>
+      )}
+
+      {/* ── 5. Beliefs ──
+          ⚠️ The orange top rule seams this against the dark Leadership band
+          above it — blue on blue has no edge of its own. See the note on
+          section 4. */}
+      <section className="border-t-2 border-brand-orange bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Our Beliefs</SectionLabel>
@@ -408,7 +492,7 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 5. Services ── */}
+      {/* ── 6. Services ── */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
@@ -462,7 +546,7 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 6. Follow BLCN ── */}
+      {/* ── 7. Follow BLCN ── */}
       <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
@@ -504,13 +588,18 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 7. Gallery ──
-          Placed here rather than up against "About BLCN" for rhythm: the page
-          runs mid → light → mid → light → mid, and a gallery section directly
-          after About would have put two light bands together with no seam
-          between them. This slot sits between the mid-blue "Follow BLCN" and
-          the dark "Network Vision", so it keeps the alternation intact and
-          lands the pictures just before the closing pair. */}
+      {/* ── 8. Gallery ──
+          Placed here rather than up against "About BLCN" for rhythm: a gallery
+          section directly after About would have put two light bands together
+          with no seam between them. This slot sits between the mid-blue
+          "Follow BLCN" and the dark "Network Vision", so it keeps the
+          alternation intact and lands the pictures just before the closing
+          pair.
+
+          ⚠️ Seven of the nineteen frames were removed by the client on
+          12 September 2026, leaving twelve. The grid is `lg:grid-cols-4`, so
+          twelve fills three full rows exactly — if this count changes again,
+          check the last row isn't left with a single orphan tile. */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
@@ -530,7 +619,7 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 8. Network Vision ── */}
+      {/* ── 9. Network Vision ── */}
       <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-5xl text-center">
           <AnimateIn direction="up">
@@ -562,7 +651,7 @@ export default function BLCNPage() {
         </div>
       </section>
 
-      {/* ── 9. CTA ── */}
+      {/* ── 10. CTA ── */}
       <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">

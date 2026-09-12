@@ -962,10 +962,23 @@ asked. If that matters, crop or blur that row rather than dropping the image.
   a colour-key or threshold approach leaves a plum fringe on the curves.
 - `pastor-fash.jpg` — 992×973, studio portrait of **Pastor Toluwalope Fash**,
   BLCN's Lead Pastor. Rendered in the "About BLCN" section of
-  `/churches/blcn` as an 80px credit line beside his name and role.
-  ⚠️ **It is a credit line, not a Leadership section, and that is deliberate**
-  — BLCN names one leader, and a card grid built for a single person reads as a
-  section waiting to be filled. BHCC has a grid because it lists two.
+  `/churches/blcn` in a **dedicated Leadership section** ("Meet the Pastor"),
+  matching BHCC's.
+  ⚠️ **It was an 80px credit line inside "About BLCN" until 12 September 2026**,
+  on the reasoning that a card built for one person reads as a section waiting
+  to be filled. The client asked for the dedicated section; that reasoning is
+  superseded, so don't reinstate the credit line.
+  ⚠️ **The BLCN section is DARK where BHCC's is light, and that is forced by the
+  page rather than chosen.** `/churches/blcn` alternates mid → light the whole
+  way down, so a section inserted between the light "About" and the mid
+  "Beliefs" must take a third treatment or stack against a neighbour with no
+  seam. It uses the standard dark card (`bg-white/[0.07]` + orange top rule),
+  and **Beliefs below it gained `border-t-2 border-brand-orange`** to seam
+  dark-against-mid — don't remove that while Leadership sits above it.
+  ⚠️ The role renders on `brand-orange-light`, where BHCC's is
+  `brand-orange-deep`: the light/dark accent split, not an inconsistency.
+  ⚠️ One leader, so it is a single `max-w-sm` centred card, not a grid. A
+  second leader means turning it into one.
   ⚠️ **Pastor Awe is deliberately not listed alongside him.** He is BLCN's
   founder and apostolic covering, which the About copy already states; a second
   "Lead Pastor" line beside the resident pastor reads as a shared pastorate. If
@@ -985,8 +998,9 @@ asked. If that matters, crop or blur that row rather than dropping the image.
   file is still `priority` on that page.
 
 ### `public/images/blcn/` — the BLCN photography (arrived 7 August 2026)
-23 real photographs of the congregation, client-supplied. **This is the first
-real congregation photography on the site**, and it retires the last stand-in on
+23 real photographs of the congregation, client-supplied; **15 remain** after
+the client's cull of 12 September 2026 (see below). This was the first real
+congregation photography on the site, and it retired the last stand-in on
 `/churches/blcn`.
 
 - **4 hero slides** (`blcn-hero-1.jpg` … `-4.jpg`, 2560×1696, q82) — the only
@@ -994,27 +1008,52 @@ real congregation photography on the site**, and it retires the last stand-in on
   ⚠️ **The names are single-digit, `-1` … `-4`, and only the gallery is
   zero-padded.** There is no `blcn-hero-04`, `-07` or `-10` and there never was;
   a request naming one is a request for a `blcn-gallery-NN` file.
-- **19 gallery images** (`blcn-gallery-01.jpg` … `-19.jpg`, 1800px long edge,
-  q80; 12 landscape 1800×1355, 7 portrait 1355×1800) — phone photographs, which
-  is why they are capped lower: they are never shown larger than a lightbox.
-  `blcn-gallery-01` is 1800×1192, the one Nikon frame that went to the gallery.
+- **Gallery images**, 1800px long edge, q80 — phone photographs, which is why
+  they are capped lower: they are never shown larger than a lightbox. Nineteen
+  arrived; **twelve remain**. `blcn-gallery-01` was 1800×1192, the one Nikon
+  frame that went to the gallery, and it is one of the deleted ones.
 
-⚠️ **The hero no longer runs the four Nikon frames — the client picked its own
-set on 8 August 2026.** `HeroSlideshow` on `/churches/blcn` now shows, in order,
-`blcn-gallery-08` → `blcn-hero-4` → `blcn-gallery-07` → `blcn-gallery-10`. Three
-of the four are therefore **1800px gallery sources on a full-bleed hero**, so
-they upscale ~1.4× at desktop. That is affordable for the one reason
-`apostle-key.jpg` records and no other — the slideshow's two scrims have taken
-the fine detail out before anyone sees it. **Don't reuse those three anywhere
-they would render unscrimmed at width.** `blcn-hero-1`, `-2` and `-3` are now
-unused by any page; they are kept on disk as the professionally-shot set.
+⚠️ **The client deleted seven gallery frames and `blcn-hero-2.jpg` on
+12 September 2026.** What survives is `blcn-gallery-05`, `-07`…`-11`,
+`-14`…`-19` (twelve), plus `blcn-hero-1`, `-3`, `-4`. Gone: `-01`, `-02`,
+`-03`, `-04`, `-06`, `-12`, `-13`.
+- ⚠️ **The survivors were NOT renumbered to close the gaps, deliberately.** The
+  client refers to individual pictures by these numbers ("rework the hero to
+  07, 09, 18"), so renumbering would silently repoint every such reference at a
+  different photograph. **A missing number is a deleted file, not a bug** —
+  don't tidy it.
+- The deletions are **not** in `/originals` either: that archive holds the BHCC
+  batch and the book artwork only. The BLCN camera originals were never kept
+  (see below), so these seven are gone for good. Re-supply is the only route
+  back.
+
+⚠️ **The hero runs three client-chosen gallery frames — reworked 12 September
+2026.** `HeroSlideshow` on `/churches/blcn` shows, in order, `blcn-gallery-07`
+→ `blcn-gallery-09` → `blcn-gallery-18`. It was four slides until then
+(`-08` → `blcn-hero-4` → `-07` → `-10`).
+- ⚠️ **No professionally-shot frame is in the hero any more.** `blcn-hero-1`,
+  `-3` and `-4` are now unused by any page — `-4` was the last one rendering.
+  They are kept on disk as the Nikon set and are the first place to look if a
+  sharper hero is ever wanted.
+- All three slides are therefore **1800px gallery sources on a full-bleed
+  hero**, so they upscale ~1.4× at desktop. Affordable for the one reason
+  `apostle-key.jpg` records and no other — the slideshow's two scrims have
+  taken the fine detail out before anyone sees it. **Don't reuse them anywhere
+  they would render unscrimmed at width.**
+- All three are also group photographs, where the old set opened on a preaching
+  frame. That is the client's choice, noted so it is not "corrected" later.
 
 ⚠️ **`object-position` is set per hero slide and is not optional.** A full-bleed
 hero on a phone shows barely a third of a 1.33 frame's width, so `object-center`
-drops the subject out of frame. The current values (`46%_30%`, `48%_38%`,
-`40%_34%`, `50%_36%`) are each read off the subject's face in that frame, so a
-change to the slide list means re-reading them — they do not travel with a file.
-The retired Nikon set used `48%_32%`, `60%_32%`, `50%_35%`, `48%_38%`.
+drops the subject out of frame. The current values are `40%_34%` (`-07`),
+`50%_36%` (`-09`) and `45%_32%` (`-18`). **They do not travel with a file**, so
+a change to the slide list means re-reading them: `-09` and `-18` were measured
+for this hero by simulating the `object-cover` crop at 1280×800 and 390×844,
+and `-07` kept the value it already had for this same hero. ⚠️ Note `-09` and
+`-18` reuse numbers that meant *nothing* in the old hero — the previous set's
+`50%_36%` belonged to `-10`, a different photograph. The retired four-slide set
+used `46%_30%`, `48%_38%`, `40%_34%`, `50%_36%`; the Nikon set before it used
+`48%_32%`, `60%_32%`, `50%_35%`, `48%_38%`.
 
 ⚠️ **The alt text names no one and dates nothing.** Nobody in these frames has
 been identified to us. Captions are the easiest place for an invented event or a
@@ -1045,6 +1084,19 @@ committing**, per the standing rule. Specifics worth keeping:
 services (**16 and 30 August 2026**). **This is the first real BHCC photography
 on the site** — but note it does **not** clear the BHCC hero placeholder on its
 own; see the hero warning below.
+
+They are rendered by the **"BHCC in Pictures"** gallery on `/churches/bhcc`,
+added 12 September 2026 — the same `ImageGallery` the BLCN gallery uses, so
+thumbnail sizing, `quality={65}`, the lightbox and the `(i % 4) * 0.1` stagger
+all come from that component and are not repeated per page.
+⚠️ **That section is mid-blue, where BLCN's gallery is light, and the slot is
+why.** `/churches/bhcc` runs mid → light → dark → light → mid → light to the
+CTA, so the only place a section could be added without restyling a neighbour
+is between the light "Services" and the CTA — and it has to be blue there,
+because a light band would stack against Services with no seam. The CTA already
+carries its own orange rule, so nothing else changed.
+⚠️ **It deliberately has no `border-t-2 border-brand-orange`**: the section
+above it is light and separates itself. That rule is for blue against blue.
 
 `bhcc-gallery-01.jpg` … `-11.jpg`, 1800px long edge, q80 — 10 portrait
 (1012×1800), 1 landscape (1800×1012). Numbered **chronologically** by the
@@ -1154,9 +1206,9 @@ alternation and lands the pictures just before the closing pair.
 - Grid is `grid-cols-2 sm:grid-cols-3 lg:grid-cols-4`, `aspect-[4/5]`
   thumbnails, `object-cover`, the standard `group-hover:scale-105`. Sharp
   corners, like every other image container.
-- ⚠️ **The stagger is `(i % 4) * 0.1`, not `i * 0.1`.** Nineteen tiles on a flat
-  index stagger would leave the last one invisible for nearly two seconds after
-  it had already scrolled into view. Four is the widest the grid gets, so this
+- ⚠️ **The stagger is `(i % 4) * 0.1`, not `i * 0.1`.** Nineteen tiles (twelve
+  now) on a flat index stagger would leave the last one invisible for nearly two
+  seconds after it had already scrolled into view. Four is the widest the grid gets, so this
   staggers one row and repeats. Second documented instance of the exception the
   `/events` programme grid records — it applies to **any** grid long enough for
   the accumulated delay to outrun the scroll.
