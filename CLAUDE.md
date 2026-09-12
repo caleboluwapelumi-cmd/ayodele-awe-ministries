@@ -1376,6 +1376,15 @@ for the BHCC leadership grid. `ChurchLeader.image` is left undefined for her, an
 `image` in `CHURCHES` — no page edit needed. Never point `image` at a stock photo
 of a stranger to fill the gap.
 
+⚠️ **She is NOT in the BHCC congregation photography** — confirmed by the client
+on 12 September 2026, after the 11 frames arrived and the missing portrait was
+queried against them. So the gallery is not a source for this, and there is no
+point going through it again looking for her. It needs a supplied portrait.
+⚠️ **Don't crop a leadership portrait out of a gallery frame in general.** The
+card is `aspect-[3/4]` beside Pastor Awe's studio portrait; a candid phone frame
+cropped to match reads as obviously different in the same grid row, and the
+frames in that set are mostly full-length.
+
 Live links (in `lib/constants.ts`):
 - `SOCIALS.spotify` — Spotify artist page
 - `SOCIALS.telegram` — Telegram channel
