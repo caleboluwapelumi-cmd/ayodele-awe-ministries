@@ -638,7 +638,9 @@ clean up: the dropdown entry is what replaced the three removed links, and
   He is married to **Iyanuoluwa** — the family line on `/about` is deliberately
   brief and mentions no children. Client-supplied; don't expand it.
 - **BHCC** = Building House Christian **Centre** — Norwich, UK. Use **British English** for all BHCC content. Founded 9 February 2025; led by Ayodele Oladapo Awe (Lead Pastor) and Iyanuoluwa Ayodele-Awe (Co-Pastor). The founding-story section on `/churches/bhcc` retells a testimony the client supplied — it is a real account of a trance at a 2023 end-of-year retreat, so keep it reverent and don't embellish it.
-- **BLCN** = Bethel Livingstone Christian Network (Nigeria) — standard English
+- **BLCN** = Bethel Livingstone Christian Network (Nigeria) — standard English.
+  Its resident **Lead Pastor is Toluwalope Fash**; Pastor Awe is BLCN's founder
+  and apostolic covering, not its pastor. See the `pastor-fash.jpg` entry.
 - **Key event:** Norwich Prayer Surge (UK) — **recurring**, last Saturday of every
   month, 10:00 AM–5:00 PM (7 hours), Norwich. Vision text is built on Isaiah 32:15
   ("until the Spirit is poured upon us from on high…"), quoted on `/events`. There
@@ -958,6 +960,21 @@ asked. If that matters, crop or blur that row rather than dropping the image.
   the ink box, then drive R/G/B to 255 across every pixel and leave alpha
   untouched. The alpha carries the glyph shape *and* its antialiased edges, so
   a colour-key or threshold approach leaves a plum fringe on the curves.
+- `pastor-fash.jpg` — 992×973, studio portrait of **Pastor Toluwalope Fash**,
+  BLCN's Lead Pastor. Rendered in the "About BLCN" section of
+  `/churches/blcn` as an 80px credit line beside his name and role.
+  ⚠️ **It is a credit line, not a Leadership section, and that is deliberate**
+  — BLCN names one leader, and a card grid built for a single person reads as a
+  section waiting to be filled. BHCC has a grid because it lists two.
+  ⚠️ **Pastor Awe is deliberately not listed alongside him.** He is BLCN's
+  founder and apostolic covering, which the About copy already states; a second
+  "Lead Pastor" line beside the resident pastor reads as a shared pastorate. If
+  the covering is ever wanted as a leadership entry, give it a role that says so
+  ("Founder & Apostolic Covering") — never a second "Lead Pastor". See the note
+  on `leadership` in `lib/constants.ts`.
+  ⚠️ Unlike the BLCN congregation photography, **this portrait names its
+  subject**, so the name and title must come from the client and not be guessed.
+  Both were confirmed 12 September 2026.
 - `blcn-logo.jpg` — 828×647, shofar emblem on a dark charcoal background (**not**
   transparent). Used **twice** on `/churches/blcn` — the crisp badge in the hero
   and the About panel — plus the BLCN card on `/churches`.

@@ -158,6 +158,21 @@ export const CHURCHES: Church[] = [
     ],
     email: "blcnglobal@gmail.com",
     logo: "/images/blcn-logo.jpg",
+    /**
+     * BLCN lists its resident Lead Pastor only. Pastor Awe is BLCN's founder
+     * and apostolic covering, but he is deliberately not repeated here: the
+     * /churches/blcn About copy already says the network was "birthed out of
+     * the apostolic mandate of Pastor Ayodele Oladapo Awe", and a second
+     * "Lead Pastor" line beside the resident pastor reads as a shared
+     * pastorate rather than a covering. BHCC lists him because he actually
+     * pastors that congregation.
+     * ⚠️ If the client wants the covering stated as a leadership entry, give
+     * it a role that says so ("Founder & Apostolic Covering"), never a
+     * second "Lead Pastor".
+     */
+    leadership: [
+      { name: "Toluwalope Fash", role: "Lead Pastor", image: "/images/pastor-fash.jpg" },
+    ],
     socials: BLCN_SOCIALS,
   },
 ];

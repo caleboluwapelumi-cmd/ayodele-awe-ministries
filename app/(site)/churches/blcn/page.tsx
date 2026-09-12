@@ -25,6 +25,14 @@ const BELIEFS = [
 
 const BLCN = CHURCHES.find((church) => church.acronym === "BLCN");
 
+/**
+ * BLCN names one leader, so this is a credit line inside the About section
+ * rather than a Leadership section of its own — a full card grid built for a
+ * single person reads as a section waiting to be filled. See the note on
+ * `leadership` in lib/constants.ts for why Pastor Awe is not listed here too.
+ */
+const BLCN_LEAD = BLCN?.leadership?.[0];
+
 const FOUNDATION = [
   {
     title: "Vision",
@@ -348,6 +356,28 @@ export default function BLCNPage() {
                 believers across Nigeria.
               </p>
             </div>
+
+            {BLCN_LEAD?.image && (
+              <div className="mt-10 flex items-center gap-5 border-t border-brand-blue/10 pt-8">
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden ring-1 ring-brand-blue/10">
+                  <Image
+                    src={BLCN_LEAD.image}
+                    alt={`${BLCN_LEAD.name}, ${BLCN_LEAD.role} of Bethel Livingstone Christian Network`}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <p className="font-serif text-lg font-bold leading-tight text-brand-blue">
+                    {BLCN_LEAD.name}
+                  </p>
+                  <p className="mt-1 font-sans text-xs uppercase tracking-widest text-brand-orange-deep">
+                    {BLCN_LEAD.role}
+                  </p>
+                </div>
+              </div>
+            )}
           </AnimateIn>
         </div>
       </section>
