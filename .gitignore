@@ -42,3 +42,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# client-supplied originals: camera files and print artwork, kept out of the
+# repo per the "downscale before committing" rule. Web renditions live in
+# public/images/. Archive these off-machine as well - they are the masters.
+/originals

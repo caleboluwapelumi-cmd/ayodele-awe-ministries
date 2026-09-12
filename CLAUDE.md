@@ -826,6 +826,28 @@ Real assets received (all in `public/images/`, all JPEG):
   `.jpeg` extension; every other image in the folder is `.jpg`. Used on
   `/books`, twice: as the `PageHero` background image and, crisp, in the book
   block below it.
+- **The second book — "Thriving in the Midst of Famine"** (subtitle "Biblical
+  Keys to Flourishing in Difficult Times", by Ayodele Oladapo Awe, published by
+  TABlink Digital Hub). Artwork arrived 12 September 2026, **for pre-order** —
+  it is not on sale yet, and there is no retailer URL for it. ⚠️ **Nothing
+  renders either file yet**; `/books` still shows only "Walking with the Holy
+  Spirit". Wiring it up needs a pre-order destination from the client.
+  - `thriving-book-mockup.jpg` — 2560×1659, the publisher's 3D hardcover render
+    (front + spine + back) on an olive-green ground. This is the **preview
+    image**. ⚠️ Its ground is a foreign brand colour and the artwork carries a
+    baked-in "Published By: TABlink Digital Hub" credit, so it is **not** a
+    `PageHero` backdrop — the Spotify-screenshot problem, and no scrim setting
+    fixes a credit line. Show it as a contained image on a plate.
+  - `thriving-book-cover.jpg` — 1156×1600 (0.723), the **flat front cover, cut
+    out of the mockup** at source rect 840,415 1755×2430 — the bottom edge found
+    by a vertical-gradient scan, not by eye. Use it in the `aspect-[2/3]` cover
+    slot the way `walking-with-the-holy-spirit.jpeg` is used.
+    ⚠️ **It is an interim file and should be replaced.** Being lifted from a
+    render it carries the mockup's linen texture overlay, its lighting gradient
+    and a sliver of page edge down the right. **Ask the client for the flat
+    cover artwork at print resolution** — they plainly have it, because
+    `THRIVING-BOOK-COVER_03.jpg` arrived alongside and is exactly that file, at
+    **207×320**. That thumbnail is unusable and is archived in `originals/`.
 - `telegram-hero.jpg` — 1435×898 **screenshot of the live Telegram channel**
   (channel header, a pinned audio post, the "Scent Of Water (Pt 1)" card).
   The `/media/teachings` `PageHero` background. Needs
@@ -1000,6 +1022,61 @@ committing**, per the standing rule. Specifics worth keeping:
   client to re-supply if a larger rendition is ever needed.
 - `sharp` was given `.rotate()` before resizing. Every file reported EXIF
   orientation 1 so it was a no-op, but never assume that of camera output.
+
+### `public/images/bhcc/` — the BHCC photography (arrived 12 September 2026)
+11 real photographs of the Norwich congregation, client-supplied, from two
+services (**16 and 30 August 2026**). **This is the first real BHCC photography
+on the site** — but note it does **not** clear the BHCC hero placeholder on its
+own; see the hero warning below.
+
+`bhcc-gallery-01.jpg` … `-11.jpg`, 1800px long edge, q80 — 10 portrait
+(1012×1800), 1 landscape (1800×1012). Numbered **chronologically** by the
+capture timestamp in the original filenames, so `-01`…`-08` are the 16 August
+service and `-09`…`-11` the 30 August one. Zero-padded, matching
+`blcn-gallery-NN`. 38 MB of camera originals → **3.5 MB**.
+
+⚠️ **They were colour-graded, and the grade is deliberately restrained.** These
+are phone photographs shot in a hired hall under mixed fluorescent light, so
+straight out of camera the indoor frames carry a yellow-green cast that reads as
+sallow skin. The pipeline, per image: **shades-of-grey white balance** (Minkowski
+p=6) damped to **55%** and gain-clamped to [0.88, 1.18], a brightness lift capped
+at **1.12** toward a mean of 118, contrast 1.07, saturation 1.06, then resize and
+`sigma: 0.7` sharpen.
+- ⚠️ **Grey-world white balance is wrong for this set and p=6 is the reason for
+  the choice.** Two frames are dominated by a single strong garment colour — a
+  maroon top (`-10`) and an orange top (`-09`) — and grey-world neutralises those
+  garments along with the cast, i.e. it changes what people were wearing.
+  Shades-of-grey at p=6 sits between grey-world and white-patch and leaves them
+  alone. Verified by before/after comparison, not by trusting the numbers.
+- ⚠️ **The 55% damping is not timidity.** A full correction flattens the warm
+  hall light that is genuinely part of these rooms. The cast is reduced, not
+  erased.
+- ⚠️ **Nothing was retouched in the content sense** — no blemish work, no object
+  or person removal, no compositing. Colour grading a photograph is honest;
+  altering what a photograph shows is exactly what the Content Integrity Notes
+  rule out on a ministry site. If the client asks for retouching, confirm they
+  mean tonal work and not "remove that person".
+
+⚠️ **Nobody in these frames has been identified to us, so any caption must name
+no one and date nothing** — the same rule the BLCN gallery runs under, and for
+the same reason. Describe only what is visible.
+
+⚠️ **Nine further frames arrived as 180×320 thumbnails and are unusable.**
+Google Photos hands out a preview at that size when a download does not complete;
+the files look real in a folder listing and are ~15 KB. Seven of the nine are
+frames that exist **nowhere else in the set** (a man with arms raised in worship,
+a woman holding an infant, two frames of a guest minister preaching, and three
+others); the remaining two are thumbnail duplicates of full-size files that did
+arrive with a ` (1)` suffix. **Ask the client to re-supply those seven at full
+size** — they cannot be recovered by upscaling. The thumbnails are kept in
+`originals/` as the reference for which frames to ask for.
+
+⚠️ **The originals are archived in `/originals`, which is gitignored** — camera
+files and the print artwork, kept out of the repo per the "downscale before
+committing" rule but **not deleted**, unlike the BLCN batch which is gone for
+good. That folder is not a backup: it exists on one machine. Archive it
+off-machine.
+
 - `awe-min-logo.png` — 1200×662 **transparent** ministry lockup: cross + arc +
   mountains beside a two-line "Ayodele Awe Ministries" wordmark, all white. Trimmed
   flush to the artwork, so all padding is the caller's job. Used in the Footer at
@@ -1190,10 +1267,22 @@ photograph of strangers. Cleared on 28 July 2026:
   labelled as nothing — they carried no claim about a church. They were removed
   later anyway, on performance grounds — see "Gradient placeholders" above.
 
-⚠️ **The BHCC hero is still awaiting a real congregation photograph** — it is on
-a gradient placeholder (see "Gradient placeholders"), and BLCN getting real
-photography on 7 August 2026 did nothing for it. **Do not port BLCN's treatment
-across in either of its forms:**
+⚠️ **The BHCC hero is still on a gradient placeholder, but it is no longer
+blocked** — BHCC's own photography arrived 12 September 2026 (see
+`public/images/bhcc/`), so the slot can now be filled honestly. Two things to
+know before doing it:
+
+- **Only `bhcc-gallery-05` is landscape** (1800×1012); the other ten are
+  1012×1800 portrait phone frames. A full-bleed hero crop of a portrait source
+  shows a narrow horizontal band of it, so each candidate needs its own
+  `imagePosition` read off the subject — the same per-slide rule the BLCN hero
+  records, and those values do not travel with a file.
+- **1800px is a gallery rendition, not a hero one.** It upscales ~1.4× at
+  desktop, affordable only because `PageHero`'s navy scrim has already taken the
+  detail out — the `apostle-key.jpg` trade. The camera originals are in
+  `/originals` if a larger rendition is wanted.
+
+**Do not port BLCN's treatment across in either of its forms:**
 
 - **Its photographs are of BLCN.** A BLCN frame behind a heading reading BHCC is
   the same failure as a stock photo there — see "No stock imagery stands for a
