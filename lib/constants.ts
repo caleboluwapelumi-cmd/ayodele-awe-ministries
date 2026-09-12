@@ -57,6 +57,67 @@ export const YOUTUBE_UPLOADS_PLAYLIST_ID: string | null = null;
 export const SELAR_BOOK_URL = "https://selar.com/f12uu6";
 export const AMAZON_BOOK_URL = "https://www.amazon.co.uk/dp/B0DMLXN64T";
 
+/**
+ * "Thriving in the Midst of Famine" — the second book, announced for pre-order.
+ *
+ * ⚠️ `null` means **no retailer link has been supplied yet**, and it is the one
+ * switch that turns pre-ordering on. While it is null, /books renders the book
+ * with a "Coming soon" badge and NO buy button, and the homepage highlight
+ * points at /books rather than at a retailer. Paste the real URL here and both
+ * places light up — no page edit.
+ *
+ * ⚠️ Do NOT substitute a stand-in destination while waiting. /contact and the
+ * newsletter both look like places to capture pre-order interest and neither
+ * is: `/api/contact` and `/api/newsletter` are still `console.log` stubs, so
+ * anything a visitor typed into them would be silently discarded. A button that
+ * looks like it registered a pre-order and didn't is worse than no button.
+ *
+ * ⚠️ And never a `tr.ee/…` URL — see the note on the two constants above.
+ */
+export const THRIVING_PREORDER_URL: string | null = null;
+
+/**
+ * The homepage's "What's New" band.
+ *
+ * A list so announcements can be added and removed without touching the page.
+ * Rendered as stacked rows, so one item reads as well as three.
+ *
+ * ⚠️ **No item may carry a date that has not been confirmed by the client.**
+ * `date` is optional precisely so an announcement can run without one — an
+ * invented launch date is the exact failure the Content Integrity Notes exist
+ * to prevent, and "we just need something there" is how it gets in. The book
+ * launch below has no date because none has been given.
+ *
+ * ⚠️ `href` is an internal route. These are announcements, not outbound links.
+ */
+export interface Highlight {
+  /** Small eyebrow above the title, e.g. "New book". */
+  label: string;
+  title: string;
+  blurb: string;
+  /** Optional thumbnail. Omit and the row renders text-only. */
+  image?: string;
+  imageAlt?: string;
+  /** Confirmed dates only. Omit when there isn't one. */
+  date?: string;
+  href: string;
+  cta: string;
+}
+
+export const HIGHLIGHTS: Highlight[] = [
+  {
+    label: "New book",
+    title: "Thriving in the Midst of Famine",
+    blurb:
+      "Biblical Keys to Flourishing in Difficult Times — the new book from Pastor Ayodele Oladapo Awe. Pre-order opening soon.",
+    image: "/images/thriving-book-cover.jpg",
+    imageAlt:
+      "Cover of Thriving in the Midst of Famine: Biblical Keys to Flourishing in Difficult Times by Ayodele Oladapo Awe",
+    href: "/books",
+    cta: "Read more",
+  },
+];
+
 export interface ServiceTime {
   day: string;
   time: string;

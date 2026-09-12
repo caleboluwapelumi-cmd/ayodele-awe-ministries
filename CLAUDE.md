@@ -831,9 +831,21 @@ Real assets received (all in `public/images/`, all JPEG):
 - **The second book — "Thriving in the Midst of Famine"** (subtitle "Biblical
   Keys to Flourishing in Difficult Times", by Ayodele Oladapo Awe, published by
   TABlink Digital Hub). Artwork arrived 12 September 2026, **for pre-order** —
-  it is not on sale yet, and there is no retailer URL for it. ⚠️ **Nothing
-  renders either file yet**; `/books` still shows only "Walking with the Holy
-  Spirit". Wiring it up needs a pre-order destination from the client.
+  it is not on sale yet, and there is no retailer URL for it.
+
+  **It renders in two places as of 12 September 2026**: it leads `/books` (a
+  "Coming soon" badge, the back-cover blurb, no buy button) and it is the sole
+  entry in the homepage's "What's New" band. ⚠️ **The one thing still missing is
+  the pre-order link** — see `THRIVING_PREORDER_URL` in `lib/constants.ts`,
+  which is `null` and is the single switch that turns the buy button on in both
+  places. Don't wire a stand-in destination: `/contact` and `/api/newsletter`
+  are both `console.log` stubs, so a CTA pointing at either would look like it
+  captured a pre-order and silently bin it.
+  - ⚠️ **The `/books` description is the publisher's own back-cover copy**,
+    transcribed from the "About the Book" panel on the back of the mockup —
+    not written to brief, so it needs no client sign-off the way the Prayer
+    Surge vision paragraphs do. It is readable in the 5000px master; the four
+    paragraphs used are a selection, and nothing was reworded.
   - `thriving-book-mockup.jpg` — 2560×1659, the publisher's 3D hardcover render
     (front + spine + back) on an olive-green ground. This is the **preview
     image**. ⚠️ Its ground is a foreign brand colour and the artwork carries a

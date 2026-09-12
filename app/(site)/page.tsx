@@ -8,7 +8,7 @@ import NewsletterForm from "@/components/NewsletterForm";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
-import { CHURCHES } from "@/lib/constants";
+import { CHURCHES, HIGHLIGHTS } from "@/lib/constants";
 import { PRAYER_SURGE, nextPrayerSurge } from "@/lib/prayer-surge";
 
 /**
@@ -41,7 +41,81 @@ export default function HomePage() {
       {/* ── 1. Hero ── */}
       <HeroSection />
 
-      {/* ── 2. About Snippet ── */}
+      {/* ── 2. What's New ──
+          The announcement band. Sits directly under the hero because that is
+          the whole point of it — a returning visitor should see what has
+          changed without scrolling into the page.
+
+          ⚠️ It is mid-blue with `border-t-2 border-brand-orange`, and both
+          halves of that matter. The hero above ends in a dark scrimmed
+          photograph, so a blue band beneath it has no seam of its own — this
+          is the same case every accent band on the site uses the orange rule
+          for. And it cannot be light: "About Snippet" directly below is light,
+          and two light gradients stacked have no seam either. Blue + rule is
+          the only treatment that separates from both neighbours.
+
+          ⚠️ The whole section is gated on HIGHLIGHTS being non-empty, so
+          emptying the array removes the band rather than leaving a heading
+          over nothing. An empty announcements strip is worse than none.
+
+          ⚠️ Rows, not a grid. One announcement in a 3-column grid reads as two
+          missing announcements; a full-width row reads as one piece of news.
+          See the note on HIGHLIGHTS in lib/constants.ts — in particular that
+          no item may carry an unconfirmed date. */}
+      {HIGHLIGHTS.length > 0 && (
+        <section className="border-t-2 border-brand-orange bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-20 sm:px-6 sm:py-24 lg:px-16">
+          <div className="mx-auto max-w-7xl">
+            <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+              <SectionLabel tone="dark">What&apos;s New</SectionLabel>
+              <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+                Latest from the Ministry
+              </h2>
+              <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
+            </AnimateIn>
+
+            <div className="mx-auto mt-14 max-w-4xl space-y-8">
+              {HIGHLIGHTS.map((item, i) => (
+                <AnimateIn key={item.title} delay={i * 0.1}>
+                  <div className="flex flex-col items-center gap-8 border-t-2 border-brand-orange bg-white/[0.07] p-8 sm:flex-row sm:items-start sm:p-10">
+                    {item.image && (
+                      <div className="relative aspect-[2/3] w-32 shrink-0 overflow-hidden shadow-xl sm:w-36">
+                        <Image
+                          src={item.image}
+                          alt={item.imageAlt ?? ""}
+                          fill
+                          sizes="144px"
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+
+                    <div className="text-center sm:text-left">
+                      {/* 12px uppercase label on a `bg-white/[0.07]` card, so
+                          it takes the light tone — `brand-orange` is 3.26:1
+                          against this card and needs 24px+ to be legitimate. */}
+                      <p className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-light">
+                        {item.label}
+                        {item.date ? ` · ${item.date}` : ""}
+                      </p>
+                      <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-white sm:text-2xl">
+                        {item.title}
+                      </h3>
+                      <p className="mb-6 font-sans text-base leading-relaxed text-white/70">
+                        {item.blurb}
+                      </p>
+                      <Button href={item.href} variant="outline" className="text-white">
+                        {item.cta}
+                      </Button>
+                    </div>
+                  </div>
+                </AnimateIn>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── 3. About Snippet ── */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
@@ -84,7 +158,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 3. Ministry Expressions ── */}
+      {/* ── 4. Ministry Expressions ── */}
       <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up">
@@ -114,7 +188,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 4. Upcoming Events ── */}
+      {/* ── 5. Upcoming Events ── */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up">
@@ -157,7 +231,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. Teachings & Music ── */}
+      {/* ── 6. Teachings & Music ── */}
       <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AnimateIn direction="up">
@@ -176,7 +250,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 6. Partners ── */}
+      {/* ── 7. Partners ── */}
       {/* The backdrop is a CSS gradient, not a photo. It was a decorative
           Unsplash image (aria-hidden) sitting under a black/70 scrim, so almost
           none of it survived to the eye — but every visitor still paid for a
@@ -202,7 +276,7 @@ export default function HomePage() {
         </AnimateIn>
       </section>
 
-      {/* ── 7. Newsletter ── */}
+      {/* ── 8. Newsletter ── */}
       <section className="bg-gradient-to-b from-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
           <SectionLabel tone="dark">Stay Connected</SectionLabel>
