@@ -5,6 +5,7 @@ import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
 import HeroAtmosphere from "@/components/HeroAtmosphere";
+import HeroSlideshow, { type HeroSlide } from "@/components/HeroSlideshow";
 import ImageGallery, { type GalleryImage } from "@/components/ImageGallery";
 import { CHURCHES } from "@/lib/constants";
 
@@ -20,6 +21,71 @@ const BELIEFS = [
 ];
 
 const BHCC = CHURCHES.find((church) => church.acronym === "BHCC");
+
+/**
+ * The hero slideshow — three of BHCC's own congregation photographs.
+ *
+ * ⚠️ This hero was a gradient placeholder until 12 September 2026, and the
+ * placeholder was not an unfinished section: it replaced a stock church
+ * interior, and a photograph of strangers behind a heading that names BHCC
+ * is read as a photograph *of* BHCC — exactly what "No stock imagery stands
+ * for a church" rules out. BLCN's photography could not stand in either, for
+ * the same reason in reverse: it is a different congregation. Only BHCC's
+ * own frames could fill this slot honestly, so it stayed empty until they
+ * arrived.
+ *
+ * ⚠️ `-05` leads because it is the ONLY landscape frame in the set (1800×1012
+ * against ten 1012×1800 portraits), so it is the one slide that never
+ * upscales meaningfully — it downscales at 1280 wide and runs ~1.07× at
+ * 1920. That matters because slide 0 is the LCP element. The two portrait
+ * slides run ~1.26× at 1280 and ~1.9× at 1920, affordable here for the one
+ * reason `apostle-key.jpg` records and no other: the slideshow's two scrims
+ * have taken the fine detail out before anyone sees it. Don't reuse these
+ * files anywhere they would render unscrimmed at width.
+ *
+ * ⚠️ Every `position` was measured by simulating the `object-cover` crop, not
+ * chosen by eye, and they do NOT travel with a file — changing the slide list
+ * means re-measuring. A full-bleed hero shows only **35.2%** of a 1012×1800
+ * source's height at 1280×800, so `object-center` puts the window at source
+ * rows 584–1217 and decapitates both portrait frames. Checked at 1280×800,
+ * 390×844 and 2560×1080:
+ *
+ *   -05  42%/45%  Landscape, so the vertical half is inert until the viewport
+ *                 is wider than ~1.78:1; 45% then keeps the whole family in
+ *                 frame on an ultrawide. 42% rather than centre because at
+ *                 390px only 26% of the width is visible and a centred crop
+ *                 slices the man on the left in half.
+ *   -11  50%/15%  Portrait; 15% clears the top of her head and holds both
+ *                 raised hands. Centre lands on her waist.
+ *   -07  50%/34%  Portrait; 34% holds all four faces with headroom.
+ *
+ * ⚠️ Pace is left at `HeroSlideshow`'s 6000/1000 default. BLCN's 980/420 is
+ * that page's own override at the client's request — it is not the shared
+ * church-page treatment, so it is not copied here.
+ *
+ * ⚠️ These carry real `alt` text and are exposed to screen readers, as BLCN's
+ * are: they are the congregation this page is about, not decoration behind a
+ * heading that already names it. `HeroSlideshow` announces only whichever
+ * slide is on screen. As everywhere in this folder the captions name nobody
+ * and date nothing — see the note on GALLERY below.
+ */
+const HERO_SLIDES: HeroSlide[] = [
+  {
+    src: "/images/bhcc/bhcc-gallery-05.jpg",
+    position: "object-[42%_45%]",
+    alt: "The BHCC family photographed together outside the centre after a service",
+  },
+  {
+    src: "/images/bhcc/bhcc-gallery-11.jpg",
+    position: "object-[50%_15%]",
+    alt: "Hands raised in worship at a BHCC service",
+  },
+  {
+    src: "/images/bhcc/bhcc-gallery-07.jpg",
+    position: "object-[50%_34%]",
+    alt: "Members of the BHCC family, young and old, gathered outside after a service",
+  },
+];
 
 /**
  * BHCC's own congregation photography, from two services in August 2026.
@@ -73,19 +139,16 @@ export default function BHCCPage() {
   return (
     <>
       {/* ── 1. Hero ── */}
-      {/* ⚠️ STILL PENDING a real photograph of the BHCC congregation — this is a
-          gradient placeholder, not the finished hero. It replaced a stock church
-          interior: that image was `priority`, so it blocked LCP, and a stock
-          photo behind a heading that names BHCC is read as a photo *of* BHCC,
-          which "No stock imagery stands for a church" rules out. A gradient
-          claims nothing. Swap in the real photo when the client supplies it. */}
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-brand-navy/50"
-        />
-        {/* The shared hero glow. This hero builds its own gradient rather than
-            using `PageHero`, so it opts in by hand. No particles — the dot
+      <section className="relative flex min-h-screen items-center overflow-hidden">
+        {/* BHCC's own congregation photography, crossfading — the same
+            component BLCN and the homepage use, so the deferred mount of the
+            later slides and the 44px dot targets come with it, and both
+            scrims are the slideshow's own. This replaced the gradient
+            placeholder that stood here while BHCC had no photography of its
+            own; see HERO_SLIDES for why nothing else could fill the slot. */}
+        <HeroSlideshow slides={HERO_SLIDES} />
+        {/* The shared hero glow, over the slideshow's scrims so it tints
+            rather than being washed out by them. No particles — the dot
             field is kept to the homepage, /events and /ministry. */}
         <HeroAtmosphere />
 

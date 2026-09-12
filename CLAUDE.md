@@ -469,7 +469,8 @@ components/
                             and nothing stateful was left. It owns the SLIDES
                             table, the copy and the CTAs, nothing else
   HeroSlideshow.tsx       ← 'use client' — the crossfading hero backdrop, shared
-                            by `HeroSection` and `/churches/blcn`. Slides stacked
+                            by `HeroSection`, `/churches/blcn` and
+                            `/churches/bhcc`. Slides stacked
                             absolutely, opacity-only transition, clickable dots,
                             **and both scrims** (`bg-black/60` +
                             the navy wash) — a hero photo is never shown
@@ -1094,8 +1095,9 @@ committing**, per the standing rule. Specifics worth keeping:
 ### `public/images/bhcc/` — the BHCC photography (arrived 12 September 2026)
 11 real photographs of the Norwich congregation, client-supplied, from two
 services (**16 and 30 August 2026**). **This is the first real BHCC photography
-on the site** — but note it does **not** clear the BHCC hero placeholder on its
-own; see the hero warning below.
+on the site**, and as of 12 September 2026 it carries both the gallery and the
+hero — see "The `/churches/bhcc` hero" below for the three frames the hero
+uses and why each `object-position` is what it is.
 
 They are rendered by the **"BHCC in Pictures"** gallery on `/churches/bhcc`,
 added 12 September 2026 — the same `ImageGallery` the BLCN gallery uses, so
@@ -1255,13 +1257,17 @@ gradients — see "Gradient placeholders" below for the list and the reasoning.
 
 Still pending real photography from the client — now on **gradient
 placeholders**, not stock photos:
-- The `/churches/bhcc` hero background (see below for why neither the logo nor
-  BLCN's photography can stand in for it).
 - The Norwich Prayer Surge banner, on `/events` and in the `/` event card.
 
 ⚠️ **`/churches/blcn` is no longer on this list** — its 23 real congregation
 photographs arrived 7 August 2026 and carry both the hero and a new gallery
 section. See `public/images/blcn/` below.
+
+⚠️ **`/churches/bhcc` came off this list on 12 September 2026.** Its hero was
+the last gradient placeholder standing for a church, and it now runs three of
+BHCC's own congregation photographs through `HeroSlideshow` — see "The
+`/churches/bhcc` hero" below. The Prayer Surge banner is now the only
+photography placeholder left on the site.
 
 ### Gradient placeholders (replaced Unsplash, 2 August 2026)
 All seven were `aria-hidden` decorative backdrops under heavy scrims, or — worse
@@ -1273,7 +1279,7 @@ for imagery the scrim had already all but erased. They are now pure CSS:
 |---|---|---|
 | `/` partnership band | `photo-1529156069898…` | the standard dark gradient + a cross gradient |
 | `/partners` hero | `photo-1529156069898…` (`priority`) | standard dark hero + navy wash |
-| `/churches/bhcc` hero | `photo-1438232992991…` (`priority`) | standard dark hero + navy wash |
+| `/churches/bhcc` hero | `photo-1438232992991…` (`priority`) | standard dark hero + navy wash — **superseded 12 Sep 2026**, now BHCC's own photography |
 | `/about` mandate | `photo-1500530855697…` | standard dark hero + navy wash |
 | `/events` featured | `photo-1524368535928…` | dark hero gradient + `awe-min-mark.png` at `opacity-25` |
 | `/` event card | same, via `EventCard imageUrl` | `EventCard`'s no-image branch |
@@ -1348,33 +1354,47 @@ photograph of strangers. Cleared on 28 July 2026:
   labelled as nothing — they carried no claim about a church. They were removed
   later anyway, on performance grounds — see "Gradient placeholders" above.
 
-⚠️ **The BHCC hero is still on a gradient placeholder, but it is no longer
-blocked** — BHCC's own photography arrived 12 September 2026 (see
-`public/images/bhcc/`), so the slot can now be filled honestly. Two things to
-know before doing it:
+### The `/churches/bhcc` hero (filled 12 September 2026)
+It ran on a gradient placeholder from 2 August 2026 until BHCC's own
+photography arrived, and it was the **last** church hero standing on one. It
+now renders `HeroSlideshow` with three of BHCC's own frames, which makes the
+two church pages structurally identical: same component, same two scrims, the
+same `HeroAtmosphere` glow over the top, same badge-and-acronym block.
 
-- **Only `bhcc-gallery-05` is landscape** (1800×1012); the other ten are
-  1012×1800 portrait phone frames. A full-bleed hero crop of a portrait source
-  shows a narrow horizontal band of it, so each candidate needs its own
-  `imagePosition` read off the subject — the same per-slide rule the BLCN hero
-  records, and those values do not travel with a file.
-- **1800px is a gallery rendition, not a hero one.** It upscales ~1.4× at
-  desktop, affordable only because `PageHero`'s navy scrim has already taken the
-  detail out — the `apostle-key.jpg` trade. The camera originals are in
-  `/originals` if a larger rendition is wanted.
+- **Slides, in order:** `bhcc-gallery-05` (`object-[42%_45%]`) →
+  `bhcc-gallery-11` (`object-[50%_15%]`) → `bhcc-gallery-07`
+  (`object-[50%_34%]`). The table and the per-slide reasoning live in
+  `HERO_SLIDES` in the page.
+- ⚠️ **`-05` leads because it is the ONLY landscape frame in the set**
+  (1800×1012 against ten 1012×1800 portraits), so it is the one slide that
+  never upscales meaningfully — it downscales at 1280 wide and runs ~1.07× at
+  1920. Slide 0 is the LCP element, so that is where it matters. The two
+  portrait slides run ~1.26× at 1280 and ~1.9× at 1920, affordable only for
+  the `apostle-key.jpg` reason: the two scrims have taken the detail out
+  first. Don't reuse them anywhere they would render unscrimmed at width.
+- ⚠️ **Every `object-position` was measured by simulating the `object-cover`
+  crop, never chosen by eye, and they do not travel with a file.** A
+  full-bleed hero shows only **35.2%** of a 1012×1800 source's height at
+  1280×800 — `object-center` puts the window at source rows 584–1217 and
+  decapitates both portrait frames. Changing the slide list means
+  re-measuring.
+- **Pace is left at the 6000/1000 default.** BLCN's 980/420 is that page's own
+  override at the client's request; it is not the shared church-page
+  treatment.
+- Verified in headless Chrome against the production build: zero horizontal
+  overflow at 390px, the deferral holds (the built HTML emits one hero `<img>`
+  and one preload, both `-05`), and the dots advance 0→1→2 on the 6s timer.
 
-**Do not port BLCN's treatment across in either of its forms:**
+⚠️ **BLCN's treatment was never portable here, in either of its forms** — kept
+because it explains why this slot stayed empty as long as it did:
 
-- **Its photographs are of BLCN.** A BLCN frame behind a heading reading BHCC is
-  the same failure as a stock photo there — see "No stock imagery stands for a
-  church".
-- **The blurred-emblem backdrop BLCN used to have was never portable either**,
-  and this is the original note kept because the reasoning still applies if
-  anyone reaches for it: `blcn-logo.jpg` blurred into usable dark texture
-  because that emblem sits on near-black. BHCC's mark is on white — blurred
-  full-bleed it washes to a flat grey field under the same scrim, losing both
-  the artwork and the imagery. A washed-out blurred mark is not an improvement
-  on the gradient.
+- **BLCN's photographs are of BLCN.** A BLCN frame behind a heading reading
+  BHCC is the same failure as a stock photo there — see "No stock imagery
+  stands for a church". Only BHCC's own frames could ever have filled it.
+- **The blurred-emblem backdrop BLCN used to have was not portable either:**
+  `blcn-logo.jpg` blurred into usable dark texture because that emblem sits on
+  near-black. BHCC's mark is on white — blurred full-bleed it washes to a flat
+  grey field under the same scrim, losing both the artwork and the imagery.
 
 ⚠️ **The ministry logo master is lost.** Only the 1200×662 derivative survives (see
 the filename warning above). Ask the client to re-supply the original if a larger
@@ -2075,9 +2095,9 @@ that is the whole mechanism, and hinting at the loader cannot substitute for it.
 
 ⚠️ **This lives in `HeroSlideshow` now, not `HeroSection`** — it moved there on
 7 August 2026 when `/churches/blcn` took real photography and needed the same
-crossfade. That page has **four** slides, so the saving is larger there than on
-the homepage. Verified against the built HTML for both routes: the only hero
-`<img>`/preload emitted is slide 1 (`apostle-1.jpg`, `blcn-gallery-08.jpg`).
+crossfade. `/churches/bhcc` joined them on 12 September 2026. Verified against
+the built HTML for all three routes: the only hero `<img>`/preload emitted is
+slide 1 (`apostle-1.jpg`, `blcn-gallery-07.jpg`, `bhcc-gallery-05.jpg`).
 
 ### ⚠️ Slideshow pace: `intervalMs` and `fadeMs` are one setting, not two
 `HeroSlideshow` takes both, defaulting to **6000ms / 1000ms**. The homepage
