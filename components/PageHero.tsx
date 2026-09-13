@@ -154,8 +154,22 @@ export default function PageHero({
       {particles && <DriftingParticles density="sparse" />}
 
       <AnimateIn direction="up" className="relative z-10 mx-auto max-w-3xl">
+        {/* ⚠️ A photo-backed hero takes the `photo` tone automatically, and
+            that is deliberately decided here rather than at the call sites:
+            the thing that makes this label fail AA is the photograph, so the
+            switch belongs wherever the photograph is switched on. Behind
+            `imageScrim="soft"` — /media/teachings, the one thin scrim on the
+            site — the plain dark tone measured 4.00:1 at 390px. The
+            near-opaque `default` and `brand` scrims were passing, but only
+            just (4.52:1 on /books), and every one of those photographs is
+            swappable. See SectionLabel for the measurement behind the
+            backing. */}
         {label && (
-          <SectionLabel tone={dark ? "dark" : "light"}>{label}</SectionLabel>
+          <SectionLabel
+            tone={backgroundImage ? "photo" : dark ? "dark" : "light"}
+          >
+            {label}
+          </SectionLabel>
         )}
         <h1
           className={`font-serif text-4xl font-bold leading-tight tracking-tight sm:text-6xl ${

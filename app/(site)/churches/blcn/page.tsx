@@ -253,7 +253,9 @@ export default function BLCNPage() {
                 />
               </div>
             </div>
-            <SectionLabel tone="dark">Nigeria</SectionLabel>
+            {/* `photo`, not `dark`: this label sits on a photograph, where the
+                dark tone measured 3.09:1. See SectionLabel. */}
+            <SectionLabel tone="photo">Nigeria</SectionLabel>
             <h1 className="font-serif text-4xl font-bold leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
               <span className="hero-shimmer">
                 Bethel Livingstone Christian Network

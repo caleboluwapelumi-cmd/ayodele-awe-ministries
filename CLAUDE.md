@@ -181,7 +181,7 @@ hover effects still fire.
 - All headings: `font-serif` (→ Clash Display), `leading-tight`
 - `h1`: `font-serif font-bold tracking-tight` — 700 is the heaviest weight the font ships
 - `h2`/`h3`: `font-serif font-bold` — **never** `font-medium` or lighter on a heading
-- Section labels above headings: use `components/SectionLabel.tsx` (`font-sans text-xs font-semibold uppercase tracking-[0.2em]`), `tone="light"` on light sections, `tone="dark"` on dark. Two tones, not five — `onAccent` went with the wine bands and the `bdayDark`/`bdayLight` pair merged into the standard split. See the three-oranges table above for why each tone takes a different orange
+- Section labels above headings: use `components/SectionLabel.tsx` (`font-sans text-xs font-semibold uppercase tracking-[0.2em]`), `tone="light"` on light sections, `tone="dark"` on dark, `tone="photo"` over a **photograph**. Three tones — the first two are colours, the third is a backing; see "The section label over photography" below. `onAccent` went with the wine bands and the `bdayDark`/`bdayLight` pair merged into the standard dark/light split. See the three-oranges table above for why each tone takes a different orange
 - Body copy: `font-sans text-base sm:text-lg leading-relaxed`
 - Body text on dark: `text-white/70` · on light: `text-muted`
 - Heading size scale — h1 (page hero): `text-4xl sm:text-6xl`; h1 (full-screen hero): `text-5xl sm:text-7xl md:text-8xl`; h2: `text-3xl sm:text-4xl md:text-5xl`
@@ -343,6 +343,58 @@ for orange as text. `/churches/blcn`'s network stats and the BHCC/BLCN hero
 acronyms are the only other places orange runs as type; everything smaller on a
 dark ground takes `brand-orange-light`.
 
+### The section label over photography (fixed 13 September 2026)
+A hero eyebrow on a **photograph** takes `SectionLabel tone="photo"`, which
+renders the label in a bordered chip — `bg-brand-navy/70`, a hairline
+`border-brand-orange/25`, `px-3 py-1.5`, sharp corners — rather than as bare
+`brand-orange-light` text. It was failing AA on every photo hero on the site.
+
+⚠️ **This was the smallest text on those heroes and the only thing failing.**
+The h1 and the body copy were always fine (the h1 measures 11.8:1 behind the
+`soft` scrim). The label fails where they don't because it is 12px — so it
+needs the full 4.5:1, not the 3:1 that large text gets — **and** it takes the
+lighter of the two oranges. Measured worst-case ground behind the glyphs,
+before the fix:
+
+| Hero | Was | Now |
+|---|---|---|
+| `/churches/bhcc` | **2.77:1** | 6.28:1 |
+| `/churches/blcn` | **3.09:1** | 6.35:1 |
+| `/` (`HeroSection`) | **3.36:1** | 6.53:1 |
+| `/media/teachings` (`soft` scrim) | **4.00:1** | 7.41:1 |
+| `/about`, `/books`, `/media/music` | 4.52–5.9:1 (passing, thin) | 6.97–7.5:1 |
+
+Swept at **1280×800, 390×844 and 2560×1080**, and on the slideshow heroes
+**every slide in the rotation**, not just the leading one — 24 measurements
+across the three, all of which now pass. Worst figure anywhere after the fix:
+**6.28:1** against the ground directly behind the glyphs, or **4.74:1** on the
+conservative reading that counts the chip’s own border pixels as ground.
+
+⚠️ **It is a backing rather than a heavier scrim because the photograph is not
+ours to rely on.** Every hero photo here is swappable — the client replaced the
+BLCN hero set once already and the Prayer Surge banner is still pending — so a
+scrim tuned to the frames in the repo today silently fails the day a brighter
+one lands. A backing makes the ground behind the glyphs a constant.
+
+⚠️ **`bg-brand-navy/70` is measured, not taste.** The brightest ground a photo
+hero can physically produce is a pure-white pixel under the slideshow’s
+`bg-black/60` and then the full-strength orange glow — rgb(142,101,87). Navy at
+70% over *that* is **6.06:1**, so the chip clears AA against any photograph
+whatsoever. Don’t thin it below ~0.55 (4.72:1 at that ceiling) and don’t swap
+the navy for a lighter blue.
+
+⚠️ **The rule is mechanical: over a photograph `photo`, over a gradient `dark`
+or `light`.** `PageHero` applies it **automatically** whenever `backgroundImage`
+is set — the switch lives where the photograph is switched on — so only the
+three hand-built slideshow heroes (`HeroSection`, `/churches/bhcc`,
+`/churches/blcn`) pass `tone="photo"` explicitly. A label on a plain gradient
+was never in trouble (6.3:1 on flat `brand-blue`) and must **not** get a chip;
+`/partners` is the check for that, and it still measures 5.15–5.43:1 untouched.
+
+⚠️ **Don’t make the chip a pill.** It is the bordered-badge idiom already used
+on `/books`, `/media`, `/media/music` and `MediaLinks`. Pills are `Button`s on
+this site, and an inert pill beside a real CTA reads as a broken control.
+
 ### ⚠️ Layer order: the glow sits ABOVE the scrims
 On any hero with a photo or a flat wash (`HeroSection`, `/churches/blcn`,
 `PageHero` with `backgroundImage`) `HeroAtmosphere` renders **after** the scrim
@@ -420,7 +472,11 @@ components/
   AnimateIn.tsx           ← 'use client' — Framer Motion scroll reveal. Props: direction 'up'|'left'|'right'|'fade', delay, className
   Button.tsx              ← THE button. Variants: primary | secondary | outline.
                             Sizes: default | lg
-  SectionLabel.tsx        ← The small-caps eyebrow above every heading. tone: dark | light
+  SectionLabel.tsx        ← The small-caps eyebrow above every heading.
+                            tone: dark | light | photo. The first two are
+                            colours; `photo` is a navy backing chip for a label
+                            sitting on a photograph, where the bare tone failed
+                            AA — see "The section label over photography"
   PageHero.tsx            ← Shared hero for all inner pages. variant: dark | light.
                             Optional `backgroundImage` (+ `imageAlt`,
                             `imagePosition`, `imageScrim`) puts a photo behind

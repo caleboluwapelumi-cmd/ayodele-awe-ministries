@@ -47,7 +47,10 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
         <AnimateIn direction="up" className="max-w-3xl">
-          <SectionLabel tone="dark">
+          {/* `photo`, not `dark`: this label sits on the slideshow, where the
+              dark tone measured 3.36:1 on slide 2 and 4.33:1 on slide 1 at
+              2560px. See SectionLabel. */}
+          <SectionLabel tone="photo">
             Pastor &mdash; UK &amp; Nigeria
           </SectionLabel>
 
