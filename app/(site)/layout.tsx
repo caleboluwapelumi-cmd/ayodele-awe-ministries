@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PointerEffects from "@/components/PointerEffects";
 
 /**
  * Chrome for the main site. Everything under `app/(site)/` gets the Navbar and
@@ -21,6 +22,9 @@ export default function SiteLayout({
       <Navbar />
       <main className="pt-[72px] lg:pt-0">{children}</main>
       <Footer />
+      {/* Magnetic buttons + cursor glow. Desktop only; renders one empty div
+          on touch screens and under reduced motion. */}
+      <PointerEffects />
     </>
   );
 }

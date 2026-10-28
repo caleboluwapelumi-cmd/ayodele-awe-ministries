@@ -3,6 +3,8 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import SectionPhoto from "@/components/SectionPhoto";
+import RevealImage from "@/components/RevealImage";
 import {
   MINISTRY_PROGRAMMES,
   type ProgrammeCategory,
@@ -58,64 +60,108 @@ export default function MinistryPage() {
         particles
       />
 
-      {/* ── 2. The Three Expressions ── */}
+      {/* ── 2. The Three Expressions ──
+          An editorial index, not a card grid. Each expression is a full-width
+          row — big numeral, title, then the prose and its programme tags —
+          and the rows step in from the left one column at a time on wide
+          screens, so the eye walks down a diagonal instead of across three
+          equal boxes. On a phone the stagger flattens and the rows stack.
+
+          The numerals are `brand-orange` on a light ground (3.3:1), which is
+          legitimate only as display type; they are 72px+ and aria-hidden — the
+          `h2` carries the meaning. */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <ol>
             {EXPRESSIONS.map((card, i) => {
               const programmes = MINISTRY_PROGRAMMES.filter(
                 (p) => p.category === card.category,
               );
+              const indent = ["", "lg:ml-[8.333%]", "lg:ml-[16.666%]"][i] ?? "";
 
               return (
-                <AnimateIn key={card.title} delay={i * 0.1} className="h-full">
-                  <div className="flex h-full flex-col border-t-2 border-brand-orange bg-white p-8">
-                    <span className="mb-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-deep">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <h2 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-blue sm:text-2xl">
-                      {card.title}
-                    </h2>
-                    <p className="font-sans text-base leading-relaxed text-muted">
-                      {card.desc}
-                    </p>
+                <li key={card.title} className={`border-t border-brand-orange/30 py-12 sm:py-16 ${indent}`}>
+                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-10">
+                    <AnimateIn direction="up" className="lg:col-span-2">
+                      <span
+                        aria-hidden
+                        className="block font-serif text-7xl font-bold leading-none text-brand-orange sm:text-8xl"
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </AnimateIn>
 
-                    {/* Scannable index of the named programmes behind the prose */}
-                    <ul className="mt-8 flex flex-wrap gap-2 border-t border-brand-orange/20 pt-6">
-                      {programmes.map((p) => (
-                        <li
-                          key={p.name}
-                          className="border border-brand-orange/40 px-3 py-1 font-sans text-xs text-muted"
-                        >
-                          {p.acronym ? `${p.name} (${p.acronym})` : p.name}
-                        </li>
-                      ))}
-                    </ul>
+                    <AnimateIn direction="up" delay={0.1} className="lg:col-span-4">
+                      <h2 className="font-serif text-2xl font-bold leading-tight text-brand-blue sm:text-3xl">
+                        {card.title}
+                      </h2>
+                    </AnimateIn>
+
+                    <AnimateIn direction="up" delay={0.2} className="lg:col-span-6">
+                      <p className="font-sans text-base leading-relaxed text-muted sm:text-lg">
+                        {card.desc}
+                      </p>
+
+                      {/* Scannable index of the named programmes behind the prose */}
+                      <ul className="mt-8 flex flex-wrap gap-2">
+                        {programmes.map((p) => (
+                          <li
+                            key={p.name}
+                            className="border border-brand-orange/40 bg-white px-3 py-1 font-sans text-xs text-muted"
+                          >
+                            {p.acronym ? `${p.name} (${p.acronym})` : p.name}
+                          </li>
+                        ))}
+                      </ul>
+                    </AnimateIn>
                   </div>
-                </AnimateIn>
+                </li>
               );
             })}
-          </div>
+          </ol>
         </div>
       </section>
 
-      {/* ── 3. The Vision Behind It ── */}
+      {/* ── 3. The Vision Behind It ──
+          Overlapping image and text: a wide photograph across most of the row,
+          with the vision copy on a navy plate laid over its right-hand edge.
+          On a phone the plate rides up over the foot of the image. The plate
+          is near-opaque navy, so its text measures against navy, not the
+          photograph — the same reasoning as SectionLabel's `photo` tone. */}
       <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
-          <SectionLabel tone="dark">The Vision</SectionLabel>
-          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-            One Burden, Three Expressions
-          </h2>
-          <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
-          <p className="font-sans text-base leading-relaxed text-white/70 sm:text-lg">
-            {EXPRESSIONS_CLOSING}
-          </p>
-        </AnimateIn>
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center lg:grid-cols-12">
+          <div className="lg:col-span-8 lg:col-start-1 lg:row-start-1">
+            <RevealImage
+              src="/images/apostle-1.jpg"
+              alt="Pastor Ayodele Oladapo Awe preaching"
+              sizes="(min-width: 1024px) 66vw, 100vw"
+              className="group aspect-[4/3] w-full sm:aspect-[16/10]"
+              imageClassName="object-[62%_40%]"
+            />
+          </div>
+
+          <AnimateIn
+            direction="right"
+            className="relative z-10 mx-3 -mt-20 sm:mx-10 lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:mx-0 lg:mt-0"
+          >
+            <div className="border-t-2 border-brand-orange bg-brand-navy/95 p-8 shadow-2xl backdrop-blur-sm sm:p-12">
+              <SectionLabel tone="dark">The Vision</SectionLabel>
+              <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl">
+                One Burden, Three Expressions
+              </h2>
+              <div className="mb-8 h-0.5 w-16 bg-brand-orange" />
+              <p className="font-sans text-base leading-relaxed text-white/75 sm:text-lg">
+                {EXPRESSIONS_CLOSING}
+              </p>
+            </div>
+          </AnimateIn>
+        </div>
       </section>
 
       {/* ── 4. CTA Banner ── */}
-      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+      <section className="relative isolate overflow-hidden border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <SectionPhoto src="/images/apostle-2.jpg" position="object-[30%_25%]" />
+        <AnimateIn direction="up" className="relative z-10 mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Invite Pastor Awe
           </h2>

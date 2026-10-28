@@ -4,8 +4,8 @@ import { MapPin } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
-import HeroAtmosphere from "@/components/HeroAtmosphere";
-import HeroSlideshow, { type HeroSlide } from "@/components/HeroSlideshow";
+import ChurchHero from "@/components/ChurchHero";
+import { type HeroSlide } from "@/components/HeroSlideshow";
 import ImageGallery, { type GalleryImage } from "@/components/ImageGallery";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
@@ -209,73 +209,29 @@ const GALLERY: GalleryImage[] = [
 export default function BLCNPage() {
   return (
     <>
-      {/* ── 1. Hero ── */}
-      <section className="relative flex min-h-screen items-center overflow-hidden">
-        {/* Real photographs of the congregation, crossfading — the same
-            component the homepage hero uses, so the deferred mount of slides
-            2-4 and the 44px dot targets come with it. Both scrims are the
-            slideshow's own. See HERO_SLIDES for why the blurred emblem this
-            replaced is gone.
+      {/* ── 1. Hero ──
+          The shared church hero: masthead top-left, BLCN's own photography
+          under a directional scrim, copy bottom-left. See ChurchHero.
 
-            ⚠️ The fast pace is THIS page only, which is why it is passed here
-            rather than changed in the component: `HeroSlideshow` is shared
-            with the homepage, whose hero is left at the 6s default.
-
-            ⚠️ `fadeMs` is not free to leave at its 1000ms default alongside a
-            980ms interval — the fade would outlast the slide it belongs to and
-            every image would start appearing before the last had gone, so the
-            stack would never settle on one photograph. 420ms holds each frame
-            clear for ~560ms and then moves, which reads as quick rather than
-            as a blur. */}
-        <HeroSlideshow slides={HERO_SLIDES} intervalMs={980} fadeMs={420} />
-        {/* The shared hero glow, over the slideshow's scrims so it tints rather
-            than being washed out by them. No particles — the dot field is kept
-            to the homepage, /events and /ministry. */}
-        <HeroAtmosphere />
-
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
-          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
-            <div className="relative mx-auto mb-10 h-40 w-40 sm:h-48 sm:w-48">
-              {/* Soft glow — the logo's own backdrop is near-black, so it needs
-                  separation from the dark hero behind it */}
-              <div
-                aria-hidden
-                className="absolute -inset-10 bg-[radial-gradient(circle,rgba(235,100,52,0.40),transparent_70%)] blur-2xl"
-              />
-              <div className="relative h-full w-full overflow-hidden shadow-2xl ring-1 ring-white/15">
-                <Image
-                  src="/images/blcn-logo.jpg"
-                  alt="Bethel Livingstone Christian Network logo"
-                  fill
-                  priority
-                  sizes="(min-width: 640px) 192px, 160px"
-                  className="object-cover"
-                />
-              </div>
-            </div>
-            {/* `photo`, not `dark`: this label sits on a photograph, where the
-                dark tone measured 3.09:1. See SectionLabel. */}
-            <SectionLabel tone="photo">Nigeria</SectionLabel>
-            <h1 className="font-serif text-4xl font-bold leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
-              <span className="hero-shimmer">
-                Bethel Livingstone Christian Network
-              </span>
-            </h1>
-            <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-brand-orange sm:text-3xl">
-              BLCN
-            </p>
-            <div className="mx-auto mt-6 h-0.5 w-16 bg-brand-orange" />
-            <p className="mx-auto mb-10 mt-8 max-w-lg font-sans text-lg leading-relaxed text-white/60 sm:text-xl">
-              Raising Believers, Transforming Nigeria
-            </p>
-            <Button href="/contact" variant="secondary" size="lg">
-              Join Us
-            </Button>
-          </AnimateIn>
-        </div>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-brand-navy to-transparent" />
-      </section>
+          ⚠️ The fast pace is THIS page only (the client's request), passed
+          here rather than changed in HeroSlideshow. `fadeMs` must shrink with
+          it: a 1000ms fade under a 980ms interval never settles on a frame. */}
+      <ChurchHero
+        name="Bethel Livingstone Christian Network"
+        acronym="BLCN"
+        place="Ado Ekiti · Nigeria"
+        label="BLCN · Ado Ekiti"
+        subtitle="Raising Believers, Transforming Nigeria"
+        emblem={{
+          src: "/images/blcn-emblem.png",
+          alt: "Bethel Livingstone Christian Network logo",
+          width: 320,
+          height: 320,
+        }}
+        slides={HERO_SLIDES}
+        intervalMs={980}
+        fadeMs={420}
+      />
 
       {/* ── 2. Church Order — vision, mission & values ── */}
       <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
@@ -643,7 +599,7 @@ export default function BLCNPage() {
                   <p className="font-serif text-xl font-bold leading-tight text-brand-orange-light">
                     {item.stat}
                   </p>
-                  <p className="mt-2 font-sans text-xs uppercase tracking-[0.2em] text-white/50">
+                  <p className="mt-2 font-sans text-xs uppercase tracking-[0.2em] text-white/70">
                     {item.label}
                   </p>
                 </div>

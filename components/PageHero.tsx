@@ -151,6 +151,7 @@ export default function PageHero({
       )}
 
       <HeroAtmosphere surface={dark ? "dark" : "light"} />
+      {/* The dots hold still while the hero is hovered or focused. */}
       {particles && <DriftingParticles density="sparse" />}
 
       <AnimateIn direction="up" className="relative z-10 mx-auto max-w-3xl">

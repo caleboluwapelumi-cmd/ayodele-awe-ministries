@@ -5,6 +5,7 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import SectionPhoto from "@/components/SectionPhoto";
 
 export const metadata: Metadata = {
   title: "Ministry Itinerary — Ayodele Oladapo Awe Ministries",
@@ -66,8 +67,9 @@ export default function ItineraryPage() {
       </section>
 
       {/* ── 3. Booking ── */}
-      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
+      <section className="relative isolate overflow-hidden bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <SectionPhoto src="/images/apostle-1.jpg" position="object-[60%_30%]" />
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SectionLabel tone="dark">Book Pastor Awe</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
@@ -88,7 +90,7 @@ export default function ItineraryPage() {
                   <h3 className="mb-2 font-serif text-base font-bold leading-tight text-brand-orange-light">
                     {type.title}
                   </h3>
-                  <p className="font-sans text-sm leading-relaxed text-white/50">
+                  <p className="font-sans text-sm leading-relaxed text-white/70">
                     {type.desc}
                   </p>
                 </div>

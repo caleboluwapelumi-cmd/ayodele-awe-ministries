@@ -6,6 +6,7 @@ import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import PageHero from "@/components/PageHero";
 import SectionLabel from "@/components/SectionLabel";
+import SectionPhoto from "@/components/SectionPhoto";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
@@ -249,8 +250,9 @@ export default function ContactPage() {
       </section>
 
       {/* ── 3. Churches Contact ── */}
-      <section className="bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <div className="mx-auto max-w-7xl text-center">
+      <section className="relative isolate overflow-hidden bg-gradient-to-r from-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <SectionPhoto src="/images/bhcc/bhcc-gallery-05.jpg" position="object-[42%_45%]" />
+        <div className="relative z-10 mx-auto max-w-7xl text-center">
           <AnimateIn direction="up" className="mx-auto max-w-3xl">
             <SectionLabel tone="dark">Find a Church</SectionLabel>
             <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
@@ -294,10 +296,10 @@ export default function ContactPage() {
                   <h3 className="mb-3 font-serif text-xl font-bold leading-tight text-white">
                     {church.name}
                   </h3>
-                  <p className="mb-6 font-sans text-base leading-relaxed text-white/50">
+                  <p className="mb-6 font-sans text-base leading-relaxed text-white/70">
                     For service times, location, and church-specific enquiries
                   </p>
-                  <div className="mb-8 flex-1 space-y-2 font-sans text-sm text-white/60">
+                  <div className="mb-8 flex-1 space-y-2 font-sans text-sm text-white/70">
                     <p>
                       <span className="font-semibold text-white">Location:</span>{" "}
                       {church.location}
@@ -321,7 +323,7 @@ export default function ContactPage() {
 
                   {church.socials && (
                     <div className="mb-8 flex flex-wrap items-center gap-3">
-                      <span className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white/40">
+                      <span className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-white/70">
                         Follow
                       </span>
                       {church.socials.map(({ name, href, Icon }) => (

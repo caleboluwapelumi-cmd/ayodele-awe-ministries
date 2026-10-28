@@ -18,7 +18,9 @@ Don't "fix" those.
 - **Framework:** Next.js 16 (App Router, TypeScript, Turbopack)
 - **Styling:** Tailwind CSS **v4** — there is **no `tailwind.config.ts`**. The theme lives in `app/globals.css` under `@theme inline { … }`.
 - **Fonts:** Clash Display only (400/500/600/700) — one face for headings and body alike. Self-hosted from `app/fonts/*.woff2` via `next/font/local`; not a Google font. Playfair Display and Inter were removed.
-- **Animation:** Framer Motion, via the `AnimateIn` wrapper (see Components)
+  ⚠️ **The font variable class goes on `<html>`, not `<body>`** — see "Why the headings were in the system font" under Typography Rules.
+- **Animation:** Framer Motion, via the `AnimateIn` wrapper (see Components), plus the CSS-first motion layer — see "The motion layer"
+- **3D:** `cobe` 2 (5.8 KB gz, zero deps) for the one homepage globe, loaded only near the viewport. **Not** three.js — see "The motion layer"
 - **Images:** Next.js `<Image>`, AVIF→WebP, **all local** — no remote image host
   is used any more. Gradient placeholders stand in where real photography is
   still pending (see Assets Status)
@@ -183,6 +185,27 @@ hover effects still fire.
 - `h2`/`h3`: `font-serif font-bold` — **never** `font-medium` or lighter on a heading
 - Section labels above headings: use `components/SectionLabel.tsx` (`font-sans text-xs font-semibold uppercase tracking-[0.2em]`), `tone="light"` on light sections, `tone="dark"` on dark, `tone="photo"` over a **photograph**. Three tones — the first two are colours, the third is a backing; see "The section label over photography" below. `onAccent` went with the wine bands and the `bdayDark`/`bdayLight` pair merged into the standard dark/light split. See the three-oranges table above for why each tone takes a different orange
 - Body copy: `font-sans text-base sm:text-lg leading-relaxed`
+
+### ⚠️ Why the headings were in the system font (fixed 22 October 2026)
+Every heading on the site rendered in the browser's default sans (Segoe UI on
+Windows) from launch until 22 October 2026. Body copy, buttons and the navbar
+were fine, which is why it went unnoticed. Two things combined:
+
+1. `--font-serif` / `--font-sans` are declared on `:root` as
+   `var(--font-clash), …`, and a custom property resolves its `var()` **where
+   it is declared**. `next/font` put `--font-clash` on `<body>` — one level
+   down — so at `:root` both resolved to nothing.
+2. The `h1, h2, h3, h4 { font-family: var(--font-serif) }` rule in
+   globals.css is **unlayered**, and unlayered CSS beats every Tailwind utility
+   regardless of specificity. So it overrode each heading's `font-serif` class
+   (which inlines `var(--font-clash)` and would have worked) with the broken
+   variable. Paragraphs survived only because nothing unlayered sets their font.
+
+The fix is `<html className={clashDisplay.variable}>` in `app/layout.tsx`.
+⚠️ **The same unlayered-wins rule still applies to `p { line-height: 1.7 }`**:
+a `leading-*` utility on a `<p>` does nothing. That is harmless for body
+copy, but display-size text that needs tight leading must not be a `<p>` —
+the `/about` pull-quote is a block `<span>` for exactly this reason.
 - Body text on dark: `text-white/70` · on light: `text-muted`
 - Heading size scale — h1 (page hero): `text-4xl sm:text-6xl`; h1 (full-screen hero): `text-5xl sm:text-7xl md:text-8xl`; h2: `text-3xl sm:text-4xl md:text-5xl`
 
@@ -412,6 +435,159 @@ library — the standing rule is that this layer must not grow the bundle furthe
 
 ---
 
+## The motion layer (22 October 2026)
+A second pass on top of the atmosphere layer, to make the site feel alive
+without changing the palette, fonts or light/dark rhythm. Mobile-first, and
+CSS wherever CSS can do it — the hero entrance, scroll cue, marquee, press
+feedback and cursor glow ship **no** JavaScript of their own.
+
+### ⚠️ No pause button — loops hold on hover and keyboard focus (22 October 2026)
+The site-wide pause switch (`MotionToggle`, `<html data-motion="paused">`, the
+`aoa-motion-paused` localStorage key, `useMotionPaused`/`useMotionAllowed`)
+was **removed at the client's request**. Every loop — the three slideshow
+heroes, the marquee, the globe's sway, the drifting dots — now stops for two
+things only:
+- **`prefers-reduced-motion`**: nothing loops at all.
+- **Hover or keyboard focus** on its own section: `useHoverFocusPause(ref,
+  scope)` in `lib/motion.ts` (mouse pointers only; focus counts only when it is
+  `:focus-visible`, so clicking a slide control doesn't pin the rotation). The
+  marquee does the same in CSS (`.marquee:hover`, `:focus-within`).
+- ⚠️ **This is a known WCAG 2.2.2 gap, accepted knowingly.** Hover/focus does not
+  give a touch-only visitor (without reduced motion on) a way to stop motion
+  that runs past five seconds. If an audit flags it, putting the button back is
+  the fix — don't invent a second mechanism.
+- **Anything new that loops** must honour reduced motion and pause on hover/
+  focus. Motion under 5s (the scroll cue's two passes) is exempt.
+- ⚠️ `DriftingParticles` animates to a still target when stopped rather than
+  dropping `animate` — removing `animate` does not cancel a running infinite
+  animation, so pausing did nothing until it was written this way.
+
+### What each page gained
+| Where | What |
+|---|---|
+| `/` hero | Word-by-word h1 rise (CSS, `.hero-word`), staggered label/rule/tagline/buttons (`.hero-rise`), slide parallax (`HeroSlideshow parallax`), scroll cue |
+| `/` About | Overlap: white text plate laid across the portrait (`RevealImage`), offset orange frame — see "The homepage About block" |
+| `/` marquee | BHCC · BLCN · Prayer Surge · OTIN · GLC · Fire Fest, between About and the churches |
+| `/` churches | cobe globe (Norwich ↔ Ado Ekiti) beside the heading, legend list, offset card grid |
+| `/about` | Offset-frame bio portrait; **pinned-scroll mandate** (`StickyStory`); the one large pull-quote; count-up stats |
+| `/ministry` | Expressions as a staggered editorial index with display numerals; vision text plate overlapping a photo |
+| all routes | Magnetic hover + press on every `Button`, cursor glow — desktop only |
+
+### The homepage About block (rebalanced 22 October 2026)
+- **Portrait framing**: `apostle-portrait.jpg` has only ~6% headroom above his
+  hair, so RevealImage's 1.14× parallax zoom clipped the top of his head at
+  every width. This image runs with `parallax={false}`. The box is 4:5 at
+  `object-[36%_0%]` at every width — full height, 80% of the width, biased
+  left so the blue prop and cable at the source's top-right edge stay out of
+  frame (a square box showed them on phones).
+- **Balance**: image 6 columns, plate 7 columns overlapping one. At 1280 that is
+  a 576×720 portrait against a ~620px plate — the plate used to run taller than
+  the photo it was laid across. Phones: the plate rides up only 48px
+  (`-mt-12`), where it used to cover most of the photo. The `/about` offset
+  orange frame sits behind the image, knocked to the bottom-left (−12px on
+  phones, inside the 16px gutter).
+- **Resolution**: 576px from a 512px crop is ~1.1× at 1× DPR. A larger source
+  was considered and rejected: `apostle-1.jpg` is hero slide 1 directly
+  above, and `apostle-key.jpg` (720px) is barely bigger and is the `/about`
+  hero. Ask the client for the studio portrait at full size.
+- **Entrances**: image wipe, frame fade and plate rise share one curve
+  (`[0.22, 1, 0.36, 1]`, 0.9s) and one trigger margin (`-80px`), staggered
+  0 / 0.1 / 0.2s. The wipe used to run 1.15s on a slow-start curve and — because
+  of the clip-path/IntersectionObserver trap noted on `RevealImage` — only
+  fired once the image's *bottom* edge was on screen, so it landed well after
+  the plate.
+
+### The hero h1
+⚠️ The shimmer moved from the h1's span onto each word, staggered, so it reads
+as one sweep left to right — `background-clip: text` does not reach reliably
+into transformed children, and every word now has its own transform. The
+padding on `.hero-word` is what keeps descenders inside the `overflow: hidden`
+mask at `leading-none`; don't trim it.
+
+⚠️ **Both shimmers now sweep a 300% tile from 100% to 0%** (`word-shimmer`,
+`hero-sweep`). The old 200% `shimmer-sweep` ended exactly where it started —
+the tile repeats — so it settled with the orange band parked over the last
+letters: "Ministry" stayed orange on every `PageHero` and every homepage word
+kept an orange tail. `/birthday`'s `.shimmer-text` keeps `shimmer-sweep`,
+correctly: it loops.
+
+⚠️ **The homepage hero is `min-h-[calc(100svh-72px)] lg:min-h-svh`.** Below
+`lg`, `<main>` carries the 72px navbar offset, so a full `100svh` hero put
+its bottom row (scroll cue, dots) just under the fold on a phone.
+
+### The globe
+Three gates, and the static SVG globe (in the server markup) is the floor:
+1. **Device**: not under reduced motion, not with Save-Data, not with < 4
+   cores or < 4 GB reported memory, not without WebGL.
+2. **Proximity**: cobe is fetched by `next/dynamic` only within 300px of the
+   viewport. Verified: the chunk (15.3 KB raw / 6.9 KB gz) is **not** in the
+   homepage HTML.
+3. **Smoothness**: `Globe` times ~60 frames and falls back to the static
+   globe if they average slower than ~22 fps.
+- cobe 2 has no render loop — it draws on `update()`. Our rAF loop *is* the
+  render, and it runs only while on screen, tab visible, and not hovered.
+- Orientation faces 3°E (both cities sit near that meridian), tilted 0.42 rad;
+  the idle sway is ±0.32 rad so neither city leaves the disc. Drag turns it,
+  horizontally only, with `touch-action: pan-y` so it never traps a scroll.
+- The globe is `aria-hidden`; the legend list beside it carries the meaning.
+- "Some 5,000 km apart" is the 5,017 km great-circle distance, computed.
+
+### Contrast decisions in this layer
+- ⚠️ **Cursor glow peak alpha is 0.05 and that is the ceiling.** Any glow that
+  lightens a dark ground lowers contrast for light text on it. Worst case is
+  12px `brand-orange-light` at the brightest point of a hero glow (4.8:1):
+  with the cursor glow on top it is **4.52:1 at 0.05, 4.46:1 at 0.06**. It
+  blends with `screen`, which is a no-op on white, so light sections are
+  untouched. Widen it if it needs to read more — never raise the alpha.
+- Stat labels on `bg-white/[0.07]` cards went `/50` → `/70` on `/about` and
+  `/churches/blcn`: white/50 is 3.92:1 there and failed AA at 12px.
+- The marquee's orange names are 36px+ bold (AA large; 3.97:1 on blue).
+- `/ministry`'s display numerals are `brand-orange` on white (3.28:1) — legal
+  only because they are 72px+, and they are `aria-hidden`.
+- Text over photographs always sits on a near-opaque navy plate or scrim
+  (`StickyStory` caption, `/ministry` vision plate: 8.86:1 worst case).
+- ⚠️ `StickyStory` never dims inactive steps — white at reduced opacity on
+  this blue fails AA. The active step is marked by numeral and rule only.
+
+### Content notes
+- The `/about` pull-quote is **verbatim** from `BIO` — if `BIO` changes,
+  re-check it still appears there word for word.
+- The marquee names are the two churches, the one confirmed event and three
+  named programmes. No dates.
+- **BLCN's stats did not get a count-up.** They are "Ado Ekiti", "One Network"
+  and "Thousands Reached" — there is no figure to count, and inventing one is
+  exactly what the Content Integrity Notes rule out. If the client supplies
+  real numbers, `CountUp` takes them with no other change.
+
+### Performance — what was measured
+First Load JS (sum of the chunks each prerendered page loads; Next 16 no longer
+prints this) went up by at most **+20.4 KB raw / +7.7 KB gz on `/`**; `/about`
++17.7/+6.9, `/ministry` +14.2/+5.8, the church pages +13.1/+5.3, every other
+route +2.9–4.6 raw. The globe's 15.3 KB is extra and loads only near it.
+
+Frame timing, 390px, CPU ×4, headless software rendering: the first version of
+the homepage ran **p50 53ms** against 18ms for an untouched page. Isolating it
+found three costs, all fixed and all load-bearing:
+- ⚠️ **The marquee edge fade is two gradient overlays, never `mask-image`.** A
+  mask over the moving strip made the browser re-composite it every frame.
+  `.marquee` also carries `content-visibility: auto` (no work off-screen), and
+  phones skip the second pass through the names (`.marquee-wide`).
+- ⚠️ **`DriftingParticles` stops while off-screen** (`useInView`). Its sixteen
+  infinite animations kept ticking after the hero had gone.
+- ⚠️ **The hero parallax clamps at one screen of scroll** and sits on its own
+  layer (`will-change-transform`), so it stops writing styles once the hero is
+  gone.
+After: homepage p50 **18ms**, the same as `/media`; allowing the globe adds
+nothing measurable. These figures are noisy on a shared machine and software
+rendering overstates GPU work — check on a real mid-range phone before reading
+much into the long-frame counts.
+
+Verified at 320px and 390px across all 15 site routes: **0 px horizontal
+overflow** (with the body's `overflow-x-hidden` disabled) and **0 console
+errors**.
+
+---
+
 ## Project Structure
 ⚠️ **The tree has two chrome branches.** `app/layout.tsx` carries `<html>`,
 `<body>`, the font and `metadataBase` — and no chrome at all. The Navbar and
@@ -445,7 +621,11 @@ app/
       music/page.tsx      ← Spotify music page. Hero (spotify-hero.jpg) →
                             MediaTabs → Podcast → Genres → Platforms → CTA.
                             See "The /media/music section order" below
-    books/page.tsx        ← Book showcase + Selar/Amazon buy buttons
+    books/page.tsx        ← Book showcase + Selar/Amazon buy buttons. Reads
+                            BOOKS from lib/books.ts
+    books/[slug]/page.tsx ← One landing page per book, prerendered via
+                            generateStaticParams. See "Books and their
+                            landing pages"
     itinerary/page.tsx
     partners/page.tsx
     contact/page.tsx
@@ -469,7 +649,34 @@ app/
                                    NEXT_PUBLIC env var
 
 components/
-  AnimateIn.tsx           ← 'use client' — Framer Motion scroll reveal. Props: direction 'up'|'left'|'right'|'fade', delay, className
+  AnimateIn.tsx           ← 'use client' — Framer Motion scroll reveal. Props: direction 'up'|'left'|'right'|'fade', delay, className,
+                            and optional duration/ease (default 0.6s easeOut —
+                            override only to move in step with a RevealImage)
+  RevealImage.tsx         ← 'use client' — clip-path wipe on enter + slow
+                            scroll parallax. Container owns the aspect ratio.
+                            Optional duration/delay/ease/viewportMargin.
+                            ⚠️ The in-view trigger is on an UNCLIPPED outer box
+                            and the clip-path on a child. Chrome's
+                            IntersectionObserver honours clip-path, so a fully
+                            clipped box with a negative margin never
+                            "intersects" — the image never appeared. Don't
+                            merge the two layers back into one.
+                            See "The motion layer"
+  ChurchHero.tsx          ← The shared /churches/bhcc + /churches/blcn hero.
+                            See "The church heroes" below
+  SectionPhoto.tsx        ← A real photo laid at 12% into a dark/mid section.
+                            See "Photography in section backgrounds" below
+  StickyStory.tsx         ← 'use client' — pinned image + scrolling steps,
+                            caption follows the active step (/about mandate)
+  CountUp.tsx             ← 'use client' — stat figure that counts up on
+                            arrival. Server renders the REAL figure
+  Marquee.tsx             ← server — CSS marquee strip (homepage)
+  GlobeSection.tsx        ← 'use client' — decides static vs live globe and
+                            lazy-loads Globe.tsx. Owns the SVG fallback
+  Globe.tsx               ← 'use client' — the cobe canvas. Never import
+                            directly; GlobeSection loads it via next/dynamic
+  PointerEffects.tsx      ← 'use client' — magnetic buttons + cursor glow,
+                            mounted once in app/(site)/layout.tsx
   Button.tsx              ← THE button. Variants: primary | secondary | outline.
                             Sizes: default | lg
   SectionLabel.tsx        ← The small-caps eyebrow above every heading.
@@ -527,9 +734,12 @@ components/
   HeroSlideshow.tsx       ← 'use client' — the crossfading hero backdrop, shared
                             by `HeroSection`, `/churches/blcn` and
                             `/churches/bhcc`. Slides stacked
-                            absolutely, opacity-only transition, clickable dots,
-                            **and both scrims** (`bg-black/60` +
-                            the navy wash) — a hero photo is never shown
+                            absolutely, opacity-only transition, clickable dots
+                            (`indicator="dots"`, the homepage) or a segmented
+                            progress bar (`"progress"`, the church heroes),
+                            **and the scrims** — `scrim="uniform"` (`bg-black/60`
+                            + the navy wash, the homepage) or `"directional"`
+                            (the church heroes) — a hero photo is never shown
                             unscrimmed on this site, so the caller cannot forget
                             one. `useState(0)` initial index keeps SSR and first
                             client render identical — never seed it from
@@ -539,6 +749,13 @@ components/
                             defers slide 2" below. Don't collapse that back to
                             a plain `.map()`. The rotation timer waits on that
                             same flag.
+                            ⚠️ The rotation clock is a CSS animation
+                            (`.slide-timer`), not a setInterval: the active
+                            progress segment (or an invisible span in dots
+                            mode) fills over `intervalMs` and its
+                            `animationend` advances the slide, so hover/focus
+                            pausing is one `animation-play-state`. Never give
+                            `.slide-timer` `animation: none` — rotation stops.
                             Pace is `intervalMs` (default 6000) + `fadeMs`
                             (default 1000). ⚠️ They must move together — a fast
                             interval under a slow fade never settles on one
@@ -610,6 +827,8 @@ components/
   SpotifyEmbed.tsx        ← Spotify iframe player. Props: kind ('artist'|'show'|
                             'album'|'track'|'episode'), id (bare ID or a pasted
                             share URL), title, size ('compact' 152px | 'full' 352px)
+  BookBuyButtons.tsx      ← "Buy on Selar" + "Buy on Amazon" pair, new tab.
+                            tone: light | dark. Used by /books and /books/[slug]
   icons/AmazonIcon.tsx    ← Amazon "a + smile", currentColor (Simple Icons, CC0)
                             (`SelarIcon`, the drawn stand-in "S" badge, is gone —
                             the real wordmark arrived, see Assets Status)
@@ -650,6 +869,8 @@ lib/
   birthday.ts             ← The 3 August 2026 birthday: BIRTHDAY_STARTS_AT /
                             BIRTHDAY_ENDS_AT (ISO), birthdayPhase(), the shared
                             `Testimony` shape and `testimonyId()`. See below
+  books.ts                ← BOOKS (with `slug`), getBook(), bookHref(),
+                            coverAlt(). Shared by /books and /books/[slug]
   admin-auth.ts           ← `checkAdminPassword()`, the timing-safe compare
                             against BIRTHDAY_ADMIN_PASSWORD. Server-only —
                             shared by /api/birthday-admin and the PATCH on
@@ -887,22 +1108,39 @@ Real assets received (all in `public/images/`, all JPEG):
   block below it.
 - **The second book — "Thriving in the Midst of Famine"** (subtitle "Biblical
   Keys to Flourishing in Difficult Times", by Ayodele Oladapo Awe, published by
-  TABlink Digital Hub). Artwork arrived 12 September 2026, **for pre-order** —
-  it is not on sale yet, and there is no retailer URL for it.
+  TABlink Digital Hub). Artwork arrived 12 September 2026 for pre-order; **the
+  book went on sale 21 October 2026** and is live on Selar and Amazon.
 
-  **It renders in two places as of 12 September 2026**: it leads `/books` (a
-  "Coming soon" badge, the back-cover blurb, no buy button) and it is the sole
-  entry in the homepage's "What's New" band. ⚠️ **The one thing still missing is
-  the pre-order link** — see `THRIVING_PREORDER_URL` in `lib/constants.ts`,
-  which is `null` and is the single switch that turns the buy button on in both
-  places. Don't wire a stand-in destination: `/contact` and `/api/newsletter`
-  are both `console.log` stubs, so a CTA pointing at either would look like it
-  captured a pre-order and silently bin it.
-  - ⚠️ **The `/books` description is the publisher's own back-cover copy**,
-    transcribed from the "About the Book" panel on the back of the mockup —
-    not written to brief, so it needs no client sign-off the way the Prayer
-    Surge vision paragraphs do. It is readable in the 5000px master; the four
-    paragraphs used are a selection, and nothing was reworded.
+  **It has its own landing page: `/books/thriving-in-the-midst-of-famine`**
+  (see "Books and their landing pages" below). It also leads `/books` and is
+  the sole entry in the homepage's "What's New" band, which now links to that
+  landing page rather than to `/books`.
+  - **Purchase links** are `BOOK2_SELAR_URL` and `BOOK2_AMAZON_URL` in
+    `lib/constants.ts`, beside the untouched `SELAR_BOOK_URL` /
+    `AMAZON_BOOK_URL` for "Walking with the Holy Spirit". Both were fetched
+    logged out on 21 October 2026: Selar (`selar.com/6s9o4z5173`) is a 200
+    titled "Buy Thriving in the Midst of Famine by Ayodele Awe on Selar"; the
+    client's Amazon link was a **KDP author-dashboard URL**
+    (`kdp.amazon.com/amazon-dp-action/uk/dualbookshelf.marketplacelink/…`)
+    that 302s to `amazon.co.uk/dp/B0HH6W7H5K`, the Kindle edition. The clean
+    `/dp/` URL is stored. ⚠️ Never store a `kdp.amazon.com` link: it is an
+    author-side tool, not a shop page.
+  - ⚠️ **Amazon lists it under a different title**: "THRIVING IN FAMINE:
+    Carrying God's Presence, Walking in His Word, and Thriving When Everything
+    Else Fails". It is the same book (the Amazon and Selar descriptions are
+    word for word the same, and both name it "Thriving in the Midst of
+    Famine"). The site keeps the cover's title and subtitle. If the client
+    wants them to agree, that is a KDP metadata fix, not a site change.
+  - **`THRIVING_PREORDER_URL` is deleted**, along with the "Coming soon"
+    state on `/books`. No waitlist form or `/api/book-waitlist` route ever
+    existed in this repo; the pre-launch state was a badge with no button.
+  - ⚠️ **The description is the client's own "About" text**, supplied 21
+    October 2026 and used verbatim, including its bulleted "This book will
+    help you:" list. It is the same copy as the Selar and Amazon listings. It
+    replaced four paragraphs transcribed from the back of the mockup. Not
+    written to brief, so it needs no sign-off the way the Prayer Surge vision
+    paragraphs do. Lists are `{ lead, items }` blocks in `description`,
+    rendered by `components/BookDescription.tsx` on both book pages.
   - `thriving-book-mockup.jpg` — 2560×1659, the publisher's 3D hardcover render
     (front + spine + back) on an olive-green ground. This is the **preview
     image**. ⚠️ Its ground is a foreign brand colour and the artwork carries a
@@ -1058,8 +1296,15 @@ asked. If that matters, crop or blur that row rather than dropping the image.
   subject**, so the name and title must come from the client and not be guessed.
   Both were confirmed 12 September 2026.
 - `blcn-logo.jpg` — 828×647, shofar emblem on a dark charcoal background (**not**
-  transparent). Used **twice** on `/churches/blcn` — the crisp badge in the hero
-  and the About panel — plus the BLCN card on `/churches`.
+  transparent). Used on `/churches/blcn` in the About panel, plus the BLCN card
+  on `/churches`. Since 22 October 2026 the hero masthead uses `blcn-emblem.png`
+  instead (below). It is the master for that file — keep it.
+- `blcn-emblem.png` — 320×320, the circular emblem **cut out of
+  `blcn-logo.jpg`** with the charcoal square removed: disc found by scanning
+  for pixels that differ from the #1B1B1B ground (centre 413.5,312.5, r 274.5),
+  masked 2px inside the edge so no charcoal ring survives, with a 1.5px
+  feathered alpha edge, then downscaled from 547px. Transparent PNG. Checked
+  on a dark slide and a bright one. The `/churches/blcn` hero masthead.
   ⚠️ **It was three uses.** The third was the hero *background*, blown up and
   blurred (`scale-125 object-cover blur-2xl` under a `bg-black/40` scrim). That
   went on 7 August 2026 when the client's real photography arrived — see
@@ -1252,11 +1497,21 @@ off-machine.
   square. Dropped into a square slot it renders as a near-blank tile with a
   sub-4px "CHRISTIAN CENTRE" line. **Nothing renders this file directly** — it is
   the master the mark is cut from. Use it only where there is real width.
+- `bhcc-mark-reverse.png` — 252×253, **transparent**, derived 22 October 2026
+  from `bhcc-logo.jpg` for the dark hero masthead. The emblem's ink box
+  (x110–349, y426–666) +6px, with the white **un-composited** rather than
+  keyed: alpha = (255 − P) / (255 − F) on the ink colour's darkest channel, so
+  antialiased edges stay partial alpha instead of leaving a white fringe. Navy
+  is recoloured **white** (it would vanish on the photo); the orange is kept as
+  BHCC's own #F8581A, not swapped for the site's brand orange. Regenerate it the
+  same way if the lockup changes. `bhcc-logo.jpg` and `bhcc-mark.png` are
+  untouched.
 - `bhcc-mark.png` — 640×640, the emblem alone (orange arc + navy house + hammer),
   cropped from the lockup and padded to ~14% margins, exactly as `awe-min-mark.png`
   was cut from `awe-min-logo.png`. This is BHCC's counterpart to `blcn-logo.jpg`
-  and the file every square slot uses: the `/churches/bhcc` hero badge
-  (`h-40 w-40 sm:h-48 sm:w-48`) and the BHCC card's `h-9 w-9` badge on `/churches`.
+  and the file every square slot on a light ground uses — the BHCC card's
+  `h-9 w-9` badge on `/churches`. (It was also the `/churches/bhcc` hero badge
+  until 22 October 2026; the hero masthead now uses `bhcc-mark-reverse.png`.)
   ⚠️ **White plate, deliberately not transparent** — the emblem is navy and
   orange, so a transparent mark would vanish against the dark hero. That is the
   inverse of `awe-min-mark.png`, which is white-on-transparent and needs a dark
@@ -1357,6 +1612,47 @@ for imagery the scrim had already all but erased. They are now pure CSS:
   `next.config.ts` `remotePatterns` so a future real Unsplash image needs no
   config change; it grants nothing on its own.
 
+### Photography in section backgrounds (22 October 2026)
+`components/SectionPhoto.tsx` lays one real photograph from `public/images/`
+faintly into one dark or mid section on each of seven pages, so bands that were
+gradient-only read as lit by the ministry's own pictures:
+
+| Page | Section | Photo |
+|---|---|---|
+| `/partners` | hero | `blcn-gallery-05` (congregation at prayer) |
+| `/contact` | "Churches" band | `bhcc-gallery-05` (BHCC family outside) |
+| `/itinerary` | Booking band | `apostle-1` |
+| `/events` | CTA ("Want to Host an Event?") | `blcn-hero-4` (worship) |
+| `/ministry` | CTA ("Invite Pastor Awe") | `apostle-2` — the vision section above already uses `apostle-1` |
+| `/media` | Music section | `bhcc-gallery-11` (hands raised in worship) |
+| `/books` | CTA | `apostle-key` |
+
+- **The recipe**: `object-cover opacity-[0.12] mix-blend-luminosity
+  brightness-50`, in a section that is `relative isolate overflow-hidden` with
+  its content `relative z-10`. Luminosity keeps the section's blue hue (that is
+  the "brand-blue overlay"); `brightness-60` caps the brightest pixel the photo
+  can add. ⚠️ `isolate` is load-bearing — without it the blend mixes against
+  whatever is behind the section.
+- **Dark and mid sections only.** On white the same photo reads as a grey smudge.
+- ⚠️ **Placement is a claim even without a caption.** No congregation photo
+  behind copy about a dated gathering, and nothing behind the /events "What God
+  Has Done" empty state, which says photos are still to come.
+- **Weight**: `sizes="50vw"` + `quality={40}` (40 had to join `qualities` in
+  next.config.ts). Served AVIF: 1–11 KB per photo on a phone, 2–26 KB at 1280,
+  7–89 KB at 2560. Lazy-loaded; none is an LCP element. First Load JS unchanged.
+- ⚠️ **Contrast, measured** on the production build at 390/1280/2560 — every text
+  run in each section against the worst pixel behind it, with its own colour
+  and alpha. Worst per page: /partners 5.49, /contact **4.75**, /itinerary
+  **4.75**, /events 7.76, /ministry 7.25, /media 6.36, /books 7.25. The binding
+  text is always 12–16px `brand-orange-light`, especially on `bg-white/[0.07]`
+  cards. ⚠️ The first pass ran 16% / `brightness-60` and put /contact at 4.28:1
+  and /itinerary at 4.35:1 — that is why it is 12% / 50 now. Don't raise them.
+  Getting there meant raising text that was already marginal on these grounds
+  to `white/70`: the /contact "Follow" label (`/40`, 2.94:1) and card copy
+  (`/50`, `/60`), the /itinerary engagement descriptions (`/50`, 3.56:1), the
+  /media "Available on all major streaming platforms" line (`/40`) and the
+  /partners hero subtitle (`/60`, 4.54:1 at 2560).
+
 ### ⚠️ No stock imagery stands for a church
 A placeholder photo is obviously a placeholder *only when nothing labels it*. A
 stock photo inside a card headed "BHCC", or captioned `alt="BHCC church
@@ -1397,9 +1693,9 @@ photograph of strangers. Cleared on 28 July 2026:
   through `CHURCHES[].logo`. The array's seven non-church entries stay literal;
   they have no counterpart in constants.ts.
 - ⚠️ **A church's own page is the exception and still names files directly.**
-  `/churches/bhcc` renders `bhcc-mark.png` in the hero badge but
+  `/churches/bhcc` renders `bhcc-mark-reverse.png` in the hero masthead but
   `bhcc-logo.jpg` in the About panel, and `/churches/blcn` renders
-  `blcn-logo.jpg` two ways (crisp hero badge, About panel) alongside its own
+  `blcn-emblem.png` in the hero masthead and `blcn-logo.jpg` in the About panel, alongside its own
   photography from `public/images/blcn/`. These are page-specific renditions of
   different assets, so one `logo` field cannot express them — don't try to route
   them through constants.ts. (BLCN was three ways until 7 August 2026; the
@@ -1410,7 +1706,57 @@ photograph of strangers. Cleared on 28 July 2026:
   labelled as nothing — they carried no claim about a church. They were removed
   later anyway, on performance grounds — see "Gradient placeholders" above.
 
+### The church heroes (redesigned 22 October 2026)
+Both church pages render **`components/ChurchHero.tsx`** — one component, so
+the two cannot drift. It replaced the centred emblem-on-a-white-plate over a
+heavily scrimmed gallery. Top to bottom:
+
+- **Masthead, top-left under the navbar**: emblem, a hairline vertical rule,
+  then the church name and "City · Country" stacked in small caps (uppercase,
+  tracked — Clash Display has no true small caps). No centred logo.
+- **The emblems are transparent derivatives**, not the originals:
+  `bhcc-mark-reverse.png` and `blcn-emblem.png` (see Assets Status). Both were
+  checked on a dark and a bright slide.
+- **Copy bottom-left**: label (`SectionLabel tone="photo"`, reading "BHCC ·
+  Norwich" / "BLCN · Ado Ekiti", so the acronym exists as real text), h1 on
+  `.hero-shimmer`, rule, subtitle at `white/80`, "Join Us".
+- **The giant outlined acronym** (`.hero-outline`, stroke-only at 28% white) is
+  `aria-hidden` decoration bleeding off the right edge: upper-right in the photo
+  gap below `lg` (where the copy spans the full width at the foot), bottom-right
+  beside the copy column from `lg`. ⚠️ Keep it clear of the copy — at 24vw it
+  ran under the subtitle at 1280 and measured 1:1 there.
+- **`HeroSlideshow scrim="directional"`**: a left-to-right gradient (from `lg`
+  only), a bottom gradient (taller and heavier below `lg`), and a band under
+  the navbar/masthead — light over the right of the frame, so the photographs
+  are clearly visible. `HeroAtmosphere` still sits above it.
+- **`indicator="progress"`**: a segmented bar under the copy; the active
+  segment fills over the interval and its `animationend` advances the slide
+  (see HeroSlideshow). Earlier segments are full, later ones empty; under
+  reduced motion the active one is full and still. Each segment is a 44px-tall
+  button. No pause button — see "The motion layer".
+
+⚠️ **Contrast, measured** on the production build, on **every slide** of both
+heroes at 390×844, 1280×800 and 2560×1080 (54 measurements): worst pixel behind
+the glyphs, with the acronym stroke and `HeroAtmosphere` in place and the text
+colour's own alpha blended in. Worst figures: **h1 5.77:1** (BLCN slide 3 at
+1280), **subtitle 6.80:1**, **label 6.37:1**, masthead name 6.87:1, masthead
+place **5.25:1** (BHCC slide 2 at 390). Two things were tuned to get there:
+the side gradient holds ~0.86 to 34% across because "Bethel Livingstone
+Christian Network" runs that far (4.30:1 when it began thinning at 30%), and
+the masthead place line is `white/90` (4.54:1 at `/80`).
+⚠️ These are properties of these six photographs. A new slide must be
+re-measured — the scrim is light on purpose and no longer proves itself
+against any photograph the way the old `bg-black/60` did.
+
+⚠️ **The lighter scrim exposes upscaling.** BHCC's two portrait slides (`-11`,
+`-07`) run ~1.9× at 2560 and now look soft there; the BLCN gallery frames run
+~1.4×. The reasoning below ("affordable because the scrims take the detail
+out") no longer fully holds. Full-resolution files from the client would fix it.
+
 ### The `/churches/bhcc` hero (filled 12 September 2026)
+⚠️ *Superseded in its structure by "The church heroes" above — the slides and
+their `object-position`s below are still current; the badge, dots and
+two-scrim description are not.*
 It ran on a gradient placeholder from 2 August 2026 until BHCC's own
 photography arrived, and it was the **last** church hero standing on one. It
 now renders `HeroSlideshow` with three of BHCC's own frames, which makes the
@@ -1457,17 +1803,23 @@ the filename warning above). Ask the client to re-supply the original if a large
 rendition is ever needed — print, an og:image, or a light-background variant, none
 of which the current white-on-transparent file can serve.
 
-Pending, **not** on a placeholder image: a portrait of **Iyanuoluwa Ayodele-Awe**
-for the BHCC leadership grid. `ChurchLeader.image` is left undefined for her, and
-`/churches/bhcc` renders an initials block ("IA" on the dark gradient) plus a
-"Photo coming soon" caption instead. Drop the file in `public/images/` and set
-`image` in `CHURCHES` — no page edit needed. Never point `image` at a stock photo
-of a stranger to fill the gap.
+- `iyanu-awe.jpg` — 1134×2016 (0.5625) **portrait of Iyanuoluwa Ayodele-Awe**,
+  BHCC's Co-Pastor, against a plain grey wall. Arrived 22 October 2026 as
+  `IYANU AWE.jpeg` (uppercase, a space, `.jpeg`) and was **renamed only** — it
+  was already under the 2560px cap at 137 KB, so it was not re-encoded. Used in
+  the BHCC "Meet the Team" card, which no longer shows the initials block.
+  ⚠️ **It needs `imagePosition: "object-[50%_8%]"`** (a new optional field on
+  `ChurchLeader`). The card is 3:4, so it shows 75% of this tall phone
+  portrait's height; centred, the window starts at source row 252 and cuts
+  through her hair (top ≈ row 170). 8% starts it at row 40. Re-measure if the
+  file is ever replaced with a different shape.
+
+The initials fallback ("IA" on the dark gradient + "Photo coming soon") is still
+in `/churches/bhcc` for any future leader whose photo is pending — leave
+`image` undefined and it renders. Never point `image` at a stock photo.
 
 ⚠️ **She is NOT in the BHCC congregation photography** — confirmed by the client
-on 12 September 2026, after the 11 frames arrived and the missing portrait was
-queried against them. So the gallery is not a source for this, and there is no
-point going through it again looking for her. It needs a supplied portrait.
+on 12 September 2026. Her portrait came separately (above).
 ⚠️ **Don't crop a leadership portrait out of a gallery frame in general.** The
 card is `aspect-[3/4]` beside Pastor Awe's studio portrait; a candid phone frame
 cropped to match reads as obviously different in the same grid row, and the
@@ -1484,7 +1836,9 @@ Live links (in `lib/constants.ts`):
 - `SPOTIFY_PODCAST_NAME` / `SPOTIFY_PODCAST_TAGLINE` — podcast title + "Everything Faith and Family"
 - `SOCIALS.youtube` — YouTube channel (@ayodeleawelive)
 - `SOCIALS.facebook` — the minister's Facebook (`web.facebook.com/awe.ayo`)
-- `SELAR_BOOK_URL` / `AMAZON_BOOK_URL` — book purchase links.
+- `BOOK2_SELAR_URL` / `BOOK2_AMAZON_URL` — "Thriving in the Midst of Famine"
+  purchase links, verified 21 October 2026 (see the book's Assets Status entry)
+- `SELAR_BOOK_URL` / `AMAZON_BOOK_URL` — "Walking with the Holy Spirit" purchase links.
   ⚠️ **Never a `tr.ee/…` URL.** Both constants held one until 7 August 2026, and
   `tr.ee` is **Linktree's own shortener, not a redirector** — each resolved to
   the full `linktr.ee/official_ayodeleawe` profile, so "Buy on Selar" and "Buy
@@ -2047,8 +2401,40 @@ Anything still on `#` is rendered dimmed + `pointer-events-none`, with a
 "Coming Soon" badge where the card has room. Never give a `#` href
 `target="_blank"` — it opens an empty tab.
 
-`/books` is fully populated — real title, subtitle, two-paragraph description
-and cover artwork are all in place. Nothing outstanding on that page.
+### Books and their landing pages (21 October 2026)
+- **`BOOKS` lives in `lib/books.ts`**, not in the `/books` page. It is read by
+  `/books` and by `app/(site)/books/[slug]/page.tsx`. Each entry carries a
+  `slug`, written out by hand rather than computed from the title, so editing
+  a title cannot break a shared link. Treat a published slug as permanent.
+- `/books/[slug]` uses `generateStaticParams` with `dynamicParams = false`, so
+  every book prerenders (`●` in the build output) and an unknown slug 404s.
+  **Both books get a page**: `/books/thriving-in-the-midst-of-famine` and
+  `/books/walking-with-the-holy-spirit`. Adding a book to `BOOKS` adds its page.
+- The page runs **dark hero → light description → accent CTA band** (back to
+  `/books`). Every word comes from the `BOOKS` entry; the only page-level copy
+  is section headings. The hero is **built by hand** because `PageHero` has no
+  room for a cover beside the title. It still uses the shared parts:
+  `HeroAtmosphere` and `.hero-shimmer` on an inline span. The cover is
+  `priority` with explicit width and height, shown whole at its own ratio, and
+  leads on a phone via `order-first lg:order-last`.
+- Metadata comes from `generateMetadata`: title, description, `og:type`
+  `book`, and the cover as `og:image`. ⚠️ The Twitter card is `summary`, not
+  `summary_large_image`: the cover is portrait, and the large card would crop
+  it to a 2:1 strip.
+- **`components/BookBuyButtons.tsx`** is the Selar + Amazon pair, used on both
+  pages. `tone="light" | "dark"` only changes the Amazon outline colour; the
+  Selar `primary` pill works on either ground.
+- On `/books`, each card shows only an **excerpt**: the first `excerpt`
+  blocks of `description` (3 for Thriving, 1 for Walking). The full text is
+  on the landing page only. The cover, the title and a "Read more" outline
+  Button under the buy pair all link there. The card itself is not a
+  link (it holds Buttons, and nested anchors are invalid).
+- ⚠️ The homepage "What's New" entry in `HIGHLIGHTS` hard-codes
+  `/books/thriving-in-the-midst-of-famine`, because `constants.ts` cannot
+  import `lib/books.ts` without a cycle. Change both if that slug ever changes.
+
+`/books` is fully populated — real title, subtitle, description and cover
+artwork are all in place for both books.
 
 The cover renders in an `aspect-[2/3]` box with `object-cover`. The source is
 800×1135 (0.705), so ~23px is trimmed from each side. Checked against the
@@ -2185,10 +2571,11 @@ for `<img` before concluding the deferral has broken.
 ### Image format and cache TTL (`next.config.ts`)
 - `formats: ["image/avif", "image/webp"]` — AVIF is ~20–30% smaller. The cost
   is slower encoding on a cache **miss**, paid once per (image, width).
-- ⚠️ **`qualities: [65, 75, 100]` is an allow-list, not a hint.** Next 16 serves
+- ⚠️ **`qualities: [40, 65, 75, 100]` is an allow-list, not a hint.** Next 16 serves
   q=75 by default and **400s any quality not in this array**, so a `quality`
   prop added at a call site without a matching entry here breaks that image in
-  production while building perfectly. 65 is the BLCN gallery thumbnails, 100
+  production while building perfectly. 40 is `SectionPhoto` (12% opacity
+  under a blend — compression is invisible), 65 the gallery thumbnails, 100
   the low-res BLCN church-order graphic, 75 everything else.
 - `minimumCacheTTL: 2678400` (31 days, up from Next's 4-hour default). Every
   optimised image is now a build-time asset, so nothing can change behind a URL

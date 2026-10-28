@@ -73,6 +73,14 @@ export default function Button({
     disabled ? "opacity-50 pointer-events-none" : ""
   } ${className}`.trim();
 
+  /**
+   * Opts the button into the magnetic hover and press feedback. The behaviour
+   * lives in `PointerEffects` (one listener for the whole page) and the
+   * `[data-magnetic]` rules in globals.css — both desktop-only, both off under
+   * reduced motion. Disabled buttons stay put.
+   */
+  const magnetic = disabled ? {} : { "data-magnetic": "" };
+
   if (href && !disabled) {
     // Hash anchors, mail links and absolute URLs bypass the router.
     const isPlainAnchor =
@@ -83,6 +91,7 @@ export default function Button({
         <a
           href={href}
           className={classes}
+          {...magnetic}
           {...(external
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
@@ -93,14 +102,20 @@ export default function Button({
     }
 
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} {...magnetic}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={classes}
+      {...magnetic}
+    >
       {children}
     </button>
   );

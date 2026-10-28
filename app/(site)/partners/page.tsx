@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import SectionPhoto from "@/components/SectionPhoto";
 import HeroAtmosphere from "@/components/HeroAtmosphere";
 
 const TIERS = [
@@ -89,7 +90,8 @@ export default function PartnersPage() {
       {/* Gradient hero, not a photo — see the note on the homepage partnership
           band. This one was `priority`, so it was blocking LCP for an image the
           scrim rendered all but invisible. */}
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
+      <section className="isolate relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
+        <SectionPhoto src="/images/blcn/blcn-gallery-05.jpg" position="object-[50%_40%]" />
         <div
           aria-hidden
           className="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-brand-navy/60"
@@ -107,7 +109,7 @@ export default function PartnersPage() {
               <span className="hero-shimmer">Partner With Us</span>
             </h1>
             <div className="mb-8 h-0.5 w-16 bg-brand-orange" />
-            <p className="mb-10 max-w-lg font-sans text-lg leading-relaxed text-white/60 sm:text-xl">
+            <p className="mb-10 max-w-lg font-sans text-lg leading-relaxed text-white/70 sm:text-xl">
               Join a community of believers fuelling the gospel across the UK
               and Nigeria
             </p>

@@ -4,8 +4,8 @@ import { MapPin } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
-import HeroAtmosphere from "@/components/HeroAtmosphere";
-import HeroSlideshow, { type HeroSlide } from "@/components/HeroSlideshow";
+import ChurchHero from "@/components/ChurchHero";
+import { type HeroSlide } from "@/components/HeroSlideshow";
 import ImageGallery, { type GalleryImage } from "@/components/ImageGallery";
 import { CHURCHES } from "@/lib/constants";
 
@@ -138,69 +138,23 @@ function initialsOf(name: string) {
 export default function BHCCPage() {
   return (
     <>
-      {/* ── 1. Hero ── */}
-      <section className="relative flex min-h-screen items-center overflow-hidden">
-        {/* BHCC's own congregation photography, crossfading — the same
-            component BLCN and the homepage use, so the deferred mount of the
-            later slides and the 44px dot targets come with it, and both
-            scrims are the slideshow's own. This replaced the gradient
-            placeholder that stood here while BHCC had no photography of its
-            own; see HERO_SLIDES for why nothing else could fill the slot. */}
-        <HeroSlideshow slides={HERO_SLIDES} />
-        {/* The shared hero glow, over the slideshow's scrims so it tints
-            rather than being washed out by them. No particles — the dot
-            field is kept to the homepage, /events and /ministry. */}
-        <HeroAtmosphere />
-
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-16">
-          <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
-            {/* Emblem only, not the supplied lockup: `bhcc-logo.jpg` is a 810×243
-                horizontal lockup floating in a 1080×1080 white square, so in this
-                square slot its "CHRISTIAN CENTRE" line would land under 4px. The
-                h1 directly below already spells the name out. See `bhcc-mark.png`
-                in Assets Status. */}
-            <div className="relative mx-auto mb-10 h-40 w-40 sm:h-48 sm:w-48">
-              {/* Soft glow — matches BLCN's hero badge. The white plate carries
-                  most of the separation here; the glow keeps the two heroes
-                  reading as a pair. */}
-              <div
-                aria-hidden
-                className="absolute -inset-10 bg-[radial-gradient(circle,rgba(235,100,52,0.40),transparent_70%)] blur-2xl"
-              />
-              <div className="relative h-full w-full overflow-hidden shadow-2xl ring-1 ring-white/15">
-                <Image
-                  src="/images/bhcc-mark.png"
-                  alt="Building House Christian Centre logo"
-                  fill
-                  priority
-                  sizes="(min-width: 640px) 192px, 160px"
-                  className="object-cover"
-                />
-              </div>
-            </div>
-            {/* `photo`, not `dark`: this label sits on a photograph, where the
-                dark tone measured 2.77:1. See SectionLabel. */}
-            <SectionLabel tone="photo">United Kingdom</SectionLabel>
-            <h1 className="font-serif text-4xl font-bold leading-none tracking-tight text-white sm:text-5xl md:text-6xl">
-              <span className="hero-shimmer">
-                Building House Christian Centre
-              </span>
-            </h1>
-            <p className="mt-5 font-serif text-2xl font-bold tracking-[0.3em] text-brand-orange sm:text-3xl">
-              BHCC
-            </p>
-            <div className="mx-auto mt-6 h-0.5 w-16 bg-brand-orange" />
-            <p className="mx-auto mb-10 mt-8 max-w-lg font-sans text-lg leading-relaxed text-white/60 sm:text-xl">
-              Building the House of God in the United Kingdom
-            </p>
-            <Button href="/contact" variant="secondary" size="lg">
-              Join Us
-            </Button>
-          </AnimateIn>
-        </div>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-brand-navy to-transparent" />
-      </section>
+      {/* ── 1. Hero ──
+          The shared church hero: masthead top-left, BHCC's own photography
+          under a directional scrim, copy bottom-left. See ChurchHero. */}
+      <ChurchHero
+        name="Building House Christian Centre"
+        acronym="BHCC"
+        place="Norwich · United Kingdom"
+        label="BHCC · Norwich"
+        subtitle="Building the House of God in the United Kingdom"
+        emblem={{
+          src: "/images/bhcc-mark-reverse.png",
+          alt: "Building House Christian Centre logo",
+          width: 252,
+          height: 253,
+        }}
+        slides={HERO_SLIDES}
+      />
 
       {/* ── 2. Vision & Mission ──
           BLCN carries the same block as a two-column layout beside its printed
@@ -328,7 +282,9 @@ export default function BHCCPage() {
                         alt={leader.name}
                         fill
                         sizes="(min-width: 640px) 50vw, 100vw"
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        className={`object-cover transition-transform duration-700 group-hover:scale-105 ${
+                          leader.imagePosition ?? "object-center"
+                        }`}
                       />
                     ) : (
                       /* Photo pending from the client — initials stand in so the

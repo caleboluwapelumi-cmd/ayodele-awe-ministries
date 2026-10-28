@@ -58,23 +58,29 @@ export const SELAR_BOOK_URL = "https://selar.com/f12uu6";
 export const AMAZON_BOOK_URL = "https://www.amazon.co.uk/dp/B0DMLXN64T";
 
 /**
- * "Thriving in the Midst of Famine" — the second book, announced for pre-order.
+ * "Thriving in the Midst of Famine" — the second book, live since October 2026.
+ * Kept as separate constants so the "Walking with the Holy Spirit" pair above
+ * is never overwritten by a new title.
  *
- * ⚠️ `null` means **no retailer link has been supplied yet**, and it is the one
- * switch that turns pre-ordering on. While it is null, /books renders the book
- * with a "Coming soon" badge and NO buy button, and the homepage highlight
- * points at /books rather than at a retailer. Paste the real URL here and both
- * places light up — no page edit.
+ * Verified 21 October 2026 by fetching each URL logged out:
+ *  - Selar: 200, no redirect, page titled "Buy Thriving in the Midst of Famine
+ *    by Ayodele Awe on Selar".
+ *  - Amazon: the client supplied a KDP author-dashboard link
+ *    (kdp.amazon.com/amazon-dp-action/uk/dualbookshelf.marketplacelink/…),
+ *    which 302s twice to this clean /dp/ URL. The public URL is used directly
+ *    so no visitor passes through KDP. ASIN B0HH6W7H5K is the Kindle edition.
  *
- * ⚠️ Do NOT substitute a stand-in destination while waiting. /contact and the
- * newsletter both look like places to capture pre-order interest and neither
- * is: `/api/contact` and `/api/newsletter` are still `console.log` stubs, so
- * anything a visitor typed into them would be silently discarded. A button that
- * looks like it registered a pre-order and didn't is worse than no button.
+ * ⚠️ **Amazon lists it under a different title**: "THRIVING IN FAMINE:
+ * Carrying God's Presence, Walking in His Word, and Thriving When Everything
+ * Else Fails". It is the same book: the product description is word for word
+ * the one on Selar, and it names the book "Thriving in the Midst of Famine".
+ * The site keeps the cover's title and subtitle. If the client wants the two
+ * to agree, that is a KDP metadata change, not a site change.
  *
- * ⚠️ And never a `tr.ee/…` URL — see the note on the two constants above.
+ * ⚠️ Never a `tr.ee/…` URL — see the note on the two constants above.
  */
-export const THRIVING_PREORDER_URL: string | null = null;
+export const BOOK2_SELAR_URL = "https://selar.com/6s9o4z5173";
+export const BOOK2_AMAZON_URL = "https://www.amazon.co.uk/dp/B0HH6W7H5K";
 
 /**
  * The homepage's "What's New" band.
@@ -86,7 +92,7 @@ export const THRIVING_PREORDER_URL: string | null = null;
  * `date` is optional precisely so an announcement can run without one — an
  * invented launch date is the exact failure the Content Integrity Notes exist
  * to prevent, and "we just need something there" is how it gets in. The book
- * launch below has no date because none has been given.
+ * below has no date because no release date has been given.
  *
  * ⚠️ `href` is an internal route. These are announcements, not outbound links.
  */
@@ -109,11 +115,13 @@ export const HIGHLIGHTS: Highlight[] = [
     label: "New book",
     title: "Thriving in the Midst of Famine",
     blurb:
-      "Biblical Keys to Flourishing in Difficult Times — the new book from Pastor Ayodele Oladapo Awe. Pre-order opening soon.",
+      "Biblical Keys to Flourishing in Difficult Times — the new book from Pastor Ayodele Oladapo Awe. Available now on Selar and Amazon.",
     image: "/images/thriving-book-cover.jpg",
     imageAlt:
       "Cover of Thriving in the Midst of Famine: Biblical Keys to Flourishing in Difficult Times by Ayodele Oladapo Awe",
-    href: "/books",
+    /* The book's landing page. Written out rather than read from lib/books.ts,
+       which imports this file — keep it in step with that entry's `slug`. */
+    href: "/books/thriving-in-the-midst-of-famine",
     cta: "Read more",
   },
 ];
@@ -138,6 +146,12 @@ export interface ChurchLeader {
    * pages fall back to an initials block, so never point this at a placeholder.
    */
   image?: string;
+  /**
+   * `object-position` utility for the portrait inside the `aspect-[3/4]` card.
+   * Only needed when the source is a different shape from the card — a tall
+   * phone portrait cropped centre-on loses the top of the head.
+   */
+  imagePosition?: string;
 }
 
 export interface Church {
@@ -202,8 +216,15 @@ export const CHURCHES: Church[] = [
         role: "Lead Pastor",
         image: "/images/apostle-portrait.jpg",
       },
-      // Photo pending from the client — renders as an initials block until then.
-      { name: "Iyanuoluwa Ayodele-Awe", role: "Co-Pastor" },
+      {
+        name: "Iyanuoluwa Ayodele-Awe",
+        role: "Co-Pastor",
+        // 1134×2016 (0.5625) in a 3:4 card shows 75% of the height. Centred,
+        // the window starts at row 252 and cuts through her hair (top ≈ row
+        // 170); 8% starts it at row 40, leaving headroom above the head.
+        image: "/images/iyanu-awe.jpg",
+        imagePosition: "object-[50%_8%]",
+      },
     ],
   },
   {

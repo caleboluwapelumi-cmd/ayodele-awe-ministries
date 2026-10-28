@@ -1,6 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { REDUCED_MOTION, useHoverFocusPause, useMediaQuery } from "@/lib/motion";
 import {
   SITE_ATMOSPHERE_TONE,
   type AtmosphereTone,
@@ -106,12 +108,25 @@ export default function DriftingParticles({
   tone?: AtmosphereTone;
   density?: keyof typeof DENSITY;
 }) {
-  const reduced = useReducedMotion();
+  // Stops for reduced motion, while the hero they sit in is hovered or holds
+  // keyboard focus, and while the layer is off-screen. Sixteen infinite animations kept
+  // ticking after the hero had scrolled away, which the 390px frame probe
+  // showed as a real share of the homepage's scroll cost.
+  const layerRef = useRef<HTMLDivElement>(null);
+  const onScreen = useInView(layerRef);
+  const reduced = useMediaQuery(REDUCED_MOTION);
+  // The layer is pointer-events-none, so watch the hero section it fills.
+  const held = useHoverFocusPause(layerRef, "parent");
+  const moving = !reduced && !held && onScreen;
   const step = DENSITY[density];
   const colours = PALETTE[tone];
 
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div
+      ref={layerRef}
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
       {DOTS.map(([left, top, size, duration, delay], i) =>
         i % step !== 0 ? null : (
           <motion.span
@@ -123,13 +138,18 @@ export default function DriftingParticles({
               width: size,
               height: size,
             }}
+            /* A still target rather than `undefined` when stopped: removing
+               `animate` does not cancel an infinite animation already running,
+               so pausing would do nothing. Animating to rest does. */
             animate={
-              reduced ? undefined : { y: [0, -22, 0], opacity: [0.35, 1, 0.35] }
+              moving
+                ? { y: [0, -22, 0], opacity: [0.35, 1, 0.35] }
+                : { y: 0, opacity: 0.7 }
             }
             transition={
-              reduced
-                ? undefined
-                : { duration, delay, repeat: Infinity, ease: "easeInOut" }
+              moving
+                ? { duration, delay, repeat: Infinity, ease: "easeInOut" }
+                : { duration: 0.6, ease: "easeOut" }
             }
           />
         ),

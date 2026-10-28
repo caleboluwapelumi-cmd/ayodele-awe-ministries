@@ -5,6 +5,7 @@ import MediaTabs from "@/components/MediaTabs";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import SectionPhoto from "@/components/SectionPhoto";
 import SpotifyIcon from "@/components/icons/SpotifyIcon";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import YouTubeIcon from "@/components/icons/YouTubeIcon";
@@ -101,8 +102,9 @@ export default function MediaPage() {
       </section>
 
       {/* ── 4. Music Section ── */}
-      <section className="bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
+      <section className="relative isolate overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <SectionPhoto src="/images/bhcc/bhcc-gallery-11.jpg" position="object-[50%_15%]" />
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <AnimateIn direction="left">
             <SpotifyEmbed
               kind="artist"
@@ -136,7 +138,7 @@ export default function MediaPage() {
             <Button href={SOCIALS.spotify} variant="secondary" size="lg" external>
               Stream on Spotify
             </Button>
-            <p className="mt-4 font-sans text-xs uppercase tracking-widest text-white/40">
+            <p className="mt-4 font-sans text-xs uppercase tracking-widest text-white/70">
               Available on all major streaming platforms.
             </p>
           </AnimateIn>

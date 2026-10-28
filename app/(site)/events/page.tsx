@@ -6,6 +6,7 @@ import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import SectionPhoto from "@/components/SectionPhoto";
 import { MINISTRY_PROGRAMMES } from "@/lib/constants";
 import { PRAYER_SURGE, nextPrayerSurge } from "@/lib/prayer-surge";
 
@@ -297,8 +298,9 @@ export default function EventsPage() {
       </section>
 
       {/* ── 7. CTA Banner ── */}
-      <section className="border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
+      <section className="relative isolate overflow-hidden border-t-2 border-brand-orange bg-gradient-to-br from-brand-blue via-brand-navy to-brand-blue px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+        <SectionPhoto src="/images/blcn/blcn-hero-4.jpg" position="object-[50%_30%]" />
+        <AnimateIn direction="up" className="relative z-10 mx-auto max-w-3xl text-center">
           <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
             Want to Host an Event?
           </h2>

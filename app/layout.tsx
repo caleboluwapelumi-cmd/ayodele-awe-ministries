@@ -81,8 +81,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body suppressHydrationWarning className={`${clashDisplay.variable} antialiased overflow-x-hidden`}>
+    // ⚠️ The font variable goes on <html>, NOT <body>. `--font-serif` and
+    // `--font-sans` are declared on :root as `var(--font-clash), …`, and a
+    // custom property resolves its var() where it is declared. With
+    // `--font-clash` set one level down on <body>, both resolved to nothing at
+    // :root — and because the global `h1, h2, h3, h4` rule in globals.css is
+    // unlayered, it beat every heading's `font-serif` class, so every heading
+    // on the site rendered in the system font until 22 October 2026.
+    <html lang="en" className={clashDisplay.variable}>
+      <body suppressHydrationWarning className="antialiased overflow-x-hidden">
         {children}
       </body>
     </html>

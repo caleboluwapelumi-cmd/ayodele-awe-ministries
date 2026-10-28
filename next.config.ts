@@ -4,13 +4,15 @@ const nextConfig: NextConfig = {
   images: {
     // Next 16 allows only q=75 by default and 400s anything else, so every
     // quality any <Image> asks for has to be listed here.
+    //  40  — SectionPhoto: section backgrounds at 16% opacity under a
+    //        luminosity blend, where compression is invisible.
     //  65  — the BLCN gallery thumbnails. 1800px sources drawn into a 270px
     //        box, where the extra bytes buy nothing; the lightbox that opens
     //        off them stays at the 75 default, which is where they are read.
     //  75  — the default, and what everything else uses.
     // 100  — the low-res BLCN church-order graphic, to avoid compounding its
     //        own softness.
-    qualities: [65, 75, 100],
+    qualities: [40, 65, 75, 100],
     /**
      * AVIF first, WebP as the fallback for anything that can't take it. AVIF
      * runs roughly 20–30% smaller than WebP at matching quality, which is worth

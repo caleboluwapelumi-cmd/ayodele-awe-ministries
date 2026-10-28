@@ -163,22 +163,34 @@ section[id] {
  */
 .hero-shimmer,
 .hero-shimmer-light {
-  background-size: 200% 100%;
+  /* ⚠️ Fixed 22 October 2026: this used `shimmer-sweep` on a 200% tile,
+     whose end position lines up exactly like its start (the tile repeats), so
+     the sweep settled with the accent band parked across the end of the
+     heading — "Ministry" in "Three Expressions of Ministry" stayed orange on
+     every inner page. A 300% tile with the band in its middle third, swept
+     100% → 0%, starts and ends on pure end-stop colour. `.shimmer-text` keeps
+     the old keyframes: it loops, and a loop should start where it ends. */
+  background-size: 300% 100%;
+  background-position: 100% 0;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: shimmer-sweep 2.6s ease-out 0.9s 1 both;
+  animation: hero-sweep 2.4s ease-out 0.9s 1 both;
 }
 
-/* Identical to `.shimmer-text`'s gradient — same accent band, same end stops.
-   The two rules differ only in timing (one pass here, a loop there), which is
-   the whole reason they are separate classes rather than one. */
+@keyframes hero-sweep {
+  from { background-position: 100% 0; }
+  to   { background-position: 0% 0; }
+}
+
+/* The same colours as `.shimmer-text` — same accent, same end stops — on a
+   wider tile so the single pass can settle clean (see above). */
 .hero-shimmer {
   background-image: linear-gradient(
     100deg,
-    #ffffff 35%,
-    var(--color-brand-orange-light) 48%,
-    #ffffff 62%
+    #ffffff 40%,
+    var(--color-brand-orange-light) 50%,
+    #ffffff 60%
   );
 }
 
@@ -189,9 +201,9 @@ section[id] {
 .hero-shimmer-light {
   background-image: linear-gradient(
     100deg,
-    var(--color-brand-blue) 35%,
-    var(--color-brand-orange-deep) 48%,
-    var(--color-brand-blue) 62%
+    var(--color-brand-blue) 40%,
+    var(--color-brand-orange-deep) 50%,
+    var(--color-brand-blue) 60%
   );
 }
 
@@ -207,5 +219,256 @@ section[id] {
     animation: none;
     background-image: none;
     color: var(--color-brand-blue);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Motion layer (22 October 2026)
+   Everything here is CSS so it ships no JavaScript and keeps the animated text
+   in the server-rendered markup. Every rule has a reduced-motion override at
+   the foot of this block.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Homepage hero entrance ───────────────────────────────────────────────── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes word-up {
+  from { transform: translateY(110%); }
+  to   { transform: none; }
+}
+
+/* Label, rule, tagline, buttons — staggered by `--d` set inline. */
+.hero-rise {
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s) both;
+}
+
+/*
+ * Word-by-word h1. The outer span is the mask; the inner span slides up
+ * through it, then takes the shimmer.
+ *
+ * ⚠️ The padding is what keeps descenders. The h1 is `leading-none`, so an
+ * inline-block's box is exactly 1em tall and `overflow: hidden` would cut the
+ * tails off the "y" and "p" in "Ayodele Oladapo" — the same trap the
+ * `.hero-shimmer` note describes for `background-clip: text`. 0.18em at the
+ * foot clears Clash Display's descenders; the side padding clears the "A"'s
+ * overhang and is cancelled by the negative margin so spacing is unchanged.
+ *
+ * ⚠️ The shimmer is per word, staggered, so it reads as one sweep travelling
+ * left to right. It cannot sit on a parent span any more: each word now has
+ * its own transform, and `background-clip: text` does not reach into
+ * transformed children reliably. The gradient is `.hero-shimmer`'s, verbatim.
+ */
+.hero-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.06em 0.18em;
+  margin: 0 -0.06em;
+}
+
+.hero-word > span {
+  display: inline-block;
+  padding-bottom: 0.18em;
+  margin-bottom: -0.18em;
+  /* ⚠️ 300% wide with the band in the middle third, swept 100% → 0%.
+     `.hero-shimmer`'s 200% tile repeats, so its end position lines up exactly
+     like its start and parks the orange band across the last letters — on a
+     per-word sweep that left the tail of every word orange. Here both ends of
+     the travel show only an all-white third of the gradient. */
+  background-image: linear-gradient(
+    100deg,
+    #ffffff 40%,
+    var(--color-brand-orange-light) 50%,
+    #ffffff 60%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    word-up 1s cubic-bezier(0.22, 1, 0.36, 1) calc(0.15s + var(--i) * 0.09s) both,
+    word-shimmer 1.4s ease-out calc(1.1s + var(--i) * 0.16s) 1 both;
+}
+
+@keyframes word-shimmer {
+  from { background-position: 100% 0; }
+  to   { background-position: 0% 0; }
+}
+
+/* ── Scroll cue ───────────────────────────────────────────────────────────
+   ⚠️ Two iterations, ~4.4s in all, then it rests. WCAG 2.2.2 exempts motion
+   under five seconds; a cue that bobs forever would need a pause button. */
+@keyframes cue-travel {
+  0%   { transform: translateY(-100%); }
+  60%  { transform: translateY(100%); }
+  100% { transform: translateY(100%); }
+}
+
+.scroll-cue-line {
+  animation: cue-travel 2.2s cubic-bezier(0.65, 0, 0.35, 1) 2s 2 both;
+}
+
+/* ── Marquee ──────────────────────────────────────────────────────────────
+   Two identical copies, slid by half the track width, so the loop is seamless.
+   Stops on hover and on keyboard focus. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 70s linear infinite;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ── Church hero acronym ─────────────────────────────────────────────────
+   Stroke only. ⚠️ The stroke lightens whatever photograph it crosses, and the
+   copy is measured with it in place — don't raise the alpha without
+   re-measuring the h1/subtitle/label figures in CLAUDE.md. */
+.hero-outline {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ── Hero slideshow clock ─────────────────────────────────────────────────
+   The active segment of the church heroes' progress bar fills over the slide
+   interval, and its `animationend` is what advances the slide (HeroSlideshow
+   sets the duration and play state inline). The homepage runs the same clock
+   on an invisible span. Never set `animation: none` on this without also
+   giving the slideshow another clock — the rotation would stop. Reduced
+   motion is handled in the component, which simply does not render it. */
+@keyframes slide-timer {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.slide-timer {
+  animation-name: slide-timer;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  transform-origin: left;
+}
+
+/* Not rendered at all — animation included — while well off-screen.
+   `auto 128px` reserves roughly the band's height so the page doesn't jump
+   when it comes into range. */
+.marquee {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 128px;
+}
+
+/* The second pass through the names is only needed where one pass is
+   narrower than the screen. Both copies drop it together, so the loop stays
+   seamless. ⚠️ Never use a mask-image for the edge fades — see Marquee.tsx. */
+.marquee-wide {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .marquee-wide {
+    display: flex;
+  }
+}
+
+/* A caption swapping in, e.g. the pinned image on /about. */
+.caption-swap {
+  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Buttons: magnetic pull + press (fine pointers only) ──────────────────
+   `translate` and `scale` are their own properties in Tailwind v4, so these
+   compose with every utility on the Button instead of overwriting `transform`.
+   `--mx`/`--my` are written by `PointerEffects`. Touch screens never match the
+   media query, so a tap gets no drift and no shrink. */
+@media (hover: hover) and (pointer: fine) {
+  [data-magnetic] {
+    translate: var(--mx, 0px) var(--my, 0px);
+  }
+
+  [data-magnetic]:active {
+    scale: 0.97;
+  }
+}
+
+/* ── Cursor glow ──────────────────────────────────────────────────────────
+   ⚠️ `screen` blending is a contrast decision, not a look. Screen never
+   darkens and is a no-op on white, so the glow is invisible on light sections
+   (where muted body copy would otherwise be tinted) and only lifts dark ones.
+   ⚠️ 0.05 peak alpha is the ceiling, measured, not a taste call. Anything
+   that lightens a dark ground also lowers the contrast of light text on it.
+   The worst spot on the site is 12px `brand-orange-light` at the brightest
+   point of a hero's own orange glow (4.8:1 before this); with the cursor glow
+   centred on it that becomes 4.52:1 at 0.05, 4.46:1 at 0.06. On a
+   `bg-white/[0.07]` card it is 4.92:1. Don't raise the alpha to make the glow
+   more visible — widen it instead. */
+.cursor-glow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 40;
+  width: 640px;
+  height: 640px;
+  margin: -320px 0 0 -320px;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgb(235 100 52 / 0.05), rgb(235 100 52 / 0.025) 45%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  will-change: transform;
+}
+
+.cursor-glow[data-on="true"] {
+  opacity: 1;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise,
+  .caption-swap,
+  .scroll-cue-line {
+    animation: none;
+  }
+
+  .hero-word > span {
+    animation: none;
+    background-image: none;
+    color: #ffffff;
+  }
+
+  /* A static, wrapped list — and only one copy of it. */
+  .marquee-track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .marquee-dup,
+  .marquee-wide {
+    display: none;
+  }
+
+  [data-magnetic] {
+    translate: none;
+  }
+
+  .cursor-glow {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* In-page jumps (the hero's scroll cue, #testimony) arrive instantly. */
+  html {
+    scroll-behavior: auto;
   }
 }

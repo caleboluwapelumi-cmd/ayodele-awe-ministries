@@ -1,10 +1,12 @@
 import { Metadata } from "next";
-import Image from "next/image";
 import ChurchCard from "@/components/ChurchCard";
 import PageHero from "@/components/PageHero";
 import AnimateIn from "@/components/AnimateIn";
 import Button from "@/components/Button";
 import SectionLabel from "@/components/SectionLabel";
+import RevealImage from "@/components/RevealImage";
+import StickyStory from "@/components/StickyStory";
+import CountUp from "@/components/CountUp";
 import { CHURCHES } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -49,10 +51,25 @@ const EXPRESSIONS_TEASER =
 const FAMILY =
   "I am married to Iyanuoluwa, and together we are devoted to serving God and equipping people to live lives of wholehearted devotion to Christ.";
 
+/**
+ * The large pull-quote. Lifted word for word from the first paragraph of
+ * BIO above — a pull-quote repeats the page's own text, it never adds to it.
+ * If BIO changes, re-check that this still appears in it verbatim.
+ */
+const PULL_QUOTE =
+  "Everything since has been shaped by one passion: to see revival awaken hearts, disciples matured in Christ, and the lost pointed to Jesus through the demonstration of the Gospel.";
+
+/**
+ * Split into number + words so the figure can count up. The rendered text is
+ * the same as before ("2 Churches", "Since 2014", "2 Nations").
+ *
+ * The year counts from 2000, not 0: a year rolling up from zero reads as a
+ * glitch, from a nearby year as an odometer.
+ */
 const STATS = [
-  { stat: "2 Churches", label: "UK & Nigeria" },
-  { stat: "Since 2014", label: "Called into Ministry" },
-  { stat: "2 Nations", label: "One Mandate" },
+  { value: 2, prefix: "", suffix: " Churches", from: 0, label: "UK & Nigeria" },
+  { value: 2014, prefix: "Since ", suffix: "", from: 2000, label: "Called into Ministry" },
+  { value: 2, prefix: "", suffix: " Nations", from: 0, label: "One Mandate" },
 ];
 
 /**
@@ -86,22 +103,27 @@ export default function AboutPage() {
         imagePosition="object-[50%_22%]"
       />
 
-      {/* ── 2. Bio Section ── */}
+      {/* ── 2. Bio Section ──
+          Offset grid: the portrait takes five columns and sits inside an
+          orange frame knocked out of register behind it; the text starts a
+          column later than a 50/50 split would put it. The frame is a border
+          only, so nothing is laid over the photograph. */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-2">
-          <AnimateIn direction="left">
-            <div className="relative aspect-square overflow-hidden">
-              <Image
-                src="/images/apostle-portrait.jpg"
-                alt="Pastor Ayodele Oladapo Awe"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
-          </AnimateIn>
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-16 lg:grid-cols-12">
+          <div className="relative lg:col-span-5">
+            <div
+              aria-hidden
+              className="absolute -bottom-4 -right-4 left-4 top-4 border-2 border-brand-orange sm:-bottom-6 sm:-right-6 sm:left-6 sm:top-6"
+            />
+            <RevealImage
+              src="/images/apostle-portrait.jpg"
+              alt="Pastor Ayodele Oladapo Awe"
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="group aspect-square w-full"
+            />
+          </div>
 
-          <AnimateIn direction="right">
+          <AnimateIn direction="right" className="lg:col-span-6 lg:col-start-7 lg:pt-8">
             <SectionLabel tone="light">My Story</SectionLabel>
             <h2 className="mb-3 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
               Ayodele Oladapo Awe <span className="text-muted">(RDP)</span>
@@ -127,55 +149,87 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 3. Mandate — the umbrella vision the expressions below serve ── */}
-      {/* Gradient backdrop, not a photo — the former Unsplash texture sat under
-          a brand-navy/85 wash plus a second gradient, so the section already read
-          as this gradient. It just cost a network request to get here. */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
+      {/* ── 3. Mandate — the umbrella vision the expressions below serve ──
+          A pinned-scroll section: on desktop the photograph holds still while
+          the three pillars scroll past it, and the caption on the photograph
+          follows along. See StickyStory.
+
+          ⚠️ `overflow-clip`, not `overflow-hidden` — `hidden` makes the
+          section a scroll container and the pin stops working. */}
+      <section className="relative overflow-clip bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
         <div
           aria-hidden
           className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-brand-navy/30"
         />
 
-        <div className="relative z-10 mx-auto max-w-7xl text-center">
-          <AnimateIn direction="up">
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <AnimateIn direction="up" className="mb-16 max-w-3xl lg:mb-8">
             <SectionLabel tone="dark">The Mandate</SectionLabel>
-            <h2 className="mx-auto mb-6 max-w-3xl font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
               Raising Voices, Building Houses, Transforming Nations
             </h2>
-            <div className="mx-auto h-0.5 w-16 bg-brand-orange" />
+            <div className="h-0.5 w-16 bg-brand-orange" />
           </AnimateIn>
 
-          <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-3">
-            {MANDATE.map((card, i) => (
-              <AnimateIn key={card.title} delay={i * 0.1}>
-                <h3 className="mb-4 font-serif text-xl font-bold leading-tight text-brand-orange-light">
-                  {card.title}
-                </h3>
-                <p className="font-sans text-base leading-relaxed text-white/70">
-                  {card.desc}
-                </p>
-              </AnimateIn>
-            ))}
-          </div>
+          <StickyStory
+            steps={MANDATE}
+            eyebrow="The Mandate"
+            image="/images/apostle-2.jpg"
+            imageAlt="Pastor Ayodele Oladapo Awe ministering at a lectern"
+            /* 1928×2560 portrait; the subject sits high and left of frame —
+               the same bias the homepage hero gives this photograph. */
+            imagePosition="object-[30%_25%]"
+          />
         </div>
       </section>
 
-      {/* ── 4. Ministry teaser — the detail lives at /ministry ── */}
+      {/* ── 4. Pull-quote + ministry teaser — the detail lives at /ministry ──
+          The one large pull-quote on the site. It quotes BIO verbatim (see
+          PULL_QUOTE), set big enough to stop the scroll, then hands on to the
+          teaser in an offset two-column row rather than another centred
+          label-heading-paragraph block. */}
       <section className="bg-gradient-to-br from-white to-brand-tint px-4 py-24 sm:px-6 sm:py-32 lg:px-16">
-        <AnimateIn direction="up" className="mx-auto max-w-3xl text-center">
-          <SectionLabel tone="light">In Practice</SectionLabel>
-          <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl md:text-5xl">
-            How I Live This Out
-          </h2>
-          <div className="mx-auto mb-8 h-0.5 w-16 bg-brand-orange" />
-          <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
-            {EXPRESSIONS_TEASER}
-          </p>
-          <Button href="/ministry" variant="primary" size="lg">
-            Explore Ministry Expressions
-          </Button>
-        </AnimateIn>
+        <div className="mx-auto max-w-7xl">
+          <AnimateIn direction="up">
+            <figure className="relative mx-auto max-w-5xl">
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -left-2 -top-16 select-none font-serif text-[9rem] font-bold leading-none text-brand-orange/20 sm:-left-10 sm:-top-24 sm:text-[14rem]"
+              >
+                &ldquo;
+              </span>
+              <blockquote className="relative">
+                {/* A span, not a <p>: the unlayered `p { line-height: 1.7 }` in
+                    globals.css beats any `leading-*` utility on a <p>, which
+                    spread a display-size quote across double-spaced lines. */}
+                <span className="block text-balance font-serif text-3xl font-bold leading-[1.15] text-brand-blue sm:text-4xl lg:text-5xl">
+                  {PULL_QUOTE}
+                </span>
+              </blockquote>
+              <figcaption className="mt-8 flex items-center gap-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-deep">
+                <span aria-hidden className="h-0.5 w-10 bg-brand-orange" />
+                Ayodele Oladapo Awe
+              </figcaption>
+            </figure>
+          </AnimateIn>
+
+          <div className="mt-24 grid grid-cols-1 gap-8 border-t border-brand-blue/10 pt-16 lg:grid-cols-12 lg:gap-16">
+            <AnimateIn direction="left" className="lg:col-span-4">
+              <SectionLabel tone="light">In Practice</SectionLabel>
+              <h2 className="font-serif text-3xl font-bold leading-tight text-brand-blue sm:text-4xl">
+                How I Live This Out
+              </h2>
+            </AnimateIn>
+            <AnimateIn direction="right" className="lg:col-span-7 lg:col-start-6">
+              <p className="mb-8 font-sans text-base leading-relaxed text-muted sm:text-lg">
+                {EXPRESSIONS_TEASER}
+              </p>
+              <Button href="/ministry" variant="primary" size="lg">
+                Explore Ministry Expressions
+              </Button>
+            </AnimateIn>
+          </div>
+        </div>
       </section>
 
       {/* ── 5. Life & Family ── */}
@@ -196,7 +250,7 @@ export default function AboutPage() {
 
           <div className="space-y-4">
             {STATS.map((item, i) => (
-              <AnimateIn key={item.stat} direction="right" delay={i * 0.1}>
+              <AnimateIn key={item.label} direction="right" delay={i * 0.1}>
                 <div className="border-t-2 border-brand-orange bg-white/[0.07] px-8 py-8 text-center">
                   {/* The figure is the accent, the label stays white — the
                       split `CountdownTimer` and `BirthdayCountdown` both make
@@ -210,9 +264,17 @@ export default function AboutPage() {
                       size is the floor. Anything smaller in this tile takes
                       `brand-orange-light` or goes back to white. */}
                   <p className="font-serif text-2xl font-bold leading-tight text-brand-orange sm:text-3xl">
-                    {item.stat}
+                    <CountUp
+                      value={item.value}
+                      from={item.from}
+                      prefix={item.prefix}
+                      suffix={item.suffix}
+                    />
                   </p>
-                  <p className="mt-2 font-sans text-xs uppercase tracking-[0.2em] text-white/50">
+                  {/* /70, not /50: white at 50% is 3.6:1 on this card (see
+                      CLAUDE.md, "Measure against the card") and fails AA at
+                      12px. /70 is what CopyField settled on for the same card. */}
+                  <p className="mt-2 font-sans text-xs uppercase tracking-[0.2em] text-white/70">
                     {item.label}
                   </p>
                 </div>

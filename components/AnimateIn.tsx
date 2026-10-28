@@ -27,11 +27,21 @@ export default function AnimateIn({
   children,
   delay = 0,
   direction = "up",
+  duration = 0.6,
+  ease = "easeOut",
   className,
 }: {
   children: ReactNode;
   delay?: number;
   direction?: Direction;
+  /**
+   * Seconds. Leave at the default everywhere except a composition that has to
+   * move as one with something that is not an `AnimateIn` — the homepage About
+   * block, whose image wipe, frame and text plate share one curve.
+   */
+  duration?: number;
+  /** A framer-motion easing; see `duration`. */
+  ease?: "easeOut" | readonly [number, number, number, number];
   /** Passed through so the wrapper can inherit grid/flex sizing from its parent. */
   className?: string;
 }) {
@@ -73,9 +83,9 @@ export default function AnimateIn({
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}
       transition={{
-        duration: reduced ? 0.2 : 0.6,
+        duration: reduced ? 0.2 : duration,
         delay: reduced ? 0 : delay,
-        ease: "easeOut",
+        ease: typeof ease === "string" ? ease : [...ease],
       }}
       variants={VARIANTS[resolved]}
     >
